@@ -1,0 +1,60 @@
+{
+  "name": "njp-micro-front-intellicut",
+  "version": "1.0.0",
+  "description": "njp微前端智能裁剪房项目",
+  "main": "main.ts",
+  "scripts": {
+    "dev": "emp dev -pr",
+    "build:develop": "emp build",
+    "build:dev": "emp build --env dev",
+    "build:test": "emp build --env test",
+    "build:pre": "emp build --env pre",
+    "build:prod": "emp build --env prod",
+    "stat": "emp build --analyze",
+    "dts": "emp dts -p src/types",
+    "serve dist": "serve ./dist -p 9001"
+  },
+  "author": "feng.m",
+  "license": "ISC",
+  "dependencies": {
+    "element-plus": "^2.2.0",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.33",
+    "vue-router": "^4.1.1",
+    "vue-i18n": "9.1.10",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-conventional": "^16.2.4",
+    "@efox/emp": "2.3.3",
+    "@efox/plugin-babel-vue-3": "^1.0.2",
+    "@njp/eslint-config-vue": "^1.0.3",
+    "@njp/njp-config": "^1.0.0",
+    "@types/lodash": "^4.14.182",
+    "@vue/compiler-sfc": "^3.2.33",
+    "external-remotes-plugin": "^1.0.0",
+    "lint-staged": "^12.4.1",
+    "vue-tsc": "^0.34.12",
+    "yorkie": "^2.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged",
+    "commit-msg": "commitlint -E GIT_PARAMS"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,vue}": [
+      "eslint --fix"
+    ]
+  }
+}
