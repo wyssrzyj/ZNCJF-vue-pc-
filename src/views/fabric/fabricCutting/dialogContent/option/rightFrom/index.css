@@ -1,0 +1,19 @@
+.dialogBottom {
+  width: 100%;
+  height: 30px;
+  /* background: red; */
+  display: flex;
+
+  flex-direction: row-reverse;
+}
+.preservation {
+  margin-left: 10px;
+}
+
+.bottomTable{
+  display: flex;
+  flex-direction: column;
+}
+.ropForm{
+  width: 150px;
+}
