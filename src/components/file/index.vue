@@ -15,18 +15,18 @@
       :on-success="uploadSuccess"
       :before-remove="beforeRemove"
       :on-error="uploadError"
+      :limit="props.upload.limit"
+      :on-preview="download"
     >
       <el-button icon="upload">上传文件</el-button>
       <div v-if="state.fileType !== null" class="subtip">
         <el-icon>
           <Warning />
         </el-icon>
-        文件命名格式：如6666
+        {{ props.upload.title }}
       </div>
     </el-upload>
   </div>
-
-  <!-- <el-button v-else icon="upload" @click="touchoffTip">上传文件666</el-button> -->
 </template>
 
 <script lang="ts" setup>
@@ -34,19 +34,19 @@
   import { Warning } from '@element-plus/icons-vue'
   import { getToken } from '@njpCommon/utils/cache'
   import { ElMessage } from 'element-plus'
-
   const props = defineProps<{
     // either: '必传且限定' | '其中一个' | '值' // 利用TS：限定父组件传 either 的值
     value: any[]
     gitFile: any
     disabled: boolean
     pictureType: any
+    upload: any
   }>()
 
   const { proxy }: any = getCurrentInstance()
   // const emits = defineEmits(['on-submit-success'])
 
-  const state = reactive({
+  const state: any = reactive({
     disabled: props.disabled,
     dialogVisible: false,
     title: '导入文件',
@@ -106,6 +106,28 @@
     ],
     uploadFileLoading: false
   })
+  const download = (e: any) => {
+    // console.log(e)
+    if (e.response.code == 0) {
+      // console.log(e.response.data.src)
+      // ownload('https://www.ijjxsw.net/api/txt_down.php?articleid=1465&articlename=%E9%81%AE%E5%A4%A9')
+      ownload(e.response.data.src)
+    }
+  }
+
+  const ownload = (data: any) => {
+    if (!data) {
+      return
+    }
+    const blobUrl = data //window.URL.createObjectURL(data)
+    // 这里的文件名根据实际情况从响应头或者url里获取
+    const a = document.createElement('a')
+    a.target = '_block'
+    a.href = blobUrl
+    a.download = 'w3logo'
+    a.click()
+    window.URL.revokeObjectURL(blobUrl)
+  }
 
   const showDialog = ({ title = '导入文件' } = {}) => {
     state.dialogVisible = true
@@ -115,14 +137,14 @@
   const uploadProgress = (rawFile: any) => {
     state.uploadFileLoading = true
   }
-
   const uploadSuccess = (res: any, uploadFile: any, uploadFiles: any) => {
     if (res.code != 0) {
       ElMessage.error(res.msg)
       uploadFile.status = 'fail'
     }
-    // console.log(uploadFiles);
-    props.gitFile(uploadFiles)
+    // 传递给父级
+    props.gitFile({ type: 'file', data: uploadFiles })
+
     state.targetArr[state.fileType]['fileList'] = uploadFiles
     state.uploadFileLoading = false
   }
@@ -135,6 +157,7 @@
   const beforeRemove = (file: any, fileList: any) => {
     state.uploadFileLoading = false
   }
+
   const setType = (name: string) => {
     let availableSuffix = props.pictureType.availableSuffix //文件后缀限制
     let index = name.lastIndexOf('.')

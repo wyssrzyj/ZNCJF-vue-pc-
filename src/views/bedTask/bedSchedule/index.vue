@@ -2,31 +2,22 @@
   床次
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
-      <el-form-item label="日期" prop="dateRange">
-        <njp-daterange-picker :query-form-data="state.queryFormData" />
+      <el-form-item label="生产订单" prop="styleNo">
+        <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="品牌" prop="brand">
-        <el-select v-model="state.queryFormData.brand" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectBrand" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="季节" prop="season">
-        <el-select v-model="state.queryFormData.season" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectSeason" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="阶段" prop="stage">
-        <el-select v-model="state.queryFormData.stage" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectStage" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="款号" prop="styleNo">
-        <el-input v-model="state.queryFormData.styleNo" placeholder="请输入" clearable />
-      </el-form-item>
-      <el-form-item label="品名" prop="productName">
+      <el-form-item label="床次计划号" prop="productName">
         <el-input v-model="state.queryFormData.productName" placeholder="请输入" clearable />
       </el-form-item>
+      <el-form-item label="款式编号" prop="styleNo">
+        <el-input v-model="state.queryFormData.styleCode" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="状态" prop="stage">
+        <el-select v-model="state.queryFormData.statu" clearable filterable>
+          <el-option v-for="item in state.queryFormData.type" :key="item.name" :label="item.name" :value="item.value" />
+        </el-select>
+      </el-form-item>
     </template>
+
     <template #operationExtBtn>
       <el-button type="primary" style="order: 1" @click="handleUploadStyle">批量导入款式</el-button>
       <el-button type="primary" style="order: 2" @click="handleUploadFile">批量导入文件</el-button>
@@ -35,23 +26,9 @@
       <el-button type="primary" style="order: 3" @click="handleClick(false, '编辑床次计划')">编辑</el-button>
       <el-button type="primary" style="order: 3" @click="mov">删除</el-button>
     </template>
-    <!-- <template #actionExtBtn="{ row }"> -->
-    <template>
-      <div>
-        <el-button type="primary" style="order: 3" @click="handleClick(true, '查看床次计划')">查看</el-button>
-        <el-button type="primary" style="order: 3" @click="handleClick(false, '编辑床次计划')">编辑</el-button>
-      </div>
-    </template>
-    <template #styleUrlList="{ row }">
-      <div @click="showUploadDialog(row, 'styleUrlList')">
-        <img
-          v-if="row.styleUrlList && row.styleUrlList.length"
-          :src="find(row.styleUrlList, { topic: 1 }) ? find(row.styleUrlList, { topic: 1 }).url : row.styleUrlList[0].url"
-          alt="主图"
-          style="width: 75px; height: 75px"
-        />
-        <njp-upload-placeholder-icon v-else />
-      </div>
+
+    <template #styleImage="{ row }">
+      <img :src="row.styleImage" alt="主图" style="width: 75px; height: 75px" />
     </template>
     <template #prooFactory="{ row }">
       <el-select v-model="row.prooFactory" clearable filterable @change="selectChange(row)">
@@ -84,44 +61,33 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref, onMounted } from 'vue'
-  import { useStore } from 'vuex'
-  import { findIndex, find } from 'lodash'
+  import { reactive, getCurrentInstance, ref } from 'vue'
+  import { findIndex } from 'lodash'
   import { ElMessage } from 'element-plus'
   import DialogContent from './dialogContent/index.vue'
 
   const { proxy }: any = getCurrentInstance()
-  const store = useStore()
 
   const dialogUploadFileEl = ref()
   const dialogUploadStyleEl = ref()
   const styleLibListEl = ref()
-  onMounted(() => {
-    //修改子组件的默认数据
-    // dialogUploadFileEl.value.state.fileTypeList = [
-    //   {
-    //     label: 'tp资料',
-    //     value: 2
-    //   },
-    //   {
-    //     label: '款式图片',
-    //     value: 5
-    //   }
-    // ]
-    // dialogUploadStyleEl.value.state.templateName = '款式模板.xlsx'
-  })
 
-  const state = reactive({
+  const state: any = reactive({
     dialogType: true,
     dialogTableVisible: false,
     dialogTitle: '查看床次计划',
 
     queryFormData: {
-      brand: '',
-      stage: '',
-      styleNo: '',
-      productName: '',
-      season: ''
+      produceOrderCode: '',
+      bedPlanNo: '',
+      styleCode: '',
+      statu: '',
+      type: [
+        { name: '未审核', value: '1' },
+        { name: '已审核', value: '2' },
+        { name: '进行中', value: '3' },
+        { name: '已完成', value: '4' }
+      ]
     },
 
     dialogVisible: false,
@@ -136,7 +102,7 @@
   }
 
   const selectChange = (row: any) => {
-    proxy.$baseService.put('/njp-dsr-api/dsr/dsrstyle/update', row).then(res => {
+    proxy.$baseService.put('/njp-dsr-api/dsr/dsrstyle/update', row).then((res: any) => {
       if (res.code !== 0) return ElMessage.error(res.msg)
       refreshTable()
     })
@@ -185,15 +151,6 @@
     dialogUploadFileEl.value.showDialog()
   }
 
-  const showUploadDialog = (row: any, type: any) => {
-    state.dialogVisible = true
-    state.title = '上传款式图'
-    state.limit = 6
-    state.rowData = row
-    state.rowData.type = type
-    state.fileList = row[type] || []
-  }
-
   const handleImageUpload = () => {
     const imgList = state.fileList.map((item: any) => {
       return {
@@ -215,7 +172,7 @@
       uploadImageList: imgList
     }
 
-    proxy.$baseService.post('/njp-dsr-api/dsr/dsrstyle/uploadImage', sendData).then(res => {
+    proxy.$baseService.post('/njp-dsr-api/dsr/dsrstyle/uploadImage', sendData).then((res: any) => {
       if (res.code !== 0) return ElMessage.error(res.msg)
       ElMessage.success(res.msg)
       state.dialogVisible = false

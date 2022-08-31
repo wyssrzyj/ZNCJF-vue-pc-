@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-08-29 13:15:58
+ * @LastEditTime: 2022-08-31 09:52:42
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="value" :disabled="disabled" />
-  <File v-if="state.type === 'file'" :picture-type="state.pictureType" :git-file="gitFile" :value="value" :disabled="disabled" />
+  <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="value" :disabled="disabled" />
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'
@@ -19,6 +19,7 @@
     getData: any
     value: []
     disabled: boolean
+    upload: any
   }>()
 
   // type 类型

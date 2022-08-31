@@ -2,12 +2,12 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-08-29 10:42:00
+ * @LastEditTime: 2022-08-30 09:20:58
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-tag v-for="tag in state.title" :key="tag" :disabled="props.type" class="mx-1" closable :disable-transitions="false" @close="handleCloseTag(tag)">
+  <el-tag v-for="tag in state.title" :key="tag" :disabled="props.type" class="mx-1" closable :disable-transitions="false" @close="handleClose(tag)">
     {{ tag.label }}
   </el-tag>
 
@@ -68,6 +68,10 @@ vue
   }
 
   init()
+
+  const handleClose = (tag: string) => {
+    state.title.splice(state.title.indexOf(tag), 1)
+  }
 
   const open = () => {
     //  调取总数据接口
@@ -160,6 +164,7 @@ vue
     overflow: auto;
   }
   .relatedFabric-btn {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
   }
 </style>
