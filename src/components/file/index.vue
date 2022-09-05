@@ -9,7 +9,7 @@
       :accept="props.pictureType.accept"
       :action="state.ossAction"
       multiple
-      :data="{ token: getToken() }"
+      :headers="{ token: getToken() }"
       :before-upload="beforeAvatarUpload"
       :on-progress="uploadProgress"
       :on-success="uploadSuccess"
@@ -30,10 +30,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance } from 'vue'
+  import { reactive, getCurrentInstance, watch } from 'vue'
   import { Warning } from '@element-plus/icons-vue'
-  import { getToken } from '@njpCommon/utils/cache'
+  import { getToken } from '@/utils/cache'
   import { ElMessage } from 'element-plus'
+  import { isEmpty } from 'lodash'
   const props = defineProps<{
     // either: '必传且限定' | '其中一个' | '值' // 利用TS：限定父组件传 either 的值
     value: any[]
@@ -73,7 +74,7 @@
         value: 6
       }
     ],
-    ossAction: `${proxy.$baseService.app.api}/njp-plus-admin-api/sys/oss/upload`,
+    ossAction: `${proxy.$baseService.app.api}/jack-ics-api/oss/upload`,
     targetArr: [
       {
         fileType: 0,
@@ -106,10 +107,19 @@
     ],
     uploadFileLoading: false
   })
+
+  watch(
+    () => props.value,
+    item => {
+      if (!isEmpty(props.value)) {
+        state.targetArr[state.fileType]['fileList'] = item
+        //
+      }
+    }
+  )
+
   const download = (e: any) => {
-    // console.log(e)
-    if (e.response.code == 0) {
-      // console.log(e.response.data.src)
+    if (!isEmpty(e.response.data)) {
       // ownload('https://www.ijjxsw.net/api/txt_down.php?articleid=1465&articlename=%E9%81%AE%E5%A4%A9')
       ownload(e.response.data.src)
     }
@@ -142,8 +152,9 @@
       ElMessage.error(res.msg)
       uploadFile.status = 'fail'
     }
+
     // 传递给父级
-    props.gitFile({ type: 'file', data: uploadFiles })
+    props.gitFile({ data: uploadFiles })
 
     state.targetArr[state.fileType]['fileList'] = uploadFiles
     state.uploadFileLoading = false
@@ -159,6 +170,8 @@
   }
 
   const setType = (name: string) => {
+    if (props.pictureType.accept === '') return true
+
     let availableSuffix = props.pictureType.availableSuffix //文件后缀限制
     let index = name.lastIndexOf('.')
     let suffix = name.slice(index + 1)
