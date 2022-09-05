@@ -1,9 +1,9 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-05 08:47:02
+ * @LastEditTime: 2022-09-05 10:13:24
  * @Description: 
- * @LastEditors: lyj
+ * @LastEditors: lyj111
 -->
 
 <template>
@@ -258,8 +258,9 @@
         }
       ]
     }
+
     if (e.type === 'file') {
-      state.form.shelfFile = e.data[0]
+      state.form.file = e.data[0]
     }
   }
   // 其他附件
