@@ -1,9 +1,0 @@
-.option{
-  display: flex;
-  flex-direction: row;
-}
-.circlePlus{
-  margin-top: 10px;
-  cursor: pointer;
-  margin-left: 50px;
-}

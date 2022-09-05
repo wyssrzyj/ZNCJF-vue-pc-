@@ -1,15 +1,14 @@
 <template>
-  设备
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
-      <el-form-item label="设备型号" prop="equipmentModel">
-        <el-input v-model="state.queryFormData.equipmentModel" placeholder="请输入" clearable />
+      <el-form-item label="设备型号" prop="spec">
+        <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="设备编号" prop="sn">
         <el-input v-model="state.queryFormData.sn" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="设备名称" prop="equipmentName">
-        <el-input v-model="state.queryFormData.equipmentName" placeholder="请输入" clearable />
+      <el-form-item label="设备名称" prop="name">
+        <el-input v-model="state.queryFormData.name" placeholder="请输入" clearable />
       </el-form-item>
     </template>
 
@@ -17,11 +16,10 @@
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
       <el-button type="primary" style="order: 1" @click="handleUploadStyle">批量导入款式</el-button>
       <el-button type="primary" style="order: 2" @click="handleUploadFile">批量导入文件</el-button>
-      <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
     <template #img="{ row }">
-      <img :src="row.img" alt="主图" style="width: 75px; height: 75px" />
+      <ImgModular :img="row.img" />
     </template>
 
     <template #type="{ row }">
@@ -30,6 +28,7 @@
 
     <template #defaultParam="{ row }">
       <div class="defaultParam" @click="setDefaultParam(row)">{{ row.defaultParam }}</div>
+      <!-- <el-icon class="proportionsLeft" :size="30"><Edit /></el-icon> -->
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -38,22 +37,22 @@
     </template>
   </njp-table-config>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1000px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1000px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
-  <!-- //默认参数 -->
-
-  <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :title="state.defaultParamTitle" width="1000px">
-    <PopModule :operation="operation" :type="state.defaultParam.type" :form="state.defaultParam.form" :list="state.defaultParam.list" />
+  <!-- 表格修改 -->
+  <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :close-on-click-modal="false" :title="state.defaultParam.Title" width="1000px">
+    <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
   import { reactive, getCurrentInstance, ref } from 'vue'
-  // import { ElMessage } from 'element-plus'
-  import DialogContent from './dialogContent/index.vue'
-  import PopModule from './popModule/index.vue'
   import { equipment } from '@/components/conifgs.ts'
+  import ImgModular from '@/components/imgModular/index.vue'
+
+  import DialogContent from './modules/dialog-content.vue'
+  import DefaultParam from './modules/dialog-forms.vue'
 
   const { proxy }: any = getCurrentInstance()
   const dialogUploadFileEl = ref()
@@ -64,20 +63,20 @@
     dialogType: true,
     dialogTableVisible: false,
     dialogTitle: '查看床次计划',
-    //默认参数
+
+    //默认参数弹窗
     defaultParam: {
       defaultParamType: false,
-      defaultParamTitle: '铺布建议参数',
-      form: { type: '3' },
-      type: false,
-      list: {}
+      row: {},
+      Title: '铺布建议参数',
+      form: { type: '1' }
     },
 
     // 查询数据
     queryFormData: {
-      equipmentModel: '',
+      spec: '',
       sn: '',
-      equipmentName: ''
+      name: ''
     },
     data: {
       row: {}
@@ -99,20 +98,9 @@
     //根据有无row判断点击新增或编辑按钮
   }
 
-  // const selectChange = (row: any) => {
-  //   proxy.$baseService.put('/njp-dsr-api/dsr/dsrstyle/update', row).then(res => {
-  //     if (res.code !== 0) return ElMessage.error(res.msg)
-  //     refreshTable()
-  //   })
-  // }
-
   const handleRowDbclick = (row: any) => {
     toViewFun(row, 'opinionList')
   }
-
-  // const toView = (row: any, type: any) => {
-  //   toViewFun(row, type)
-  // }
 
   const toViewFun = (row: any, type: any) => {
     proxy.$routerToView({
@@ -131,18 +119,6 @@
     })
   }
 
-  //去打印通知单详情
-  // const toViewSample = (row: any) => {
-  //   proxy.$routerToView({
-  //     path: `/style/create-sample/view-create-sample`,
-  //     query: {
-  //       _mt: `打样单详情`,
-  //       styleNo: row.styleNo,
-  //       stage: row.stage
-  //     }
-  //   })
-  // }
-
   const handleUploadStyle = () => {
     dialogUploadStyleEl.value.showDialog({
       action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
@@ -160,9 +136,7 @@
     state.dialogType = e
     state.dialogTableVisible = true
   }
-  const mov = () => {
-    // console.log('删除')
-  }
+
   //关闭 弹窗
   const close = (type: string) => {
     if (type == 'preservation') {
@@ -175,12 +149,29 @@
 
   // 修改默认参数
   const setDefaultParam = (row: any) => {
-    // console.log(row.defaultParam)
+    state.defaultParam.row = row
+
+    let type = row.type.toString()
+    state.defaultParam.form.type = type
+
+    if (type === '1') {
+      state.defaultParam.Title = '铺布建议参数'
+    }
+    if (type === '3') {
+      state.defaultParam.Title = '裁剪建议参数'
+    }
     state.defaultParam.defaultParamType = true
   }
-  const operation = (type: any, data: any) => {
-    state.defaultParam.defaultParamType = false
-    // console.log(type)
+
+  //关闭弹窗-【默认参数】
+  const operation = (e: any) => {
+    if (e.type === 'cancel') {
+      state.defaultParam.defaultParamType = false
+    }
+    if (e.type === 'confirm') {
+      refreshTable()
+      state.defaultParam.defaultParamType = false
+    }
   }
 </script>
 <style>
