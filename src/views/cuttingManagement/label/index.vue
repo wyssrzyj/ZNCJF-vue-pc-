@@ -1,140 +1,104 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <span>报表666</span>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" :expand-row-keys="[]"
-                    @expand-change="expandRow"
-  >
+  <span>贴标任务</span>
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
-      <el-form-item label="日期" prop="dateRange">
-        <njp-daterange-picker :query-form-data="state.queryFormData" />
+      <el-form-item label="床次计划号" prop="snstyleBedNo">
+        <el-input v-model="state.queryFormData.snstyleBedNo" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="品牌" prop="brand">
-        <el-select v-model="state.queryFormData.brand" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectBrand" :key="item" :label="item" :value="item" />
+      <el-form-item label="贴标任务号" prop="bedPlanNo">
+        <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="设备名称" prop="deviceName">
+        <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="状态" prop="statu">
+        <el-select v-model="state.queryFormData.statu" clearable filterable>
+          <el-option v-for="item in state.statu" :key="item.name" :label="item.name" :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="季节" prop="season">
-        <el-select v-model="state.queryFormData.season" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectSeason" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="版型" prop="plateType">
-        <el-select v-model="state.queryFormData.plateType" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectPlateType" :key="item" :label="item"
-                     :value="item"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="阶段" prop="stage">
-        <el-select v-model="state.queryFormData.stage" clearable filterable>
-          <el-option v-for="item in store.state.selectOptions.selectStage" :key="item" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <!--      <el-form-item label="样办" prop="ybType">-->
-      <!--        <el-select v-model="state.queryFormData.ybType" clearable filterable>-->
-      <!--          <el-option v-for="item in store.state.selectOptions.selectYbType" :key="item" :label="item" :value="item" />-->
-      <!--        </el-select>-->
-      <!--      </el-form-item>-->
-      <el-form-item label="款号" prop="styleNo">
-        <el-input v-model="state.queryFormData.styleNo" placeholder="请输入" clearable />
-      </el-form-item>
-      <el-form-item label="品名" prop="productName">
-        <el-input v-model="state.queryFormData.productName" placeholder="请输入" clearable />
-      </el-form-item>
-    </template>
-    <template #actionExtBtn="{ row }">
-      <div>
-        <el-button type="primary" link @click="toView(row, 'opinionList')">编辑</el-button>
-        <el-button class="mgt5" type="primary" link @click="toViewSample(row)">查看</el-button>
-      </div>
     </template>
 
-    <template #styleUrlList="{ row }">
-      <el-image v-if="row.styleUrlList && row.styleUrlList.length" style="width: 75px; height: 75px"
-                :src="find(row.styleUrlList, { topic: 1 }) ? find(row.styleUrlList, { topic: 1 }).url : row.styleUrlList[0].url"
-                :preview-src-list="row.styleUrlList.map(item => item.url)" :preview-teleported="true"
-      />
-      <svg-icon v-else width="75px" height="75px" name="empty_table" />
+    <template #operationExtBtn>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增贴标')">新增</el-button>
     </template>
-    <template #stage="{ row }">
-      <el-button type="primary" link @click="handleClick(row)">{{ row.stage }}</el-button>
+
+
+    <template #styleImage="{ row }">
+      <ImgModular :img="row.styleImage" />
     </template>
-    <template #expandSlot>
-      <el-table-column type="expand">
-        <template #default="{ row }">
-          <div style="padding-left: 94px">
-            <el-table :data="row.sampleList" border>
-              <el-table-column align="center" label="阶段" prop="stage" />
-              <el-table-column align="center" label="样办类型" prop="ybType" />
-              <el-table-column align="center" label="打样批次" prop="batch" />
-              <el-table-column align="center" label="打样通知时间" prop="createDate" />
-              <el-table-column align="center" label="操作" prop="zip">
-                <template #default="scope">
-                  <el-button link type="primary" @click="toView(scope.row)">查看详情</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </template>
-      </el-table-column>
+
+    <template #actionExtBtn="{ row }">
+      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看贴标', row)">查看</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标', row)">编辑</el-button>
     </template>
+
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1000px">
+      <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
+    </el-dialog>
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref } from 'vue'
-  import { useStore } from 'vuex'
-  import { find } from 'lodash'
-  import { ElMessage } from 'element-plus'
+  import { reactive, ref } from 'vue'
+  import ImgModular from '@/components/imgModular/index.vue'
+  import DialogContent from './modules/dialog-content.vue'
 
-  const { proxy } = getCurrentInstance()
-  const store = useStore()
+  // import DialogContent from './dialogContent/index.vue'
+
+  let mapType = new Map()
+  mapType.set(1, '未审核')
+  mapType.set(2, '已审核')
+  mapType.set(3, '进行中')
+  mapType.set(4, '已完成')
 
   const styleLibListEl = ref()
 
-  const state = reactive({
+  const state: any = reactive({
+    row: {},
+    dialogType: true,
+    dialogTableVisible: false,
+    dialogTitle: '查看贴标',
+    statu: [
+      { name: '未审核', value: '1' },
+      { name: '已审核', value: '2' },
+      { name: '进行中', value: '3' },
+      { name: '已完成', value: '4' }
+    ],
+
     queryFormData: {
-      brand: '',
-      plateType: '',
-      stage: '',
-      styleNo: '',
-      // eslint-disable-next-line prettier/prettier
-    productName: '',
-      ybType: '',
-      season: ''
+      produceOrderCode: '',
+      bedPlanNo: '',
+      styleCode: '',
+      statu: ''
     },
-    dialogVisible: false
+
+    dialogVisible: false,
+    title: '上传',
+    fileList: [],
+    rowData: {},
+    limit: 6
   })
 
-  const toView = row => {
-    proxy.$routerToView({
-      path: `/data-assets/style-library-v2/view-style-library`,
-      query: {
-        _mt: `款式库详情`,
-        id: row.id,
-        dsrStyleId: row.dsrStyleId
-      }
-    })
+  const handleAddOrUpdate = (row: any) => {
+    //根据有无row判断点击新增或编辑按钮
   }
 
-  const expandRow = (row: any) => {
-    getSampleList(row)
+  const refreshTable = () => {
+    styleLibListEl.value.refreshTable()
   }
 
-  const handleClick = (row: any) => {
-    styleLibListEl.value.getTableEl().toggleRowExpansion(row)
-    getSampleList(row)
+  //新增、编辑、查看
+  const handleClick = (e: any, type: any, row: any) => {
+    state.row = row
+    state.dialogTitle = type
+    state.dialogType = e
+    state.dialogTableVisible = true
   }
 
-  const getSampleList = (row: any) => {
-    row.sampleList = []
-    proxy.$baseService
-      .get('/njp-dsr-api/dsr/dsrproonotice/getHistoryStyleProoListByDsrStyleId', {
-        dsrStyleId: row.id
-      })
-      .then(res => {
-        if (res.code !== 0) return ElMessage.error(res.msg)
-        row.sampleList = res.data || []
-      })
+  //关闭 弹窗
+  const close = () => {
+    state.dialogTableVisible = false
+    refreshTable()
   }
 </script>

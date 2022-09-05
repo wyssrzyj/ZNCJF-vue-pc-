@@ -1,12 +1,104 @@
-<!--
- * @Author: lyj
- * @Date: 2022-08-16 13:16:10
- * @LastEditTime: 2022-08-16 15:06:34
- * @Description: 
- * @LastEditors: lyj
--->
+<!-- eslint-disable prettier/prettier -->
 <template>
-  <div>我是裁剪任务</div>
+  <span>裁剪任务-测试</span>
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
+    <template #queryFormItem>
+      <el-form-item label="床次计划号" prop="snstyleBedNo">
+        <el-input v-model="state.queryFormData.snstyleBedNo" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="裁剪任务号" prop="bedPlanNo">
+        <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="设备名称" prop="deviceName">
+        <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="状态" prop="statu">
+        <el-select v-model="state.queryFormData.statu" clearable filterable>
+          <el-option v-for="item in state.statu" :key="item.name" :label="item.name" :value="item.value" />
+        </el-select>
+      </el-form-item>
+    </template>
+
+    <template #operationExtBtn>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增裁剪')">新增</el-button>
+    </template>
+
+
+    <template #styleImage="{ row }">
+      <ImgModular :img="row.styleImage" />
+    </template>
+
+    <template #actionExtBtn="{ row }">
+      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看裁剪', row)">查看</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪', row)">编辑</el-button>
+    </template>
+
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1000px">
+      <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
+    </el-dialog>
+  </njp-table-config>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts" setup>
+  import { reactive, ref } from 'vue'
+  import ImgModular from '@/components/imgModular/index.vue'
+  import DialogContent from './modules/dialog-content.vue'
+
+  // import DialogContent from './dialogContent/index.vue'
+
+  let mapType = new Map()
+  mapType.set(1, '未审核')
+  mapType.set(2, '已审核')
+  mapType.set(3, '进行中')
+  mapType.set(4, '已完成')
+
+  const styleLibListEl = ref()
+
+  const state: any = reactive({
+    row: {},
+    dialogType: true,
+    dialogTableVisible: false,
+    dialogTitle: '查看裁剪',
+    statu: [
+      { name: '未审核', value: '1' },
+      { name: '已审核', value: '2' },
+      { name: '进行中', value: '3' },
+      { name: '已完成', value: '4' }
+    ],
+
+    queryFormData: {
+      produceOrderCode: '',
+      bedPlanNo: '',
+      styleCode: '',
+      statu: ''
+    },
+
+    dialogVisible: false,
+    title: '上传',
+    fileList: [],
+    rowData: {},
+    limit: 6
+  })
+
+  const handleAddOrUpdate = (row: any) => {
+    //根据有无row判断点击新增或编辑按钮
+  }
+
+  const refreshTable = () => {
+    styleLibListEl.value.refreshTable()
+  }
+
+  //新增、编辑、查看
+  const handleClick = (e: any, type: any, row: any) => {
+    state.row = row
+    state.dialogTitle = type
+    state.dialogType = e
+    state.dialogTableVisible = true
+  }
+
+  //关闭 弹窗
+  const close = () => {
+    state.dialogTableVisible = false
+    refreshTable()
+  }
+</script>
