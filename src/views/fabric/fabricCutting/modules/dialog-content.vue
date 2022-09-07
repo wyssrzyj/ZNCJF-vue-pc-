@@ -1,14 +1,7 @@
 <!--
  * @Author: lyj
- * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-04 16:34:04
- * @Description: 
- * @LastEditors: lyj
--->
-<!--
- * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-08-17 13:38:19
+ * @LastEditTime: 2022-09-07 11:14:28
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -19,32 +12,31 @@
       <div>
         <el-form ref="ruleFormRef" class="dialogContentForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
           <el-form-item label="模板面料图片" class="layclothImg" prop="img">
-            <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form.img" />
+            <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
-          <el-form-item label="参数模板编号" prop="templateNumber">
-            <el-input v-model="state.form.templateNumber" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
+          <el-form-item label="参数模板编号" prop="sn">
+            <el-input v-model="state.form.sn" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
           </el-form-item>
-          <el-form-item label="参数模板名称" prop="templateName">
-            <el-input v-model="state.form.templateName" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
+          <el-form-item label="参数模板名称" prop="name">
+            <el-input v-model="state.form.name" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
           </el-form-item>
           <el-form-item label="面料类型" prop="fabricType">
             <el-select v-model="state.form.fabricType" :disabled="disable(false)">
-              <el-option label="针织" value="1" />
-              <el-option label="梭织" value="2" />
+              <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="面料克重" prop="fabricWeight">
-            <FabricWeight v-model="state.form.fabricWeight" :type="state.type" :fabric-weight="fabricWeight" />
+            <FabricWeight v-model="state.form.fabricWeight" :data="state.form" :type="state.type" :fabric-weight="fabricWeight" />
           </el-form-item>
           <el-form-item label="关联面料">
-            <RelatedFabric :type="state.type" :set-fabric="setFabric" />
+            <RelatedFabric :form="state.form" :type="state.type" :set-fabric="setFabric" />
           </el-form-item>
         </el-form>
       </div>
     </el-col>
     <!-- 自定义 -->
     <el-col :span="16" class="dialogBottomRight">
-      <Option :type="state.type" :data="state.form.levelParamVOList" />
+      <Option :type="state.type" :data="state.form.levelParamVOList" :get-list="getList" />
     </el-col>
     <div class="dialogBottom">
       <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
@@ -53,19 +45,18 @@
   </el-row>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty } from 'lodash'
-
   import { content } from './conifgs'
   import './index.less'
-  // import UploadModule from './uploadModule/index.vue'
+  import { ElMessage } from 'element-plus'
+  import { fabricType } from '@/components/conifgs.ts'
+
   import UploadModule from './dialog-upload.vue'
-  // import FabricWeight from './fabricWeight/index.vue'
   import FabricWeight from './dialog-content-weight.vue'
-  // import Option from './option/index.vue'
   import Option from './dialog-content-right.vue'
-  // import RelatedFabric from './relatedFabric/index.vue'
   import RelatedFabric from './dialog-content-fabric.vue'
+  const { proxy } = getCurrentInstance()
 
   const ruleFormRef = ref<any>()
   const { formData, dataRule } = content
@@ -74,6 +65,7 @@
     dialogType: boolean
     close: any
     current: any
+    row: any
   }>()
 
   const state = reactive({
@@ -81,129 +73,28 @@
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息
-    prop: dataRule
+    prop: dataRule,
+    fabricType: fabricType
   })
 
-  const processInitialData = (data: any) => {
-    // 初始 数据格式转换
-    const dataFormatConversion = (item: any, title: any) => {
-      let data = !isEmpty(item.split(',')) ? item.split(',') : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      let table = {
-        date: title,
-        one: data[0],
-        two: data[1],
-        three: data[2],
-        four: data[3],
-        five: data[4],
-        six: data[5],
-        seven: data[6],
-        eight: data[7],
-        nine: data[8],
-        ten: data[9]
-      }
-      return table
-    }
-
-    //添加表格
-    const setSpreadTemplateParam = (item: any) => {
-      item.bottomTable = [dataFormatConversion(item.uniform, '布斗匀速'), dataFormatConversion(item.acceleration, '布斗加速'), dataFormatConversion(item.reduce, '布斗减速')]
-      return item
-    }
-
-    // 右边处理
-    if (!isEmpty(data.levelParamVOList)) {
-      data.levelParamVOList.map((item: any) => {
-        item.spreadTemplateParam = setSpreadTemplateParam(item.spreadTemplateParam)
-      })
-    }
-
-    return data
-  }
   const init = () => {
     //获取接口数据赋值form
-    let res: any = {
-      img: [
-        {
-          fileName: 'file.name',
-          doc: 'data.src',
-          url: 'http://localhost:9000/assets/dsrlogonav.20af6bbe.png',
-          name: 'file.name'
-        }
-      ],
-      templateNumber: '参数模板编号11',
-      templateName: '参数模板名称',
-      fabricType: '1',
-      fabricWeight: '',
-      relatedFabric: '关联面料',
-      levelParamVOList: [
-        {
-          levelName: '1~20',
-          spreadTemplateParam: {
-            id: 1562968510160236545,
-            creator: 1067246875800000001,
-            createDate: '2022-08-26T01:01:46.000+00:00',
-            updater: 1067246875800000001,
-            updateDate: '2022-08-26T01:01:46.000+00:00',
-            deletedFlag: 1,
-            tenantCode: 1001,
-            templateId: 1562968510021824514,
-            minLevel: '1', //最小
-            maxLevel: '20', //最大
-            forwardSpeed: 20.5, //前进速度
-            backSpeed: 7.0, //后退速度
-            uniformTightness: '300', //匀速松紧值
-            accelerationTightness: '加速松紧值', //加速松紧值
-            reduceTightness: '减速松紧值', //减速松紧值
-            crawlTightness: '爬行松紧值', //爬行松紧值
-            crawlSpeed: '爬行速度', //爬行速度
-            crawlDistance: '爬行距离', //爬行距离
-            angle: '20', //部都目标角度
-            accelerationWeight: '加速权重', //加速权重
-            uniform: '10,20,2,3,4,5,6,7,8,9', //匀速
-            acceleration: '85,1,2,3,4,5,6,7,8,9', //加速
-            reduce: '66,1,2,3,4,5,6,7,8,9', //减速
-            cutSpeed: 0.1,
-            cutLength: 10.5,
-            remark: ''
-          }
-        },
-        {
-          levelName: '1~20',
-          spreadTemplateParam: {
-            id: 1562968510160236545,
-            creator: 1067246875800000001,
-            createDate: '2022-08-26T01:01:46.000+00:00',
-            updater: 1067246875800000001,
-            updateDate: '2022-08-26T01:01:46.000+00:00',
-            deletedFlag: 1,
-            tenantCode: 1001,
-            templateId: 1562968510021824514,
-            minLevel: '50', //最小
-            maxLevel: '70', //最大
-            forwardSpeed: 20.5, //前进速度
-            backSpeed: 7.0, //后退速度
-            uniformTightness: '300', //匀速松紧值
-            accelerationTightness: '加速松紧值', //加速松紧值
-            reduceTightness: '减速松紧值', //减速松紧值
-            crawlTightness: '爬行松紧值', //爬行松紧值
-            crawlSpeed: '爬行速度', //爬行速度
-            crawlDistance: '爬行距离', //爬行距离
-            angle: '20', //部都目标角度
-            accelerationWeight: '加速权重', //加速权重
-            uniform: '55,1,2,3,4,5,6,7,8,9', //匀速
-            acceleration: '55,1,2,3,4,5,6,7,8,9', //加速
-            reduce: '75,1,2,3,4,5,6,7,8,9', //减速
-            cutSpeed: 0.1,
-            cutLength: 10.5,
-            remark: ''
-          }
-        }
-      ]
+    if (!isEmpty(props.row)) {
+      proxy.$baseService.get('/jack-ics-api/cutTemplateParam/get', { templateId: props.row.id }).then((res: any) => {
+        let arr = res.data
+        const { sn, name, fabricType, imageUrl, fabricWeightMin, fabricWeightMax } = arr.templateDTO
+        //赋值
+        arr.sn = sn
+        arr.name = name
+        arr.fabricType = fabricType
+        arr.img = [{ url: imageUrl }]
+        arr.fabricWeight = { left: Number(fabricWeightMin), right: Number(fabricWeightMax) }
+
+        state.form = arr
+      })
     }
-    // console.log(processInitialData(res))
-    //赋值
-    state.form = processInitialData(res)
   }
+
   init()
 
   // 是否可用
@@ -221,11 +112,12 @@
   //面料克重 赋值
   const fabricWeight = (e: any) => {
     state.form.fabricWeight = e
+    state.form.fabricWeightMin = e.left
+    state.form.fabricWeightMax = e.right
   }
   //关联面料
   const setFabric = (e: any) => {
-    state.form.relatedFabric = e
-    // console.log(e)
+    state.form.relationFabricList = e
   }
 
   // 表单提交
@@ -233,28 +125,47 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
-        // console.log('成功', state.form)
-        // close()
+        const { fabricType, fabricWeightMax, fabricWeightMin, img, name, sn } = state.form
+
+        // 格式处理
+        let arr = {
+          templateDTO: {
+            id: props.row.id,
+            fabricType: Number(fabricType),
+            fabricWeightMax: Number(fabricWeightMax),
+            fabricWeightMin: Number(fabricWeightMin),
+            imageUrl: !isEmpty(img) ? img[0].url : '',
+            name: name,
+            sn: sn,
+            relationFabricList: [{ name: 'sn1', id: 1562009101217095682 }]
+          },
+          levelParamVOList: state.form.levelParamVOList
+        }
+        proxy.$baseService.post('/jack-ics-api/cutTemplateParam/save', arr).then((res: any) => {
+          if (res.code === 0) {
+            ElMessage({
+              message: '保存成功',
+              type: 'success'
+            })
+            formEl.resetFields()
+            props.close('preservation')
+          } else {
+            ElMessage({
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
       }
     })
   }
 
-  //弹窗事件
-  // const operation = (e: any) => {
-  //   if (e.type === 'cancel') {
-  //     state.dialogTableVisible = false
-  //   }
-  //   if (e.type === 'confirm') {
-  //     //获取子项数据 proportions
-  //     // form.proportions = e.data
-  //     state.dialogTableVisible = false
-  //   }
-  // }
-
+  const getList = (e: any) => {
+    state.form.levelParamVOList = e
+  }
   // 取消
   const resetForm = (formEl: any) => {
-    props.close()
-    // if (!formEl) return
     formEl.resetFields()
+    props.close()
   }
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-04 16:41:26
+ * @LastEditTime: 2022-09-07 11:13:17
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,15 +17,40 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料')">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料', {})">新增</el-button>
     </template>
 
-    <template #img="{ row }">
-      <ImgModular :img="row.img" />
+    <template #imageUrl="{ row }">
+      <ImgModular :img="row.imageUrl" />
     </template>
 
-    <template #type="{ row }">
-      {{ mapType.get(row.type) }}
+    <template #fabricType="{ row }">
+      <span> {{ fabric.get(row.fabricType) }}</span>
+    </template>
+    <template #fabricWeight="{ row }">
+      <span> {{ row.fabricWeightMin }}~{{ row.fabricWeightMax }}</span>
+    </template>
+    <template #knifeSpeed="{ row }">
+      <span> {{ row.knifeSpeedMin }}~{{ row.knifeSpeedMax }}</span>
+    </template>
+
+    <template #minKnifeFrequency="{ row }">
+      <span> {{ row.minKnifeFrequencyMin }}~{{ row.minKnifeFrequencyMax }}</span>
+    </template>
+    <template #maxKnifeFrequency="{ row }">
+      <span> {{ row.maxKnifeFrequencyMin }}~{{ row.maxKnifeFrequencyMax }}</span>
+    </template>
+    <template #minKnifeDistance="{ row }">
+      <span> {{ row.minKnifeDistanceMin }}~{{ row.minKnifeFrequencyMax }}</span>
+    </template>
+    <template #knifeAngle="{ row }">
+      <span> {{ row.knifeAngleMin }}~{{ row.knifeAngleMax }}</span>
+    </template>
+    <template #emptyRatio="{ row }">
+      <span> {{ row.emptyRatioMin }}~{{ row.emptyRatioMax }}</span>
+    </template>
+    <template #relationFabricName="{ row }">
+      <span> {{ row.relationFabricName }}</span>
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -33,26 +58,21 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑面料管理', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1200px">
-      <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
+    <el-dialog v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1250px">
+      <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref } from 'vue'
-  import ImgModular from '@/components/imgModular/index.vue'
-  // import DialogContent from './dialogContent/index.vue'
-  import DialogContent from './modules/dialog-content.vue'
-  // import DialogContent from './modules/dialog-content.vue'
+  import { reactive, ref } from 'vue'
+  import { fabric } from '@/components/conifgs.ts'
 
-  let mapType = new Map()
-  mapType.set(1, '针织面料')
-  mapType.set(2, '梭织面料')
-  const { proxy }: any = getCurrentInstance()
+  import ImgModular from '@/components/imgModular/index.vue'
+
+  import DialogContent from './modules/dialog-content.vue'
 
   const styleLibListEl = ref()
-
   const state = reactive({
     dialogType: true,
     dialogTableVisible: false,
@@ -92,6 +112,7 @@
   //关闭 弹窗
 
   const close = (type: string) => {
+    state.data.row = {}
     if (type == 'preservation') {
       state.dialogTableVisible = false
       refreshTable()

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-04 16:19:21
+ * @LastEditTime: 2022-09-06 20:59:15
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -43,8 +43,7 @@
     props.getData(e)
   }
   const gitFile = (e: any) => {
-    // console.log('文件上传gitFile', e)
-
+    e.type = state.type
     props.getData(e)
   }
 </script>

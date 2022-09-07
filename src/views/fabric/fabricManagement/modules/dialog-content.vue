@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-04 15:35:44
+ * @LastEditTime: 2022-09-06 20:55:31
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -112,7 +112,7 @@
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
-  import { isEmpty } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
   import { formData, formMiddleData, formRightData, dataRule } from './conifgs'
@@ -148,7 +148,7 @@
       proxy.$baseService.get('/jack-ics-api/fabric/get', { id: props.row.id }).then((res: any) => {
         // console.log(res)
         // 图片
-        res.data.img = [{ url: res.data.styleImage }]
+        res.data.img = [{ url: res.data.img }]
 
         // console.log('获取接口数据', res.data)
         state.form = res.data
@@ -175,12 +175,40 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
-        if (!isEmpty(state.form.img)) {
-          state.form.img = state.form.img[0].url
+        let data = cloneDeep(state.form) //防止污染
+        // 图片
+        if (!isEmpty(data.img)) {
+          data.img = data.img[0].url
+        }
+
+        //其他附件
+        if (!isEmpty(data.attachmentList)) {
+          let arr: any = []
+
+          data.attachmentList.forEach((item: any) => {
+            //组件返回格式
+            if (!isEmpty(item.response)) {
+              arr.push({
+                name: item.name,
+                url: item.response.data.src,
+                size: item.size,
+                suffix: item.response.data.extension
+              })
+            } else {
+              // 后端返回格式
+              arr.push({
+                name: item.name,
+                url: item.url,
+                size: item.size,
+                suffix: item.suffix
+              })
+            }
+          })
+          data.attachmentList = arr
         }
 
         // console.log(state.form)
-        proxy.$baseService.post('/jack-ics-api/fabric/save', state.form).then((res: any) => {
+        proxy.$baseService.post('/jack-ics-api/fabric/save', data).then((res: any) => {
           if (res.data === true) {
             ElMessage({
               message: '保存成功',
@@ -194,19 +222,10 @@
     })
   }
 
+  // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
-      let dome = [
-        {
-          name: e.data[0].name,
-          url: e.data[0].response.data.src,
-          moduleId: e.data[0].response.data.id,
-          suffix: e.data[0].response.data.extension,
-          size: e.data[0].response.data.size
-        }
-      ]
-      state.form.attachmentList = dome
-      // console.log('其他附件', e)
+      state.form.attachmentList = e.data
     }
   }
   // 取消

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-04 17:55:50
+ * @LastEditTime: 2022-09-05 20:27:16
  * @Description:
  * @LastEditors: lyj
  */
@@ -14,23 +14,21 @@ export const content: any = {
     shelfFile: '',
     attachmentList: [],
 
-    produceOrderCode: '',
-    customName: '',
-    fabricCode: '',
-    fabricColor: '',
-    shelfWidth: 0,
-    spreadClothLevel: '',
-    levelClothSum: 0,
-    bedSum: 0,
+    produceOrderCode: '生产订单',
+    customName: '床次计划号',
+    fabricCode: '面料编号',
+    fabricColor: '面料颜色',
+    shelfWidth: 10,
+    spreadClothLevel: 100,
+    levelClothSum: '',
 
-    bedPlanNo: null,
-    styleBedNo: null,
-    fabricName: '',
-    shelfLength: 0,
-    spreadClothLength: 0,
-    shelfList: '',
-    attritionRate: 0,
-    remark: ''
+    bedPlanNo: '款式床次号',
+    styleBedNo: '贴标任务号',
+    fabricName: '面料名称',
+    shelfLength: 20,
+    spreadClothLength: 30,
+    shelfList: '设备名称',
+    attritionRate: ''
   },
   formMiddleData: [
     { name: '生产订单', model: 'produceOrderCode', prop: 'produceOrderCode', type: null, disabled: false },

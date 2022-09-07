@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-04 15:02:11
+ * @LastEditTime: 2022-09-07 11:13:48
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -196,6 +196,7 @@
         if (!isEmpty(state.form.img)) {
           state.form.img = state.form.img[0].url
         }
+
         proxy.$baseService.post('/jack-ics-api/device/save', state.form).then((res: any) => {
           if (res.code === 0) {
             ElMessage({

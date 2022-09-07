@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-09-04 15:07:44
+ * @LastEditTime: 2022-09-05 13:55:28
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -25,7 +25,7 @@
     disabled: boolean
   }>()
   const state: any = reactive({
-    fileList: [],
+    fileList: props.value.img || [],
     limit: 1,
     img: jackImg
   })

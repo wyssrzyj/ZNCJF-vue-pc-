@@ -1,9 +1,9 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-05 10:13:24
+ * @LastEditTime: 2022-09-07 11:17:07
  * @Description: 
- * @LastEditors: lyj111
+ * @LastEditors: lyj
 -->
 
 <template>
@@ -197,21 +197,19 @@
     attachmentList: { limit: 5, title: '最多上传5个' }
   })
   const init = () => {
+    //数据回显
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
-        // console.log(res)
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
-        //唛架图先使用静态数据
+
+        //唛架图
         res.data.shelfFile = [
           {
-            name: '小心.jpg',
+            name: res.data.shelfFile.name,
             response: {
               data: {
-                src: 'http://10.18.4.25/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-                relativeSrc: '/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-                size: 0.05,
-                extension: 'jpg'
+                src: res.data.shelfFile.src
               }
             }
           }
@@ -224,7 +222,6 @@
           })
           res.data.shelfList = shelfList
         }
-        // console.log('获取接口数据', res.data)
         state.form = res.data
       })
     }
@@ -244,33 +241,14 @@
     }
     //唛架图
     if (e.type === 'shelfFile') {
-      state.form.shelfFile = [
-        {
-          name: '小心.jpg',
-          response: {
-            data: {
-              src: 'http://10.18.4.25/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-              relativeSrc: '/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-              size: 0.05,
-              extension: 'jpg'
-            }
-          }
-        }
-      ]
-    }
-
-    if (e.type === 'file') {
-      state.form.file = e.data[0]
+      state.form.shelfFile = e.data
     }
   }
+
   // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
-      // console.log('其他', e.data)
-      // console.log('其他附件', e.data)
-
-      state.form.attachmentList = []
-      // console.log('其他附件', e)
+      state.form.attachmentList = e.data
     }
   }
 
@@ -285,17 +263,53 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
-        if (!isEmpty(state.form.styleImage)) {
-          state.form.styleImage = state.form.styleImage[0].url
+        let data = cloneDeep(state.form) //防止污染
+        // 图片
+        if (!isEmpty(data.styleImage)) {
+          data.styleImage = data.styleImage[0].url
         }
-        proxy.$baseService.post('/jack-ics-api/bedPlan/save', state.form).then((res: any) => {
-          if (res.code === 200) {
+        // 唛架图处理
+        if (!isEmpty(data.shelfFile)) {
+          let shelfFile = {
+            name: data.shelfFile[0].name,
+            url: data.shelfFile[0].response.data.src
+          }
+          data.shelfFile = shelfFile
+        }
+
+        //其他附件
+        if (!isEmpty(data.attachmentList)) {
+          let arr: any = []
+
+          data.attachmentList.forEach((item: any) => {
+            //组件返回格式
+            if (!isEmpty(item.response)) {
+              arr.push({
+                name: item.name,
+                url: item.response.data.src,
+                size: item.size,
+                suffix: item.response.data.extension
+              })
+            } else {
+              // 后端返回格式
+              arr.push({
+                name: item.name,
+                url: item.url,
+                size: item.size,
+                suffix: item.suffix
+              })
+            }
+          })
+          data.attachmentList = arr
+        }
+
+        proxy.$baseService.post('/jack-ics-api/bedPlan/save', data).then((res: any) => {
+          if (res.code === 0) {
             ElMessage({
               message: '保存成功',
               type: 'success'
             })
             formEl.resetFields()
-
             props.close()
           } else {
             // console.log(res.msg)

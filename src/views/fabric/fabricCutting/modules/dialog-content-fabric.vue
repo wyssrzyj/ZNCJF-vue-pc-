@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-04 16:24:11
+ * @LastEditTime: 2022-09-07 11:13:08
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -32,7 +32,8 @@ vue
 
 <script lang="ts" setup>
   import { isEmpty } from 'lodash'
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, getCurrentInstance } from 'vue'
+  const { proxy } = getCurrentInstance()
 
   const dialogVisible: any = ref(false)
 
@@ -47,8 +48,20 @@ vue
     options: [{}] //总数据
   })
 
+  //  watch()
+  // dialogVisible == true才执行
+
   //初始
   const init = () => {
+    let data = {
+      pageIndex: 1,
+      pageSize: 1000,
+      fabricWeightMax: 1,
+      fabricWeightMin: 2,
+      type: 1
+    }
+    proxy.$baseService.get('/jack-ics-api/fabric/pageList', data).then((res: any) => {})
+
     let res = [
       {
         value: '11',

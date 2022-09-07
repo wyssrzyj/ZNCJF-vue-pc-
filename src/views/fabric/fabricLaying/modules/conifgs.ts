@@ -1,20 +1,89 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-04 16:37:08
+ * @LastEditTime: 2022-09-06 16:37:53
  * @Description:
  * @LastEditors: lyj
  */
 export const content: any = {
   formData: {
-    img: [{}],
+    img: [],
     templateNumber: '',
     templateName: '',
-    fabricType: '',
-    fabricWeight: '',
+    type: '',
+    fabricWeight: {
+      left: 0,
+      right: 0
+    },
     relatedFabric: '',
     fabric: '',
-    right: []
+    right: [],
+    levelParamVOList: [
+      {
+        spreadTemplateParam: {
+          minLevel: 1,
+          maxLevel: 10,
+          forwardSpeed: 0,
+          backSpeed: 0,
+          uniformTightness: '',
+          accelerationTightness: '',
+          reduceTightness: '',
+          crawlTightness: '',
+          crawlSpeed: '',
+          crawlDistance: '',
+          angle: '',
+          accelerationWeight: '',
+          uniform: '0,0,0,0,0,0,0,0,0,0',
+          acceleration: '0,0,0,0,0,0,0,0,0,0',
+          reduce: '0,0,0,0,0,0,0,0,0,0',
+          cutSpeed: 0,
+          cutLength: 0,
+          remark: '',
+          bottomTable: [
+            {
+              date: '布斗匀速',
+              one: 0,
+              two: 0,
+              three: 0,
+              four: 0,
+              five: 0,
+              six: 0,
+              seven: 0,
+              eight: 0,
+              nine: 0,
+              ten: 0
+            },
+            {
+              date: '布斗加速',
+              one: 0,
+              two: 0,
+              three: 0,
+              four: 0,
+              five: 0,
+              six: 0,
+              seven: 0,
+              eight: 0,
+              nine: 0,
+              ten: 0
+            },
+            {
+              date: '布斗减速',
+              one: 0,
+              two: 0,
+              three: 0,
+              four: 0,
+              five: 0,
+              six: 0,
+              seven: 0,
+              eight: 0,
+              nine: 0,
+              ten: 0
+            }
+          ]
+        },
+        title: '5-10层'
+      }
+    ]
   },
   dataRule: {
     templateNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -79,7 +148,7 @@ export const customFormData = {
   },
   formMiddleData: [
     { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
-    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: null, disabled: false },
+    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: 'forwardSpeed', disabled: false },
     { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
     { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
     { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: null, disabled: false },
@@ -87,7 +156,7 @@ export const customFormData = {
   ],
   formRightData: [
     { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
-    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: null, disabled: false },
+    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: 'backSpeed', disabled: false },
     { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
     { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
     { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: null, disabled: false },
