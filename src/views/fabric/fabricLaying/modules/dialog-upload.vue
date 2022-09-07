@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-04 16:22:15
+ * @LastEditTime: 2022-09-05 13:44:03
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="props.value" :disabled="disabled" />
-  <File v-if="state.type === 'file'" :picture-type="state.pictureType" :git-file="gitFile" :value="value" :disabled="disabled" />
+  <File v-if="state.type === 'file'" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'
@@ -17,7 +17,7 @@
   const props = defineProps<{
     type: string
     getData: any
-    value: []
+    value: any
     disabled: boolean
   }>()
 

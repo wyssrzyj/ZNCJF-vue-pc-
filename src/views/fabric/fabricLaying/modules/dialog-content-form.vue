@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-04 16:35:22
+ * @LastEditTime: 2022-09-06 18:22:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -27,6 +27,13 @@
                   />
                 </el-form-item>
               </div>
+
+              <div v-if="item.type === 'forwardSpeed'">
+                <el-form-item :label="`${item.name}`">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
+                </el-form-item>
+              </div>
+
               <div v-if="item.type === null">
                 <el-form-item :label="`${item.name}`">
                   <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange" />
@@ -39,6 +46,12 @@
               <div v-if="item.type === 'maxLevel'">
                 <el-form-item :label="`${item.name}`">
                   <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="state.form[item.min]" type="text" @change="handleChange" />
+                </el-form-item>
+              </div>
+
+              <div v-if="item.type === 'backSpeed'">
+                <el-form-item :label="`${item.name}`">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
                 </el-form-item>
               </div>
               <div v-if="item.type === null">
@@ -60,9 +73,8 @@
 <script lang="ts" setup>
   import { reactive, watch } from 'vue'
   import { customFormData } from './conifgs'
-  import './index.less'
 
-  // import BottomTable from './bottomTable/index.vue'
+  import './index.less'
   import BottomTable from './dialog-content-table.vue'
   const { formData, formMiddleData, formRightData, dataRule } = customFormData
   const props = defineProps<{
@@ -101,10 +113,14 @@
   )
 
   const handleChange = () => {
-    props.update('form', state.form)
+    let data = props.current
+    data.spreadTemplateParam = state.form
+    props.update(data)
   }
   // table修改的返回值
-  const onChang = () => {
-    props.update('table', state.bottomTable)
+  const onChang = (e: any) => {
+    let data = props.current
+    data.spreadTemplateParam.bottomTable = e
+    props.update(data)
   }
 </script>

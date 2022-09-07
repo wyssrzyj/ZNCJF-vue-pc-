@@ -1,20 +1,13 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-09-04 14:27:28
+ * @LastEditTime: 2022-09-07 08:33:52
  * @Description:
  * @LastEditors: lyj
  */
 
 export const formData = {
-  img: [
-    {
-      fileName: 'file.name',
-      doc: 'data.src',
-      url: 'http://localhost:9000/assets/dsrlogonav.20af6bbe.png',
-      name: 'file.name'
-    }
-  ],
+  img: [],
   attachmentList: [],
 
   sn: '',

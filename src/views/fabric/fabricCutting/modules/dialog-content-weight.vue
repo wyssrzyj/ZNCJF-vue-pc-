@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-04 16:24:51
+ * @LastEditTime: 2022-09-07 10:24:45
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -13,19 +13,32 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive } from 'vue'
+  import { reactive, watch } from 'vue'
 
   const props = defineProps<{
     fabricWeight: any
     type: any
+    data: any
   }>()
 
   const state = reactive({
     list: {
-      left: 0,
-      right: 0
+      left: '',
+      right: ''
     }
   })
+
+  const init = () => {
+    state.list = props.data.fabricWeight
+  }
+  init()
+
+  watch(
+    () => props.data,
+    item => {
+      state.list = item.fabricWeight
+    }
+  )
   const data = (list: any) => {
     if (list.left > 0 && list.left > 0) {
       props.fabricWeight(list)

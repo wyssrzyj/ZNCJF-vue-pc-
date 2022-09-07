@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-04 14:29:13
+ * @LastEditTime: 2022-09-07 11:11:50
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,15 +40,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref } from 'vue'
+  import { reactive, ref } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  // import DialogContent from './dialogContent/index.vue'
   import DialogContent from './modules/dialog-content.vue'
 
   let mapType = new Map()
   mapType.set(1, '针织面料')
   mapType.set(2, '梭织面料')
-  const { proxy }: any = getCurrentInstance()
 
   const styleLibListEl = ref()
 

@@ -117,11 +117,16 @@
       }
     }
   )
-
+  //点击下载
   const download = (e: any) => {
-    if (!isEmpty(e.response.data)) {
-      // ownload('https://www.ijjxsw.net/api/txt_down.php?articleid=1465&articlename=%E9%81%AE%E5%A4%A9')
-      ownload(e.response.data.src)
+    //后端返回的
+    if (!isEmpty(e.url)) {
+      ownload(e.url)
+    } else {
+      //组件返回的
+      if (!isEmpty(e.response.data)) {
+        ownload(e.response.data.src)
+      }
     }
   }
 

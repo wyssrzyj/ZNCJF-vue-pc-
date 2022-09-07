@@ -1,20 +1,46 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-04 16:37:08
+ * @LastEditTime: 2022-09-07 10:24:03
  * @Description:
  * @LastEditors: lyj
  */
 export const content: any = {
   formData: {
-    img: [{}],
+    img: [],
     templateNumber: '',
     templateName: '',
-    fabricType: '',
-    fabricWeight: '',
+    type: '',
+    fabricWeight: {
+      left: '',
+      right: ''
+    },
     relatedFabric: '',
     fabric: '',
-    right: []
+    right: [],
+    levelParamVOList: [
+      {
+        cutTemplateParam: {
+          minLevel: 1,
+          maxLevel: 10,
+          minKnifeFrequency: 0,
+          maxKnifeFrequency: 0,
+          knifeSpeed: '',
+          knifeAngle: '',
+          minKnifeDistance: '',
+          emptyRatio: '',
+          crawlSpeed: '',
+          crawlDistance: '',
+          angle: '',
+          accelerationWeight: '',
+
+          cutSpeed: 0,
+          cutLength: 0,
+          remark: ''
+        },
+        title: '1-10层'
+      }
+    ]
   },
   dataRule: {
     templateNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -25,7 +51,7 @@ export const content: any = {
 }
 export const customFormData = {
   formData: {
-    forwardSpeed: '1',
+    minKnifeFrequency: '1',
     uniformTension: '',
     slowDown: '',
     creepSpeed: '',
@@ -34,64 +60,19 @@ export const customFormData = {
     acceleration: '',
     creeping: '',
     distance: '',
-    accelerationWeight: '',
-    bottomTable: [
-      {
-        date: '布斗匀速',
-        one: '',
-        two: '',
-        three: '',
-        four: '',
-        five: '',
-        six: '',
-        seven: '',
-        eight: '',
-        nine: '',
-        ten: ''
-      },
-      {
-        date: '布斗加速',
-        one: '',
-        two: '',
-        three: '',
-        four: '',
-        five: '',
-        six: '',
-        seven: '',
-        eight: '',
-        nine: '',
-        ten: ''
-      },
-      {
-        date: '布斗减速',
-        one: '',
-        two: '',
-        three: '',
-        four: '',
-        five: '',
-        six: '',
-        seven: '',
-        eight: '',
-        nine: '',
-        ten: ''
-      }
-    ]
+    accelerationWeight: ''
   },
   formMiddleData: [
     { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
-    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: null, disabled: false },
-    { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
-    { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
-    { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: null, disabled: false },
-    { name: '布斗目标角度', model: 'angle', prop: 'angle', type: null, disabled: false }
+    { name: '最小刀频', model: 'minKnifeFrequency', prop: 'minKnifeFrequency', type: null, disabled: false, title: 'U/min' },
+    { name: '刀速', model: 'knifeSpeed', prop: 'knifeSpeed', type: null, disabled: false, title: 'm/min' },
+    { name: '最小磨刀距离', model: 'minKnifeDistance', prop: 'minKnifeDistance', type: null, disabled: false, title: 'mm' }
   ],
   formRightData: [
     { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
-    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: null, disabled: false },
-    { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
-    { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
-    { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: null, disabled: false },
-    { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }
+    { name: '最大刀频', model: 'maxKnifeFrequency', prop: 'maxKnifeFrequency', type: null, disabled: false, title: 'U/min' },
+    { name: '提刀角度', model: 'knifeAngle', prop: 'knifeAngle', type: null, disabled: false, title: '°' },
+    { name: '真空率', model: 'emptyRatio', prop: 'emptyRatio', type: null, disabled: false, title: '%' }
   ],
   dataRule: {
     equipmentNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

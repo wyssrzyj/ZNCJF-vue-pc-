@@ -1,7 +1,14 @@
+/*
+ * @Author: lyj
+ * @Date: 2022-09-05 10:01:25
+ * @LastEditTime: 2022-09-05 13:35:23
+ * @Description:
+ * @LastEditors: lyj
+ */
 //---------------content-----------------
 export const content: any = {
   formData: {
-    img: '',
+    img: [],
     sn: '',
     name: '',
     relationDevice: '',
