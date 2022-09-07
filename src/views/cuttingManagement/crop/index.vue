@@ -1,6 +1,6 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <span>裁剪任务</span>
+  <span>裁剪任务-测试</span>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
       <el-form-item label="床次计划号" prop="snstyleBedNo">

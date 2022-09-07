@@ -19,8 +19,8 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 1" @click="handleUploadStyle">批量导入款式</el-button>
-      <el-button type="primary" style="order: 2" @click="handleUploadFile">批量导入文件</el-button>
+      <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button>
+      <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增床次计划')">新增</el-button>
     </template>
 
