@@ -1,5 +1,12 @@
+/*
+ * @Author: lyj
+ * @Date: 2022-08-15 09:55:44
+ * @LastEditTime: 2022-09-07 13:04:16
+ * @Description:
+ * @LastEditors: lyj
+ */
 const port_common = 8990
-const port_intellicut = 9002
+const port_intellicut = 9001
 
 const host_develop = 'http://localhost'
 const host_dev = 'http://192.168.0.242'
