@@ -33,7 +33,7 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1000px">
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="920px" hei>
       <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -57,7 +57,7 @@
   const state: any = reactive({
     row: {},
     dialogType: true,
-    dialogTableVisible: false,
+    dialogTableVisible: true,
     dialogTitle: '查看铺布',
     statu: [
       { name: '未审核', value: '1' },
