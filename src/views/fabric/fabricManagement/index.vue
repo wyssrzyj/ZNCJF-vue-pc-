@@ -3,7 +3,7 @@
  * @Date: 2022-08-31 13:11:11
  * @LastEditTime: 2022-09-07 11:11:50
  * @Description: 
- * @LastEditors: lyj
+ * @LastEditors:··· lyj
 -->
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
@@ -17,7 +17,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料')">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料')"> 新增 </el-button>
     </template>
 
     <template #img="{ row }">
