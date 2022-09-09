@@ -64,7 +64,7 @@
     dialogTableVisible: false,
     dialogTitle: '查看床次计划',
 
-    //默认参数弹窗
+    //默认参数弹窗1
     defaultParam: {
       defaultParamType: false,
       row: {},
