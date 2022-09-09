@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 15:40:27
+ * @LastEditTime: 2022-09-09 17:26:16
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -75,7 +75,7 @@
   </el-form>
 
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
-    <Crop :list="props.list" :row="props.row" :type="false" :cancel="cancel" :preservation="preservation" />
+    <Crop :list="props.list" :row="state.form" :type="false" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
 
@@ -121,11 +121,8 @@
     //数据回显
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/cutTask/get', { taskId: props.row.id }).then((res: any) => {
-        // console.log('回显', res)
-
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
-
         //唛架图
         res.data.shelfFile = [
           {
@@ -139,7 +136,6 @@
         ]
         ;(res.data.deviceSn = 1), //设备编号测试~
           (state.form = res.data)
-        // console.log(state.form)
       })
     }
   }
@@ -253,20 +249,8 @@
   }
   //确认
   const preservation = (e: any, type: string, title: any) => {
-    // console.log('确认', e)
-    // console.log('确认', title)
-    state.form.spreadClothLevel = '设备编号'
-    // let data = { ...e, defaultParam: title, deviceId: props.row.id }
+    state.form.cutTaskParam = e //赋值
 
-    // 裁剪
-    if (type === 'crop') {
-      // proxy.$baseService.post('/jack-ics-api/cutDefaultParam/save', data).then((res: any) => {
-      //   ElMessage({
-      //     message: '保存成功',
-      //     type: 'success'
-      //   })
-      // })
-      state.dialogTableVisible = false
-    }
+    state.dialogTableVisible = false
   }
 </script>

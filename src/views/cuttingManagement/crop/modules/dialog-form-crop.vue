@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 14:54:34
+ * @LastEditTime: 2022-09-09 17:40:24
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -82,15 +82,21 @@
   })
 
   const init = () => {
+    //判断 本地是否有值 cutTaskParam
     try {
-      let id = props.row.id
-
-      if (id === undefined) {
-        state.form = props.list
+      // 有使用旧数据
+      if (!isEmpty(props.row.cutTaskParam)) {
+        state.form = props.row.cutTaskParam
       } else {
-        proxy.$baseService.get('/jack-ics-api/cutDefaultParam/get', { deviceId: id }).then((res: any) => {
+        // 没有使用接口数据
+        let data = {
+          bedPlanId: props.row.bedPlanId,
+          deviceId: props.row.deviceId,
+          spreadClothLevel: props.row.spreadClothLevel
+        }
+        proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
           if (!isEmpty(res.data)) {
-            state.form = res.data
+            state.form = res.data.cutTaskParam
           }
         })
       }
