@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 14:39:27
+ * @LastEditTime: 2022-09-09 15:40:27
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -46,7 +46,7 @@
 
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划开始时间" />
+              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划开始时间" format="YYYY/MM/DD hh:mm:ss" value-format="x" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -61,7 +61,7 @@
           </div>
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" />
+              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY/MM/DD hh:mm:ss" value-format="x" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -120,7 +120,7 @@
   const init = () => {
     //数据回显
     if (props.row) {
-      proxy.$baseService.get('/jack-ics-api/pasteTask/get', { taskId: props.row.id }).then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/cutTask/get', { taskId: props.row.id }).then((res: any) => {
         // console.log('回显', res)
 
         // 图片
@@ -222,7 +222,7 @@
           data.attachmentList = arr
         }
 
-        proxy.$baseService.post('/jack-ics-api/bedPlan/save', data).then((res: any) => {
+        proxy.$baseService.post('/jack-ics-api/cutTask/save', data).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',

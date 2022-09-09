@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 14:37:22
+ * @LastEditTime: 2022-09-09 15:46:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -131,6 +131,7 @@
         ]
         ;(res.data.deviceSn = 1), //设备编号测试~
           (state.form = res.data)
+        // console.log( state.form);
       })
     }
   }

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-08-29 13:08:48
+ * @LastEditTime: 2022-09-09 14:50:49
  * @Description:
  * @LastEditors: lyj
  */
@@ -11,7 +11,7 @@ export const formData = {
     {
       fileName: 'file.name',
       doc: 'data.src',
-      url: 'http://localhost:9000/assets/dsrlogonav.20af6bbe.png',
+      url: '',
       name: 'file.name'
     }
   ],

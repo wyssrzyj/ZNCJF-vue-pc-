@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 14:45:09
+ * @LastEditTime: 2022-09-09 15:16:36
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -239,6 +239,7 @@
             }
           }
         ]
+
         //回显排唛比例-unique判断唯一值
         if (!isEmpty(res.data.shelfList)) {
           let shelfList = cloneDeep(res.data.shelfList)

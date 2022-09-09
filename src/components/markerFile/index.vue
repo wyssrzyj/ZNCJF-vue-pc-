@@ -1,32 +1,28 @@
 <template>
-  <div v-if="disabled === true">
-    <el-button icon="upload" :disabled="true">上传文件</el-button>
-  </div>
-  <div v-if="disabled === false">
-    <el-upload
-      v-if="state.fileType !== null"
-      :file-list="state.targetArr[0]['fileList']"
-      :accept="props.pictureType.accept"
-      :action="state.ossAction"
-      multiple
-      :headers="{ token: getToken() }"
-      :before-upload="beforeAvatarUpload"
-      :on-progress="uploadProgress"
-      :on-success="uploadSuccess"
-      :before-remove="beforeRemove"
-      :on-error="uploadError"
-      :limit="props.upload.limit"
-      :on-preview="download"
-    >
-      <el-button icon="upload">上传文件</el-button>
-      <div v-if="state.fileType !== null" class="subtip">
-        <el-icon>
-          <Warning />
-        </el-icon>
-        {{ props.upload.title }}
-      </div>
-    </el-upload>
-  </div>
+  <el-upload
+    v-if="state.fileType !== null"
+    :disabled="disabled"
+    :file-list="state.targetArr[0]['fileList']"
+    :accept="props.pictureType.accept"
+    :action="state.ossAction"
+    multiple
+    :headers="{ token: getToken() }"
+    :before-upload="beforeAvatarUpload"
+    :on-progress="uploadProgress"
+    :on-success="uploadSuccess"
+    :before-remove="beforeRemove"
+    :on-error="uploadError"
+    :limit="props.upload.limit"
+    :on-preview="download"
+  >
+    <el-button icon="upload">上传文件</el-button>
+    <div v-if="state.fileType !== null" class="subtip">
+      <el-icon>
+        <Warning />
+      </el-icon>
+      {{ props.upload.title }}
+    </div>
+  </el-upload>
 </template>
 
 <script lang="ts" setup>
