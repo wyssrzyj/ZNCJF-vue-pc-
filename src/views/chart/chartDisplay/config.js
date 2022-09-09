@@ -29,10 +29,6 @@ export const echartsOpt = {
       interval: 3600 * 1000, //以一个小时递增
       // min: '2008-9-1 1:00', //将data里最小时间的整点时间设为min,否则min会以data里面的min为开始进行整点递增
       axisTick: {
-        //x轴刻度线
-        show: false
-      },
-      axisTick: {
         // X轴线 刻度线
         show: false,
         length: 10,
