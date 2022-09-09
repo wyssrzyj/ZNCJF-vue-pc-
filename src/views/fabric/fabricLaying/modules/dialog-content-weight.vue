@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-06 13:48:30
+ * @LastEditTime: 2022-09-07 17:36:26
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -58,7 +58,7 @@
 
 <style>
   .fabricWeightInput {
-    width: 50px;
+    width: 90px;
   }
   .fabricWeight-right {
     margin-left: 10px;

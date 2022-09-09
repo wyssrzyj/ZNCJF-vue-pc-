@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-06 16:37:53
+ * @LastEditTime: 2022-09-08 16:27:21
  * @Description:
  * @LastEditors: lyj
  */
@@ -81,7 +81,8 @@ export const content: any = {
             }
           ]
         },
-        title: '5-10层'
+        lyjyyds: 'init', //用于判断
+        title: '1-10层'
       }
     ]
   },

@@ -1,9 +1,9 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-07 11:11:50
+ * @LastEditTime: 2022-09-08 09:20:52
  * @Description: 
- * @LastEditors:··· lyj
+ * @LastEditors: lyj
 -->
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
@@ -33,8 +33,8 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑面料管理', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1000px">
-      <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
+      <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
 </template>

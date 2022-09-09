@@ -1,5 +1,4 @@
 <template>
-  床次-lyj-构建测~
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
       <el-form-item label="生产订单" prop="produceOrderCode">

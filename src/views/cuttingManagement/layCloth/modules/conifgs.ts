@@ -1,104 +1,165 @@
 /*
  * @Author: lyj
- * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-04 17:55:50
+ * @Date: 2022-09-04 16:20:33
+ * @LastEditTime: 2022-09-09 11:16:55
  * @Description:
  * @LastEditors: lyj
  */
-//---------------content-----------------
 export const content: any = {
   formData: {
-    styleImage: '',
+    //左侧数据格式
+    styleImage: [],
     styleCode: '',
     styleName: '',
-    shelfFile: '',
+    shelfFile: [],
     attachmentList: [],
 
-    produceOrderCode: '',
-    customName: '',
-    fabricCode: '',
-    fabricColor: '',
-    shelfWidth: 0,
-    spreadClothLevel: '',
-    levelClothSum: 0,
-    bedSum: 0,
-
-    bedPlanNo: null,
-    styleBedNo: null,
-    fabricName: '',
-    shelfLength: 0,
-    spreadClothLength: 0,
-    shelfList: '',
-    attritionRate: 0,
-    remark: ''
+    // img: [{}],
+    templateNumber: '',
+    templateName: '',
+    fabricType: '',
+    fabricWeight: '',
+    relatedFabric: '',
+    fabric: '',
+    right: []
+  },
+  dataRule: {
+    templateNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    templateName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    fabricType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    fabricWeight: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  }
+}
+export const customFormData = {
+  formData: {
+    forwardSpeed: '1',
+    uniformTension: '',
+    slowDown: '',
+    creepSpeed: '',
+    targetAngle: '',
+    reverseSpeed: '',
+    acceleration: '',
+    creeping: '',
+    distance: '',
+    accelerationWeight: '',
+    bottomTable: [
+      {
+        date: '布斗匀速',
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: '',
+        seven: '',
+        eight: '',
+        nine: '',
+        ten: ''
+      },
+      {
+        date: '布斗加速',
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: '',
+        seven: '',
+        eight: '',
+        nine: '',
+        ten: ''
+      },
+      {
+        date: '布斗减速',
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: '',
+        seven: '',
+        eight: '',
+        nine: '',
+        ten: ''
+      }
+    ]
   },
   formMiddleData: [
-    { name: '生产订单', model: 'produceOrderCode', prop: 'produceOrderCode', type: null, disabled: false },
-    { name: '床次计划号', model: 'customName', prop: null, type: null, disabled: false },
-    { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: false },
-    { name: '面料颜色', model: 'fabricColor', prop: 'fabricColor', type: null, disabled: false },
-    { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: null, disabled: false },
-    { name: '设备编号', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: 'spreadClothLevel', disabled: false },
-    { name: '计划开始', model: 'levelClothSum', prop: null, type: null, disabled: true }
+    { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
+    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: null, disabled: false },
+    { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
+    { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
+    { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: null, disabled: false },
+    { name: '布斗目标角度', model: 'angle', prop: 'angle', type: null, disabled: false }
   ],
   formRightData: [
-    { name: '款式床次号', model: 'bedPlanNo', prop: null, type: null, disabled: true },
-    { name: '贴标任务号', model: 'styleBedNo', prop: 'styleBedNo', type: null, disabled: true },
-    { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: null, disabled: false },
-    { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: null, disabled: false },
-    { name: '铺布长度', model: 'spreadClothLength', prop: null, type: null, disabled: false },
-    { name: '设备名称', model: 'shelfList', prop: 'shelfList', type: null, disabled: false },
-    { name: '计划结束', model: 'attritionRate', prop: 'attritionRate', type: null, disabled: true }
+    { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
+    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: null, disabled: false },
+    { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
+    { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
+    { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: null, disabled: false },
+    { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }
   ],
   dataRule: {
-    produceOrderCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    fabricColor: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    shelfWidth: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    spreadClothLevel: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    fabricName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    shelfLength: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    spreadClothLength: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    shelfList: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    styleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    shelfFile: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+    equipmentNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    equipmentName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    equipmentModel: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    equipmentType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }
 
-export const tableColumns = [
-  {
-    title: '铺布设备编号',
-    align: 'center',
-    dataIndex: 'externalProduceOrderNum',
-    width: 200
-  },
-  {
-    title: '铺布设备名称',
-    align: 'center',
-    dataIndex: 'factoryName',
-    width: 200
-  },
-  {
-    title: '贴标设备编号',
-    align: 'center',
-    dataIndex: 'shopName',
-    width: 200
-  },
-  {
-    title: '贴标设备名称',
-    align: 'center',
-    dataIndex: 'teamName',
-    width: 200
-  },
-  {
-    title: '裁床设备编号',
-    align: 'center',
-    dataIndex: 'productName',
-    width: 250
-  },
-  {
-    title: '裁床设备名称',
-    align: 'center',
-    dataIndex: 'productNum',
-    width: 200
-  }
-]
+export const customTableData = {
+  tableData: [
+    {
+      date: '布斗匀速',
+      one: '',
+      two: '',
+      three: '',
+      four: '',
+      five: '',
+      six: '',
+      seven: '',
+      eight: '',
+      nine: '',
+      ten: ''
+    },
+    {
+      date: '布斗加速',
+      one: '',
+      two: '',
+      three: '',
+      four: '',
+      five: '',
+      six: '',
+      seven: '',
+      eight: '',
+      nine: '',
+      ten: ''
+    },
+    {
+      date: '布斗减速',
+      one: '0',
+      two: '0',
+      three: '0',
+      four: '0',
+      five: '0',
+      six: '0',
+      seven: '0',
+      eight: '0',
+      nine: '0',
+      ten: '10'
+    }
+  ],
+  tableMiddleData: [
+    { name: '1', model: 'one' },
+    { name: '2', model: 'two' },
+    { name: '3', model: 'three' },
+    { name: '4', model: 'four' },
+    { name: '5', model: 'five' },
+    { name: '6', model: 'six' },
+    { name: '7', model: 'seven' },
+    { name: '8', model: 'eight' },
+    { name: '9', model: 'nine' },
+    { name: '10', model: 'ten' }
+  ]
+}

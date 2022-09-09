@@ -2,22 +2,27 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-07 11:12:24
+ * @LastEditTime: 2022-09-08 19:04:39
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-tag v-for="tag in state.title" :key="tag" :disabled="props.type" class="mx-1" closable :disable-transitions="false" @close="handleClose(tag)">
-    {{ tag.label }}
+  <el-tag v-for="tag in state.title" :key="tag" :closable="state.tagType" class="mx-1" :disable-transitions="false" @close="handleClose(tag)">
+    {{ tag.name }}
   </el-tag>
 
   <!-- 弹窗 -->
-  <el-button class="relatedFabric-btn" :disabled="props.type" size="small" @click="open"> +选择关联面料</el-button>
+  <el-button class="relatedFabric-btn" :disabled="state.btnType" size="small" @click="open"> +选择关联面料</el-button>
+  <div>
+    <el-tooltip class="box-item" effect="dark" content="【请先选择面料类型、填写面料克重】" placement="right-start">
+      <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
+    </el-tooltip>
+  </div>
   <el-dialog v-model="dialogVisible" title="关联面料" width="30%">
     <div style="display: inline-block">
       <span style="margin-left: 10px">关联面料：</span>
       <el-select v-model="data" :disabled="props.type" multiple placeholder="请选择关联面料" style="width: 240px">
-        <el-option v-for="item in state.options" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in state.options" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
     </div>
 
@@ -32,125 +37,126 @@ vue
 
 <script lang="ts" setup>
   import { isEmpty } from 'lodash'
-  import { ref, reactive, getCurrentInstance } from 'vue'
+  import { ref, reactive, getCurrentInstance, watch } from 'vue'
+  import { QuestionFilled } from '@element-plus/icons-vue'
   const { proxy } = getCurrentInstance()
 
   const dialogVisible: any = ref(false)
 
   const props = defineProps<{
+    form: any
     setFabric: any
     type: any
   }>()
 
   const data: any = ref([]) //选中项
-  const state = reactive({
-    title: [{}], //面料的 tag
-    options: [{}] //总数据
+  const state: any = reactive({
+    title: [], //面料的 tag
+    options: [], //总数据
+    type: props.type,
+    tagType: false, //是否可用
+    btnType: true //是否可用
   })
 
-  //  watch()
-  // dialogVisible == true才执行
-
-  //初始
-  const init = () => {
-    let data = {
-      pageIndex: 1,
-      pageSize: 1000,
-      fabricWeightMax: 1,
-      fabricWeightMin: 2,
-      type: 1
+  //初始-回显
+  const setTitle = (e: any) => {
+    let data: any = []
+    if (!isEmpty(e)) {
+      e.forEach((item: any) => {
+        data.push({
+          value: item.id,
+          name: item.name,
+          id: item.id
+        })
+      })
+      state.title = data
     }
-    proxy.$baseService.get('/jack-ics-api/fabric/pageList', data).then((res: any) => {})
-
-    let res = [
-      {
-        value: '11',
-        label: '小心'
-      },
-      {
-        value: '22',
-        label: '咪咪'
-      },
-      {
-        value: '33',
-        label: '糯米'
-      }
-    ]
-
-    state.title = res
   }
+  watch(
+    () => props.form,
+    item => {
+      if (!isEmpty(item.templateDTO)) {
+        setTitle(item.templateDTO.relationFabricList)
+      } else {
+        state.title = []
+      }
 
-  init()
+      let type = item.fabricType
+      let right = item.fabricWeight.right
+      if (type !== undefined && right > 0) {
+        disable(true)
+      } else {
+        disable(false)
+      }
+    }
+  )
 
   const handleClose = (tag: string) => {
     state.title.splice(state.title.indexOf(tag), 1)
   }
 
   const open = () => {
-    //  调取总数据接口
-    let res = [
-      {
-        value: '11',
-        label: '小心'
-      },
-      {
-        value: '22',
-        label: '咪咪'
-      },
-      {
-        value: '33',
-        label: '糯米'
-      },
-      {
-        value: '44',
-        label: '梅鲁'
-      },
-      {
-        value: '1',
-        label: '葫芦娃1'
-      },
-      {
-        value: '2',
-        label: '葫芦娃2'
-      },
-      {
-        value: '3',
-        label: '葫芦娃3'
-      },
-      {
-        value: '5',
-        label: '葫芦娃4'
-      },
-      {
-        value: '5',
-        label: '葫芦娃5'
+    let sum = {
+      page: 1,
+      limit: 99,
+      type: props.form.fabricType,
+      fabricWeightMin: props.form.fabricWeight.left,
+      fabricWeightMax: props.form.fabricWeight.right
+    }
+    proxy.$baseService.get('/jack-ics-api/fabric/pageList', sum).then((res: any) => {
+      if (res.code === 0) {
+        let list = res.data.list
+        if (!isEmpty(list)) {
+          let fabricList: any = []
+          list.forEach((item: any) => {
+            fabricList.push({ name: item.name, id: item.id })
+          })
+          state.options = fabricList
+        }
       }
-    ]
+    })
 
-    state.options = res
-
-    //回显
+    //选中回显
     let ids: any = []
     state.title.forEach((item: any) => {
-      ids.push(item.value)
+      ids.push(item.id)
     })
     data.value = ids
     dialogVisible.value = true
   }
+
+  // 是否可用
+  const disable = (type: any) => {
+    if (!state.type) {
+      //编辑/新增
+      if (type) {
+        ;(state.tagType = true), //是否可用
+          (state.btnType = false) //是否可用
+      } else {
+        ;(state.tagType = false), //是否可用
+          (state.btnType = true) //是否可用
+      }
+    } else {
+      //查看
+      ;(state.tagType = false), //是否可用
+        (state.btnType = true) //是否可用
+    }
+  }
+
   //确认
   const confirm = () => {
-    dialogVisible.value = false
-
     let checkValues: any = [] //选中所有值
     if (!isEmpty(data.value)) {
       data.value.map((v: any) => {
-        let current = state.options.filter((item: any) => item.value === v)
+        let current = state.options.filter((item: any) => item.id === v)
         checkValues.push(current[0])
       })
     }
     state.title = checkValues
     // 暴露出去
     props.setFabric(checkValues)
+
+    dialogVisible.value = false
   }
 </script>
 

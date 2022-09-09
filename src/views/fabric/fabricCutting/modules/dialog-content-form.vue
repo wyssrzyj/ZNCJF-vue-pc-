@@ -1,36 +1,27 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-07 11:13:00
+ * @LastEditTime: 2022-09-08 17:22:55
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
-  <div class="bottomTable">
-    <el-form ref="formRef" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <div class="rightForm">
+    <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
       <el-row :gutter="0">
         <el-col :span="12">
           <div v-for="(item, index) in state.middle" :key="index">
             <div v-if="item.type === 'minLevel'">
               <el-form-item :label="`${item.name}`">
-                <el-input-number
-                  v-model="state.form[item.model]"
-                  :disabled="props.type"
-                  class="fabricLayingForm"
-                  :controls="false"
-                  :min="1"
-                  :max="state.form[item.max]"
-                  type="text"
-                  @change="handleChange"
-                />
+                <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
               </el-form-item>
             </div>
 
             <div v-if="item.type === null">
               <el-form-item :label="`${item.name}`">
-                <div>
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="1" :max="state.form[item.max]" type="text" />
+                <div class="titleData">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" />
                   <span class="titleRight">{{ item.title }}</span>
                 </div>
               </el-form-item>
@@ -41,14 +32,14 @@
           <div v-for="(item, index) in state.right" :key="index">
             <div v-if="item.type === 'maxLevel'">
               <el-form-item :label="`${item.name}`">
-                <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="state.form[item.min]" type="text" @change="handleChange" />
+                <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="state.form[item.min]" type="text" @change="handleChange" />
               </el-form-item>
             </div>
 
             <div v-if="item.type === null">
               <el-form-item :label="`${item.name}`">
-                <div>
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="1" :max="state.form[item.max]" type="text" />
+                <div class="titleData">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" />
                   <span class="titleRight">{{ item.title }}</span>
                 </div>
               </el-form-item>

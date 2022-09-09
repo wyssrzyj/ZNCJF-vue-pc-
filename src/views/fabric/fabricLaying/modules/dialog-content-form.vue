@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-06 18:22:03
+ * @LastEditTime: 2022-09-07 15:35:56
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
 <template>
   <div class="bottomTable">
     <div class="bottomTable-form">
-      <el-form ref="formRef" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+      <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
         <el-row :gutter="0">
           <el-col :span="12">
             <div v-for="(item, index) in state.middle" :key="index">

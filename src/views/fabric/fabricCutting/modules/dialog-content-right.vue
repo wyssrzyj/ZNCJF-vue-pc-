@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-09-07 11:09:16
+ * @LastEditTime: 2022-09-08 19:04:01
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -23,10 +23,12 @@
   import type { TabsPaneContext } from 'element-plus'
   import RightFrom from './dialog-content-form.vue'
   import './index.less'
+  import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
 
   const props = defineProps<{
-    data: any[]
+    data: any
+    initForm: any
     type: any
     getList: any
   }>()
@@ -58,7 +60,7 @@
   // 初始格式处理
 
   //初始设置数据
-  const init = (data: any) => {
+  const init = (data: any, type: any) => {
     let cloneData = data
 
     if (!isEmpty(cloneData)) {
@@ -66,21 +68,36 @@
       cloneData.map((item: any) => {
         item.title = getTitle(item.cutTemplateParam.minLevel, item.cutTemplateParam.maxLevel)
       })
+
+      if (type === 'init') {
+        state.current = cloneData[0]
+        state.tabPosition = cloneData[0].title //选中第几个
+      }
+      if (type === 'initForm') {
+        // console.log("initForm");
+
+        state.tabPosition = cloneData[0].title
+        state.current = cloneData[0]
+      }
+      state.list = cloneData
     }
-
-    state.current = cloneData[0]
-    state.tabPosition = cloneData[0].title //选中第几个
-
-    state.list = cloneData
   }
 
-  init(props.data)
+  init(props.data.levelParamVOList, 'init')
 
-  //监听父级数据变化
+  // 初始展示第一条
+  watch(
+    () => props.initForm,
+    item => {
+      init(item.levelParamVOList, 'initForm')
+    }
+  )
+
+  //监听数据变化
   watch(
     () => props.data,
     item => {
-      init(item)
+      init(item.levelParamVOList, 'watch')
     }
   )
 
@@ -138,24 +155,31 @@
         increase()
       }
       if (type === 'remove') {
-        let arr = state.list.filter((item: any) => item.title !== e)
-        if (!isEmpty(arr)) {
-          state.tabPosition = arr[0].title
-          state.current = arr[0]
-        } else {
-          let newlyAdded = {
-            title: '',
-            cutTemplateParam: {
-              minLevel: 0,
-              maxLevel: 0,
-              ...state.data
+        if (state.list.length > 1) {
+          let arr = state.list.filter((item: any) => item.title !== e)
+          if (!isEmpty(arr)) {
+            state.tabPosition = arr[0].title
+            state.current = arr[0]
+          } else {
+            let newlyAdded = {
+              title: '',
+              cutTemplateParam: {
+                minLevel: 0,
+                maxLevel: 0,
+                ...state.data
+              }
             }
+            state.current = newlyAdded
           }
-          state.current = newlyAdded
-        }
 
-        state.list = arr
-        props.getList(state.list)
+          state.list = arr
+          props.getList(state.list)
+        } else {
+          ElMessage({
+            message: '至少保留一项',
+            type: 'warning'
+          })
+        }
       }
     }
   }

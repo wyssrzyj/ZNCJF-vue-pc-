@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 11:12:16
+ * @LastEditTime: 2022-09-08 19:03:12
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -14,6 +14,7 @@
           <el-form-item label="模板面料图片" class="layclothImg" prop="img">
             <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
+          <br />
           <el-form-item label="参数模板编号" prop="sn">
             <el-input v-model="state.form.sn" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
           </el-form-item>
@@ -21,7 +22,7 @@
             <el-input v-model="state.form.name" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
           </el-form-item>
           <el-form-item label="面料类型" prop="fabricType">
-            <el-select v-model="state.form.fabricType" :disabled="disable(false)">
+            <el-select v-model="state.form.fabricType" :disabled="disable(false)" @change="change">
               <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -36,7 +37,7 @@
     </el-col>
     <!-- 自定义 -->
     <el-col :span="16" class="dialogBottomRight">
-      <Option :type="state.type" :data="state.form.levelParamVOList" :get-list="getList" />
+      <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
     </el-col>
     <div class="dialogBottom">
       <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
@@ -70,6 +71,7 @@
 
   const state = reactive({
     form: formData,
+    initForm: formData, //只用作初始展示
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息
@@ -127,6 +129,8 @@
         arr.fabricWeight = { left: Number(fabricWeightMin), right: Number(fabricWeightMax) }
 
         state.form = processInitialData(arr)
+        state.initForm = processInitialData(arr)
+        // console.log("初始数据", state.form );
       })
     }
   }
@@ -150,7 +154,16 @@
     state.form.fabricWeight = e
     state.form.fabricWeightMin = e.left
     state.form.fabricWeightMax = e.right
+    const cloneForm = cloneDeep(state.form)
+    state.form = cloneForm
   }
+  //  面料类型 赋值
+  const change = (e: any) => {
+    state.form.fabricType = e
+    const cloneForm = cloneDeep(state.form)
+    state.form = cloneForm
+  }
+
   //关联面料
   const setFabric = (e: any) => {
     state.form.relationFabricList = e
@@ -198,7 +211,7 @@
             imageUrl: !isEmpty(img) ? img[0].url : '',
             name: name,
             sn: sn,
-            relationFabricList: [{ name: 'sn1', id: 1562009101217095682 }]
+            relationFabricList: state.form.relationFabricList
           },
           levelParamVOList: changeStructure(state.form.levelParamVOList)
         }

@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 11:13:48
+ * @LastEditTime: 2022-09-07 14:54:39
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-form ref="ruleFormRef" class="dialogContentForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left -->
       <el-col :span="8">

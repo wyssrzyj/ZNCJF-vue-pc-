@@ -74,7 +74,7 @@
         value: 6
       }
     ],
-    ossAction: `${proxy.$baseService.app.api}/jack-ics-api/oss/upload`,
+    ossAction: `${proxy.$baseService.app.api}/jack-ics-api/oss/analysis-mark`,
     targetArr: [
       {
         fileType: 0,
@@ -143,20 +143,6 @@
     a.download = 'w3logo'
     a.click()
     window.URL.revokeObjectURL(blobUrl)
-
-    // 用fetch发送请求
-    // fetch(data).then(res => {
-    //   res.blob().then(blob => {
-    //     const blobUrl = window.URL.createObjectURL(blob)
-    //     // 这里的文件名根据实际情况从响应头或者url里获取
-    //     const filename = 'user.jpg'
-    //     const a = document.createElement('a')
-    //     a.href = blobUrl
-    //     a.download = filename
-    //     a.click()
-    //     window.URL.revokeObjectURL(blobUrl)
-    //   })
-    // })
   }
 
   const showDialog = ({ title = '导入文件' } = {}) => {

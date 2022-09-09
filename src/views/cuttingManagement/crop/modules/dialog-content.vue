@@ -1,26 +1,27 @@
 <!--
  * @Author: lyj
- * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-04 17:57:46
+ * @Date: 2022-08-17 09:49:26
+ * @LastEditTime: 2022-09-09 14:39:27
  * @Description: 
  * @LastEditors: lyj
 -->
+
 <template>
-  <el-form ref="dataFormRef" class="dialogContentForm" :rules="dataRule" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left -->
       <el-col :span="8">
-        <el-form-item label="款图" class="layclothImg" prop="img">
+        <el-form-item label="款图" class="layclothImg">
           <UploadModule v-model="state.form.styleImage" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
         <el-form-item label="款式编号">
-          <el-input v-model="state.form.name" placeholder="请输入款式编号" type="text" />
+          <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
         </el-form-item>
-        <el-form-item label="款式名称">
-          <el-input v-model="state.form.username" placeholder="请输入款式名称" type="text" />
+        <el-form-item label="款式名称" prop="styleName">
+          <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
         </el-form-item>
-        <el-form-item label="唛架图">
-          <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
+        <el-form-item label="唛架图" prop="shelfFile">
+          <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
         </el-form-item>
         <el-form-item label="其他附件">
           <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
@@ -29,19 +30,23 @@
 
       <el-col :span="8">
         <div v-for="(item, index) in state.middle" :key="index">
+          <div v-if="item.type === null">
+            <el-form-item :label="`${item.name}`">
+              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+            </el-form-item>
+          </div>
           <div v-if="item.type === 'spreadClothLevel'">
-            <el-form-item :label="item.name" prop="spreadClothLevel" class="buttonContainer">
-              <el-select v-model="state.form[item.model]">
-                <el-option label="CJoo1" value="1" />
-                <el-option label="PBJ001" value="2" />
-              </el-select>
-              <button class="LayButton" @click="state.dialogTableVisible = true">按钮q</button>
+            <el-form-item :label="`${item.name}`" prop="spreadClothLevel">
+              <div class="level">
+                <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" />
+                <el-icon class="proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
+              </div>
             </el-form-item>
           </div>
 
-          <div v-if="item.type === null">
+          <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-input v-model="item.model" :disabled="item.disable" type="text" />
+              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划开始时间" />
             </el-form-item>
           </div>
         </div>
@@ -51,35 +56,42 @@
         <div v-for="(item, index) in state.right" :key="index">
           <div v-if="item.type === null">
             <el-form-item :label="`${item.name}`">
-              <el-input v-model="lossRate" :disabled="item.disable" type="text" />
+              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+            </el-form-item>
+          </div>
+          <div v-if="item.type === 'time'">
+            <el-form-item :label="`${item.name}`">
+              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" />
             </el-form-item>
           </div>
         </div>
       </el-col>
     </el-row>
+
     <div class="dialogBottom">
       <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
     </div>
   </el-form>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="模板弹窗" width="1000px">
-    <PopModule :operation="operation" />
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
+    <Crop :list="props.list" :row="props.row" :type="false" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance } from 'vue'
-  import { isEmpty } from 'lodash'
+  import { reactive, ref, getCurrentInstance } from 'vue'
+  import { isEmpty, cloneDeep } from 'lodash'
 
   import { content } from './conifgs'
 
   import UploadModule from './dialog-upload.vue'
   import { ElMessage } from 'element-plus'
-
-  import PopModule from './dialog-content-dialog.vue'
   import './index.less'
+  import Crop from './dialog-form-crop.vue'
+
   const { formData, formMiddleData, formRightData, dataRule } = content
+  const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance()
 
   const props = defineProps<{
@@ -87,8 +99,6 @@
     close: any
     row: any
   }>()
-
-  // const form = reactive(formData)
 
   const state: any = reactive({
     form: formData,
@@ -98,7 +108,7 @@
     dialogTableVisible: false,
     //提示信息
     prop: dataRule,
-
+    messageTitle: '裁剪建议参数',
     effectiveArea: 100 //有效面积
   })
 
@@ -107,30 +117,29 @@
     shelfFile: { limit: 1, title: '最多上传一个' },
     attachmentList: { limit: 5, title: '最多上传5个' }
   })
-
   const init = () => {
+    //数据回显
     if (props.row) {
-      proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
-        // console.log(res)
+      proxy.$baseService.get('/jack-ics-api/pasteTask/get', { taskId: props.row.id }).then((res: any) => {
+        // console.log('回显', res)
+
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
-        //唛架图先使用静态数据
+
+        //唛架图
         res.data.shelfFile = [
           {
-            name: '小心.jpg',
+            name: res.data.shelfFileName,
             response: {
               data: {
-                src: 'http://10.18.4.25/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-                relativeSrc: '/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-                size: 0.05,
-                extension: 'jpg'
+                src: res.data.shelfFileUrl
               }
             }
           }
         ]
-
-        // console.log('获取接口数据', res.data)
-        state.form = res.data
+        ;(res.data.deviceSn = 1), //设备编号测试~
+          (state.form = res.data)
+        // console.log(state.form)
       })
     }
   }
@@ -149,51 +158,77 @@
     }
     //唛架图
     if (e.type === 'shelfFile') {
-      state.form.shelfFile = [
-        {
-          name: '小心.jpg',
-          response: {
-            data: {
-              src: 'http://10.18.4.25/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-              relativeSrc: '/20220903/f9daaa4fa8904a07875e84d3f8ad38c7.jpg',
-              size: 0.05,
-              extension: 'jpg'
-            }
-          }
-        }
-      ]
-    }
-    if (e.type === 'file') {
-      state.form.shelfFile = e.data[0]
+      // console.log(e.data);
+
+      state.form.shelfFile = e.data
     }
   }
+
   // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
-      // console.log('其他', e.data)
-      // console.log('其他附件', e.data)
-
-      state.form.attachmentList = []
-      // console.log('其他附件', e)
+      state.form.attachmentList = e.data
     }
   }
+
+  // const setUtilization = () => {
+  //   // (铺布长度*唛架门幅)
+  //   let product = state.form.spreadClothLength * state.form.shelfWidth
+  //   state.form.attritionRate = state.effectiveArea / product
+  // }
 
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
-        if (!isEmpty(state.form.styleImage)) {
-          state.form.styleImage = state.form.styleImage[0].url
+        let data = cloneDeep(state.form) //防止污染
+        // 图片
+        if (!isEmpty(data.styleImage)) {
+          data.styleImage = data.styleImage[0].url
         }
-        proxy.$baseService.post('/jack-ics-api/bedPlan/save', state.form).then((res: any) => {
-          if (res.code === 200) {
+        // 唛架图处理
+        if (!isEmpty(data.shelfFile)) {
+          let shelfFile = {
+            name: data.shelfFile[0].name,
+            url: data.shelfFile[0].response.data.src
+          }
+          data.shelfFile = shelfFile
+        }
+
+        //其他附件
+        if (!isEmpty(data.attachmentList)) {
+          let arr: any = []
+
+          data.attachmentList.forEach((item: any) => {
+            //组件返回格式
+            if (!isEmpty(item.response)) {
+              arr.push({
+                name: item.name,
+                url: item.response.data.src,
+                size: item.size,
+                suffix: item.response.data.extension
+              })
+            } else {
+              // 后端返回格式
+              arr.push({
+                name: item.name,
+                url: item.url,
+                size: item.size,
+                suffix: item.suffix
+              })
+            }
+          })
+          data.attachmentList = arr
+        }
+
+        proxy.$baseService.post('/jack-ics-api/bedPlan/save', data).then((res: any) => {
+          if (res.code === 0) {
             ElMessage({
               message: '保存成功',
               type: 'success'
             })
             formEl.resetFields()
-
             props.close()
           } else {
             // console.log(res.msg)
@@ -203,30 +238,35 @@
     })
   }
 
-  //弹窗事件
-  const operation = (e: any) => {
-    if (e.type === 'cancel') {
-      state.dialogTableVisible = false
-    }
-    if (e.type === 'confirm') {
-      let color = e.data.map((item: any) => {
-        return item.color
-      })
-      e.data.map((item: any) => {
-        item.type = ''
-      })
-
-      state.form.shelfList = e.data
-      state.form.fabricColor = color.join('，') //颜色更新
-
-      state.dialogTableVisible = false
-    }
-  }
-
   // 取消
   const resetForm = (formEl: any) => {
     props.close()
     // if (!formEl) return
     formEl.resetFields()
+  }
+
+  // ------------------
+
+  // 取消
+  const cancel = () => {
+    state.dialogTableVisible = false
+  }
+  //确认
+  const preservation = (e: any, type: string, title: any) => {
+    // console.log('确认', e)
+    // console.log('确认', title)
+    state.form.spreadClothLevel = '设备编号'
+    // let data = { ...e, defaultParam: title, deviceId: props.row.id }
+
+    // 裁剪
+    if (type === 'crop') {
+      // proxy.$baseService.post('/jack-ics-api/cutDefaultParam/save', data).then((res: any) => {
+      //   ElMessage({
+      //     message: '保存成功',
+      //     type: 'success'
+      //   })
+      // })
+      state.dialogTableVisible = false
+    }
   }
 </script>

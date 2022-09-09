@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-06 20:55:31
+ * @LastEditTime: 2022-09-09 10:39:42
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-form ref="ruleFormRef" class="dialogContentForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left -->
       <el-col :span="8">
@@ -28,8 +28,7 @@
           <div v-if="item.type === 'type'">
             <el-form-item label="面料类型" prop="type">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option label="针织面料" value="1" />
-                <el-option label="梭织面料" value="2" />
+                <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </div>
@@ -44,24 +43,23 @@
           <div v-if="item.type === 'looseClothFlag'">
             <el-form-item label="需要松布" prop="looseClothFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
-                <el-radio label="1" size="large">是</el-radio>
-                <el-radio label="2" size="large">否</el-radio>
+                <el-radio :label="1" size="large">是</el-radio>
+                <el-radio :label="2" size="large">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </div>
           <div v-if="item.type === 'shrinkFlag'">
             <el-form-item label="需要预缩" prop="shrinkFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
-                <el-radio label="1" size="large">是</el-radio>
-                <el-radio label="2" size="large">否</el-radio>
+                <el-radio :label="1" size="large">是</el-radio>
+                <el-radio :label="2" size="large">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadTemplateId'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option label="绒布" value="1" />
-                <el-option label="黑布" value="2" />
+                <el-option v-for="item in state.spreadTemplateId" :key="item.id" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </div>
@@ -91,8 +89,7 @@
           <div v-if="item.type === 'cutTemplateId'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option label="绒布" value="1" />
-                <el-option label="黑布" value="2" />
+                <el-option v-for="item in state.cutTemplateId" :key="item.id" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </div>
@@ -118,6 +115,7 @@
   import { formData, formMiddleData, formRightData, dataRule } from './conifgs'
   import './index.less'
   import UploadModule from './dialog-upload.vue'
+  import { fabricType } from '@/components/conifgs.ts'
 
   const { proxy } = getCurrentInstance()
   const ruleFormRef = ref<any>()
@@ -139,18 +137,44 @@
     middle: formMiddleData,
     right: formRightData,
     dialogTableVisible: false,
+    spreadTemplateId: [],
+    cutTemplateId: [],
     //提示信息
-    prop: dataRule
+    prop: dataRule,
+    fabricType: fabricType
   })
 
+  // 更改格式
+  const structure = (e: any) => {
+    let sum: any = []
+    if (!isEmpty(e)) {
+      e.forEach((item: any) => {
+        sum.push({
+          label: item.name,
+          value: item.id
+        })
+      })
+    }
+    return sum
+  }
   const init = () => {
+    //铺布参数模板
+    proxy.$baseService.get('/jack-ics-api/spreadTemplateParam/listName').then((res: any) => {
+      if (res.code === 0) {
+        state.spreadTemplateId = structure(res.data)
+      }
+    })
+    //裁床参数模板
+    proxy.$baseService.get('/jack-ics-api/cutTemplateParam/listName').then((res: any) => {
+      if (res.code === 0) {
+        state.cutTemplateId = structure(res.data)
+      }
+    })
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/fabric/get', { id: props.row.id }).then((res: any) => {
-        // console.log(res)
         // 图片
         res.data.img = [{ url: res.data.img }]
 
-        // console.log('获取接口数据', res.data)
         state.form = res.data
       })
     }
@@ -207,7 +231,6 @@
           data.attachmentList = arr
         }
 
-        // console.log(state.form)
         proxy.$baseService.post('/jack-ics-api/fabric/save', data).then((res: any) => {
           if (res.data === true) {
             ElMessage({

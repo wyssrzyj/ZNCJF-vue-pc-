@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-01 18:00:19
+ * @LastEditTime: 2022-09-07 18:20:30
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-form ref="formRef" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
     <el-row :gutter="0">
       <el-col :span="12">
         <el-form-item prop="forwardSpeed" label="前进速度">
@@ -100,8 +100,7 @@
 
   const init = () => {
     try {
-      console.log('id', props.row.id)
-
+      // console.log('id', props.row.id)
       let id = props.row.id
       //判断id是否为空≈【新增】
       if (id === undefined) {

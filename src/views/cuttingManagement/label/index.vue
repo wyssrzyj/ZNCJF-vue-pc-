@@ -1,13 +1,11 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
-  <span>贴标任务</span>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
-      <el-form-item label="床次计划号" prop="snstyleBedNo">
-        <el-input v-model="state.queryFormData.snstyleBedNo" placeholder="请输入" clearable />
-      </el-form-item>
-      <el-form-item label="贴标任务号" prop="bedPlanNo">
+      <el-form-item label="床次计划号" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
+      </el-form-item>
+      <el-form-item label="贴标任务号" prop="taskCode">
+        <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="设备名称" prop="deviceName">
         <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
@@ -19,21 +17,25 @@
       </el-form-item>
     </template>
 
-    <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增贴标')">新增</el-button>
-    </template>
-
+    <!-- <template #operationExtBtn>
+      <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button>
+      <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增贴标任务')">新增</el-button>
+    </template> -->
 
     <template #styleImage="{ row }">
       <ImgModular :img="row.styleImage" />
     </template>
-
-    <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看贴标', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标', row)">编辑</el-button>
+    <template #statu="{ row }">
+      {{ mapType.get(row.statu) }}
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1000px">
+    <template #actionExtBtn="{ row }">
+      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看贴标任务', row)">查看</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标任务', row)">编辑</el-button>
+    </template>
+
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="800px">
       <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -42,9 +44,8 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  import DialogContent from './modules/dialog-content.vue'
 
-  // import DialogContent from './dialogContent/index.vue'
+  import DialogContent from './modules/dialog-content.vue'
 
   let mapType = new Map()
   mapType.set(1, '未审核')
@@ -52,13 +53,15 @@
   mapType.set(3, '进行中')
   mapType.set(4, '已完成')
 
+  // const dialogUploadFileEl = ref()
+  // const dialogUploadStyleEl = ref()
   const styleLibListEl = ref()
 
   const state: any = reactive({
     row: {},
     dialogType: true,
     dialogTableVisible: false,
-    dialogTitle: '查看贴标',
+    dialogTitle: '查看床次计划',
     statu: [
       { name: '未审核', value: '1' },
       { name: '已审核', value: '2' },
@@ -67,9 +70,9 @@
     ],
 
     queryFormData: {
-      produceOrderCode: '',
       bedPlanNo: '',
-      styleCode: '',
+      taskCode: '',
+      deviceName: '',
       statu: ''
     },
 
@@ -83,6 +86,16 @@
   const handleAddOrUpdate = (row: any) => {
     //根据有无row判断点击新增或编辑按钮
   }
+
+  // const handleUploadStyle = () => {
+  //   dialogUploadStyleEl.value.showDialog({
+  //     action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
+  //   })
+  // }
+
+  // const handleUploadFile = () => {
+  //   dialogUploadFileEl.value.showDialog()
+  // }
 
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()

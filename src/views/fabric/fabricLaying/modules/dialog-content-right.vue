@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-09-07 11:10:13
+ * @LastEditTime: 2022-09-08 19:05:02
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -23,12 +23,14 @@
   import type { TabsPaneContext } from 'element-plus'
   import RightFrom from './dialog-content-form.vue'
   import './index.less'
+  import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
 
   const props = defineProps<{
-    data: any[]
+    data: any
     type: any
     getList: any
+    initForm: any
   }>()
 
   const state: any = reactive({
@@ -95,34 +97,7 @@
   const getTitle = (small: any, large: any) => {
     return `${small}-${large}层`
   }
-
-  // 初始格式处理
-
-  //初始设置数据
-  const init = (data: any) => {
-    let cloneData = cloneDeep(data)
-
-    if (!isEmpty(data)) {
-      //添加标题
-      cloneData.map((item: any) => {
-        item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
-      })
-    }
-    state.current = cloneData[0]
-    state.tabPosition = cloneData[0].title //选中第几个
-    state.list = cloneData
-  }
-
-  init(props.data)
-
-  //监听数据变化
-  watch(
-    () => props.data,
-    item => {
-      init(item)
-    }
-  )
-
+  //点击
   const handleClick = (tab: TabsPaneContext, event: Event) => {
     let title = tab.props.label
     state.tabPosition = title
@@ -130,27 +105,94 @@
     let arr = state.list.filter((item: any) => item.title === title)
     state.current = arr[0]
   }
+
+  // 初始格式处理
+
+  //初始设置数据
+  const init = (data: any, type: any) => {
+    let cloneData = cloneDeep(data)
+    // console.log(cloneData[0]);
+
+    if (!isEmpty(data)) {
+      //添加标题
+      cloneData.map((item: any) => {
+        item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
+      })
+
+      if (type === 'init') {
+        state.current = cloneData[0]
+        state.tabPosition = cloneData[0].title //选中第几个
+      }
+      //初始不是 1-10层默认展示第一个
+      if (type === 'initForm') {
+        // console.log("initForm");
+
+        state.tabPosition = cloneData[0].title
+        state.current = cloneData[0]
+      }
+
+      state.list = cloneData
+    }
+  }
+
+  init(props.data.levelParamVOList, 'init')
+
+  // 初始展示第一条
+  watch(
+    () => props.initForm,
+    item => {
+      init(item.levelParamVOList, 'initForm')
+    }
+  )
+  // 监听数据变化
+  watch(
+    () => props.data,
+    item => {
+      init(item.levelParamVOList, 'watch')
+    }
+  )
+
   //添加
   const increase = () => {
-    let lastItem = state.list[state.list.length - 1]
-    let min = Number(lastItem.spreadTemplateParam.maxLevel) + 1
-    let max = Number(min) + 1
-    let title = `${min}-${max}层`
-    let newlyAdded = {
-      title: title,
-      spreadTemplateParam: {
-        minLevel: min,
-        maxLevel: max,
-        ...state.data
+    if (!isEmpty(state.list)) {
+      let lastItem = state.list[state.list.length - 1]
+      let min = Number(lastItem.spreadTemplateParam.maxLevel) + 1
+      let max = Number(min) + 1
+      let title = `${min}-${max}层`
+      let newlyAdded = {
+        title: title,
+        spreadTemplateParam: {
+          minLevel: min,
+          maxLevel: max,
+          ...state.data
+        }
       }
+      state.list.push(newlyAdded)
+      state.current = newlyAdded
+
+      state.tabPosition = title
+
+      //传递给父级
+      props.getList(state.list)
+    } else {
+      let min = 1
+      let max = 10
+      let title = `${min}-${max}层`
+      let newlyAdded = {
+        title: title,
+        spreadTemplateParam: {
+          minLevel: min,
+          maxLevel: max,
+          ...state.data
+        }
+      }
+      state.list.push(newlyAdded)
+      state.current = newlyAdded
+      state.tabPosition = title
+
+      //传递给父级
+      props.getList(state.list)
     }
-    state.list.push(newlyAdded)
-    state.current = newlyAdded
-
-    state.tabPosition = title
-
-    //传递给父级
-    props.getList(state.list)
   }
 
   const handleTabsEdit = (e: any, type: any) => {
@@ -159,24 +201,30 @@
         increase()
       }
       if (type === 'remove') {
-        let arr = state.list.filter((item: any) => item.title !== e)
-        if (!isEmpty(arr)) {
-          state.tabPosition = arr[0].title
-          state.current = arr[0]
-        } else {
-          let newlyAdded = {
-            title: '',
-            spreadTemplateParam: {
-              minLevel: 0,
-              maxLevel: 0,
-              ...state.data
+        if (state.list.length > 1) {
+          let arr = state.list.filter((item: any) => item.title !== e)
+          if (!isEmpty(arr)) {
+            state.tabPosition = arr[0].title
+            state.current = arr[0]
+          } else {
+            let newlyAdded = {
+              title: '',
+              spreadTemplateParam: {
+                minLevel: 0,
+                maxLevel: 0,
+                ...state.data
+              }
             }
+            state.current = newlyAdded
           }
-          state.current = newlyAdded
+          state.list = arr
+          props.getList(state.list)
+        } else {
+          ElMessage({
+            message: '至少保留一项',
+            type: 'warning'
+          })
         }
-
-        state.list = arr
-        props.getList(state.list)
       }
     }
   }

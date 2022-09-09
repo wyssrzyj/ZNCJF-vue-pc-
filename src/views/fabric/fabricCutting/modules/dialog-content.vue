@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 11:14:28
+ * @LastEditTime: 2022-09-08 19:04:29
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-row :gutter="70" style="margin: 2px 2px 0 20px">
+  <el-row :gutter="30" style="margin: 2px 2px 0 10px">
     <!-- form -->
     <el-col :span="8">
       <div>
@@ -36,7 +36,7 @@
     </el-col>
     <!-- 自定义 -->
     <el-col :span="16" class="dialogBottomRight">
-      <Option :type="state.type" :data="state.form.levelParamVOList" :get-list="getList" />
+      <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
     </el-col>
     <div class="dialogBottom">
       <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
@@ -46,7 +46,7 @@
 </template>
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
-  import { isEmpty } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
   import { content } from './conifgs'
   import './index.less'
   import { ElMessage } from 'element-plus'
@@ -70,6 +70,7 @@
 
   const state = reactive({
     form: formData,
+    initForm: formData,
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息
@@ -91,6 +92,7 @@
         arr.fabricWeight = { left: Number(fabricWeightMin), right: Number(fabricWeightMax) }
 
         state.form = arr
+        state.initForm = arr
       })
     }
   }
@@ -114,7 +116,16 @@
     state.form.fabricWeight = e
     state.form.fabricWeightMin = e.left
     state.form.fabricWeightMax = e.right
+    const cloneForm = cloneDeep(state.form)
+    state.form = cloneForm
   }
+  //  面料类型 赋值
+  //  const change=(e:any)=>{
+  //   state.form.fabricType=e
+  //     const cloneForm = cloneDeep(state.form)
+  //     state.form = cloneForm
+
+  //  }
   //关联面料
   const setFabric = (e: any) => {
     state.form.relationFabricList = e
@@ -137,7 +148,7 @@
             imageUrl: !isEmpty(img) ? img[0].url : '',
             name: name,
             sn: sn,
-            relationFabricList: [{ name: 'sn1', id: 1562009101217095682 }]
+            relationFabricList: state.form.relationFabricList
           },
           levelParamVOList: state.form.levelParamVOList
         }

@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-07 11:17:07
+ * @LastEditTime: 2022-09-09 14:45:09
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
-  <el-form ref="ruleFormRef" class="dialogContentForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left -->
       <el-col :span="8">
@@ -94,13 +94,15 @@
               </el-input>
             </el-form-item>
           </div>
+
           <div v-if="item.type === 'fabricName'">
             <el-form-item :label="item.name" prop="fabricName" class="buttonContainer">
-              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option label="面料管理" value="1" />
+              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" filterable>
+                <el-option v-for="item in state.fabricName" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </div>
+
           <div v-if="item.type === 'shelfLength'">
             <el-form-item :label="`${item.name}`" prop="shelfLength">
               <div>
@@ -187,8 +189,8 @@
     dialogTableVisible: false,
     //提示信息
     prop: dataRule,
-
-    effectiveArea: 100 //有效面积
+    fabricName: [],
+    effectiveArea: 0 //有效面积
   })
 
   // 上传
@@ -196,7 +198,30 @@
     shelfFile: { limit: 1, title: '最多上传一个' },
     attachmentList: { limit: 5, title: '最多上传5个' }
   })
+
+  //面料名称
+  const getFabricName = (name: any) => {
+    let data = {
+      page: 1,
+      limit: 99
+    }
+    proxy.$baseService.get('/jack-ics-api/fabric/pageList', data).then((res: any) => {
+      if (!isEmpty(res.data.list)) {
+        let list: any = []
+        res.data.list.forEach((item: any) => {
+          list.push({
+            label: item.name,
+            value: item.id
+          })
+        })
+        state.fabricName = list
+      }
+    })
+  }
   const init = () => {
+    //面料名称
+    getFabricName('')
+
     //数据回显
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
@@ -241,7 +266,22 @@
     }
     //唛架图
     if (e.type === 'shelfFile') {
-      state.form.shelfFile = e.data
+      if (!isEmpty(e.data)) {
+        let shelfFile = e.data[0].response.data
+
+        const { heigh, width, sumArea } = shelfFile
+        state.form.shelfWidth = heigh //唛架门幅
+        state.form.shelfLength = width //唛架长度
+        state.form.spreadClothLength = Number(width) + 0.03 //铺布长度
+        state.effectiveArea = sumArea //利用率
+        //利用率
+        state.form.attritionRate = sumArea / (heigh * Number(state.form.spreadClothLength))
+        //文件传给组件
+        e.data[0].response.data.src = e.data[0].response.data.shelfFileUrl
+
+        state.form.shelfFile = e.data //赋值
+      }
+      // shelfWidth
     }
   }
 
@@ -255,6 +295,8 @@
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
+    // console.log(product)
+
     state.form.attritionRate = state.effectiveArea / product
   }
 
