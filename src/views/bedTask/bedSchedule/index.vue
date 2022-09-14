@@ -39,6 +39,9 @@
       <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
+
+
+
 </template>
 
 <script lang="ts" setup>

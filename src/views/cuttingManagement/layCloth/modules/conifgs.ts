@@ -1,10 +1,35 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-09 11:16:55
+ * @LastEditTime: 2022-09-12 15:19:44
  * @Description:
  * @LastEditors: lyj
  */
+
+
+export const selectDevice: any = {
+  formData: {
+      produceOrderCode: '',
+      styleBedNo: '',
+      bedPlanNo: '',
+      taskCode: '',
+      fabricCode: '',
+      fabricName: '',
+      fabricColor: '',
+      shelfWidth: '',
+      spreadClothLength: '',
+      spreadClothLevel: '',
+      deviceName: '',
+      useRate: '',
+      levelClothSum: '',
+      bedSum: ''
+  },
+  dataRule: {
+    deviceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    bedPlanNo: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  }
+}
+
 export const content: any = {
   formData: {
     //左侧数据格式
@@ -30,8 +55,11 @@ export const content: any = {
     fabricWeight: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }
+
+
 export const customFormData = {
   formData: {
+    img: '',
     forwardSpeed: '1',
     uniformTension: '',
     slowDown: '',
@@ -163,3 +191,147 @@ export const customTableData = {
     { name: '10', model: 'ten' }
   ]
 }
+//床次计划
+export const tableColumns = [
+  {
+    title: '生产订单',
+    align: 'center',
+    dataIndex: 'produceOrderCode',
+    width: 200
+  },
+  {
+    title: '床次计划号',
+    align: 'center',
+    dataIndex: 'bedPlanNo',
+    width: 200
+  },
+  {
+    title: '款式床次号',
+    align: 'center',
+    dataIndex: 'styleBedNo',
+    width: 200
+  },
+  {
+    title: '款式图片',
+    align: 'center',
+    dataIndex: 'styleImage',
+    width: 200
+  },
+  {
+    title: '款式名称',
+    align: 'center',
+    dataIndex: 'styleName',
+    width: 250
+  },
+  {
+    title: '款式编号',
+    align: 'center',
+    dataIndex: 'styleCode',
+    width: 200
+  },
+  {
+    title: '客户名称',
+    align: 'center',
+    dataIndex: 'customName',
+    width: 200
+  },
+  {
+    title: '面料编号',
+    align: 'center',
+    dataIndex: 'fabricCode',
+    width: 200
+  },
+  {
+    title: '面料名称',
+    align: 'center',
+    dataIndex: 'fabricName',
+    width: 200
+  },
+  {
+    title: '唛架长度',
+    align: 'center',
+    dataIndex: 'shelfLength',
+    width: 200
+  },
+  {
+    title: '唛架门幅',
+    align: 'center',
+    dataIndex: 'shelfWidth',
+    width: 200
+  },
+  {
+    title: '铺布长度',
+    align: 'center',
+    dataIndex: 'spreadClothLength',
+    width: 200
+  },
+  {
+    title: '铺布层数',
+    align: 'center',
+    dataIndex: 'spreadClothLevel',
+    width: 200
+  },
+  {
+    title: '床次总件数',
+    align: 'center',
+    dataIndex: 'bedSum',
+    width: 200
+  },
+  {
+    title: '排唛比例',
+    align: 'center',
+    dataIndex: 'shelfScalList',
+    width: 200
+  },
+  {
+    title: '状态',
+    align: 'center',
+    dataIndex: 'statu',
+    width: 200
+  }
+]
+
+
+
+//设备编号
+export const specData = [
+  {
+    title: '设备图片',
+    align: 'center',
+    dataIndex: 'img',
+    width: 200
+  },
+  {
+    title: '设备编号',
+    align: 'center',
+    dataIndex: 'sn',
+    // width: 200
+  },
+  {
+    title: '设备型号',
+    align: 'center',
+    dataIndex: 'spec',
+    // width: 200
+  },
+  {
+    title: '设备名称',
+    align: 'center',
+    dataIndex: 'name',
+    // width: 200
+  },
+  {
+    title: '设备类型',
+    align: 'center',
+    dataIndex: 'type',
+    // width: 250
+  },
+  {
+    title: '默认参数',
+    align: 'center',
+    dataIndex: 'defaultParam',
+    // width: 200
+  },
+]
+
+
+

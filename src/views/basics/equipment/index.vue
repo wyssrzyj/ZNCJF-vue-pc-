@@ -14,8 +14,9 @@
 
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
-      <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button>
-      <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button>
+      <el-button type="primary" style="order: 3" >导入</el-button>
+      <!-- <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 导入 </el-button> -->
+      <!-- <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button> -->
     </template>
 
     <template #img="{ row }">
@@ -55,8 +56,6 @@
   import DefaultParam from './modules/dialog-forms.vue'
 
   const { proxy }: any = getCurrentInstance()
-  const dialogUploadFileEl = ref()
-  const dialogUploadStyleEl = ref()
   const styleLibListEl = ref()
 
   const state = reactive({
@@ -119,15 +118,15 @@
     })
   }
 
-  const handleUploadStyle = () => {
-    dialogUploadStyleEl.value.showDialog({
-      action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
-    })
-  }
+  // const handleUploadStyle = () => {
+  //   dialogUploadStyleEl.value.showDialog({
+  //     action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
+  //   })
+  // }
 
-  const handleUploadFile = () => {
-    dialogUploadFileEl.value.showDialog()
-  }
+  // const handleUploadFile = () => {
+  //   dialogUploadFileEl.value.showDialog()
+  // }
 
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {

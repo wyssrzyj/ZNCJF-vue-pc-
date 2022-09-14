@@ -18,9 +18,9 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button>
-      <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增裁剪任务')">新增</el-button>
+      <!-- <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button> -->
+      <!-- <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button> -->
+      <!-- <el-button type="primary" style="order: 3" @click="handleClick(false, '新增裁剪任务')">新增</el-button> -->
     </template>
 
     <template #styleImage="{ row }">
@@ -53,8 +53,6 @@
   mapType.set(3, '进行中')
   mapType.set(4, '已完成')
 
-  const dialogUploadFileEl = ref()
-  const dialogUploadStyleEl = ref()
   const styleLibListEl = ref()
 
   const state: any = reactive({
@@ -87,15 +85,15 @@
     //根据有无row判断点击新增或编辑按钮
   }
 
-  const handleUploadStyle = () => {
-    dialogUploadStyleEl.value.showDialog({
-      action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
-    })
-  }
+  // const handleUploadStyle = () => {
+  //   dialogUploadStyleEl.value.showDialog({
+  //     action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
+  //   })
+  // }
 
-  const handleUploadFile = () => {
-    dialogUploadFileEl.value.showDialog()
-  }
+  // const handleUploadFile = () => {
+  //   dialogUploadFileEl.value.showDialog()
+  // }
 
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()

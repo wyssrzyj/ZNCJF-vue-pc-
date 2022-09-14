@@ -1,22 +1,22 @@
 <template>
   <div class="container">
     <div class="top">
-      <p v-for="(item, i) in state.topList" :key="i" :class="state.topCurrent === i ? 'active' : ''" @click="state.topCurrent = i">{{ item }}</p>
+      <p v-for="(item, i) in state.topList" :key="i" :class="state.topCurrent === i ? 'active' : ''" @click="switchMenu(i)">{{ item }}</p>
     </div>
     <div class="middle">
       <div class="left-form">
         <el-form ref="leftForm" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
           <el-form-item label="款图" class="layclothImg">
-            <UploadModule v-model="state.form.styleImage" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
+            <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
           <el-form-item label="款式编号">
-            <el-input v-model="state.form.styleCode" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
+            <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
           </el-form-item>
           <el-form-item label="款式名称">
-            <el-input v-model="state.form.styleName" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
+            <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
           </el-form-item>
           <el-form-item label="唛架图">
-            <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
+            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
           </el-form-item>
           <el-form-item label="其他附件">
             <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
@@ -25,11 +25,11 @@
       </div>
       <div class="right-from">
         <!--选择设备-->
-        <SelectDev v-if="state.topCurrent === 0" ref="selectDevice" @changeFrom="selectDeviceSub" />
+        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" @changeFrom="selectDeviceSub" />
         <!--设备参数-->
-        <DevParam v-if="state.topCurrent === 1" ref="devParam" @changeFrom="devParamSub" />
+        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" @changeFrom="devParamSub" />
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" @changeFrom="plannedTimeSub" />
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :row="props.row" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
       </div>
     </div>
     <div class="foot">
@@ -40,28 +40,35 @@
 </template>
 
 <script lang="ts" setup>
+  import { ElMessage } from 'element-plus'
+  import { isEmpty, cloneDeep } from 'lodash'
+  import { reactive, ref, getCurrentInstance } from 'vue'
+  import type { FormRules } from 'element-plus'
+  import { FormInstance } from 'element-plus'
+
   import SelectDev from './selectDev.vue'
   import DevParam from './devParam.vue'
   import PlannedTime from './plannedTime.vue'
   import UploadModule from './dialog-upload.vue'
   import { content } from './conifgs'
 
-  import { isEmpty } from 'lodash'
-  import { reactive, ref } from 'vue'
-  import type { FormRules } from 'element-plus'
-  import { FormInstance } from 'element-plus'
-
   const leftForm = ref<FormInstance>()
+  const { proxy } = getCurrentInstance()
 
   const { formData } = content
 
   const props = defineProps<{
+    type: any
     close: any
+    row: any
   }>()
 
   const state: any = reactive({
+    type: props.type,
+    list: { one: {}, two: {}, three: {} }, //保存数据
     form: formData,
-    topCurrent: 2,
+    topCurrent: 0,
+
     topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
     leftForm: {
       styleNo: '',
@@ -84,9 +91,65 @@
     ]
   })
 
-  const selectDevice = ref<any>(null)
+  // const selectDevice = ref<any>(null)
   const devParam = ref<any>(null)
   const plannedTime = ref<any>(null)
+
+  const init = () => {
+    //面料名称
+
+    //数据回显
+    if (props.row) {
+      proxy.$baseService.get('/jack-ics-api/spreadTask/get', { taskId: props.row.id }).then((res: any) => {
+        // 图片
+        res.data.img = [{ url: res.data.shelfFileUrl }]
+
+        //唛架图
+        res.data.shelfFile = [
+          {
+            name: res.data.shelfFileName,
+            response: {
+              data: {
+                src: res.data.shelfFileUrl
+              }
+            }
+          }
+        ]
+        state.form = res.data //显示左侧款图
+
+        state.list.one = res.data //初始显示数据
+      })
+    }
+  }
+
+  init()
+
+  //切换菜单
+  const switchMenu = (i: any) => {
+    let bedPlanNo = state.list.one.bedPlanNo
+    let deviceSn = state.list.one.deviceSn
+    if (bedPlanNo && deviceSn) {
+      state.topCurrent = i
+    } else {
+      ElMessage({
+        message: '必填项不能为空',
+        type: 'warning'
+      })
+    }
+  }
+
+  // 总数据
+  const setData = (type: any, e: any) => {
+    if (type === '1') {
+      state.list.one = e
+    }
+    if (type === '2') {
+      state.list.two = e
+    }
+    if (type === '3') {
+      state.list.three = e
+    }
+  }
 
   // 是否可用
   const disable = (type: any) => {
@@ -132,54 +195,113 @@
 
   // 保存
   const save = () => {
-    // 先校验左边表单
-    submitForm(leftForm)
-    // 通过 topCurrent 区分保存内容
-    // 选择设备
-    if (state.topCurrent === 0) {
-      selectDevice.value.validateFrom()
-    }
-    // 设备参数
-    if (state.topCurrent === 1) {
-      devParam.value.submitForm()
-    }
-    // 计划时间
-    if (state.topCurrent === 2) {
-      plannedTime.value.submitForm()
+    //必填项不可为空
+
+    let bedPlanNo = state.list.one.bedPlanNo
+    let deviceSn = state.list.one.deviceSn
+    let rowId = !isEmpty(props.row) ? props.row.id : null
+    //其他附件
+
+    if (bedPlanNo && deviceSn) {
+      let list = cloneDeep(state.form) //防止污染
+      //其他附件
+
+      if (!isEmpty(list.attachmentList)) {
+        let arr: any = []
+
+        list.attachmentList.forEach((item: any) => {
+          //组件返回格式
+          if (!isEmpty(item.response)) {
+            arr.push({
+              name: item.name,
+              url: item.response.data.src,
+              size: item.size,
+              suffix: item.response.data.extension
+            })
+          } else {
+            // 后端返回格式
+            arr.push({
+              name: item.name,
+              url: item.url,
+              size: item.size,
+              suffix: item.suffix
+            })
+          }
+        })
+        list.attachmentList = arr
+      }
+
+      let data = {
+        id: rowId,
+        //附件
+        attachmentList: list.attachmentList,
+        // 1-
+        bedPlanId: state.list.one.bedPlanId,
+        deviceId: state.list.one.deviceId,
+
+        // 2-上
+        spreadTaskParam: state.list.two.top,
+        // 2-下
+        cutTaskParam: state.list.two.bottom,
+        //3-时间
+        bedPalnTaskTimeDTO: state.list.three
+      }
+
+      proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
+        if (res.code === 0) {
+          ElMessage({
+            message: '保存成功',
+            type: 'success'
+          })
+          props.close()
+        } else {
+          ElMessage({
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+      })
+    } else {
+      ElMessage({
+        message: '必填项不能为空',
+        type: 'warning'
+      })
     }
   }
 
-  // 选择设备提交
-  const selectDeviceSub = (data: any) => {
-    state.selectDeviceData = data
-    submitForm(leftForm).then(res => {
-      if (data && res) {
-      }
-    })
-  }
-  // 设备参数提交
-  const devParamSub = (data: any) => {
-    state.devParamData = data
-    submitForm(leftForm).then(res => {
-      if (data && res) {
-      }
-    })
-  }
-  // 计划时间提交
-  const plannedTimeSub = (data: any) => {
-    state.plannedTimeData = data
-    submitForm(leftForm).then(res => {
-      if (data && res) {
-      }
-    })
-  }
+  // // 选择设备提交
+  // const selectDeviceSub = (data: any) => {
+  //   state.selectDeviceData = data
+  //   submitForm(leftForm).then(res => {
+  //     if (data && res) {
+  //       console.log(data)
+  //     }
+  //   })
+  // }
+  // // 设备参数提交
+  // const devParamSub = (data: any) => {
+  //   state.devParamData = data
+  //   submitForm(leftForm).then(res => {
+  //     if (data && res) {
+  //       console.log(data)
+  //     }
+  //   })
+  // }
+  // // 计划时间提交
+  // const plannedTimeSub = (data: any) => {
+  //   state.plannedTimeData = data
+  //   submitForm(leftForm).then(res => {
+  //     if (data && res) {
+  //     }
+  //   })
+  // }
   //  表单验证
-  const submitForm = async (formEl: FormInstance | undefined | any) => {
-    if (!formEl) return
-    return await formEl.value.validate((valid: any) => {
-      return !!valid
-    })
-  }
+  // const submitForm = async (formEl: FormInstance | undefined | any) => {
+  //   if (!formEl) return
+  //   return await formEl.value.validate((valid: any) => {
+  //     return !!valid
+  //   })
+  // }
 
   // 取消
   const close = (formEl: any) => {
@@ -249,17 +371,6 @@
       }
       .right-from {
         width: 555px;
-        //display: flex;
-        //align-items: center;
-        //justify-content: space-between;
-        //.el-form{
-        //  display: flex;
-        //  flex-wrap: wrap;
-        //  justify-content: space-between;
-        //  .el-form-item{
-        //    width: calc(calc(100% / 2) - 0px);
-        //  }
-        //}
       }
     }
     .foot {

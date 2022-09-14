@@ -134,29 +134,14 @@
     if (!data) {
       return
     }
+    const a = document.createElement('a'); 
+    a.style.display = 'none';       
+    a.href = data;   
+    document.body.appendChild(a);
+    a.click();  
+    document.body.removeChild(a);
+  
 
-    const blobUrl = data
-    // 这里的文件名根据实际情况从响应头或者url里获取
-    const a = document.createElement('a')
-    a.target = '_block'
-    a.href = blobUrl
-    a.download = 'w3logo'
-    a.click()
-    window.URL.revokeObjectURL(blobUrl)
-
-    // 用fetch发送请求
-    // fetch(data).then(res => {
-    //   res.blob().then(blob => {
-    //     const blobUrl = window.URL.createObjectURL(blob)
-    //     // 这里的文件名根据实际情况从响应头或者url里获取
-    //     const filename = 'user.jpg'
-    //     const a = document.createElement('a')
-    //     a.href = blobUrl
-    //     a.download = filename
-    //     a.click()
-    //     window.URL.revokeObjectURL(blobUrl)
-    //   })
-    // })
   }
 
   const showDialog = ({ title = '导入文件' } = {}) => {

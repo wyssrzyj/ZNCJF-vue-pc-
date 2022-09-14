@@ -1,13 +1,14 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-09-05 13:55:28
+ * @LastEditTime: 2022-09-13 13:22:45
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div v-if="disabled === true">
     <img v-if="state.fileList.length === 0" class="pictureImg" :src="state.img" />
+
     <img v-if="state.fileList.length === 1" class="disabledImg" :src="state.fileList[0].url" />
   </div>
   <div v-if="disabled === false">
@@ -62,7 +63,6 @@
     height: 100px;
   }
   .disabledImg {
-    background: #bbbdbb;
     width: 100px;
     height: 100px;
     padding: 10px;

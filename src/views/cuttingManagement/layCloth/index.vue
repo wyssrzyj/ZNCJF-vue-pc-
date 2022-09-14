@@ -1,16 +1,15 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <span>铺布任务</span>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
-      <el-form-item label="床次计划号" prop="snstyleBedNo">
-        <el-input v-model="state.queryFormData.snstyleBedNo" placeholder="请输入" clearable />
+      <el-form-item label="生产订单" prop="produceOrderCode">
+        <el-input v-model="state.queryFormData.produceOrderCode" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="铺布任务号" prop="bedPlanNo">
+      <el-form-item label="床次计划号" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="设备名称" prop="deviceName">
-        <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
+      <el-form-item label="款式编号" prop="taskCode">
+        <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="statu">
         <el-select v-model="state.queryFormData.statu" clearable filterable>
@@ -21,11 +20,14 @@
 
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button>
+      <el-button type="primary" style="order: 3" >审核</el-button>
     </template>
-
 
     <template #styleImage="{ row }">
       <ImgModular :img="row.styleImage" />
+    </template>
+    <template #statu="{ row }">
+      {{ mapType.get(row.statu) }}
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -33,8 +35,8 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="920px" hei>
-      <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
+    <el-dialog  v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="920px" hei>
+      <DialogContent :type="state.dialogType" :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
 </template>
@@ -54,10 +56,16 @@
 
   const styleLibListEl = ref()
 
+  let statuMap = new Map()
+  statuMap.set(1, '未审核')
+  statuMap.set(2, '已审核')
+  statuMap.set(3, '进行中')
+  statuMap.set(4, '已完成')
+
   const state: any = reactive({
     row: {},
     dialogType: true,
-    dialogTableVisible: true,
+    dialogTableVisible: false,
     dialogTitle: '查看铺布',
     statu: [
       { name: '未审核', value: '1' },
@@ -69,7 +77,7 @@
     queryFormData: {
       produceOrderCode: '',
       bedPlanNo: '',
-      styleCode: '',
+      taskCode: '',
       statu: ''
     },
 
