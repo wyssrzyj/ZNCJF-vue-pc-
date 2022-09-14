@@ -197,7 +197,7 @@ const setDeviceSnType = (e: any) => {
     state.deviceSnType = false;
   }
   if (e.type === "confirm") {
-    //存一份用于回显
+    //存一份用于回显111
     state.device.deviceId = e.data.id;
     state.device.deviceSn = e.data.sn;
 
