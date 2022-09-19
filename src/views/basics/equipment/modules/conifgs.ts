@@ -1,12 +1,36 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2022-09-05 13:35:23
+ * @LastEditTime: 2022-09-15 10:18:44
  * @Description:
  * @LastEditors: lyj
  */
+// 导出
+export const exportData = [
+  {
+    prop: 'image',
+    label: '设备图片',
+    type:"img"
+  },
+  {
+    prop: 'sn',
+    label: '设备型号',
+     type:null
+  },
+  {
+    prop: 'name',
+    label: '设备名称',
+     type:null
+
+  },
+  {
+    prop: 'type',
+    label: '设备类型',
+    type:"type"
+  }
+]
 //---------------content-----------------
-export const content: any = {
+export const content  = {
   formData: {
     img: [],
     sn: '',

@@ -21,9 +21,11 @@
     "element-plus": "^2.2.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "print-js": "^1.6.0",
     "vue": "^3.2.33",
     "vue-echarts": "^6.2.3",
     "vue-i18n": "9.1.10",
+    "vue-qr": "^4.0.9",
     "vue-router": "^4.1.1",
     "vuex": "^4.0.2"
   },

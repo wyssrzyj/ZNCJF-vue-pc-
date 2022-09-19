@@ -1,10 +1,44 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-09-09 08:56:08
+ * @LastEditTime: 2022-09-15 11:04:58
  * @Description:
  * @LastEditors: lyj
  */
+// 导出
+
+export const exportData = [
+    {
+    prop: 'image',
+    label: '面料图片',
+    type:"img"
+  },
+  {
+    prop: 'sn',
+    label: '面料编号',
+    type:null
+  },
+  {
+    prop: 'name',
+    label: '面料名称',
+    type:null
+  },
+  {
+    prop: 'type',
+    label: '面料类型',
+    type:"type"
+  },
+  {
+    prop: 'weight',
+    label: '面料克重',
+    type:null
+  },
+  {
+    prop: 'color',
+    label: '面料颜色',
+    type:null
+  }
+]
 
 export const formData = {
   img: [],

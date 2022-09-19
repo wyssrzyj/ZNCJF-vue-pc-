@@ -36,19 +36,19 @@
       <el-input v-model="state.rightForm.fabricColor" disabled />
     </el-form-item>
     <el-form-item label="唛架长度：">
-      <div class="row">
+      <div class="layCloth-row">
         <el-input v-model="state.rightForm.spreadClothLength" disabled />
         <span>米</span>
       </div>
     </el-form-item>
     <el-form-item label="唛架门幅：">
-      <div class="row">
+      <div class="layCloth-row">
         <el-input v-model="state.rightForm.shelfWidth" disabled />
         <span>米</span>
       </div>
     </el-form-item>
     <el-form-item label="铺布长度：">
-      <div class="row">
+      <div class="layCloth-row">
         <el-input v-model="state.rightForm.spreadClothLength" disabled />
         <span>米</span>
       </div>
@@ -135,7 +135,6 @@ const init = () => {
 };
 init();
 
-//监听变化赋值11
 
 watch(
   () => props.value,
@@ -216,7 +215,7 @@ const setDeviceSnType = (e: any) => {
 </script>
 
 <style scoped lang="less">
-.row {
+.layCloth-row {
   .el-input {
     width: 192px !important;
   }

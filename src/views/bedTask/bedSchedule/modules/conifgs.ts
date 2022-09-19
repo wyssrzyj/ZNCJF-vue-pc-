@@ -1,10 +1,66 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-03 14:18:46
+ * @LastEditTime: 2022-09-15 09:30:00
  * @Description:
  * @LastEditors: lyj
  */
+
+// 导出
+export const exportData = [
+  {
+    prop: 'styleCode',
+    label: '款式编号'
+  },
+  {
+    prop: 'styleName',
+    label: '款式名称'
+  },
+  {
+    prop: 'produceOrderCode',
+    label: '生产订单'
+  },
+  {
+    prop: 'customName',
+    label: '客户名称'
+  },
+  {
+    prop: 'styleBedNo',
+    label: '床次'
+  },
+  {
+    prop: 'fabricCode',
+    label: '面料编号'
+  },
+  {
+    prop: 'fabricName',
+    label: '面料名称'
+  },
+  {
+    prop: 'fabricColor',
+    label: '面料颜色'
+  },
+  {
+    prop: 'spreadClothLength',
+    label: '唛架长度（米）'
+  },
+  {
+    prop: 'shelfWidth',
+    label: '唛架门幅（米）'
+  },
+  {
+    prop: 'spreadClothLength',
+    label: '铺布长度（米'
+  },
+  {
+    prop: 'spreadClothLevel',
+    label: '铺布层数'
+  },
+  {
+    prop: 'shelfScalList',
+    label: '排唛比例'
+  }
+]
 //---------------content-----------------
 export const content: any = {
   formData: {

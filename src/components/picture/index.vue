@@ -1,17 +1,16 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-09-13 13:22:45
+ * @LastEditTime: 2022-09-14 17:54:30
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <div v-if="disabled === true">
+  <div v-if="props.disabled === true">
     <img v-if="state.fileList.length === 0" class="pictureImg" :src="state.img" />
-
     <img v-if="state.fileList.length === 1" class="disabledImg" :src="state.fileList[0].url" />
   </div>
-  <div v-if="disabled === false">
+  <div v-if="props.disabled === false">
     <IntellicutImg v-model="state.fileList" :model-value="state.fileList" :limit="state.limit" />
   </div>
 </template>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 15:16:36
+ * @LastEditTime: 2022-09-19 14:04:14
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -96,8 +96,9 @@
           </div>
 
           <div v-if="item.type === 'fabricName'">
+
             <el-form-item :label="item.name" prop="fabricName" class="buttonContainer">
-              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" filterable>
+              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" filterable @change="setFabricName">
                 <el-option v-for="item in state.fabricName" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -148,7 +149,8 @@
     </el-row>
 
     <div class="dialogBottom">
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+      <el-button type="primary" v-if="!disable(false)" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+      <el-button type="primary" v-if="disable(false)"  class="preservation" @click="setPrint()">打印</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
     </div>
   </el-form>
@@ -156,11 +158,17 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
     <PopModule v-if="state.dialogTableVisible" :type="props.dialogType" :operation="operation" :form="state.form" />
   </el-dialog>
+
+    <div style="height: 0; overflow: hidden">
+    <!-- <Print /> -->
+    <Work v-if="state.printType" :id="state.id" />
+  </div>
 </template>
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
+  import print from 'print-js'
 
   import { QuestionFilled } from '@element-plus/icons-vue'
   import { content } from './conifgs'
@@ -168,6 +176,8 @@
   import UploadModule from './dialog-upload.vue'
   import { ElMessage } from 'element-plus'
   import PopModule from './dialog-forms.vue'
+  import Work from './dialog-work.vue'
+
   import './index.less'
   const { formData, formMiddleData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
@@ -190,8 +200,22 @@
     //提示信息
     prop: dataRule,
     fabricName: [],
-    effectiveArea: 0 //有效面积
+    effectiveArea: 0 ,//有效面积
+    id:props.row.id,
+    printType:false,
   })
+
+  const setPrint = () => {
+    //添加状态
+    state.printType=true
+    print({
+      printable: 'work',
+      type: 'html',
+      targetStyles: ['*'],
+      maxWidth:5000,
+      // scanStyles:false
+    })
+  }
 
   // 上传
   const upload = reactive({
@@ -217,6 +241,10 @@
         state.fabricName = list
       }
     })
+  }
+  //面料名称联动
+  const setFabricName=()=>{
+    
   }
   const init = () => {
     //面料名称

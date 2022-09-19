@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-08 09:20:52
+ * @LastEditTime: 2022-09-15 11:51:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -18,6 +18,7 @@
 
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料')"> 新增 </el-button>
+      <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
     </template>
 
     <template #img="{ row }">
@@ -32,17 +33,31 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看面料管理', row)">查看</el-button>
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑面料管理', row)">编辑</el-button>
     </template>
-
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
-      <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
-    </el-dialog>
   </njp-table-config>
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
+    <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
+  </el-dialog>
+
+  <!-- 导出  -->
+  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
+    <ImportDialog :export="state.export" :get-list="getList" />
+    <template #footer>
+      <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
+      <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref ,getCurrentInstance} from 'vue'
+  import { ElMessage } from 'element-plus'
+
+
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
+  import ImportDialog from '@/components/dialog-import-table/index.vue'
+  import  {exportData} from  "./modules/conifgs.ts"
+  const { proxy }: any = getCurrentInstance()
 
   let mapType = new Map()
   mapType.set(1, '针织面料')
@@ -51,6 +66,16 @@
   const styleLibListEl = ref()
 
   const state = reactive({
+      //导出
+    export: {
+      type:"fabric",
+      data:exportData,
+      importType: false,
+      list: [],//导出数据
+      template: 'http://10.18.4.25/template/fabric.xlsx',
+      interface: '/jack-ics-api/fabric/import'
+    },
+
     dialogType: true,
     dialogTableVisible: false,
     dialogTitle: '',
@@ -94,6 +119,49 @@
       refreshTable()
     } else {
       state.dialogTableVisible = false
+    }
+  }
+
+   //------------------------------导出-------------------------------
+  //打开弹窗-【导出】
+  const importMethod = () => {
+    state.export.importType = true
+  }
+
+  //获取导出数据
+  const getList = (e: any) => {
+    state.export.list = e
+  }
+
+  //关闭弹窗-【导出】
+  const exportEvents = (type: any) => {
+    if (type === true) {
+      let saveData = state.export.list
+
+      let data: any = []
+
+      saveData.forEach((item: any) => {
+        data.push({
+          color: item.color,
+          image: item.image ? item.image : '',
+          name: item.name,
+          sn: item.sn,
+          type: item.type,
+          weight: item.weight
+        })
+      })
+      proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
+        state.export.importType = false
+          ElMessage({
+          message: '添加成功',
+          type: 'success'
+        })
+        refreshTable()
+
+      })
+    }
+    if (type === false) {
+      state.export.importType = false
     }
   }
 </script>

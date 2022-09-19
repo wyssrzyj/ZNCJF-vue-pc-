@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
@@ -14,7 +14,7 @@
 
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
-      <el-button type="primary" style="order: 3" >导入</el-button>
+      <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <!-- <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 导入 </el-button> -->
       <!-- <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button> -->
     </template>
@@ -24,7 +24,7 @@
     </template>
 
     <template #type="{ row }">
-      <span> {{ equipment.get(row.type.toString()) }}</span>
+      <span> {{ row.type ? equipment.get(row.type.toString()) : null }}</span>
     </template>
 
     <template #defaultParam="{ row }">
@@ -45,20 +45,42 @@
   <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :close-on-click-modal="false" :title="state.defaultParam.Title" width="500px">
     <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
   </el-dialog>
+  <!-- 导出  -->
+
+  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
+    <ImportDialog :export="state.export" :get-list="getList" />
+    <template #footer>
+      <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
+      <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
   import { reactive, getCurrentInstance, ref } from 'vue'
+  import { ElMessage } from 'element-plus'
+
   import { equipment } from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
+  import ImportDialog from '@/components/dialog-import-table/index.vue'
 
   import DialogContent from './modules/dialog-content.vue'
   import DefaultParam from './modules/dialog-forms.vue'
-
+  import { exportData } from './modules/conifgs.ts'
   const { proxy }: any = getCurrentInstance()
   const styleLibListEl = ref()
 
   const state = reactive({
+    //导出
+    export: {
+      type: 'equipment',
+      data: exportData,
+      importType: false,
+      list: [], //导出数据
+      template: 'http://10.18.4.25/template/device.xlsx',
+      interface: '/jack-ics-api/device/import'
+    },
+
     dialogType: true,
     dialogTableVisible: false,
     dialogTitle: '查看床次计划',
@@ -92,41 +114,6 @@
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
   }
-
-  const handleAddOrUpdate = (row: any) => {
-    //根据有无row判断点击新增或编辑按钮
-  }
-
-  const handleRowDbclick = (row: any) => {
-    toViewFun(row, 'opinionList')
-  }
-
-  const toViewFun = (row: any, type: any) => {
-    proxy.$routerToView({
-      path: `/style/create-style/view-create-style`,
-      query: {
-        _mt: `款式详情`,
-        id: row.id,
-        season: row.season,
-        stage: row.stage,
-        styleNo: row.styleNo,
-        gender: row.gender,
-        brand: row.brand,
-        productType: row.productType,
-        typeValue: type
-      }
-    })
-  }
-
-  // const handleUploadStyle = () => {
-  //   dialogUploadStyleEl.value.showDialog({
-  //     action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
-  //   })
-  // }
-
-  // const handleUploadFile = () => {
-  //   dialogUploadFileEl.value.showDialog()
-  // }
 
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {
@@ -170,6 +157,47 @@
     if (e.type === 'confirm') {
       refreshTable()
       state.defaultParam.defaultParamType = false
+    }
+  }
+
+  //------------------------------导出-------------------------------
+  //打开弹窗-【导出】
+  const importMethod = () => {
+    state.export.importType = true
+  }
+
+  //获取导出数据
+  const getList = (e: any) => {
+    state.export.list = e
+  }
+
+  //关闭弹窗-【导出】
+  const exportEvents = (type: any) => {
+    if (type === true) {
+      let saveData = state.export.list
+
+      let data: any = []
+
+      saveData.forEach((item: any) => {
+        data.push({
+          image: item.image ? item.image : '',
+          name: item.name,
+          sn: item.sn,
+          spec: item.spec,
+          type: item.type.toString()
+        })
+      })
+      proxy.$baseService.post('/jack-ics-api/device/saveBatch', { deviceExcelDTOList: data }).then((res: any) => {
+        refreshTable()
+        state.export.importType = false
+        ElMessage({
+          message: '添加成功',
+          type: 'success'
+        })
+      })
+    }
+    if (type === false) {
+      state.export.importType = false
     }
   }
 </script>

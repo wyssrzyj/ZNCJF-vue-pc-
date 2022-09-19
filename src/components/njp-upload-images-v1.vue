@@ -53,7 +53,7 @@
   import type { UploadProps } from 'element-plus'
   import { getToken } from '@/utils/cache'
   import { ElMessage } from 'element-plus'
-  import { cloneDeep, isEmpty } from 'lodash'
+  import { cloneDeep } from 'lodash'
 
   const { proxy }: any = getCurrentInstance()
 
@@ -87,17 +87,6 @@
     { deep: true }
   )
 
-  //赋值
-  watch(
-    () => props.modelValue,
-    v => {
-      if (!isEmpty(v)) {
-        state.fileList = v
-      }
-    },
-    { deep: true, immediate: true }
-  )
-
   const removeEl = fileList => {
     let plusEl = null
     if (!plusEl) plusEl = document.querySelector('.el-upload--picture-card')
@@ -111,8 +100,6 @@
   const emits = defineEmits(['update:modelValue'])
 
   const handleSuccess = (res, uploadFile, uploadFiles) => {
-    // console.log('成功', uploadFiles)
-
     state.fileList = uploadFiles
     emits('update:modelValue', formartFileList(state.fileList))
     state.loading = false
