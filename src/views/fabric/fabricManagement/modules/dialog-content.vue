@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-09 10:39:42
+ * @LastEditTime: 2022-09-20 10:26:24
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -57,7 +57,7 @@
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadTemplateId'">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
+            <el-form-item :label="`${item.name}`" prop="spreadTemplateId">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
                 <el-option v-for="item in state.spreadTemplateId" :key="item.id" :label="item.label" :value="item.value" />
               </el-select>
@@ -74,7 +74,7 @@
       <el-col :span="8">
         <div v-for="(item, index) in state.right" :key="index">
           <div v-if="item.type === 'name'">
-            <el-form-item :label="`${item.name}`" prop="name">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
@@ -86,6 +86,7 @@
               </el-input>
             </el-form-item>
           </div>
+
           <div v-if="item.type === 'cutTemplateId'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-19 13:59:50
+ * @LastEditTime: 2022-09-19 16:56:19
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -16,30 +16,33 @@
         </div>
       </div>
     </div>
-      <Information :data="state.data"/>
-      <Ready :data="state.data"/>
+    <Information :data="state.data" />
+    <Ready :data="state.data" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive,getCurrentInstance } from 'vue'
-   import VueQr from 'vue-qr/src/packages/vue-qr.vue'
+  import { isEmpty } from 'lodash';
+import { reactive, getCurrentInstance } from 'vue'
+  import VueQr from 'vue-qr/src/packages/vue-qr.vue'
   import Information from './dialog-work-information.vue'
   import Ready from './dialog-work-ready.vue'
   const { proxy } = getCurrentInstance()
 
   const props = defineProps<{
-    id:any
+    id: any
   }>()
 
   const state = reactive({
     data: []
   })
 
-    const init = () => {
-      proxy.$baseService.get('/jack-ics-api/print/getTaskInfo',{bedPlanId:props.id} ).then((res: any) => {
-        state.data=res.data
-      })
+  const init = () => {
+    proxy.$baseService.get('/jack-ics-api/print/getTaskInfo', { bedPlanId: props.id }).then((res: any) => {
+      if (!isEmpty(res.data)) {
+        state.data = res.data
+      }
+    })
   }
   init()
 </script>

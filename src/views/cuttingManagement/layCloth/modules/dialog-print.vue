@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-18 15:16:33
+ * @LastEditTime: 2022-09-19 17:11:45
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -23,18 +23,23 @@
 
 <script lang="ts" setup>
 import { reactive ,getCurrentInstance} from 'vue'
+  import { isEmpty } from 'lodash';
   import Information from './dialog-print-information.vue'
   import Ready from './dialog-print-ready.vue'
   const { proxy } = getCurrentInstance()
 
-  const props = defineProps<{}>()
+  const props = defineProps<{
+    id:any
+  }>()
 
   const state = reactive({
     data: {}
   })
   const init = () => {
-      proxy.$baseService.get('/jack-ics-api/print/getTaskCompleteInfo',{bedPlanId:"1567443329765433346"} ).then((res: any) => {
-        state.data=res.data
+      proxy.$baseService.get('/jack-ics-api/print/getTaskCompleteInfo',{bedPlanId:props.id} ).then((res: any) => {
+         if (!isEmpty(res.data)) {
+        state.data = res.data
+      }
       
       })
   }

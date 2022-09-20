@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-12 15:19:44
+ * @LastEditTime: 2022-09-20 10:04:11
  * @Description:
  * @LastEditors: lyj
  */
@@ -296,39 +296,39 @@ export const tableColumns = [
 //设备编号
 export const specData = [
   {
-    title: '设备图片',
+    title: '铺布设备编号',
     align: 'center',
-    dataIndex: 'img',
+    dataIndex: 'equipmentSn',
     width: 200
   },
   {
-    title: '设备编号',
+    title: '铺布设备名称',
     align: 'center',
-    dataIndex: 'sn',
+    dataIndex: 'equipmentName',
     // width: 200
   },
   {
-    title: '设备型号',
+    title: '贴标设备编号',
     align: 'center',
-    dataIndex: 'spec',
+    dataIndex: 'labelingSn',
     // width: 200
   },
   {
-    title: '设备名称',
+    title: '贴标设备名称',
     align: 'center',
-    dataIndex: 'name',
+    dataIndex: 'labelingName',
     // width: 200
   },
   {
-    title: '设备类型',
+    title: '裁床设备编号',
     align: 'center',
-    dataIndex: 'type',
+    dataIndex: 'cuttingSn',
     // width: 250
   },
   {
-    title: '默认参数',
+    title: '裁床设备名称',
     align: 'center',
-    dataIndex: 'defaultParam',
+    dataIndex: 'cuttingName',
     // width: 200
   },
 ]

@@ -91,7 +91,7 @@
   <el-dialog
     v-if="state.deviceSnType"
     v-model="state.deviceSnType"
-    title="床次计划"
+    title="设备编号"
     width="1100px"
   >
     <DeviceSnType :type="props.type" :operation="setDeviceSnType" />

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-15 09:30:00
+ * @LastEditTime: 2022-09-20 15:55:39
  * @Description:
  * @LastEditors: lyj
  */
@@ -64,7 +64,7 @@ export const exportData = [
 //---------------content-----------------
 export const content: any = {
   formData: {
-    styleImage: [],
+    styleImage: "",
     styleCode: '',
     styleName: '',
     shelfFile: [],
@@ -138,7 +138,7 @@ export const formsTable = {
       width: 200
     },
     {
-      title: '单间层数',
+      title: '单层间数',
       align: 'center',
       dataIndex: 'levelClothSum',
       width: 200

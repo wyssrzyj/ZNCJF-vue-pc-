@@ -98,7 +98,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="chartContainer">
     <div class="tops">
       <div class="title">
         <div class="txt">设备计划任务</div>
@@ -116,8 +116,8 @@
       </div>
       <div id="chart" style="width: 100%; height: 320px"></div>
     </div>
-    <div class="bottom">
-      <div class="left">
+    <div class="chartBottom">
+      <div class="chartLeft">
         <div class="title">
           <div class="txt">任务进度查询</div>
           <div class="form">
@@ -147,7 +147,7 @@
           </el-table>
         </div>
       </div>
-      <div class="right">
+      <div class="chartRight">
         <img v-if="state.taskStep.overviewVOList.length === 0" src="@/assets/images/layCloth/isNull.png" alt="" />
         <div v-if="state.taskStep.overviewVOList.length !== 0" class="order-title">生产订单号：{{ state.taskStep.title }}</div>
         <div v-if="state.taskStep.overviewVOList.length !== 0" class="order-list">

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-19 14:04:14
+ * @LastEditTime: 2022-09-20 16:25:36
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -96,7 +96,6 @@
           </div>
 
           <div v-if="item.type === 'fabricName'">
-
             <el-form-item :label="item.name" prop="fabricName" class="buttonContainer">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" filterable @change="setFabricName">
                 <el-option v-for="item in state.fabricName" :key="item.value" :label="item.label" :value="item.value" />
@@ -149,8 +148,8 @@
     </el-row>
 
     <div class="dialogBottom">
-      <el-button type="primary" v-if="!disable(false)" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
-      <el-button type="primary" v-if="disable(false)"  class="preservation" @click="setPrint()">打印</el-button>
+      <el-button v-if="!disable(false)" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+      <el-button v-if="disable(false) && props.row.statu === 2" type="primary" class="preservation" @click="setPrint">打印</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
     </div>
   </el-form>
@@ -158,10 +157,9 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
     <PopModule v-if="state.dialogTableVisible" :type="props.dialogType" :operation="operation" :form="state.form" />
   </el-dialog>
-
-    <div style="height: 0; overflow: hidden">
-    <!-- <Print /> -->
-    <Work v-if="state.printType" :id="state.id" />
+  <div style="height: 0; overflow: hidden">
+    <Work :id="state.printId" />
+    <!-- <Work  :id="'1567443329765433346'" /> -->
   </div>
 </template>
 
@@ -200,21 +198,22 @@
     //提示信息
     prop: dataRule,
     fabricName: [],
-    effectiveArea: 0 ,//有效面积
-    id:props.row.id,
-    printType:false,
+    effectiveArea: 0, //有效面积
+    printId: '',
+    printType: false
   })
 
   const setPrint = () => {
+    if (props.row.statu === 2) {
+      state.printType = true
+      print({
+        printable: 'work',
+        type: 'html',
+        targetStyles: ['*'],
+        maxWidth: 5000
+      })
+    }
     //添加状态
-    state.printType=true
-    print({
-      printable: 'work',
-      type: 'html',
-      targetStyles: ['*'],
-      maxWidth:5000,
-      // scanStyles:false
-    })
   }
 
   // 上传
@@ -243,15 +242,14 @@
     })
   }
   //面料名称联动
-  const setFabricName=()=>{
-    
-  }
+  const setFabricName = () => {}
   const init = () => {
     //面料名称
     getFabricName('')
 
     //数据回显
     if (props.row) {
+      state.printId = props.row.id
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
@@ -324,7 +322,6 @@
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
-    // console.log(product)
 
     state.form.attritionRate = state.effectiveArea / product
   }
@@ -383,7 +380,6 @@
             formEl.resetFields()
             props.close()
           } else {
-            // console.log(res.msg)
           }
         })
       }
@@ -393,17 +389,18 @@
   //排唛比例
   const shippingMarks = () => {
     let colorTitle: any = state.form.fabricColor
-    let spreadClothLevel = false
+    let spreadClothLevel = true
     let fabricColor = false
+
+    // spreadClothLevel = true
     // 铺布层数
-    if (Number(state.form.spreadClothLevel) > 0) {
-      spreadClothLevel = true
-    } else {
-      ElMessage({
-        message: '铺布层数不可为空',
-        type: 'warning'
-      })
-    }
+    // if (Number(state.form.spreadClothLevel) > 0) {
+    // } else {
+    //   ElMessage({
+    //     message: '铺布层数不可为空',
+    //     type: 'warning'
+    //   })
+    // }
     // 面料颜色
     if (colorTitle) {
       let data = colorTitle.split('，')
@@ -433,6 +430,53 @@
       state.dialogTableVisible = true
     }
   }
+  //去重
+  let dataRepeat = (arr: any) => {
+    let newArr = arr.filter(function (value: any, index: any, self: any) {
+      return self.indexOf(value) === index
+    })
+    return newArr
+  }
+  //排唛比例- 保存- 数据处理
+  const setShelfList = (e: any) => {
+    let list = e.data
+
+    let bedSum = 0
+    let levelClothSum = 0
+    let spreadClothLevel = 0
+    let data: any = { color: [], size: [], newColor: [], newSize: [] }
+    if (!isEmpty(list)) {
+      //床次总件数
+      list.forEach((item: any) => {
+        bedSum += item.total
+        data.color.push(item.color)
+        data.size.push(item.size)
+      })
+      data.newColor = dataRepeat(data.color)
+      data.newSize = dataRepeat(data.size)
+      //单层件数
+      let levelData: any = []
+      data.newSize.forEach((item: any) => {
+        let arr = list.findIndex((v: any) => v.size === item)
+        levelData.push(list[arr])
+      })
+      levelData.forEach((item: any) => {
+        levelClothSum += item.levelClothSum
+      })
+      //铺布层数
+      let colorData: any = []
+      data.newColor.forEach((item: any) => {
+        let arr = list.findIndex((v: any) => v.color === item)
+        colorData.push(list[arr])
+      })
+      colorData.forEach((item: any) => {
+        spreadClothLevel += item.spreadClothLevel
+      })
+      state.form.bedSum = bedSum
+      state.form.levelClothSum = levelClothSum
+      state.form.spreadClothLevel = spreadClothLevel
+    }
+  }
 
   //弹窗事件
   const operation = (e: any) => {
@@ -446,10 +490,15 @@
       e.data.map((item: any) => {
         item.type = ''
       })
-
       state.form.shelfList = e.data
-      state.form.fabricColor = color.join('，') //颜色更新
 
+      //颜色去重
+      let newArr = color.filter(function (value: any, index: any, self: any) {
+        return self.indexOf(value) === index
+      })
+      state.form.fabricColor = newArr.join('，')
+
+      setShelfList(e)
       state.dialogTableVisible = false
     }
   }

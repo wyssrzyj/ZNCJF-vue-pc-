@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-13 13:45:16
+ * @LastEditTime: 2022-09-20 20:54:19
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,40 +17,30 @@
     stripe
     @selection-change="handleSelectionChange"
   >
-    <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed" >
-      <template #default="{ row }">
-        <div v-if="item.dataIndex !== 'img'">
-          <span>{{ row[item.dataIndex] }}</span>
-        </div>
-        <div v-if="item.dataIndex === 'img'">
-          <ImgModular :img="row.img" />
-        </div>
-      </template>
-    </el-table-column>
+    <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed" />
 
     <el-table-column fixed="right" label="操作" width="120">
       <template #default="{ row }">
-        <el-button  :disabled="disable(false)" link type="primary" size="small" @click="selectedChange(row)">选择</el-button>
+        <el-button :disabled="disable(false)" link type="primary" size="small" @click="selectedChange(row)">选择</el-button>
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, getCurrentInstance ,watch} from 'vue'
+  import { reactive, ref, getCurrentInstance, watch } from 'vue'
   import { specData } from './conifgs'
-  import ImgModular from '@/components/imgModular/index.vue'
 
   import './index.less'
+  import { isEmpty } from 'lodash'
   const { proxy } = getCurrentInstance()
 
   const table: any = ref()
 
   const props = defineProps<{
-    type:any
+    type: any
     select: any
     form: any
-
   }>()
   const state: any = reactive({
     selectioned: {},
@@ -58,21 +48,51 @@
     tableColumns: specData,
     tableData: []
   })
+  //格式处理
+  const setDataFormat = (list: any) => {
+    if (!isEmpty(list)) {
+      list.map((item: any) => {
+        if (!isEmpty(item.taskDeviceList)) {
+          item.taskDeviceList.forEach((v:any) => {
+            if (v.type === 1) {
+              item.id=v.id
+              item.sn = v.sn//用于选择返回给父级的数据
 
+              item.equipmentSn = v.sn
+              item.equipmentSn = v.sn
+              item.equipmentName = v.name
+            }
+            if (v.type === 2) {
+              item.labelingSn = v.sn
+              item.labelingName = v.name
+            }
+            if (v.type === 3) {
+              item.cuttingSn = v.sn
+              item.cuttingName = v.name
+            }
+          })
+        }
+
+        console.log(item)
+      })
+    }
+
+    state.tableData = list
+  }
   const init = () => {
     //数据回显
-    proxy.$baseService.get('/jack-ics-api/device/pageList').then((res: any) => {
-      state.tableData = res.data.list
+    proxy.$baseService.get('/jack-ics-api/device/taskDevice').then((res: any) => {
+      setDataFormat(res.data.list)
     })
   }
 
   init()
 
-    watch(
+  watch(
     () => props.form,
     item => {
       proxy.$baseService.get('/jack-ics-api/device/pageList', item).then((res: any) => {
-        state.tableData = res.data.list
+        setDataFormat(res.data.list)
       })
     }
   )
@@ -81,7 +101,7 @@
   const selectedChange = (e: any) => {
     props.select(e)
   }
-      // 是否可用
+  // 是否可用
   const disable = (type: any) => {
     return props.type === true ? true : type
   }

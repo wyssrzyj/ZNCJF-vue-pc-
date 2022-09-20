@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-05 08:47:14
+ * @LastEditTime: 2022-09-20 20:54:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -116,7 +116,6 @@
     data: any
     type: any
   }>()
-  // console.log(props.type)
 
   const state: any = reactive({
     type: props.type,
@@ -134,56 +133,119 @@
         newList.splice(subscript, 1, item)
       }
     })
+    // 总件数
+    if (!isEmpty(newList)) {
+      newList.map((item: any) => {
+        item.total = item.levelClothSum * item.spreadClothLevel
+      })
+    }
     return newList
   }
 
-  const init = () => {
-    const fabricColor = props.data.fabricColor
-    // console.log(props.data)
+  //获取新的数据
+  const setData = (size: any, list: any) => {
+    let colorList: any = [] //老数据的颜色合计
+    let difference: any = [] //新数据
 
-    const shelfIdList = props.data.shelfList //上次保存的数据
-    // console.log('保存过的~~~~~~~~', shelfIdList)
-
-    let selectData: any = []
-
-    if (fabricColor) {
-      let data = fabricColor.split('，')
-      let newList: any = [] //最新的数据
-      data.forEach((item: any, index: any) => {
-        selectData.push({
-          label: item,
-          value: index
-        })
-
-        //假如在中间更改数据就会重置了 只能尾部添加-后期再优化9.2 15.09
-        newList.push({
+    list.forEach((item: any) => {
+      if (colorList.indexOf(item.color) === -1) {
+        colorList.push(item.color)
+      }
+    })
+    //用户输入和老数据对比 输入新的才添加
+    size.forEach((item: any) => {
+      let arr = colorList.findIndex((v: any) => v === item)
+      if (arr === -1) {
+        difference.push(item)
+      }
+    })
+    // 添加新的数据
+    if (!isEmpty(difference)) {
+      difference.forEach((item: any, index: any) => {
+        list.push({
           unique: `${item + index}`,
           color: item,
           size: '',
           levelClothSum: 1,
-          spreadClothLevel: props.data.spreadClothLevel,
+          spreadClothLevel: 1,
           total: 0
         })
       })
-      // 总件数
-      if (!isEmpty(data)) {
-        newList.map((item: any) => {
-          item.total = item.levelClothSum * item.spreadClothLevel
+    }
+    return list
+  }
+  //下拉颜色处理
+  const setColor = (data: any) => {
+    let sum: any = []
+    let selectData: any = []
+    data.forEach((item: any) => {
+      if (sum.indexOf(item.color) === -1) {
+        sum.push(item.color)
+      }
+    })
+
+    if (!isEmpty(sum)) {
+      sum.forEach((item: any, index: any) => {
+        selectData.push({
+          label: item,
+          value: index
+        })
+      })
+    }
+
+    return selectData
+  }
+
+  const init = () => {
+    const fabricColor = props.data.fabricColor
+    const shelfIdList = props.data.shelfList //上次保存的数据||接口数据
+    let sizeList = fabricColor.split('，')
+    let selectData: any = [] //下拉颜色
+    let newList: any = [] //最新的数据+
+
+    //先判断老数据是否有有值
+    if (!isEmpty(shelfIdList)) {
+      //是否新增
+      const newListClone = setData(sizeList, shelfIdList)
+
+      newListClone.map((item: any, index: any) => {
+        item.unique = `${item + index}`
+      })
+
+      selectData = setColor(newListClone)
+      newList = dataReuse(shelfIdList, newListClone) //唯一值是 名字+下标
+    } else {
+      if (fabricColor) {
+        sizeList.forEach((item: any, index: any) => {
+          if (item !== '') {
+            selectData.push({
+              label: item,
+              value: index
+            })
+            //假如在中间更改数据就会重置了 只能尾部添加-后期再优化9.2 15.09
+            newList.push({
+              unique: `${item + index}`,
+              color: item,
+              size: '',
+              levelClothSum: 1,
+              spreadClothLevel: 1,
+              total: 0
+            })
+          }
         })
       }
+    }
 
-      //有数据 - 旧===新 数据后复用
-      if (!isEmpty(shelfIdList)) {
-        const newListClone = cloneDeep(newList) //防止被污染
-        state.tableData = dataReuse(shelfIdList, newListClone) //唯一值是 名字+下标
-      } else {
-        //没数据
-        state.tableData = newList
-        backData(newList)
-      }
+    // 总件数
+    if (!isEmpty(newList)) {
+      newList.map((item: any) => {
+        item.total = item.levelClothSum * item.spreadClothLevel
+      })
     }
     state.selectData = selectData
-    backData(state.tableData)
+    //赋值
+    state.tableData = newList
+    backData(newList)
   }
 
   init()
@@ -194,11 +256,38 @@
     row.unique = `${row.color + row.unique.charAt(row.unique.length - 1)}`
     backData(state.tableData)
   }
+
   //输入框处理
   const handleChange = (e: any, row: any, type: any) => {
-    if (type === 'spreadClothLevel' || type === 'levelClothSum') {
-      row.total = row.spreadClothLevel * row.levelClothSum
+    let cloneData = cloneDeep(state.tableData)
+    //铺布层数 颜色一样   铺布层数一样  返回父级：颜色不同总合
+    if (!isEmpty(cloneData)) {
+      if (type === 'spreadClothLevel') {
+        cloneData.map((item: any) => {
+          if (item.color === row.color && item.color != '') {
+            item.spreadClothLevel = e
+            item.total = item.spreadClothLevel * item.levelClothSum
+          } else {
+            item.total = item.spreadClothLevel * item.levelClothSum
+          }
+        })
+        state.tableData = cloneData
+      }
+
+      // 单层件数 尺寸一样  单层值一样   返回父级：尺寸不同的总合
+      if (type === 'levelClothSum') {
+        cloneData.map((item: any) => {
+          if (item.size === row.size && item.size != '') {
+            item.levelClothSum = e
+            item.total = item.levelClothSum * item.spreadClothLevel
+          } else {
+            item.total = item.spreadClothLevel * item.levelClothSum
+          }
+        })
+        state.tableData = cloneData
+      }
     }
+
     if (type === 'size') {
       row.size = e
     }
@@ -221,6 +310,7 @@
 
       tail.unique = setNewUnique(tail.unique)
       tail.type = 'select'
+      tail.color = ''
       state.tableData.push(tail)
     }
     if (type === 'delete') {
@@ -229,7 +319,7 @@
 
     backData(state.tableData)
   }
-
+  
   // 是否可用
   const disable = (type: any) => {
     return state.type === true ? true : type

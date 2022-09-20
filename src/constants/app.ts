@@ -1,3 +1,10 @@
+/*
+ * @Author: lyj
+ * @Date: 2022-09-05 10:01:25
+ * @LastEditTime: 2022-09-19 17:18:03
+ * @Description: 
+ * @LastEditors: lyj
+ */
 import appPack from '../../package.json'
 /**
  * app系统配置
@@ -19,7 +26,7 @@ export default {
   /**
    * 开启页面缓存
    */
-  enabledKeepAlive: true,
+  enabledKeepAlive: false,
 
   /**
    * 网络请求超时时间，单位毫秒

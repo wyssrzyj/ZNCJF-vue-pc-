@@ -1,13 +1,16 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-08 16:27:21
+ * @LastEditTime: 2022-09-20 10:33:05
  * @Description:
  * @LastEditors: lyj
  */
 export const content: any = {
   formData: {
-    img: [],
+    img: "",
+    sn:"",
+    name:"",
+    fabricType:"",
     templateNumber: '',
     templateName: '',
     type: '',

@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" @selection-change="handleSelectionChange" :query-form-data="state.queryFormData" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
       <el-form-item label="生产订单" prop="produceOrderCode">
         <el-input v-model="state.queryFormData.produceOrderCode" placeholder="请输入" clearable />
@@ -18,18 +18,16 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" @click="btnDome">点击测试</el-button>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增床次计划')">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
-      <el-button type="primary" style="order: 3" @click="printingMethod(true)">打印拉布单</el-button>
-      <el-button type="primary" style="order: 3" @click="setWrkType(true)">打印工单</el-button>
+      <el-button type="success" style="order: 3" @click="examine">审核</el-button>
     </template>
 
     <template #styleImage="{ row }">
       <ImgModular :img="row.styleImage" />
     </template>
     <template #statu="{ row }">
-      {{ mapType.get(row.statu) }}
+       <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)">  {{ mapType.get(row.statu) }}</el-tag>
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -66,41 +64,24 @@
       <el-button type="primary" style="order: 3" @click="setWrkType(true)">确认</el-button>
     </template>
   </el-dialog>
-
-  <div style="height: 0; overflow: hidden">
-    <Print />
-    <Work :id="'1567443329765433346'"  />
-  </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref,getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { isEmpty } from 'lodash'
 
-  import print from 'print-js'
+  import { mapType ,tagType} from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import { exportData } from './modules/conifgs.ts'
-  import Print from './modules/dialog-print.vue'
-  import Work from './modules/dialog-work.vue'
+  const { proxy } = getCurrentInstance()
 
 
-  const btnDome = () => {
-    print({
-      printable: 'print',
-      type: 'html',
-      targetStyles: ['*'],
-      maxWidth:5000,
-      // scanStyles:false
-    })
-  }
 
-  let mapType = new Map()
-  mapType.set(1, '未审核')
-  mapType.set(2, '已审核')
-  mapType.set(3, '进行中')
-  mapType.set(4, '已完成')
+
+
 
   const styleLibListEl = ref()
 
@@ -140,12 +121,15 @@
     title: '上传',
     fileList: [],
     rowData: {},
-    limit: 6
+    limit: 6,
+    ids:[]
   })
 
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
   }
+
+
 
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {
@@ -153,6 +137,25 @@
     state.dialogTitle = type
     state.dialogType = e
     state.dialogTableVisible = true
+  }
+
+   const examine = () => {
+    if (!isEmpty(state.ids)) {
+      proxy.$baseService.post('/jack-ics-api/bedPlan/audit', { idList: Object.values(state.ids) }).then((res: any) => {
+        if (res.code === 0) {
+          ElMessage({
+            message: '审核成功',
+            type: 'success'
+          })
+          refreshTable()
+        }
+      })
+    } else {
+      ElMessage({
+        message: '至少选择一个',
+        type: 'warning'
+      })
+    }
   }
 
   //关闭 弹窗
@@ -185,6 +188,18 @@
       state.export.importType = false
     }
   }
+
+
+    const handleSelectionChange = (val: any) => {
+    if (!isEmpty(val)) {
+      let ids: any = []
+      val.map((item: any) => {
+        ids.push(item.id)
+      })
+      state.ids = ids
+    }
+  }
+
   // ---------------------------------
   // -------------------打印---------------------------------
   const printingMethod = (type: any) => {

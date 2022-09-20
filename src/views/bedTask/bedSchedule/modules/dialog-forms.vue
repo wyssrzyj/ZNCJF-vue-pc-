@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-05 08:47:24
+ * @LastEditTime: 2022-09-20 13:10:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,14 +34,14 @@
   }
   const preservation = (e: any) => {
     let type = state.list.every((item: any) => {
-      return item.size !== ''
+      return item.size !== ''&& item.color !== ''
     })
 
     if (type) {
       props.operation({ type: 'confirm', data: state.list })
     } else {
       ElMessage({
-        message: '尺码不可为空',
+        message: '颜色和尺码不可为空',
         type: 'warning'
       })
     }
