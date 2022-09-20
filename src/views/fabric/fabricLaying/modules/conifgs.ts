@@ -1,16 +1,16 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-20 10:33:05
+ * @LastEditTime: 2022-09-20 21:22:46
  * @Description:
  * @LastEditors: lyj
  */
 export const content: any = {
   formData: {
-    img: "",
-    sn:"",
-    name:"",
-    fabricType:"",
+    img: '',
+    sn: '',
+    name: '',
+    fabricType: '',
     templateNumber: '',
     templateName: '',
     type: '',
@@ -90,6 +90,8 @@ export const content: any = {
     ]
   },
   dataRule: {
+    sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     templateNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     templateName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     fabricType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

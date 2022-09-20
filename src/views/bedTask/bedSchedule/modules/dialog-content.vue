@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-20 16:25:36
+ * @LastEditTime: 2022-09-20 21:33:04
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -234,7 +234,8 @@
         res.data.list.forEach((item: any) => {
           list.push({
             label: item.name,
-            value: item.id
+            value: item.id,
+            ...item
           })
         })
         state.fabricName = list
@@ -242,7 +243,12 @@
     })
   }
   //面料名称联动
-  const setFabricName = () => {}
+  const setFabricName = (e: any) => {
+    let dataClone = cloneDeep(state.fabricName)
+    let arr = dataClone.filter((item: any) => item.value === e)[0]
+    state.form.fabricColor = arr.color
+    state.form.fabricCode = arr.sn
+  }
   const init = () => {
     //面料名称
     getFabricName('')
