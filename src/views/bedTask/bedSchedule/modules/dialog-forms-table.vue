@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-20 20:54:05
+ * @LastEditTime: 2022-09-20 22:04:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -154,9 +154,11 @@
     })
     //用户输入和老数据对比 输入新的才添加
     size.forEach((item: any) => {
-      let arr = colorList.findIndex((v: any) => v === item)
-      if (arr === -1) {
-        difference.push(item)
+      if (item !== '') {
+        let arr = colorList.findIndex((v: any) => v === item)
+        if (arr === -1) {
+          difference.push(item)
+        }
       }
     })
     // 添加新的数据
@@ -186,13 +188,14 @@
 
     if (!isEmpty(sum)) {
       sum.forEach((item: any, index: any) => {
-        selectData.push({
-          label: item,
-          value: index
-        })
+        if (item !== '') {
+          selectData.push({
+            label: item,
+            value: index
+          })
+        }
       })
     }
-
     return selectData
   }
 
@@ -207,7 +210,6 @@
     if (!isEmpty(shelfIdList)) {
       //是否新增
       const newListClone = setData(sizeList, shelfIdList)
-
       newListClone.map((item: any, index: any) => {
         item.unique = `${item + index}`
       })
@@ -319,7 +321,7 @@
 
     backData(state.tableData)
   }
-  
+
   // 是否可用
   const disable = (type: any) => {
     return state.type === true ? true : type
