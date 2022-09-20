@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-20 21:33:04
+ * @LastEditTime: 2022-09-20 22:15:06
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -159,7 +159,7 @@
   </el-dialog>
   <div style="height: 0; overflow: hidden">
     <Work :id="state.printId" />
-    <!-- <Work  :id="'1567443329765433346'" /> -->
+    <!-- <Work  :id="'1567443329765433346'"111 /> -->
   </div>
 </template>
 
