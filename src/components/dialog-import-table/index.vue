@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-15 11:49:09
+ * @LastEditTime: 2022-09-21 09:47:21
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -20,7 +20,7 @@
     <el-dialog v-if="state.importType" v-model="state.importType" :close-on-click-modal="false" title="导入" width="800px">
       <DialogTable :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
       <template #footer>
-        <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
+        <el-button style="order: 3" @click="state.importType = false">取消</el-button>
         <el-button type="primary" style="order: 3" @click="exportEvents(false)">确认</el-button>
       </template>
     </el-dialog>
@@ -33,8 +33,10 @@
   import DialogTable from './dialog-table.vue'
 
   const props = defineProps<{
+    type: any
     getList: any
     export: any
+    confirm: any
   }>()
 
   const state: any = reactive({
@@ -45,6 +47,10 @@
   const getData = (e: any) => {
     state.fileList = e.data
     state.importType = true
+    //床次计划直接关闭
+    if (props.type === 'bedSchedule') {
+      props.confirm()
+    }
   }
 
   const download = () => {
@@ -65,13 +71,13 @@
 
   //传递给父级
   const getTableData = (e: any) => {
-    
     props.getList(e)
   }
 
   //关闭弹窗
   const exportEvents = (type: any) => {
     state.importType = type
+    props.confirm()
   }
 </script>
 <style>

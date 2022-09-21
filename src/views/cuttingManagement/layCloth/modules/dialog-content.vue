@@ -141,6 +141,9 @@
   // 总数据
   const setData = (type: any, e: any) => {
     if (type === '1') {
+      state.form.styleCode=e.styleCode
+      state.form.styleName=e.styleName
+
       state.list.one = e
     }
     if (type === '2') {

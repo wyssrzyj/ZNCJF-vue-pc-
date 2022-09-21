@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-07 11:14:21
+ * @LastEditTime: 2022-09-21 12:59:12
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,7 +17,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料', {})">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布', {})">新增</el-button>
     </template>
 
     <template #imageUrl="{ row }">
@@ -44,8 +44,8 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看面料管理', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑面料管理', row)">编辑</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看铺布', row)">查看</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
     </template>
 
     <el-dialog v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1250px">

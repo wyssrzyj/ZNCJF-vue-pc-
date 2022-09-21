@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-09-14 17:54:30
+ * @LastEditTime: 2022-09-21 14:36:22
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -57,6 +57,7 @@
   }
 
   .pictureImg {
+    padding: 10px;
     background: #bbbdbb;
     width: 100px;
     height: 100px;

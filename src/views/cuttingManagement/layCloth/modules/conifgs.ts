@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-20 10:04:11
+ * @LastEditTime: 2022-09-21 10:34:46
  * @Description:
  * @LastEditors: lyj
  */
@@ -33,7 +33,7 @@ export const selectDevice: any = {
 export const content: any = {
   formData: {
     //左侧数据格式
-    styleImage: [],
+    styleImage: "",
     styleCode: '',
     styleName: '',
     shelfFile: [],

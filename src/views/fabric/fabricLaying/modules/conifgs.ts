@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-20 21:22:46
+ * @LastEditTime: 2022-09-21 13:03:20
  * @Description:
  * @LastEditors: lyj
  */
@@ -102,6 +102,7 @@ export const customFormData = {
   formData: {
     forwardSpeed: '1',
     uniformTension: '',
+    relationFabricList:null,
     slowDown: '',
     creepSpeed: '',
     targetAngle: '',

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-19 19:39:39
+ * @LastEditTime: 2022-09-21 09:37:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,7 +40,7 @@
 
   <!-- 导出  -->
   <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :export="state.export" :get-list="getList" />
+    <ImportDialog :export="state.export" :get-list="getList" :confirm="confirm" />
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
@@ -49,14 +49,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref ,getCurrentInstance} from 'vue'
+  import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
-
 
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
-  import  {exportData} from  "./modules/conifgs.ts"
+  import { exportData } from './modules/conifgs.ts'
   const { proxy }: any = getCurrentInstance()
 
   let mapType = new Map()
@@ -66,12 +65,12 @@
   const styleLibListEl = ref()
 
   const state = reactive({
-      //导出
+    //导出
     export: {
-      type:"fabric",
-      data:exportData,
+      type: 'fabric',
+      data: exportData,
       importType: false,
-      list: [],//导出数据
+      list: [], //导出数据
       template: 'http://10.18.4.25/template/fabric.xlsx',
       interface: '/jack-ics-api/fabric/import'
     },
@@ -122,7 +121,7 @@
     }
   }
 
-   //------------------------------导出-------------------------------
+  //------------------------------导出-------------------------------
   //打开弹窗-【导出】
   const importMethod = () => {
     state.export.importType = true
@@ -131,6 +130,10 @@
   //获取导出数据
   const getList = (e: any) => {
     state.export.list = e
+  }
+
+  const confirm = () => {
+    exportEvents(true)
   }
 
   //关闭弹窗-【导出】
@@ -152,12 +155,11 @@
       })
       proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
         state.export.importType = false
-          ElMessage({
+        ElMessage({
           message: '添加成功',
           type: 'success'
         })
         refreshTable()
-
       })
     }
     if (type === false) {

@@ -27,7 +27,7 @@
       <ImgModular :img="row.styleImage" />
     </template>
     <template #statu="{ row }">
-      {{ mapType.get(row.statu) }}
+       <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)">  {{ mapType.get(row.statu.toString() ) }}</el-tag>
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -48,29 +48,24 @@
 
 <script lang="ts" setup>
   import print from 'print-js'
-
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty } from 'lodash'
-
   import { ElMessage } from 'element-plus'
+
+  import { tagType} from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import Print from './modules/dialog-print.vue'
   const { proxy } = getCurrentInstance()
 
   let mapType = new Map()
-  mapType.set(1, '未审核')
-  mapType.set(2, '已审核')
-  mapType.set(3, '进行中')
-  mapType.set(4, '已完成')
+  mapType.set("1", '未审核')
+  mapType.set("2", '已审核')
+  mapType.set("3", '进行中')
+  mapType.set("4", '已完成')
 
   const styleLibListEl = ref()
 
-  let statuMap = new Map()
-  statuMap.set(1, '未审核')
-  statuMap.set(2, '已审核')
-  statuMap.set(3, '进行中')
-  statuMap.set(4, '已完成')
 
   const state: any = reactive({
     row: {},

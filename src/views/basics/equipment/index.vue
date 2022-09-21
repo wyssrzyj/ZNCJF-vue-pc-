@@ -48,7 +48,7 @@
   <!-- 导出  -->
 
   <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :export="state.export" :get-list="getList" />
+    <ImportDialog :export="state.export" :get-list="getList"  :confirm="confirm"/>
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
@@ -142,11 +142,12 @@
 
     if (type === '1') {
       state.defaultParam.Title = '铺布建议参数'
+    state.defaultParam.defaultParamType = true
     }
     if (type === '3') {
       state.defaultParam.Title = '裁剪建议参数'
-    }
     state.defaultParam.defaultParamType = true
+    }
   }
 
   //关闭弹窗-【默认参数】
@@ -169,8 +170,11 @@
   //获取导出数据
   const getList = (e: any) => {
     state.export.list = e
-  }
+  } 
 
+  const confirm=()=>{
+    exportEvents(true)
+  }
   //关闭弹窗-【导出】
   const exportEvents = (type: any) => {
     if (type === true) {

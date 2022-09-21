@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2022-09-15 10:18:44
+ * @LastEditTime: 2022-09-21 08:54:11
  * @Description:
  * @LastEditors: lyj
  */
@@ -32,7 +32,7 @@ export const exportData = [
 //---------------content-----------------
 export const content  = {
   formData: {
-    img: [],
+    img: '',
     sn: '',
     name: '',
     relationDevice: '',

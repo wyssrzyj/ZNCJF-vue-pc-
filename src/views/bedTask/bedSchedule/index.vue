@@ -32,7 +32,7 @@
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看设备', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑设备', row)">编辑</el-button>
+      <el-button v-if="row.statu!==2" link type="primary" style="order: 3" @click="handleClick(false, '编辑设备', row)">编辑</el-button>
     </template>
   </njp-table-config>
 
@@ -41,7 +41,7 @@
   </el-dialog>
   <!-- 导出  -->
   <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :export="state.export" :get-list="getList" />
+    <ImportDialog :type="'bedSchedule'" :export="state.export" :get-list="getList" :confirm="confirm" />
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
@@ -174,6 +174,9 @@
     state.export.list = e
   }
 
+    const confirm=()=>{
+    exportEvents(true)
+  }
   //关闭弹窗-【导出】
   const exportEvents = (type: any) => {
     if (type === true) {

@@ -170,6 +170,8 @@ const setDeviceSn = () => {
 };
 //设置床次数据
 const operation = (e: any) => {
+  console.log("床次数据",e);
+  
   if (e.type === "cancel") {
     state.bedPlanNoType = false;
   }
@@ -178,7 +180,6 @@ const operation = (e: any) => {
     //设备
     e.data.deviceId = state.device.deviceId;
     e.data.deviceSn = state.device.deviceSn;
-
     state.rightForm = e.data;
     props.setData("1", state.rightForm);
 

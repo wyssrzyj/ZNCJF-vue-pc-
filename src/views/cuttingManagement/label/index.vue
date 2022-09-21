@@ -17,22 +17,16 @@
       </el-form-item>
     </template>
 
-    <!-- <template #operationExtBtn>
-      <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 批量导入款式 </el-button>
-      <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增贴标任务')">新增</el-button>
-    </template> -->
-
     <template #styleImage="{ row }">
       <ImgModular :img="row.styleImage" />
     </template>
     <template #statu="{ row }">
-      {{ mapType.get(row.statu) }}
+      <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)"> {{ mapType.get(row.statu) }}</el-tag>
     </template>
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看贴标任务', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标任务', row)">编辑</el-button>
+      <el-button v-if="row.statu === '2'" link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标任务', row)">编辑</el-button>
     </template>
 
     <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="800px">
@@ -44,17 +38,13 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-
+  import { tagType } from '@/components/conifgs.ts'
   import DialogContent from './modules/dialog-content.vue'
 
   let mapType = new Map()
-  mapType.set(1, '未审核')
-  mapType.set(2, '已审核')
+  mapType.set(2, '待执行')
   mapType.set(3, '进行中')
   mapType.set(4, '已完成')
-
-
-
 
   // const dialogUploadFileEl = ref()
   // const dialogUploadStyleEl = ref()
@@ -66,8 +56,7 @@
     dialogTableVisible: false,
     dialogTitle: '查看床次计划',
     statu: [
-      { name: '未审核', value: '1' },
-      { name: '已审核', value: '2' },
+      { name: '待执行', value: '2' },
       { name: '进行中', value: '3' },
       { name: '已完成', value: '4' }
     ],

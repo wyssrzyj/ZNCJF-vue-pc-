@@ -1,14 +1,13 @@
 <script lang="ts" setup>
+  //首页 home 源码  
+  import * as echarts from 'echarts'
+ import { isEmpty } from 'lodash'
   import ImgModular from '@/components/imgModular/index.vue'
 
   import './index.less'
-  import * as echarts from 'echarts'
   import { echartsOpt } from './config.js'
   import { onMounted, reactive, getCurrentInstance } from 'vue'
   const { proxy }: any = getCurrentInstance()
-
-  import { isEmpty } from 'lodash'
-
   const state: any = reactive({
     equipmentPlanningTaskParam: {
       time: '',
@@ -34,7 +33,7 @@
     proxy.$baseService.get('/jack-ics-api/index/deviceTask', { ...state.equipmentPlanningTaskParam }).then((res: any) => {
       if (!isEmpty(res.data)) {
         let colorsIndex = 0
-        let echartsServerData = []
+        let echartsServerData:any = []
         let colors = ['#CCEED0', '#C6E8EF', '#B9D7FF', '#ABC8E6', '#EDE0F7']
         let device = res.data.map((item: any) => item.deviceName)
         res.data.map((item: any, i: any) => {

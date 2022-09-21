@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-20 22:04:03
+ * @LastEditTime: 2022-09-21 12:53:34
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -309,10 +309,14 @@
   const taskHandle = (type: any, row: any) => {
     if (type === 'increase') {
       let tail: any = cloneDeep(state.tableData[state.tableData.length - 1])
-
+      console.log(tail);
+      
       tail.unique = setNewUnique(tail.unique)
       tail.type = 'select'
       tail.color = ''
+      tail.size = ''
+      tail.total = 10
+      tail.spreadClothLevel = ''
       state.tableData.push(tail)
     }
     if (type === 'delete') {

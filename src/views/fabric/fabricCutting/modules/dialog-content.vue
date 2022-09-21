@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-08 19:04:29
+ * @LastEditTime: 2022-09-21 13:05:16
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -148,7 +148,7 @@
             imageUrl: !isEmpty(img) ? img[0].url : '',
             name: name,
             sn: sn,
-            relationFabricList: state.form.relationFabricList
+            relationFabricList: !isEmpty(state.form.relationFabricList) ?state.form.relationFabricList:null
           },
           levelParamVOList: state.form.levelParamVOList
         }

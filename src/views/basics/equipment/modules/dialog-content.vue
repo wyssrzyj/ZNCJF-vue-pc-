@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 14:54:39
+ * @LastEditTime: 2022-09-21 14:35:06
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -14,9 +14,10 @@
           <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
 
-        <el-form-item label="设备默认参数" prop="defaultParam">
+        <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam">
           <el-icon class="proportionsLeft" :size="30" @click="shippingMarks"><Edit /></el-icon>
           <br />
+
           <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}</span>
         </el-form-item>
       </el-col>
@@ -195,6 +196,8 @@
       if (valid) {
         if (!isEmpty(state.form.img)) {
           state.form.img = state.form.img[0].url
+        }else{
+          state.form.img = ''
         }
 
         proxy.$baseService.post('/jack-ics-api/device/save', state.form).then((res: any) => {

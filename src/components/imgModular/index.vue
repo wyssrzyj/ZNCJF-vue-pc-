@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-02 17:04:06
+ * @LastEditTime: 2022-09-21 15:19:00
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <img v-if="props.img === ''" :src="state.img" alt="主图" class="emptyImg" />
-  <img v-if="props.img !== ''" :src="props.img" alt="主图" class="equipmentImg" />
+  <img v-if="props.img === ''||props.img === null" :src="state.img" alt="主图" class="emptyImg" />
+  <img v-if="props.img !== '' && props.img !== null  " :src="props.img" alt="主图" class="equipmentImg" />
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'

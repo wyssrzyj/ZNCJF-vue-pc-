@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-20 22:15:06
+ * @LastEditTime: 2022-09-21 12:55:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -121,7 +121,7 @@
           </div>
           <div v-if="item.type === 'shelfList'">
             <el-form-item :label="`${item.name}`" prop="shelfList">
-              <el-icon class="proportionsLeft" :size="30" @click="shippingMarks"><Edit /></el-icon>
+              <el-icon class="bedScheduleLeft" :size="30" @click="shippingMarks"><Edit /></el-icon>
               <el-tooltip class="box-item" effect="dark" content="维护排唛比例后生成总件数机损耗率" placement="right-start">
                 <el-icon class="proportionsRight" :size="20"><QuestionFilled /></el-icon>
               </el-tooltip>
