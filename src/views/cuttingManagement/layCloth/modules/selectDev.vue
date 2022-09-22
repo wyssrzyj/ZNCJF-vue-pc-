@@ -170,16 +170,17 @@ const setDeviceSn = () => {
 };
 //设置床次数据
 const operation = (e: any) => {
-  console.log("床次数据",e);
   
   if (e.type === "cancel") {
     state.bedPlanNoType = false;
   }
   if (e.type === "confirm") {
+    
     e.data.bedPlanId = e.data.id;
     //设备
-    e.data.deviceId = state.device.deviceId;
-    e.data.deviceSn = state.device.deviceSn;
+    // e.data.deviceId = state.device.deviceId;
+    // e.data.deviceSn = state.device.deviceSn;
+
     state.rightForm = e.data;
     props.setData("1", state.rightForm);
 
@@ -203,7 +204,7 @@ const setDeviceSnType = (e: any) => {
 
     state.rightForm.deviceId = e.data.id;
     state.rightForm.deviceSn = e.data.sn;
-
+    state.rightForm.deviceName = e.data.equipmentName;
     props.setData("1", state.rightForm);
 
     ElMessage({

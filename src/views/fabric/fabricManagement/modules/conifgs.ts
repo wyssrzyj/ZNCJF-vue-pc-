@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-09-20 10:26:08
+ * @LastEditTime: 2022-09-22 21:56:02
  * @Description:
  * @LastEditors: lyj
  */
@@ -70,8 +70,8 @@ export const formMiddleData = [
 export const formRightData = [
   { name: '面料名称', model: 'name', prop: 'name', type: 'name', disabled: false },
   { name: '面料克重', model: 'weight', prop: "weight", type: null, disabled: false, append: 'g/m²' },
-  { name: '预缩时间', model: 'shrinkHours', prop: 'shrinkHours', type: null, disabled: false, append: 'h' },
-  { name: '松布时间', model: 'looseClothHours', prop: 'looseClothHours', type: null, disabled: false, append: 'h' },
+  // { name: '预缩时间', model: 'shrinkHours', prop: 'shrinkHours', type: null, disabled: false, append: 'h' },
+  // { name: '松布时间', model: 'looseClothHours', prop: 'looseClothHours', type: null, disabled: false, append: 'h' },
   { name: '裁床参数模板', model: 'cutTemplateId', prop: 'cutTemplateId', type: 'cutTemplateId', disabled: false }
 ]
 export const dataRule = {

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-08 17:54:00
+ * @LastEditTime: 2022-09-22 14:42:58
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -37,7 +37,7 @@
     value: props.value,
     type: props.type,
     //文件上传类型
-    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt' },
+    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt .GBR ', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt GBR' },
     pictureTypeNow: { accept: '', availableSuffix: '' }
   })
 

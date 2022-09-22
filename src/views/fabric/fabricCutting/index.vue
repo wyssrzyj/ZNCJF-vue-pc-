@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-21 12:59:35
+ * @LastEditTime: 2022-09-22 22:54:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -58,7 +58,7 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1100px">
+    <el-dialog   :draggable="false" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1100px">
       <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>

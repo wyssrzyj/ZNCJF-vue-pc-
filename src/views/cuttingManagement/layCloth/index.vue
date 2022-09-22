@@ -27,16 +27,16 @@
       <ImgModular :img="row.styleImage" />
     </template>
     <template #statu="{ row }">
-       <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)">  {{ mapType.get(row.statu.toString() ) }}</el-tag>
+       <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)">  {{ mapType.get(row.statu ) }}</el-tag>
     </template>
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看铺布', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
+      <el-button  v-if="row.statu !== 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
       <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1100px" hei>
+    <el-dialog  :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1100px" hei>
       <DialogContent :type="state.dialogType" :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -52,17 +52,13 @@
   import { isEmpty } from 'lodash'
   import { ElMessage } from 'element-plus'
 
-  import { tagType} from '@/components/conifgs.ts'
+  import { tagType,mapType} from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import Print from './modules/dialog-print.vue'
   const { proxy } = getCurrentInstance()
 
-  let mapType = new Map()
-  mapType.set("1", '未审核')
-  mapType.set("2", '已审核')
-  mapType.set("3", '进行中')
-  mapType.set("4", '已完成')
+
 
   const styleLibListEl = ref()
 
@@ -73,10 +69,10 @@
     dialogTableVisible: false,
     dialogTitle: '查看铺布',
     statu: [
-      { name: '未审核', value: '1' },
-      { name: '已审核', value: '2' },
-      { name: '进行中', value: '3' },
-      { name: '已完成', value: '4' }
+      { name: '未审核', value: 1 },
+      { name: '已审核', value: 2 },
+      { name: '进行中', value: 3 },
+      { name: '已完成', value: 4 }
     ],
 
     queryFormData: {
@@ -130,7 +126,6 @@
         })
       }
     } catch (error) {
-      console.log('🚀 ~ file: index.vue ~ line 140 ~ setPrint ~ error', error)
     }
 
     //添加状态

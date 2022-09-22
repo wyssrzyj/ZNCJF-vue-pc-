@@ -101,13 +101,11 @@
     //数据回显
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/spreadTask/get', { taskId: props.row.id }).then((res: any) => {
-        // 图片
-        res.data.img = [{ url: res.data.shelfFileUrl }]
-
         //唛架图
         res.data.shelfFile = [
           {
             name: res.data.shelfFileName,
+            shelfImage: res.data.shelfImage,
             response: {
               data: {
                 src: res.data.shelfFileUrl
@@ -141,9 +139,25 @@
   // 总数据
   const setData = (type: any, e: any) => {
     if (type === '1') {
-      state.form.styleCode=e.styleCode
-      state.form.styleName=e.styleName
+      let cloneForm = cloneDeep(state.form) //为了图片可以渲染
+      cloneForm.styleCode = e.styleCode
+      cloneForm.styleName = e.styleName
+      // 图片
+      cloneForm.img = [{ url: e.styleImage }]
 
+        cloneForm.shelfFile = [
+          {
+            name: e.shelfFile.name,
+            // shelfImage: e.shelfImage,//图暂时没有
+            response: {
+              data: {
+                src: e.shelfFile.url
+              }
+            }
+          }
+        ]
+
+      state.form = cloneForm
       state.list.one = e
     }
     if (type === '2') {
@@ -271,40 +285,6 @@
       })
     }
   }
-
-  // // 选择设备提交
-  // const selectDeviceSub = (data: any) => {
-  //   state.selectDeviceData = data
-  //   submitForm(leftForm).then(res => {
-  //     if (data && res) {
-  //       console.log(data)
-  //     }
-  //   })
-  // }
-  // // 设备参数提交
-  // const devParamSub = (data: any) => {
-  //   state.devParamData = data
-  //   submitForm(leftForm).then(res => {
-  //     if (data && res) {
-  //       console.log(data)
-  //     }
-  //   })
-  // }
-  // // 计划时间提交
-  // const plannedTimeSub = (data: any) => {
-  //   state.plannedTimeData = data
-  //   submitForm(leftForm).then(res => {
-  //     if (data && res) {
-  //     }
-  //   })
-  // }
-  //  表单验证
-  // const submitForm = async (formEl: FormInstance | undefined | any) => {
-  //   if (!formEl) return
-  //   return await formEl.value.validate((valid: any) => {
-  //     return !!valid
-  //   })
-  // }
 
   // 取消
   const close = (formEl: any) => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-09 17:26:16
+ * @LastEditTime: 2022-09-22 22:43:36
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -46,7 +46,7 @@
 
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划开始时间" format="YYYY/MM/DD hh:mm:ss" value-format="x" @change="setTime" />
+              <el-date-picker  :disabled="disable(item.disabled)" v-model="state.form[item.model]"  value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm"  @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -61,7 +61,7 @@
           </div>
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY/MM/DD hh:mm:ss" value-format="x" @change="setTime" />
+              <el-date-picker  :disabled="disable(item.disabled)" v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -75,7 +75,7 @@
   </el-form>
 
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
-    <Crop :list="props.list" :row="state.form" :type="false" :cancel="cancel" :preservation="preservation" />
+    <Crop :list="props.list" :row="state.form" :type="props.dialogType" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
 

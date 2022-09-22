@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-20 10:26:24
+ * @LastEditTime: 2022-09-22 21:56:08
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,22 +40,22 @@
               </el-radio-group>
             </el-form-item>
           </div> -->
-          <div v-if="item.type === 'looseClothFlag'">
+          <!-- <div v-if="item.type === 'looseClothFlag'">
             <el-form-item label="需要松布" prop="looseClothFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio :label="1" size="large">是</el-radio>
                 <el-radio :label="2" size="large">否</el-radio>
               </el-radio-group>
             </el-form-item>
-          </div>
-          <div v-if="item.type === 'shrinkFlag'">
+          </div> -->
+          <!-- <div v-if="item.type === 'shrinkFlag'">
             <el-form-item label="需要预缩" prop="shrinkFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio :label="1" size="large">是</el-radio>
                 <el-radio :label="2" size="large">否</el-radio>
               </el-radio-group>
             </el-form-item>
-          </div>
+          </div> -->
           <div v-if="item.type === 'spreadTemplateId'">
             <el-form-item :label="`${item.name}`" prop="spreadTemplateId">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">

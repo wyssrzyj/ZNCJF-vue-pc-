@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-21 09:37:10
+ * @LastEditTime: 2022-09-22 22:48:57
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,12 +34,12 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑面料管理', row)">编辑</el-button>
     </template>
   </njp-table-config>
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
     <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
 
   <!-- 导出  -->
-  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
+  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :draggable="false" :close-on-click-modal="false" title="导入" width="400px">
     <ImportDialog :export="state.export" :get-list="getList" :confirm="confirm" />
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>

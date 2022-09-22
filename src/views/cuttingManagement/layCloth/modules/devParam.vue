@@ -67,18 +67,18 @@
           <span>°</span>
         </div>
       </el-form-item>
-      <!-- <el-form-item label="最小磨刀距离：">
+      <el-form-item label="最小磨刀距离：">
         <div class="devParam-row">
-          <el-input v-model="state.rightForm.minimumSharpeningDistance" @change="onChang" />
+          <el-input v-model="state.bottomForm.minKnifeDistance" @change="onChang" />
           <span>mm</span>
         </div>
       </el-form-item>
       <el-form-item label="真空率：">
         <div class="devParam-row">
-          <el-input v-model="state.rightForm.emptyRatio" @change="onChang" />
+          <el-input v-model="state.bottomForm.emptyRatio" @change="onChang" />
           <span>%</span>
         </div>
-      </el-form-item> -->
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -115,11 +115,13 @@
       crawlSpeed: '',
       crawlDistance: '',
       angle: '',
-      accelerationWeight: ''
+      accelerationWeight: '',
     },
     bottomForm: {
       minKnifeFrequency: '',
       maxKnifeFrequency: '',
+      minKnifeDistance: '',
+      emptyRatio: '',
       knifeSpeed: '',
       knifeAngle: ''
     }

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-21 12:53:34
+ * @LastEditTime: 2022-09-22 22:58:17
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -309,15 +309,19 @@
   const taskHandle = (type: any, row: any) => {
     if (type === 'increase') {
       let tail: any = cloneDeep(state.tableData[state.tableData.length - 1])
-      console.log(tail);
+     let arr ={
+      unique:setNewUnique(tail.unique),
+      type:'select',
+      color:"",
+      size:"",
+      levelClothSum:1,
+      spreadClothLevel:10,
+      total:10,
+     }
       
-      tail.unique = setNewUnique(tail.unique)
-      tail.type = 'select'
-      tail.color = ''
-      tail.size = ''
-      tail.total = 10
-      tail.spreadClothLevel = ''
-      state.tableData.push(tail)
+     
+      state.tableData.push(arr)
+      
     }
     if (type === 'delete') {
       state.tableData = state.tableData.filter((item: any) => item.unique !== row.unique)

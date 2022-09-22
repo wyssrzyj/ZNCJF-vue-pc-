@@ -6,6 +6,7 @@
         <el-date-picker
           v-model="state.rightForm.spreadTaskTime.planStartTime"
           :disabled="disable(false)"
+          :clearable="false"
           value-format="x"
           format="YYYY-MM-DD HH:mm"
           type="datetime"
@@ -65,6 +66,7 @@
         <el-date-picker
           v-model="state.rightForm.cutTaskTime.planEndTime"
           :disabled="disable(false)"
+          :clearable="false"
           type="datetime"
           format="YYYY/MM/DD hh:mm:ss"
           value-format="x"
@@ -119,7 +121,17 @@
       }
       proxy.$baseService.get('/jack-ics-api/spreadTask/getTime', data).then((res: any) => {
         if (res.code === 0) {
-          state.rightForm = res.data
+          if (res.data.spreadTaskTime) {
+            state.rightForm.spreadTaskTime = res.data.spreadTaskTime
+          }
+          if (res.data.pasteTaskTime) {
+            state.rightForm.pasteTaskTime = res.data.pasteTaskTime
+          }
+          if (res.data.cutTaskTime) {
+            state.rightForm.cutTaskTime = res.data.cutTaskTime
+          }
+
+          // state.rightForm = res.data
           props.setData('3', state.rightForm)
         }
       })

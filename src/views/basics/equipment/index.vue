@@ -20,7 +20,7 @@
     </template>
 
     <template #img="{ row }">
-      <ImgModular :img="row.img" />
+      <ImgModular :img="row.img" />666
     </template>
 
     <template #type="{ row }">
@@ -38,16 +38,16 @@
     </template>
   </njp-table-config>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
+  <el-dialog :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
   <!-- 表格修改 -->
-  <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :close-on-click-modal="false" :title="state.defaultParam.Title" width="500px">
+  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType"  :title="state.defaultParam.Title" width="500px">
     <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
   </el-dialog>
   <!-- 导出  -->
 
-  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
+  <el-dialog :draggable="false" v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
     <ImportDialog :export="state.export" :get-list="getList"  :confirm="confirm"/>
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-21 12:55:41
+ * @LastEditTime: 2022-09-22 22:57:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -49,11 +49,18 @@
           <div v-if="item.type === 'shelfWidth'">
             <el-form-item label="唛架门幅" prop="shelfWidth">
               <div>
-                <el-input-number v-model="state.form[item.model]" controls-position="right" :precision="2" :step="0.1" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="titleRight">米</span>
+                <el-input-number
+                  v-model="state.form[item.model]"
+                 :precision="0"
+                  controls-position="right"
+                  :min="0"
+                  :disabled="disable(item.disabled)"
+                  @change="setUtilization"
+                />
+                <span class="titleRight">mm</span>
               </div>
-              <!-- <el-input-number v-model="form[item.model]" :precision="2" :step="0.1" :disabled="disable(item.disabled)">
-                <template #append>米</template>
+              <!-- <el-input-number v-model="form[item.model]" :precision="2"  :disabled="disable(item.disabled)">
+                <template #append>mm</template>
               </el-input-number> -->
             </el-form-item>
           </div>
@@ -106,16 +113,23 @@
           <div v-if="item.type === 'shelfLength'">
             <el-form-item :label="`${item.name}`" prop="shelfLength">
               <div>
-                <el-input-number v-model="state.form[item.model]" controls-position="right" :precision="2" :step="0.1" :disabled="disable(item.disabled)" />
-                <span class="titleRight">米</span>
+                <el-input-number :precision="0" v-model="state.form[item.model]" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
+                <span class="titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadClothLength'">
             <el-form-item :label="`${item.name}`" prop="spreadClothLength">
               <div>
-                <el-input-number v-model="state.form[item.model]" controls-position="right" :precision="2" :step="0.1" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="titleRight">米</span>
+                <el-input-number
+                  v-model="state.form[item.model]"
+                 :precision="0"
+                  controls-position="right"
+                  :min="0"
+                  :disabled="disable(item.disabled)"
+                  @change="setUtilization"
+                />
+                <span class="titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
@@ -127,9 +141,9 @@
               </el-tooltip>
             </el-form-item>
           </div>
-          <div v-if="item.type === 'attritionRate'">
+          <div v-if="item.type === 'useRate'">
             <el-form-item :label="`${item.name}`" class="buttonContainer">
-              <el-input-number v-model="state.form[item.model]" controls-position="right" :precision="2" :step="0.1" :disabled="disable(item.disabled)" />
+              <el-input-number v-model="state.form[item.model]" :precision="2" controls-position="right" :disabled="disable(item.disabled)" />
               <div>
                 <el-tooltip class="box-item" effect="dark" content="【选择唛架图获取有效面积】有效面积/(铺布长度*唛架门幅)" placement="right-start">
                   <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
@@ -257,6 +271,7 @@
     if (props.row) {
       state.printId = props.row.id
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
+
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
 
@@ -264,6 +279,7 @@
         res.data.shelfFile = [
           {
             name: res.data.shelfFile.name,
+            shelfImage: res.data.shelfImage,
             response: {
               data: {
                 src: res.data.shelfFile.src
@@ -306,12 +322,15 @@
         state.form.shelfWidth = heigh //唛架门幅
         state.form.shelfLength = width //唛架长度
         state.form.spreadClothLength = Number(width) + 0.03 //铺布长度
-        state.effectiveArea = sumArea //利用率
+        state.effectiveArea = sumArea //有效面积
+
         //利用率
-        state.form.attritionRate = sumArea / (heigh * Number(state.form.spreadClothLength))
+        state.form.useRate = (sumArea / (heigh * Number(state.form.spreadClothLength))) * 100
+
         //文件传给组件
         e.data[0].response.data.src = e.data[0].response.data.shelfFileUrl
 
+        state.form.effectiveArea = sumArea //有效面积
         state.form.shelfFile = e.data //赋值
       }
       // shelfWidth
@@ -328,8 +347,10 @@
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
+    // console.log(product)
+    // console.log('有效面积', state.effectiveArea)
 
-    state.form.attritionRate = state.effectiveArea / product
+    state.form.useRate = state.effectiveArea / product
   }
 
   // 表单提交
@@ -342,12 +363,16 @@
         if (!isEmpty(data.styleImage)) {
           data.styleImage = data.styleImage[0].url
         }
+
         // 唛架图处理
         if (!isEmpty(data.shelfFile)) {
           let shelfFile = {
             name: data.shelfFile[0].name,
             url: data.shelfFile[0].response.data.src
           }
+          //  唛架预览
+          data.shelfImage = data.shelfFile[0].response.data.shelfImage
+
           data.shelfFile = shelfFile
         }
 
@@ -376,7 +401,6 @@
           })
           data.attachmentList = arr
         }
-
         proxy.$baseService.post('/jack-ics-api/bedPlan/save', data).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
@@ -516,3 +540,4 @@
     formEl.resetFields()
   }
 </script>
+<style></style>

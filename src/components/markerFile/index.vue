@@ -23,6 +23,18 @@
       {{ props.upload.title }}
     </div>
   </el-upload>
+
+    <div v-if="state.img!==''"   class="demo-image__preview">
+    <el-image
+      style="width: 200px; height: 100px"
+      :src="state.img"
+      :preview-src-list="state.srcList"
+      :initial-index="1"
+      fit="cover"
+    />
+  </div>
+  <!-- <img v-if="state.img!==''"  class="markerFile-pictureImg" :src="state.img" /> -->
+
 </template>
 
 <script lang="ts" setup>
@@ -41,9 +53,9 @@
   }>()
 
   const { proxy }: any = getCurrentInstance()
-  // const emits = defineEmits(['on-submit-success'])
-
   const state: any = reactive({
+    img:"",//预览
+    srcList:[],
     disabled: props.disabled,
     dialogVisible: false,
     title: '导入文件',
@@ -108,6 +120,11 @@
     () => props.value,
     item => {
       if (!isEmpty(props.value)) {
+        if(item[0].shelfImage){
+        state.img=item[0].shelfImage
+        state.srcList=[item[0].shelfImage]
+
+        }
         state.targetArr[state.fileType]['fileList'] = item
         //
       }
@@ -154,7 +171,10 @@
       ElMessage.error(res.msg)
       uploadFile.status = 'fail'
     }
-
+    //预览图片
+    state.img=uploadFiles[0].response.data.shelfImage
+    state.srcList=[uploadFiles[0].response.data.shelfImage]
+    console.log(state.img);
     // 传递给父级
     props.gitFile({ data: uploadFiles })
 
@@ -168,6 +188,7 @@
   }
 
   const beforeRemove = (file: any, fileList: any) => {
+    state.img=""
     state.uploadFileLoading = false
   }
 
@@ -251,4 +272,18 @@
     width: 260px;
     margin-right: 20px;
   }
+.demo-image__error .image-slot {
+  font-size: 30px;
+}
+.demo-image__error .image-slot .el-icon {
+  font-size: 30px;
+}
+.demo-image__error .el-image {
+  width: 100%;
+  height: 200px;
+}
+.markerFile-pictureImg{
+  width: 100px;
+  height: 100px;
+}
 </style>

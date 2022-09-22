@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-20 15:55:39
+ * @LastEditTime: 2022-09-22 18:41:35
  * @Description:
  * @LastEditors: lyj
  */
@@ -85,7 +85,7 @@ export const content: any = {
     shelfLength: 0,
     spreadClothLength: 0,
     shelfList: '',
-    attritionRate: 0,
+    useRate: 0,
     remark: ''
   },
   formMiddleData: [
@@ -93,7 +93,7 @@ export const content: any = {
     { name: '客户名称', model: 'customName', prop: null, type: null, disabled: false },
     { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: false },
     { name: '面料颜色', model: 'fabricColor', prop: 'fabricColor', type: 'fabricColor', disabled: false },
-    { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: false },
+    { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
     { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: 'spreadClothLevel', disabled: false },
     { name: '单层件数', model: 'levelClothSum', prop: null, type: null, disabled: true },
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true }
@@ -102,10 +102,10 @@ export const content: any = {
     { name: '床次计划号', model: 'bedPlanNo', prop: null, type: null, disabled: true },
     { name: '款式床次号', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: true },
     { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
-    { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: false },
+    { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
     { name: '铺布长度', model: 'spreadClothLength', prop: 'spreadClothLength', type: 'spreadClothLength', disabled: false },
     { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false },
-    { name: '利用率(%)', model: 'attritionRate', prop: 'attritionRate', type: 'attritionRate', disabled: true },
+    { name: '利用率(%)', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
     { name: '备注', model: 'remark', prop: null, type: null }
   ],
   dataRule: {
@@ -138,7 +138,7 @@ export const formsTable = {
       width: 200
     },
     {
-      title: '单层间数',
+      title: '单层件数',
       align: 'center',
       dataIndex: 'levelClothSum',
       width: 200

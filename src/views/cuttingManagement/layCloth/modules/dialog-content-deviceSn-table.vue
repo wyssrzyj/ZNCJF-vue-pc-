@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-22 09:15:42
+ * @LastEditTime: 2022-09-22 22:12:30
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -19,11 +19,14 @@
   >
     <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed" width="120">
       <template #default="{ row }">
-        <div v-if="item.dataIndex !== 'styleImage'">
+        <div v-if="item.dataIndex !== 'styleImage' && item.dataIndex !== 'statu'">
           <span>{{ row[item.dataIndex] }}</span>
         </div>
         <div v-if="item.dataIndex === 'styleImage'">
           <ImgModular :img="row.styleImage" />
+        </div>
+        <div v-if="item.dataIndex === 'statu'">
+          <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)"> {{ mapType.get(row.statu) }}</el-tag>
         </div>
       </template>
     </el-table-column>
@@ -51,9 +54,11 @@
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance, watch } from 'vue'
-  import { tableColumns } from './conifgs'
+  import { tagType, mapType } from '@/components/conifgs.ts'
+
   import ImgModular from '@/components/imgModular/index.vue'
 
+  import { tableColumns } from './conifgs'
   import './index.less'
   const { proxy } = getCurrentInstance()
 
@@ -77,7 +82,8 @@
   })
 
   const setList = (data?: any) => {
-    proxy.$baseService.get('/jack-ics-api/bedPlan/pageList', data).then((res: any) => {
+    let arr = { ...data, statu: '1' }
+    proxy.$baseService.get('/jack-ics-api/bedPlan/pageList', arr).then((res: any) => {
       state.total = res.data.total
       state.tableData = res.data.list
     })
@@ -114,7 +120,10 @@
 
   //选中项传递给父级
   const selectedChange = (e: any) => {
-    props.select(e)
+    //详情数据
+    proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: e.id }).then((res: any) => {
+      props.select(res.data)
+    })
   }
 </script>
 
