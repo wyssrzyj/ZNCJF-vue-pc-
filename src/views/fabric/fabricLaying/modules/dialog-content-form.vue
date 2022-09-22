@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-07 15:35:56
+ * @LastEditTime: 2022-09-22 14:17:11
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -16,14 +16,13 @@
               <div v-if="item.type === 'minLevel'">
                 <el-form-item :label="`${item.name}`">
                   <el-input-number
+                  disabled
                     v-model="state.form[item.model]"
-                    :disabled="props.type"
                     class="fabricLayingForm"
                     :controls="false"
                     :min="1"
                     :max="state.form[item.max]"
                     type="text"
-                    @change="handleChange"
                   />
                 </el-form-item>
               </div>
@@ -45,7 +44,7 @@
             <div v-for="(item, index) in state.right" :key="index">
               <div v-if="item.type === 'maxLevel'">
                 <el-form-item :label="`${item.name}`">
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="state.form[item.min]" type="text" @change="handleChange" />
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" :min="Number(state.form[item.min])+1" type="text" @change="handleChange" />
                 </el-form-item>
               </div>
 

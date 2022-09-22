@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-09-08 19:05:02
+ * @LastEditTime: 2022-09-22 11:02:26
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,7 +10,8 @@
     <div>
       <el-tabs v-model="state.tabPosition" editable tab-position="left" @edit="handleTabsEdit" @tab-click="handleClick">
         <div class="handleTabsEdit">
-          <el-tab-pane v-for="item in state.list" :key="item.title" :label="item.title" :name="item.title" />
+          <el-tab-pane :lazy="true" v-for="item in state.list" :key="item.title" :label="item.title" :name="item.title" >
+          </el-tab-pane>
         </div>
       </el-tabs>
     </div>
@@ -231,10 +232,13 @@
 
   //数据更新
   const update = (data: any) => {
+    
     const subscript = state.list.findIndex((item: any) => item.title === data.title)
+    
     if (subscript !== -1) {
       state.list.splice(subscript, 1, data)
-      let arr = state.list
+
+      let arr =  cloneDeep(state.list)
       //更改头部
       arr.map((item: any) => {
         item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
@@ -242,9 +246,13 @@
       })
 
       //选中值
-      state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
-      state.list = arr
+      //排序
+      arr.sort((a: any, b: any) => {
+        return a.spreadTemplateParam.minLevel - b.spreadTemplateParam.minLevel
+      })
 
+      state.list=arr
+      state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
       props.getList(state.list)
     }
   }

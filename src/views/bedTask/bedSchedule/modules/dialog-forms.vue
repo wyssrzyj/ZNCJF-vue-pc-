@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-20 13:10:59
+ * @LastEditTime: 2022-09-22 11:09:48
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <LayclothTbale :type="props.type" :data="props.form" @getData="getData" />
-  <div class="footer">
+  <div class="bedTask-footer">
     <div class="footer-right">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="preservation">保存</el-button>
@@ -55,7 +55,7 @@
 </script>
 
 <style>
-  .footer {
+  .bedTask-footer {
     width: 100%;
     margin-top: 20px;
     height: 30px;

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-21 10:49:05
+ * @LastEditTime: 2022-09-22 14:02:48
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
   <div id="work">
     <div>
       <div class="topContainer">
-        <vue-qr text="卢英杰666" margin="5" size="120" />
+        <vue-qr :text="state.data.bedPlanId" margin="5" size="120" />
         <div class="topRight">
           <div>浙江杰克智联智能设备科技有限公司</div>
           <div class="title">裁铺任务工单</div>

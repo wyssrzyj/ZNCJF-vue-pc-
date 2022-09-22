@@ -47,23 +47,7 @@
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
     </template>
   </el-dialog>
-  <!-- 打印拉布单 -->
-  <el-dialog v-if="state.printType" v-model="state.printType" :close-on-click-modal="false" title="打印拉布单" width="1000px">
-    <Print />
-    <template #footer>
-      <el-button style="order: 3" @click="printingMethod(false)">取消</el-button>
-      <el-button type="primary" style="order: 3" @click="printingMethod(true)">确认</el-button>
-    </template>
-  </el-dialog>
 
-  <!-- 打印工单 -->
-  <el-dialog v-if="state.workType" v-model="state.workType" :close-on-click-modal="false" title="打印工单" width="1000px">
-    <Work :id="'1567443329765433346'" />
-    <template #footer>
-      <el-button style="order: 3" @click="setWrkType(false)">取消</el-button>
-      <el-button type="primary" style="order: 3" @click="setWrkType(true)">确认</el-button>
-    </template>
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -203,12 +187,4 @@
     }
   }
 
-  // ---------------------------------
-  // -------------------打印---------------------------------
-  const printingMethod = (type: any) => {
-    state.printType = type
-  }
-  const setWrkType = (type: any) => {
-    state.workType = type
-  }
 </script>

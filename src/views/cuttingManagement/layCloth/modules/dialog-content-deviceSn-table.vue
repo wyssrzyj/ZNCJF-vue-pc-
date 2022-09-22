@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-13 13:37:36
+ * @LastEditTime: 2022-09-22 09:15:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,6 +34,19 @@
       </template>
     </el-table-column>
   </el-table>
+
+  <el-pagination
+    v-model:currentPage="page"
+    v-model:page-size="limit"
+    :page-sizes="[10, 20, 50, 100]"
+    :small="small"
+    :disabled="disabled"
+    :background="background"
+    layout="total, sizes, prev, pager, next, jumper"
+    :total="state.total"
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -44,26 +57,35 @@
   import './index.less'
   const { proxy } = getCurrentInstance()
 
+  const page = ref(1)
+  const limit = ref(10)
+
   const table: any = ref()
 
   const props = defineProps<{
     select: any
     form: any
-    type:any
+    type: any
   }>()
   const state: any = reactive({
+    forms: {},
+    total: 0,
     selectioned: {},
     dialogTableVisible: false,
     tableColumns: tableColumns,
     tableData: []
   })
 
+  const setList = (data?: any) => {
+    proxy.$baseService.get('/jack-ics-api/bedPlan/pageList', data).then((res: any) => {
+      state.total = res.data.total
+      state.tableData = res.data.list
+    })
+  }
 
   const init = () => {
     //数据回显
-    proxy.$baseService.get('/jack-ics-api/bedPlan/pageList').then((res: any) => {
-      state.tableData = res.data.list
-    })
+    setList()
   }
 
   init()
@@ -71,16 +93,23 @@
   watch(
     () => props.form,
     item => {
-      proxy.$baseService.get('/jack-ics-api/bedPlan/pageList', item).then((res: any) => {
-        state.tableData = res.data.list
-      })
+      state.forms = item
+      setList(item)
     }
   )
 
-    // 是否可用
+  // 是否可用
   const disable = (type: any) => {
-    
     return props.type === true ? true : type
+  }
+
+  const handleSizeChange = (val: number) => {
+    let data = { ...state.forms, page: page.value, limit: limit.value }
+    setList(data)
+  }
+  const handleCurrentChange = (val: number) => {
+    let data = { ...state.forms, page: page.value, limit: limit.value }
+    setList(data)
   }
 
   //选中项传递给父级
