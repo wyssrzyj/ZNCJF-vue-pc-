@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-09-22 22:49:21
+ * @LastEditTime: 2022-09-23 09:51:22
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -48,7 +48,7 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
     </template>
 
-    <el-dialog :draggable="false" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1250px">
+    <el-dialog  :draggable="false" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="1250px">
       <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-21 14:35:06
+ * @LastEditTime: 2022-09-23 14:02:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -77,7 +77,7 @@
     </div>
   </el-form>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
+  <el-dialog :draggable="false"  v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
     <DialogForms :list="state.echoDefaultParam" :row="props.row" :type="state.type" :operation="operation" :form="state.form" />
   </el-dialog>
 </template>

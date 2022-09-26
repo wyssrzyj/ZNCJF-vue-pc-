@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-22 22:58:17
+ * @LastEditTime: 2022-09-26 15:20:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -54,7 +54,7 @@
           <el-input-number
             v-model="scope.row.levelClothSum"
             :disabled="disable(false)"
-            :min="1"
+            :min="0"
             controls-position="right"
             placeholder="请输入入"
             @change="
@@ -68,7 +68,7 @@
           <el-input-number
             v-model="scope.row.spreadClothLevel"
             :disabled="disable(false)"
-            :min="1"
+            :min="0"
             controls-position="right"
             placeholder="请输入入"
             @change="
@@ -229,8 +229,8 @@
               unique: `${item + index}`,
               color: item,
               size: '',
-              levelClothSum: 1,
-              spreadClothLevel: 1,
+              levelClothSum: 0,
+              spreadClothLevel: 0,
               total: 0
             })
           }
@@ -254,9 +254,14 @@
   //选择框
   const change = (e: any, row: any) => {
     let current = state.selectData.filter((item: any) => item.value === e)
+
     row.color = current[0].label
     row.unique = `${row.color + row.unique.charAt(row.unique.length - 1)}`
-    backData(state.tableData)
+
+    let data = state.tableData.filter((item: any) => item.color === row.color)
+    row.spreadClothLevel = data[0].spreadClothLevel
+
+    row.total = Number(row.levelClothSum) * Number(row.spreadClothLevel)
   }
 
   //输入框处理
@@ -292,6 +297,9 @@
 
     if (type === 'size') {
       row.size = e
+      let data = state.tableData.filter((item: any) => item.size === e)
+      row.levelClothSum = data[0].levelClothSum
+      row.total = Number(row.levelClothSum) * Number(row.spreadClothLevel)
     }
     backData(state.tableData)
   }
@@ -309,19 +317,17 @@
   const taskHandle = (type: any, row: any) => {
     if (type === 'increase') {
       let tail: any = cloneDeep(state.tableData[state.tableData.length - 1])
-     let arr ={
-      unique:setNewUnique(tail.unique),
-      type:'select',
-      color:"",
-      size:"",
-      levelClothSum:1,
-      spreadClothLevel:10,
-      total:10,
-     }
-      
-     
+      let arr = {
+        unique: setNewUnique(tail.unique),
+        type: 'select',
+        color: '',
+        size: '',
+        levelClothSum: 0,
+        spreadClothLevel: 0,
+        total: 0
+      }
+
       state.tableData.push(arr)
-      
     }
     if (type === 'delete') {
       state.tableData = state.tableData.filter((item: any) => item.unique !== row.unique)

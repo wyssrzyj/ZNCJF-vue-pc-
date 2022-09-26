@@ -15,9 +15,10 @@
       <el-input v-model="state.rightForm.styleBedNo" disabled />
     </el-form-item>
     <el-form-item label="床次计划号：" required prop="bedPlanNo">
-      <el-input :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号：`">
+      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号：`">
         <template #append>
-          <span class="setting" @click="setBedPlanNo"
+          <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 --> 
+          <span class="setting"
             ><el-icon><Setting color="#3e8ff7" /></el-icon
           ></span>
         </template>
@@ -37,7 +38,7 @@
     </el-form-item>
     <el-form-item label="唛架长度：">
       <div class="layCloth-row">
-        <el-input v-model="state.rightForm.spreadClothLength" disabled />
+        <el-input v-model="state.rightForm.shelfLength" disabled />
         <span>米</span>
       </div>
     </el-form-item>
@@ -56,7 +57,7 @@
     <el-form-item label="设备编号：" required prop="deviceSn">
       <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`">
         <template #append>
-          <span class="setting" @click="setDeviceSn"
+          <span  class="setting" @click="setDeviceSn"
             ><el-icon><Setting color="#3e8ff7" /></el-icon
           ></span>
         </template>
@@ -80,6 +81,8 @@
   </el-form>
   <!-- 床次计划 -->
   <el-dialog
+  :draggable="false"
+  :close-on-click-modal="false"
     v-if="state.bedPlanNoType"
     v-model="state.bedPlanNoType"
     title="床次计划"
@@ -89,6 +92,8 @@
   </el-dialog>
   <!-- 设备编号 -->
   <el-dialog
+  :draggable="false"
+  :close-on-click-modal="false"
     v-if="state.deviceSnType"
     v-model="state.deviceSnType"
     title="设备编号"
@@ -166,7 +171,10 @@ const setBedPlanNo = () => {
   state.bedPlanNoType = true;
 };
 const setDeviceSn = () => {
+  if(!props.type){
   state.deviceSnType = true;
+
+  }
 };
 //设置床次数据
 const operation = (e: any) => {
@@ -195,6 +203,8 @@ const operation = (e: any) => {
 
 const setDeviceSnType = (e: any) => {
   if (e.type === "cancel") {
+    
+
     state.deviceSnType = false;
   }
   if (e.type === "confirm") {
@@ -204,7 +214,12 @@ const setDeviceSnType = (e: any) => {
 
     state.rightForm.deviceId = e.data.id;
     state.rightForm.deviceSn = e.data.sn;
+
     state.rightForm.deviceName = e.data.equipmentName;
+    
+    state.rightForm.labelingSn = e.data.labelingSn;
+    state.rightForm.labelingName = e.data.labelingName;
+
     props.setData("1", state.rightForm);
 
     ElMessage({

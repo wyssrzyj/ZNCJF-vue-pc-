@@ -122,10 +122,7 @@
     state.uploadFileLoading = true
   }
   const uploadSuccess = (res: any, uploadFile: any, uploadFiles: any) => {
-     ElMessage({
-      message: '导入成功',
-      type: 'success'
-    })
+
     // // 传递给父级
     props.gitFile({ data: uploadFiles })
 

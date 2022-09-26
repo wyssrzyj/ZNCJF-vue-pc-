@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-20 20:54:19
+ * @LastEditTime: 2022-09-23 14:52:21
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -72,8 +72,6 @@
             }
           })
         }
-
-        console.log(item)
       })
     }
 

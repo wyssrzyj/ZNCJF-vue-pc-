@@ -1,17 +1,17 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-08 17:54:00
+ * @LastEditTime: 2022-09-26 09:39:26
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <!-- 图片 -->
-  <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="props.value" :disabled="disabled" />
+  <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="props.value" :disabled="state.disabled" />
   <!-- 唛架图 -->
-  <MarkerFile v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <MarkerFile v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="state.disabled" />
   <!-- 其他上传 -->
-  <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="state.disabled" />
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'

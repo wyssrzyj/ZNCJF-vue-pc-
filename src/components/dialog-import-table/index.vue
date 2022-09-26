@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-21 09:47:21
+ * @LastEditTime: 2022-09-23 16:17:16
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,7 +17,7 @@
 
   <!-- 表格 -->
   <div v-if="props.export.type !== ''">
-    <el-dialog v-if="state.importType" v-model="state.importType" :close-on-click-modal="false" title="导入" width="800px">
+    <el-dialog :draggable="false"  v-if="state.importType" v-model="state.importType" :close-on-click-modal="false" title="导入" width="800px">
       <DialogTable :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
       <template #footer>
         <el-button style="order: 3" @click="state.importType = false">取消</el-button>
@@ -29,6 +29,8 @@
 
 <script lang="ts" setup>
   import { reactive } from 'vue'
+  import { ElMessage } from 'element-plus'
+
   import UploadModule from '@/components/dialog-upload.vue'
   import DialogTable from './dialog-table.vue'
 
@@ -77,6 +79,7 @@
   //关闭弹窗
   const exportEvents = (type: any) => {
     state.importType = type
+ 
     props.confirm()
   }
 </script>

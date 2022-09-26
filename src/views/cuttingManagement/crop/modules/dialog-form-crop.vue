@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-09 17:40:24
+ * @LastEditTime: 2022-09-23 14:18:11
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -43,7 +43,7 @@
         </el-form-item>
         <div class="dialogBottom">
           <el-button type="primary" :disabled="disabled(false)" class="preservation" @click="submitForm(formRef)">确认</el-button>
-          <el-button type="primary" :disabled="disabled(false)" class="preservation" @click="empty(formRef)">清空</el-button>
+          <el-button type="warning" :disabled="disabled(false)" class="preservation" @click="empty(formRef)">清空</el-button>
           <el-button @click="resetForm()">取消</el-button>
         </div>
       </el-col>

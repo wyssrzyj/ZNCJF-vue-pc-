@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-22 22:44:31
+ * @LastEditTime: 2022-09-23 14:13:15
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -43,7 +43,7 @@
 
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker :disabled="disable(true)"  v-model="state.form[item.model]"  value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm"  @change="setTime" />
+              <el-date-picker :disabled="disable(false)"  v-model="state.form[item.model]"  value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm"  @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -58,7 +58,7 @@
           </div>
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker :disabled="disable(true)"  v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
+              <el-date-picker :disabled="disable(false)"  v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -119,6 +119,7 @@
         res.data.shelfFile = [
           {
             name: res.data.shelfFileName,
+            shelfImage: res.data.shelfImage,
             response: {
               data: {
                 src: res.data.shelfFileUrl

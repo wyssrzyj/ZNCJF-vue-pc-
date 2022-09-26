@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-18 15:43:30
+ * @LastEditTime: 2022-09-23 13:09:15
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -99,7 +99,7 @@
     () => props.data,
     item => {
       state.list = item
-      console.log(state.list.spreadDetailIntermediateList );
+      console.log(state.list );
       
     }
   )

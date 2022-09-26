@@ -26,7 +26,7 @@
           @change="setTime"
         />
       </el-form-item>
-      <el-form-item label="贴标任务开始时间：">
+      <el-form-item v-if="state.planType" label="贴标任务开始时间：">
         <el-date-picker
           v-model="state.rightForm.pasteTaskTime.planStartTime"
           :disabled="disable(false)"
@@ -38,7 +38,7 @@
           @change="setTime"
         />
       </el-form-item>
-      <el-form-item label="贴标任务结束时间：">
+      <el-form-item v-if="state.planType" label="贴标任务结束时间：">
         <el-date-picker
           v-model="state.rightForm.pasteTaskTime.planEndTime"
           :disabled="disable(false)"
@@ -68,7 +68,7 @@
           :disabled="disable(false)"
           :clearable="false"
           type="datetime"
-          format="YYYY/MM/DD hh:mm:ss"
+          format="YYYY-MM-DD hh:mm"
           value-format="x"
           :suffix-icon="Calendar"
           @change="setTime"
@@ -95,6 +95,7 @@
   }>()
 
   const state: any = reactive({
+    planType: true, //贴标时间是否可用
     rightForm: {
       //铺布
       spreadTaskTime: {
@@ -137,7 +138,21 @@
       })
     }
   }
+
+  //设备是否选择了有贴标机的
+  const setPlanType = (e: any) => {
+    if (e.labelingName && e.labelingSn) {
+      state.planType = true
+    } else {
+      state.planType = false
+    }
+  }
+
   const init = () => {
+    if (!isEmpty(props.value.one)) {
+      setPlanType(props.value.one)
+    }
+
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.three)) {
       state.rightForm = props.value.three

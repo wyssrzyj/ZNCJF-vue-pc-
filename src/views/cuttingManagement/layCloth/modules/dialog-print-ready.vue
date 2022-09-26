@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-19 13:34:19
+ * @LastEditTime: 2022-09-23 13:16:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -92,10 +92,14 @@
 
   //添加对应的字段并赋值
   const setSize = (v: any, item: any) => {
+    
     let topData = item.sizeAndAmountList //动态头
     let data = cloneDeep(v)
     let size = item.colorAndSizeList
     //给每一项添加对应的字段
+
+   
+
     size.forEach((i: any) => {
       if (data.color === i.color) {
         data[i.size] = addData(i.size, topData, data)

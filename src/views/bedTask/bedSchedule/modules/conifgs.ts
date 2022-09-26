@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-22 18:41:35
+ * @LastEditTime: 2022-09-26 09:26:49
  * @Description:
  * @LastEditors: lyj
  */
@@ -117,6 +117,7 @@ export const content: any = {
     shelfLength: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     spreadClothLength: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     shelfList: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    styleCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     styleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     shelfFile: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }

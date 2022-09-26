@@ -8,6 +8,8 @@
         <el-form ref="leftForm" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
           <el-form-item label="款图" class="layclothImg">
             <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
+
+          
           </el-form-item>
           <el-form-item label="款式编号">
             <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
@@ -16,7 +18,9 @@
             <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
           </el-form-item>
           <el-form-item label="唛架图">
+            <div class="layCloth-img">
             <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
+              </div>
           </el-form-item>
           <el-form-item label="其他附件">
             <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
@@ -34,7 +38,7 @@
     </div>
     <div class="foot">
       <el-button @click="close">取消</el-button>
-      <el-button type="primary" @click="save">保存</el-button>
+      <el-button  :disabled="disable(false)"  type="primary" @click="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -144,11 +148,10 @@
       cloneForm.styleName = e.styleName
       // 图片
       cloneForm.img = [{ url: e.styleImage }]
-
         cloneForm.shelfFile = [
           {
             name: e.shelfFile.name,
-            // shelfImage: e.shelfImage,//图暂时没有
+            shelfImage: e.shelfImage,//图暂时没有
             response: {
               data: {
                 src: e.shelfFile.url
@@ -156,7 +159,6 @@
             }
           }
         ]
-
       state.form = cloneForm
       state.list.one = e
     }
@@ -367,5 +369,8 @@
       height: 52px;
       box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
     }
+  }
+  .layCloth-img{
+    width: 200px;
   }
 </style>

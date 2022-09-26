@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-08 17:22:55
+ * @LastEditTime: 2022-09-26 09:47:26
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -14,7 +14,7 @@
           <div v-for="(item, index) in state.middle" :key="index">
             <div v-if="item.type === 'minLevel'">
               <el-form-item :label="`${item.name}`">
-                <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
+                <el-input-number v-model="state.form[item.model]" disabled :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
               </el-form-item>
             </div>
 

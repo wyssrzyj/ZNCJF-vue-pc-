@@ -32,7 +32,7 @@
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看床次计划', row)">查看</el-button>
-      <el-button v-if="row.statu!==2" link type="primary" style="order: 3" @click="handleClick(false, '编辑床次计划', row)">编辑</el-button>
+      <el-button v-if="row.statu===1" link type="primary" style="order: 3" @click="handleClick(false, '编辑床次计划', row)">编辑</el-button>
     </template>
   </njp-table-config>
 

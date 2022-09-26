@@ -20,7 +20,7 @@
     </template>
 
     <template #img="{ row }">
-      <ImgModular :img="row.img" />666
+      <ImgModular :img="row.img" />
     </template>
 
     <template #type="{ row }">
@@ -46,7 +46,6 @@
     <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
   </el-dialog>
   <!-- 导出  -->
-
   <el-dialog :draggable="false" v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
     <ImportDialog :export="state.export" :get-list="getList"  :confirm="confirm"/>
     <template #footer>
@@ -195,7 +194,7 @@
         refreshTable()
         state.export.importType = false
         ElMessage({
-          message: '添加成功',
+          message: '导入成功',
           type: 'success'
         })
       })

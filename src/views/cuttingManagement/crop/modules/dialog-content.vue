@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-22 22:43:36
+ * @LastEditTime: 2022-09-23 14:15:30
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -74,7 +74,7 @@
     </div>
   </el-form>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
+  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible"  :title="state.messageTitle" width="700px">
     <Crop :list="props.list" :row="state.form" :type="props.dialogType" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
@@ -127,6 +127,7 @@
         res.data.shelfFile = [
           {
             name: res.data.shelfFileName,
+            shelfImage: res.data.shelfImage,
             response: {
               data: {
                 src: res.data.shelfFileUrl

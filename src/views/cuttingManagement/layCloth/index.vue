@@ -19,8 +19,8 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button>
-      <el-button type="primary" style="order: 3" @click="examine">审核</el-button>
+      <!-- <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button> -->
+      <el-button type="success" style="order: 3" @click="examine">审核</el-button>
     </template>
 
     <template #styleImage="{ row }">
@@ -32,8 +32,8 @@
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看铺布', row)">查看</el-button>
-      <el-button  v-if="row.statu !== 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
-      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
+      <el-button  v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑</el-button>
+      <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
     </template>
 
     <el-dialog  :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="1100px" hei>
@@ -42,7 +42,7 @@
   </njp-table-config>
 
   <div  style="height: 0; overflow: hidden">
-    <Print  :id="state.printId" />
+    <Print   :data="state.printData" />
   </div>
 </template>
 
@@ -87,8 +87,7 @@
     fileList: [],
     rowData: {},
     limit: 6,
-    printType: false,
-    printId: '',
+    printData: '',
     ids: [] //选中id
   })
   const refreshTable = () => {
@@ -115,15 +114,21 @@
   }
   const setPrint = (row: any) => {
     try {
-      if (row.statu === 2) {
-        state.printId = row.id
-        state.printType = true
-        print({
+      if (row.statu === 4) {
+        proxy.$baseService.get('/jack-ics-api/print/getTaskCompleteInfo', { bedPlanId: row.bedPlanId }).then((res: any) => {
+          if (!isEmpty(res.data)) {
+          state.printData = res.data
+          console.log( res);
+
+          print({
           printable: 'print',
           type: 'html',
           targetStyles: ['*'],
           maxWidth: 5000
         })
+        }
+      })
+     
       }
     } catch (error) {
     }

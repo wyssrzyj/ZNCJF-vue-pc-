@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-22 21:56:08
+ * @LastEditTime: 2022-09-26 10:29:01
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -204,6 +204,8 @@
         // 图片
         if (!isEmpty(data.img)) {
           data.img = data.img[0].url
+        }else{
+          data.img = ""
         }
 
         //其他附件

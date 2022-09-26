@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-19 14:12:24
+ * @LastEditTime: 2022-09-23 17:26:44
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,14 +34,25 @@
 
       <!-- 其他 -->
       <template v-if="item.type == null" #default="{ row }">
-        <span>{{ row[item.prop] }}</span>
+        <el-input v-model="row[item.prop]" type="text" />
       </template>
       <!-- 类型 -->
       <template v-if="item.type === 'type'" #default="{ row }">
         <!-- 设备  -->
-        <span v-if="props.type === 'equipment'"> {{ row.type ? equipment.get(row.type.toString()) : null }}</span>
+        <div v-if="props.type === 'equipment'">
+          <el-select v-model="row.type">
+            <el-option v-for="item in state.equipmentType" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </div>
+        
         <!-- 面料 -->
-        <span v-if="props.type === 'fabric'"> {{ row.type ? fabric.get(row.type) : null }}</span>
+        <div v-if="props.type === 'fabric'">
+            <el-select v-model="row.type" >
+                <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+
+          <!-- {{ row.type ? fabric.get(row.type) : null }} -->
+        </div>
       </template>
     </el-table-column>
 
@@ -69,7 +80,7 @@
   import { reactive, ref, watch } from 'vue'
   import ImagesV1 from '@/components/njp-upload-images-v1.vue'
   import { find, isEmpty, cloneDeep } from 'lodash'
-  import { equipment, fabric } from '@/components/conifgs.ts'
+  import { equipmentType ,fabricType} from '@/components/conifgs.ts'
 
   const table: any = ref()
 
@@ -83,6 +94,8 @@
   const state: any = reactive({
     data: props.data,
     tableData: [],
+    equipmentType: equipmentType,
+    fabricType: fabricType,
     //
     dialogVisible: false,
     title: '上传',
@@ -105,8 +118,10 @@
     //处理图片回显
     arr.map((item: any, index: any) => {
       item.only = index
+      item.type = item.type.toString()
       item.styleUrlList = item.image !== null ? [{ url: item.image }] : [] //图片组件
     })
+    console.log(arr)
 
     return arr
   }

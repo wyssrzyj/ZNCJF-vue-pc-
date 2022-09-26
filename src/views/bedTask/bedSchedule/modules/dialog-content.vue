@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-22 22:57:59
+ * @LastEditTime: 2022-09-26 10:41:58
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -14,7 +14,7 @@
         <el-form-item label="款图" class="layclothImg">
           <UploadModule v-model="state.form.styleImage" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
-        <el-form-item label="款式编号">
+        <el-form-item label="款式编号 " prop="styleCode">
           <el-input v-model="state.form.styleCode" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
         </el-form-item>
         <el-form-item label="款式名称" prop="styleName">
@@ -65,8 +65,8 @@
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadClothLevel'">
-            <el-form-item label="铺布层数" prop="spreadClothLevel">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="1" type="text" />
+            <el-form-item label="总铺布层数" prop="spreadClothLevel">
+              <el-input-number v-model="state.form[item.model]" :disabled="disable(true)" controls-position="right" :min="1" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'levelClothSum'">
@@ -168,7 +168,7 @@
     </div>
   </el-form>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
+  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
     <PopModule v-if="state.dialogTableVisible" :type="props.dialogType" :operation="operation" :form="state.form" />
   </el-dialog>
   <div style="height: 0; overflow: hidden">
@@ -201,13 +201,12 @@
     row: any
   }>()
 
-  // const form = reactive(formData)
 
   const state: any = reactive({
-    form: formData,
+    form: cloneDeep(formData) ,
     type: props.dialogType,
-    middle: formMiddleData,
-    right: formRightData,
+    middle: cloneDeep (formMiddleData) ,
+    right: cloneDeep(formRightData) ,
     dialogTableVisible: false,
     //提示信息
     prop: dataRule,
@@ -248,7 +247,7 @@
         res.data.list.forEach((item: any) => {
           list.push({
             label: item.name,
-            value: item.id,
+            value: item.name,
             ...item
           })
         })
@@ -271,10 +270,8 @@
     if (props.row) {
       state.printId = props.row.id
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: props.row.id }).then((res: any) => {
-
         // 图片
         res.data.img = [{ url: res.data.styleImage }]
-
         //唛架图
         res.data.shelfFile = [
           {
@@ -296,6 +293,9 @@
           })
           res.data.shelfList = shelfList
         }
+         
+        let  sum =res.data.shelfWidth*res.data.spreadClothLength
+        state.effectiveArea=(res.data.useRate/100)*sum//有效面积x`
         state.form = res.data
       })
     }
@@ -347,10 +347,7 @@
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
-    // console.log(product)
-    // console.log('有效面积', state.effectiveArea)
-
-    state.form.useRate = state.effectiveArea / product
+    state.form.useRate = (state.effectiveArea / product)*100
   }
 
   // 表单提交
@@ -362,6 +359,9 @@
         // 图片
         if (!isEmpty(data.styleImage)) {
           data.styleImage = data.styleImage[0].url
+        }else{
+          data.styleImage = ""
+
         }
 
         // 唛架图处理
@@ -401,6 +401,8 @@
           })
           data.attachmentList = arr
         }
+
+        //面料名称
         proxy.$baseService.post('/jack-ics-api/bedPlan/save', data).then((res: any) => {
           if (res.code === 0) {
             ElMessage({

@@ -25,7 +25,7 @@
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看裁剪任务', row)">查看</el-button>
-      <el-button v-if="row.statu === '2'" link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪任务', row)">编辑</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪任务', row)">编辑</el-button>
     </template>
 
     <el-dialog  :close-on-click-modal="false" :draggable="false"  v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="800px">

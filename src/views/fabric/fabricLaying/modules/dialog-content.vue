@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-21 13:03:57
+ * @LastEditTime: 2022-09-26 16:12:11
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -70,8 +70,8 @@
   }>()
 
   const state = reactive({
-    form: formData,
-    initForm: formData, //只用作初始展示
+    form: cloneDeep (formData),
+    initForm: cloneDeep(formData) , //只用作初始展示
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息
@@ -117,6 +117,7 @@
   }
   const init = () => {
     //获取接口数据赋值form
+    
     if (!isEmpty(props.row)) {
       proxy.$baseService.get('/jack-ics-api/spreadTemplateParam/get', { templateId: props.row.id }).then((res: any) => {
         let arr = res.data
@@ -130,7 +131,6 @@
 
         state.form = processInitialData(arr)
         state.initForm = processInitialData(arr)
-        // console.log("初始数据", state.form );
       })
     }
   }
@@ -144,7 +144,6 @@
 
   // 上传
   const getData = (e: any) => {
-    // console.log('最终展示', e)
     if (e.type === 'img') {
       state.form.img = e.data
     }

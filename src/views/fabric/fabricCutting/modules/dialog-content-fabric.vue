@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-08 19:03:50
+ * @LastEditTime: 2022-09-23 14:04:53
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -18,7 +18,7 @@ vue
       <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
     </el-tooltip>
   </div>
-  <el-dialog v-model="dialogVisible" title="关联面料" width="30%">
+  <el-dialog :draggable="false" v-model="dialogVisible" title="关联面料" width="30%">
     <div style="display: inline-block">
       <span style="margin-left: 10px">关联面料：</span>
       <el-select v-model="data" :disabled="props.type" multiple placeholder="请选择关联面料" style="width: 240px">

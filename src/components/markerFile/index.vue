@@ -1,7 +1,7 @@
 <template>
   <el-upload
     v-if="state.fileType !== null"
-    :disabled="disabled"
+    :disabled="props.disabled"
     :file-list="state.targetArr[0]['fileList']"
     :accept="props.pictureType.accept"
     :action="state.ossAction"
@@ -15,7 +15,7 @@
     :limit="props.upload.limit"
     :on-preview="download"
   >
-    <el-button icon="upload">上传文件</el-button>
+    <el-button   :disabled="props.disabled"  icon="upload">上传文件</el-button>
     <div v-if="state.fileType !== null" class="subtip">
       <el-icon>
         <Warning />

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-21 13:05:16
+ * @LastEditTime: 2022-09-23 10:30:37
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -69,8 +69,8 @@
   }>()
 
   const state = reactive({
-    form: formData,
-    initForm: formData,
+    form: cloneDeep(formData) ,
+    initForm: cloneDeep (formData),
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息

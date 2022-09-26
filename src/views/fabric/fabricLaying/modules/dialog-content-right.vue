@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-09-22 11:02:26
+ * @LastEditTime: 2022-09-26 16:12:27
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -112,7 +112,6 @@
   //初始设置数据
   const init = (data: any, type: any) => {
     let cloneData = cloneDeep(data)
-    // console.log(cloneData[0]);
 
     if (!isEmpty(data)) {
       //添加标题
@@ -126,8 +125,6 @@
       }
       //初始不是 1-10层默认展示第一个
       if (type === 'initForm') {
-        // console.log("initForm");
-
         state.tabPosition = cloneData[0].title
         state.current = cloneData[0]
       }
@@ -155,7 +152,9 @@
 
   //添加
   const increase = () => {
+    let cloneData=cloneDeep (state.data)//防止污染原始数据
     if (!isEmpty(state.list)) {
+
       let lastItem = state.list[state.list.length - 1]
       let min = Number(lastItem.spreadTemplateParam.maxLevel) + 1
       let max = Number(min) + 1
@@ -165,7 +164,7 @@
         spreadTemplateParam: {
           minLevel: min,
           maxLevel: max,
-          ...state.data
+          ...cloneData
         }
       }
       state.list.push(newlyAdded)
@@ -184,7 +183,7 @@
         spreadTemplateParam: {
           minLevel: min,
           maxLevel: max,
-          ...state.data
+          ...cloneData
         }
       }
       state.list.push(newlyAdded)
@@ -252,6 +251,8 @@
       })
 
       state.list=arr
+      // console.log("排序",state.list);
+      
       state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
       props.getList(state.list)
     }
