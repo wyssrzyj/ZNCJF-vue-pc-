@@ -117,23 +117,33 @@
 
   const setList = () => {
     if (props.row) {
-      const data = {
-        bedPlanId: props.row.bedPlanId
-      }
-      proxy.$baseService.get('/jack-ics-api/spreadTask/getTime', data).then((res: any) => {
-        if (res.code === 0) {
-          if (res.data.spreadTaskTime) {
-            state.rightForm.spreadTaskTime = res.data.spreadTaskTime
-          }
-          if (res.data.pasteTaskTime) {
-            state.rightForm.pasteTaskTime = res.data.pasteTaskTime
-          }
-          if (res.data.cutTaskTime) {
-            state.rightForm.cutTaskTime = res.data.cutTaskTime
-          }
+      proxy.$baseService
+        .get('/jack-ics-api/spreadTask/getTime', {
+          bedPlanId: props.row.bedPlanId
+        })
+        .then((res: any) => {
+          if (res.code === 0) {
+            if (res.data.spreadTaskTime) {
+              state.rightForm.spreadTaskTime = res.data.spreadTaskTime
+            }
+            if (res.data.pasteTaskTime) {
+              state.rightForm.pasteTaskTime = res.data.pasteTaskTime
+            }
+            if (res.data.cutTaskTime) {
+              state.rightForm.cutTaskTime = res.data.cutTaskTime
+            }
 
-          // state.rightForm = res.data
-          props.setData('3', state.rightForm)
+            // state.rightForm = res.data
+            props.setData('3', state.rightForm)
+          }
+        })
+
+      //判断贴标是否可用
+      proxy.$baseService.get('/jack-ics-api/device/listTaskTypeByDeviceId', { deviceId: props.row.deviceId }).then((res: any) => {
+        if (res.data[1] === 2) {
+          state.planType = true
+        } else {
+          state.planType = false
         }
       })
     }

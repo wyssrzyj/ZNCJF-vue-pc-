@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-23 14:04:18
+ * @LastEditTime: 2022-09-26 17:21:30
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -18,7 +18,7 @@ vue
       <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
     </el-tooltip>
   </div>
-  <el-dialog :draggable="false" v-model="dialogVisible" title="关联面料" width="30%">
+  <el-dialog v-model="dialogVisible" :draggable="false" title="关联面料" width="30%">
     <div style="display: inline-block">
       <span style="margin-left: 10px">关联面料：</span>
       <el-select v-model="data" :disabled="props.type" multiple placeholder="请选择关联面料" style="width: 240px">
@@ -101,11 +101,12 @@ vue
       limit: 99,
       type: props.form.fabricType,
       fabricWeightMin: props.form.fabricWeight.left,
-      fabricWeightMax: props.form.fabricWeight.right
+      fabricWeightMax: props.form.fabricWeight.right,
+      templateType: '1'
     }
-    proxy.$baseService.get('/jack-ics-api/fabric/pageList', sum).then((res: any) => {
+    proxy.$baseService.get('/jack-ics-api/fabric/noParamFabricList', sum).then((res: any) => {
       if (res.code === 0) {
-        let list = res.data.list
+        let list = res.data
         if (!isEmpty(list)) {
           let fabricList: any = []
           list.forEach((item: any) => {
