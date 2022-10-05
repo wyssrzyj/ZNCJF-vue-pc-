@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-09-26 09:26:49
+ * @LastEditTime: 2022-09-30 10:40:21
  * @Description:
  * @LastEditors: lyj
  */
@@ -9,62 +9,73 @@
 // 导出
 export const exportData = [
   {
+    prop: 'styleImage',
+    label: '款式图片',
+    required: false,
+    type :"styleImage"
+  },
+  {
+    prop: 'shelfImage',
+    label: '唛架图',
+    required: true,
+    type :"shelfImage"
+
+  },
+  {
     prop: 'styleCode',
-    label: '款式编号'
+    label: '款式编号',
+    required: true
   },
   {
     prop: 'styleName',
-    label: '款式名称'
+    label: '款式名称',
+    required: true
   },
   {
     prop: 'produceOrderCode',
-    label: '生产订单'
+    label: '生产订单',
+    required: true
   },
   {
     prop: 'customName',
-    label: '客户名称'
-  },
-  {
-    prop: 'styleBedNo',
-    label: '床次'
-  },
-  {
-    prop: 'fabricCode',
-    label: '面料编号'
-  },
-  {
-    prop: 'fabricName',
-    label: '面料名称'
-  },
-  {
-    prop: 'fabricColor',
-    label: '面料颜色'
-  },
-  {
-    prop: 'spreadClothLength',
-    label: '唛架长度（米）'
-  },
-  {
-    prop: 'shelfWidth',
-    label: '唛架门幅（米）'
-  },
-  {
-    prop: 'spreadClothLength',
-    label: '铺布长度（米'
+    label: '客户名称',
+    required: false
   },
   {
     prop: 'spreadClothLevel',
-    label: '铺布层数'
+    label: '床次总件数',
+    required: true
   },
   {
-    prop: 'shelfScalList',
-    label: '排唛比例'
+    prop: 'fabricCode',
+    label: '面料编号',
+    required: true
+  },
+  {
+    prop: 'fabricName',
+    label: '面料名称',
+    required: true
+  },
+    {
+    prop: 'fabricColor',
+    label: '面料颜色',
+    required: true
+  },
+  {
+    prop: 'spreadClothLevel',
+    label: '铺布层数',
+    required: true
+  },
+  {
+    prop: 'shelfScale',
+    label: '排唛比例',
+    required: true
   }
 ]
 //---------------content-----------------
 export const content: any = {
   formData: {
-    styleImage: "",
+    styleImage: '',
     styleCode: '',
     styleName: '',
     shelfFile: [],
@@ -99,7 +110,7 @@ export const content: any = {
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true }
   ],
   formRightData: [
-    { name: '床次计划号', model: 'bedPlanNo', prop: null, type: null, disabled: true },
+    { name: '床次计划号', model: 'bedPlanNo', prop: null, type: "bedPlanNo", disabled: true },
     { name: '款式床次号', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: true },
     { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
     { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },

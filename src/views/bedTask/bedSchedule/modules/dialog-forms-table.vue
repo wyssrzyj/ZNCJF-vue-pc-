@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-26 15:20:20
+ * @LastEditTime: 2022-09-28 08:48:27
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -89,7 +89,7 @@
         </el-button>
       </template>
       <template #default="scope">
-        <el-popconfirm :disabled="disable(false)" title="是否删除?" @confirm="taskHandle('delete', scope.row)">
+        <el-popconfirm v-if="state.tableData.length>1" :disabled="disable(false)" title="是否删除?" @confirm="taskHandle('delete', scope.row)">
           <template #reference>
             <el-icon class="proportionsDelete" :size="20"><Remove /></el-icon>
           </template>
@@ -332,7 +332,6 @@
     if (type === 'delete') {
       state.tableData = state.tableData.filter((item: any) => item.unique !== row.unique)
     }
-
     backData(state.tableData)
   }
 

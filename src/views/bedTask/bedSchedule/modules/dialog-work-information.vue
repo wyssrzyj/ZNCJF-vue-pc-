@@ -1,59 +1,59 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-19 09:11:12
+ * @LastEditTime: 2022-10-03 17:32:30
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div>
     <div class="informationTitle">床次信息</div>
-    <div class="row">
-      <div class="infBlockLeft">床次计划：</div>
-      <div class="infBlock">{{ state.list.bedPlanNo }}</div>
-      <div class="infBlock-title">款式床次号：</div>
-      <div class="infBlock">{{ state.list.styleBedNo }}</div>
-      <div class="infBlock-title">款式编码：</div>
-      <div class="infBlock">{{ state.list.styleCode }}</div>
-      <div class="infBlock-title">款式名称：</div>
-      <div class="infBlock">{{ state.list.styleName }}</div>
+    <div class="work-row">
+      <div class="work-infBlockLeft">床次计划：</div>
+      <div class="work-infBlock">{{ state.list.bedPlanNo }}</div>
+      <div class="work-infBlock-title">款式床次号：</div>
+      <div class="work-infBlock">{{ state.list.styleBedNo }}</div>
+      <div class="work-infBlock-title">款式编码：</div>
+      <div class="work-infBlock">{{ state.list.styleCode }}</div>
+      <div class="work-infBlock-title">款式名称：</div>
+      <div class="work-infBlock">{{ state.list.styleName }}</div>
     </div>
-    <div class="row">
-      <div class="infBlockLeft">面料类型：</div>
-      <div class="block-f">{{ fabric.get(Number(state.list.fabricType) ) }}</div>
-      <div class="infBlock-title">面料编号：</div>
-      <div class="infBlock">{{ state.list.fabricCode }}</div>
-      <div class="infBlock-title">面料名称：</div>
-      <div class="infBlock">{{ state.list.fabricName }}</div>
-      <div class="infBlock-title">面料颜色：</div>
-      <div class="infBlock">{{ state.list.fabricColor }}</div>
+    <div class="work-row">
+      <div class="work-infBlockLeft">面料类型：</div>
+      <div class="work-infBlock">{{ fabric.get((state.list.fabricType) ) }}</div>
+      <div class="work-infBlock-title">面料编号：</div>
+      <div class="work-infBlock">{{ state.list.fabricCode }}</div>
+      <div class="work-infBlock-title">面料名称：</div>
+      <div class="work-infBlock">{{ state.list.fabricName }}</div>
+      <div class="work-infBlock-title">面料颜色：</div>
+      <div class="work-infBlock">{{ state.list.fabricColor }}</div>
       <!-- <div class="rightBro"></div> -->
     </div>
-    <div class="row">
-      <div class="infBlockLeft">唛架门幅(米)</div>
-      <div class="infBlock">{{ state.list.shelfWidth }}</div>
-      <div class="infBlock-title">唛架长度(米)</div>
-      <div class="infBlock">{{ state.list.shelfLength }}</div>
-      <div class="infBlock-title">拉布长度(米)</div>
-      <div class="infBlock">{{ state.list.spreadClothLength }}</div>
-      <div class="infBlock-title">计划拉布层数</div>
-      <div class="infBlock">{{ state.list.planSpreadClothLevel }}</div>
+    <div class="work-row">
+      <div class="work-infBlockLeft">唛架门幅(mm)</div>
+      <div class="work-infBlock">{{ state.list.shelfWidth }}</div>
+      <div class="work-infBlock-title">唛架长度(mm)</div>
+      <div class="work-infBlock">{{ state.list.shelfLength }}</div>
+      <div class="work-infBlock-title">拉布长度(mm)</div>
+      <div class="work-infBlock">{{ state.list.spreadClothLength }}</div>
+      <div class="work-infBlock-title">计划拉布层数</div>
+      <div class="work-infBlock">{{ state.list.planSpreadClothLevel }}</div>
       <!-- <div class="rightBro"></div> -->
     </div>
-    <div class="row">
-      <div class="infBlockLeft">版图名称:</div>
-      <div class="infThree">{{ state.list.shelfFileName }}</div>
-      <div class="infBlock-title">版图路径：</div>
-      <div class="infThree">{{ state.list.shelfFileUrl }}</div>
+    <div class="work-row">
+      <div class="work-infBlockLeft-bottom">版图名称:</div>
+      <div class="infThree-bottom">{{ state.list.shelfFileName }}</div>
+      <div class="work-infBlock-title-bottom">版图路径：</div>
+      <div class="infThree-bottom">{{ state.list.shelfFileUrl }}</div>
     </div>
-    <div class="infRow">
-      <div class="infBlockLeft">备注:</div>
-      <div class="remarks">{{ state.list.planSpreadClothLevel }}</div>
-      <!-- <div class="infBlock-title">备注</div>
+    <div class="work-infRow">
+      <div class="work-infBlockLeft">备注:</div>
+      <div class="work-remarks">{{ state.list.remark }}</div>
+      <!-- <div class="work-infBlock-title">备注</div>
       <div class="infThree">{{ state.list.remark }}</div> -->
     </div>
 
-    <div class="bottom"></div>
+    <div class="work-bottom"></div>
   </div>
 </template>
 
@@ -100,26 +100,28 @@
     font-size: 15px;
   }
 
-  .infRow {
+ 
+  .work-row {
     display: flex;
-    width: 1200px;
+    width: 1550px;
+    height: 50px;
+    border-top: 1px solid #000;
+  }
+   .work-infRow {
+    margin-top: 15px;
+    display: flex;
+    width: 1550px;
     height: 50px;
     border-top: 1px solid #000;
     border-bottom: 1px solid #000;
   }
-  .row {
-    display: flex;
-    width: 1200px;
-    height: 50px;
-    border-top: 1px solid #000;
-  }
-  .bottom {
-    width: 1200px;
+  .work-bottom {
+     width: 1550px;
     height: 1px;
     background: #000;
   }
-  .infBlockLeft {
-    width: 100px;
+  .work-infBlockLeft {
+    width: 150px; 
     font-size: 12px !important;
     height: 50px;
     text-align: center;
@@ -127,16 +129,16 @@
     border-left: 1px solid #000;
     border-right: 1px solid #000;
   }
-  .infBlock-title {
-    width: 100px;
+  .work-infBlock-title {
+    width: 150px;
     font-size: 12px !important;
     height: 50px;
     text-align: center;
     line-height: 50px;
     border-right: 1px solid #000;
   }
-  .infBlock {
-    width: 200px;
+  .work-infBlock {
+    width: 237px;
     font-size: 12px !important;
     height: 50px;
     text-align: center;
@@ -149,17 +151,45 @@
     background: #000;
   }
   .infThree {
-    width: 500px;
+    width: 530px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     border-right: 1px solid #000;
   }
-  .remarks{
-        width: 1100px;
+  .work-remarks{
+    width: 1450px;
     height: 50px;
     text-align: center;
     line-height: 50px;
+    border-right: 1px solid #000;
+  }
+  /* 版图 */
+   .work-infBlockLeft-bottom{
+    width: 150px;
+    font-size: 12px !important;
+    height: 65px;
+    text-align: center;
+    line-height: 65px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+  }
+    .infThree-bottom{
+    width: 625px;
+    height: 65px;
+    text-align: center;
+    border-right: 1px solid #000;
+    padding: 10px;
+    word-wrap: normal;
+    word-wrap: break-word;
+    word-break: normal;
+  }
+    .work-infBlock-title-bottom{
+    width: 150px;
+    font-size: 12px !important;
+    height: 65px;
+    text-align: center;
+    line-height: 65px;
     border-right: 1px solid #000;
   }
 </style>

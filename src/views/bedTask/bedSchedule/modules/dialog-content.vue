@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-26 10:41:58
+ * @LastEditTime: 2022-10-03 17:56:23
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -66,17 +66,17 @@
           </div>
           <div v-if="item.type === 'spreadClothLevel'">
             <el-form-item label="总铺布层数" prop="spreadClothLevel">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(true)" controls-position="right" :min="1" type="text" />
+              <el-input-number v-model="state.form[item.model]" :disabled="disable(true)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'levelClothSum'">
             <el-form-item :label="`${item.name}`">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="1" type="text" />
+              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'bedSum'">
             <el-form-item :label="`${item.name}`">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="1" type="text" />
+              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
 
@@ -90,11 +90,12 @@
       <!-- right -->
       <el-col :span="8">
         <div v-for="(item, index) in state.right" :key="index">
-          <div v-if="item.type === 'styleBedNo'">
-            <el-form-item :label="`${item.name}`" prop="styleBedNo">
+
+            <div v-if="item.type === 'bedPlanNo'">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text">
                 <template #append>
-                  <el-tooltip class="box-item" effect="dark" content="数字 自动生成 生成规则：一个款式根据床次计划数量从1开始+1  不可修改 " placement="right-start">
+                  <el-tooltip class="box-item" effect="dark" content="数字 自动生成 " placement="right-start">
                     <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
                   </el-tooltip>
                 </template>
@@ -102,8 +103,23 @@
             </el-form-item>
           </div>
 
+          <div v-if="item.type === 'styleBedNo'">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
+              <el-input-number
+                  v-model="state.form[item.model]"
+                  controls-position="right"
+                  :min="1"
+                />
+                  <div>
+                <el-tooltip class="box-item" effect="dark" content="根据款式自动加1" placement="right-start">
+                  <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
+                </el-tooltip>
+              </div>
+            </el-form-item>
+          </div>
+
           <div v-if="item.type === 'fabricName'">
-            <el-form-item :label="item.name" prop="fabricName" class="buttonContainer">
+            <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" filterable @change="setFabricName">
                 <el-option v-for="item in state.fabricName" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
@@ -111,7 +127,7 @@
           </div>
 
           <div v-if="item.type === 'shelfLength'">
-            <el-form-item :label="`${item.name}`" prop="shelfLength">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
                 <el-input-number :precision="0" v-model="state.form[item.model]" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
                 <span class="titleRight">mm</span>
@@ -119,7 +135,7 @@
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadClothLength'">
-            <el-form-item :label="`${item.name}`" prop="spreadClothLength">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
                 <el-input-number
                   v-model="state.form[item.model]"
@@ -134,7 +150,7 @@
             </el-form-item>
           </div>
           <div v-if="item.type === 'shelfList'">
-            <el-form-item :label="`${item.name}`" prop="shelfList">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-icon class="bedScheduleLeft" :size="30" @click="shippingMarks"><Edit /></el-icon>
               <el-tooltip class="box-item" effect="dark" content="维护排唛比例后生成总件数机损耗率" placement="right-start">
                 <el-icon class="proportionsRight" :size="20"><QuestionFilled /></el-icon>
@@ -142,7 +158,7 @@
             </el-form-item>
           </div>
           <div v-if="item.type === 'useRate'">
-            <el-form-item :label="`${item.name}`" class="buttonContainer">
+            <el-form-item :label="`${item.name}`" :prop="item.prop" class="buttonContainer">
               <el-input-number v-model="state.form[item.model]" :precision="2" controls-position="right" :disabled="disable(item.disabled)" />
               <div>
                 <el-tooltip class="box-item" effect="dark" content="【选择唛架图获取有效面积】有效面积/(铺布长度*唛架门幅)" placement="right-start">
@@ -153,7 +169,7 @@
           </div>
 
           <div v-if="item.type === null">
-            <el-form-item :label="`${item.name}`">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
@@ -213,12 +229,12 @@
     fabricName: [],
     effectiveArea: 0, //有效面积
     printId: '',
-    printType: false
+    // printType: false
   })
 
   const setPrint = () => {
     if (props.row.statu === 2) {
-      state.printType = true
+      
       print({
         printable: 'work',
         type: 'html',
@@ -321,12 +337,11 @@
         const { heigh, width, sumArea } = shelfFile
         state.form.shelfWidth = heigh //唛架门幅
         state.form.shelfLength = width //唛架长度
-        state.form.spreadClothLength = Number(width) + 0.03 //铺布长度
+        state.form.spreadClothLength = Number(width) +30//铺布长度
         state.effectiveArea = sumArea //有效面积
 
         //利用率
         state.form.useRate = (sumArea / (heigh * Number(state.form.spreadClothLength))) * 100
-
         //文件传给组件
         e.data[0].response.data.src = e.data[0].response.data.shelfFileUrl
 

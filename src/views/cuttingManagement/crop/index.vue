@@ -1,14 +1,15 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
-      <el-form-item label="生产订单" prop="produceOrderCode">
-        <el-input v-model="state.queryFormData.produceOrderCode" placeholder="请输入" clearable />
-      </el-form-item>
       <el-form-item label="床次计划号" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="款式编号" prop="styleCode">
-        <el-input v-model="state.queryFormData.styleCode" placeholder="请输入" clearable />
+      <el-form-item label="裁剪任务号" prop="taskCode">
+        <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
+      </el-form-item>
+
+      <el-form-item label="设备名称" prop="deviceName">
+        <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="statu">
         <el-select v-model="state.queryFormData.statu" clearable filterable>
@@ -28,7 +29,7 @@
       <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪任务', row)">编辑</el-button>
     </template>
 
-    <el-dialog  :close-on-click-modal="false" :draggable="false"  v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :title="state.dialogTitle" width="800px">
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="800px">
       <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -60,9 +61,9 @@
     ],
 
     queryFormData: {
-      produceOrderCode: '',
       bedPlanNo: '',
-      styleCode: '',
+      taskCode: '',
+      deviceName: '',
       statu: ''
     },
 

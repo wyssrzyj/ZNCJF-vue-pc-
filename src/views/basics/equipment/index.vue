@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
@@ -15,6 +15,13 @@
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
+      <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
+      <!-- <el-button type="primary" style="order: 3" @click="downloadTemplate">测试1</el-button>
+
+      <a href="@/static/lyj.xlsx" download>下载1</a>
+      <a href="./lxr.xlsx" download>下载2</a>
+      <img src="@/static/jack.png" alt="" /> -->
+
       <!-- <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 导入 </el-button> -->
       <!-- <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button> -->
     </template>
@@ -37,17 +44,27 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑设备', row)">编辑</el-button>
     </template>
   </njp-table-config>
+  <!-- 删除 -->
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
+    <span>确定要删除该数据吗？</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="state.dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmDelete">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 
-  <el-dialog :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
   <!-- 表格修改 -->
-  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType"  :title="state.defaultParam.Title" width="500px">
+  <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :close-on-click-modal="false" :draggable="false" :title="state.defaultParam.Title" width="500px">
     <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
   </el-dialog>
   <!-- 导出  -->
-  <el-dialog :draggable="false" v-if="state.export.importType" v-model="state.export.importType" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :export="state.export" :get-list="getList"  :confirm="confirm"/>
+  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :draggable="false" :close-on-click-modal="false" title="导入" width="400px">
+    <ImportDialog :export="state.export" :get-list="getList" :confirm="confirm" />
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
@@ -58,7 +75,7 @@
 <script lang="ts" setup>
   import { reactive, getCurrentInstance, ref } from 'vue'
   import { ElMessage } from 'element-plus'
-
+  import { isEmpty } from 'lodash'
   import { equipment } from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
@@ -70,10 +87,13 @@
   const styleLibListEl = ref()
 
   const state = reactive({
+    dialogVisible: false,
+    ids: [],
     //导出
     export: {
       type: 'equipment',
       data: exportData,
+      width: '800px',
       importType: false,
       list: [], //导出数据
       template: 'http://10.18.4.25/template/device.xlsx',
@@ -141,11 +161,11 @@
 
     if (type === '1') {
       state.defaultParam.Title = '铺布建议参数'
-    state.defaultParam.defaultParamType = true
+      state.defaultParam.defaultParamType = true
     }
     if (type === '3') {
       state.defaultParam.Title = '裁剪建议参数'
-    state.defaultParam.defaultParamType = true
+      state.defaultParam.defaultParamType = true
     }
   }
 
@@ -169,9 +189,9 @@
   //获取导出数据
   const getList = (e: any) => {
     state.export.list = e
-  } 
+  }
 
-  const confirm=()=>{
+  const confirm = () => {
     exportEvents(true)
   }
   //关闭弹窗-【导出】
@@ -201,6 +221,61 @@
     }
     if (type === false) {
       state.export.importType = false
+    }
+  }
+
+  // const downloadTemplate = () => {
+  //   let a = document.createElement('a')
+  //   a.setAttribute('download', '')
+  //   a.href = 'http://localhost:9000/static/lyj.xlsx'
+  //   console.log(a.href)
+  //   // a.download;
+  //   // a.style.display = "none";
+  //   // document.body.appendChild(a);
+  //   a.click()
+  //   // a.remove();
+  // }
+
+
+
+  //删除
+  const mov = () => {
+    if (!isEmpty(state.ids)) {
+      state.dialogVisible = true
+    } else {
+      ElMessage({
+        message: '至少选择一个',
+        type: 'warning'
+      })
+    }
+  }
+  const confirmDelete = () => {
+    proxy.$baseService.delete('/jack-ics-api/device/delete', state.ids).then((res: any) => {
+      if (res.code === 0) {
+        state.ids = [] //清空选中项
+        ElMessage({
+          message: '删除成功',
+          type: 'success'
+        })
+        state.dialogVisible = false
+        refreshTable()
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'warning'
+        })
+      }
+    })
+  }
+
+  //选中id
+  const handleSelectionChange = (val: any) => {
+    if (!isEmpty(val)) {
+      let ids: any = []
+      val.map((item: any) => {
+        ids.push(item.id)
+      })
+      state.ids = ids
     }
   }
 </script>

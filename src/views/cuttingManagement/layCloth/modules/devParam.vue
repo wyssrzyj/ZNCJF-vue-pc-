@@ -6,79 +6,101 @@
       <el-row :gutter="20">
         <el-col :span="9">
           <el-form-item label="前进速度：">
-            <el-input-number v-model="state.rightForm.forwardSpeed" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <div class="devParam-row">
+              <el-input-number v-model="state.rightForm.forwardSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>mm/s</span>
+            </div>
           </el-form-item>
           <el-form-item label="匀速松紧值：">
-            <el-input-number v-model="state.rightForm.uniformTightness" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <el-input-number v-model="state.rightForm.uniformTightness" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="减速松紧值：">
-            <el-input-number v-model="state.rightForm.reduceTightness" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <el-input-number v-model="state.rightForm.reduceTightness" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="爬行速度：">
-            <el-input-number v-model="state.rightForm.crawlSpeed" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <div class="devParam-row">
+              <el-input-number v-model="state.rightForm.crawlSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>mm/s</span>
+            </div>
           </el-form-item>
           <el-form-item label="布斗目标角度：">
-            <el-input-number v-model="state.rightForm.angle" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <div class="devParam-row">
+              <el-input-number v-model="state.rightForm.angle" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>°</span>
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="9" class="layClothRight">
           <el-form-item label="后退速度：">
-            <el-input-number v-model="state.rightForm.backSpeed" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <div class="devParam-row">
+              <el-input-number v-model="state.rightForm.backSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>mm/s</span>
+            </div>
           </el-form-item>
 
           <el-form-item label="加速松紧值：">
-            <el-input-number v-model="state.rightForm.accelerationTightness" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <el-input-number v-model="state.rightForm.accelerationTightness" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="爬行松紧值：">
-            <el-input-number v-model="state.rightForm.crawlTightness" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <el-input-number v-model="state.rightForm.crawlTightness" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="爬行距离：">
-            <el-input-number v-model="state.rightForm.crawlDistance" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <div class="devParam-row">
+              <el-input-number v-model="state.rightForm.crawlDistance" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>mm</span>
+            </div>
           </el-form-item>
 
           <el-form-item label="加速权重：">
-            <el-input-number v-model="state.rightForm.accelerationWeight" :disabled="disable(false)" :min="0"  :controls="false" size="large" @change="onChang" />
+            <el-input-number v-model="state.rightForm.accelerationWeight" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
         </el-col>
       </el-row>
 
       <div class="title">裁床建议参数</div>
-      <el-form-item label="最小磨刀频率：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.minKnifeFrequency" @change="onChang" />
-          <span>U/min</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="刀频：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.maxKnifeFrequency" @change="onChang" />
-          <span>U/min</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="刀速：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.knifeSpeed" @change="onChang" />
-          <span>m/min</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="提刀角度：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.knifeAngle" @change="onChang" />
-          <span>°</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="最小磨刀距离：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.minKnifeDistance" @change="onChang" />
-          <span>mm</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="真空率：">
-        <div class="devParam-row">
-          <el-input :disabled="disable(false)" v-model="state.bottomForm.emptyRatio" @change="onChang" />
-          <span>%</span>
-        </div>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="最小磨刀频率：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.minKnifeFrequency" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>U/min</span>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="刀速：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.knifeSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>m/min</span>
+            </div>
+          </el-form-item>
+          <el-form-item label="最小磨刀距离：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.minKnifeDistance" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>mm</span>
+            </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" class="layClothRight">
+          <el-form-item label="刀频：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.maxKnifeFrequency" class="layClothTow" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>U/min</span>
+            </div>
+          </el-form-item>
+          <el-form-item label="提刀角度：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.knifeAngle" class="layClothTow" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>°</span>
+            </div>
+          </el-form-item>
+          <el-form-item label="真空率：">
+            <div class="devParam-row">
+              <el-input-number v-model="state.bottomForm.emptyRatio" class="layClothTow" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
+              <span>%</span>
+            </div>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </div>
 </template>
@@ -87,7 +109,7 @@
   import { customFormData } from './conifgs'
 
   import { isEmpty } from 'lodash'
-  import { reactive, ref, defineEmits, defineExpose, getCurrentInstance,  } from 'vue'
+  import { reactive, ref, defineEmits, defineExpose, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
   const { proxy } = getCurrentInstance()
 
@@ -115,7 +137,7 @@
       crawlSpeed: '',
       crawlDistance: '',
       angle: '',
-      accelerationWeight: '',
+      accelerationWeight: ''
     },
     bottomForm: {
       minKnifeFrequency: '',
@@ -143,7 +165,6 @@
           if (!isEmpty(res.data.cutTaskParam)) {
             state.bottomForm = res.data.cutTaskParam
           }
-
           props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
         }
       })
@@ -209,17 +230,21 @@
     }
   }
   .devParam-row {
+    display: flex;
     /deep/ .el-input {
-      width: 192px !important;
+      height: 32px;
+      width: 180px !important;
     }
     span {
+      margin-top: 3px;
       width: 58px;
+      height: 32px;
       text-align: center;
       background-color: #eaeaea;
       display: inline-block;
     }
-    .layClothLeft {
-      margin-right: 50px;
-    }
+    // .layClothTow {
+    //   margin-left: 30px;
+    // }
   }
 </style>

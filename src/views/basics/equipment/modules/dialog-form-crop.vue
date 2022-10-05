@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-21 11:29:06
+ * @LastEditTime: 2022-10-05 11:31:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -112,7 +112,13 @@
         let title: any = []
         crop.forEach(item => {
           if (!['', 0, undefined].includes(state.form[item.value])) {
-            title.push(`${item.name}:${state.form[item.value]}`)
+            if(item.name==="提刀角度"){
+            title.push(`${item.name}:${state.form[item.value]} ° `)
+            }
+              if(item.name==="真空率"){
+            title.push(`${item.name}:${state.form[item.value]} % `)
+            }
+            title.push(`${item.name}:${state.form[item.value]} mm `)
           }
         })
 

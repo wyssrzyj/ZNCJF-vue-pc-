@@ -8,8 +8,6 @@
         <el-form ref="leftForm" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
           <el-form-item label="款图" class="layclothImg">
             <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
-
-          
           </el-form-item>
           <el-form-item label="款式编号">
             <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
@@ -19,8 +17,8 @@
           </el-form-item>
           <el-form-item label="唛架图">
             <div class="layCloth-img">
-            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
-              </div>
+              <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
+            </div>
           </el-form-item>
           <el-form-item label="其他附件">
             <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
@@ -33,12 +31,12 @@
         <!--设备参数-->
         <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" @changeFrom="devParamSub" />
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :row="props.row" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :bed-plan-id="state.bedPlanId" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
       </div>
     </div>
     <div class="foot">
       <el-button @click="close">取消</el-button>
-      <el-button  :disabled="disable(false)"  type="primary" @click="save">保存</el-button>
+      <el-button :disabled="disable(false)" type="primary" @click="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -72,7 +70,7 @@
     list: { one: {}, two: {}, three: {} }, //保存数据
     form: formData,
     topCurrent: 0,
-
+    bedPlanId: props.row.bedPlanId, //设备id
     topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
     leftForm: {
       styleNo: '',
@@ -117,8 +115,7 @@
             }
           }
         ]
-        state.form = res.data //显示左侧款图
-
+        state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
     }
@@ -146,12 +143,15 @@
       let cloneForm = cloneDeep(state.form) //为了图片可以渲染
       cloneForm.styleCode = e.styleCode
       cloneForm.styleName = e.styleName
+      cloneForm.deviceId = e.deviceId
       // 图片
       cloneForm.img = [{ url: e.styleImage }]
+      //唛架图
+      if (e.shelfFile.name) {
         cloneForm.shelfFile = [
           {
             name: e.shelfFile.name,
-            shelfImage: e.shelfImage,//图暂时没有
+            shelfImage: e.shelfImage, //图暂时没有
             response: {
               data: {
                 src: e.shelfFile.url
@@ -159,6 +159,8 @@
             }
           }
         ]
+      }
+      state.bedPlanId = e.deviceId
       state.form = cloneForm
       state.list.one = e
     }
@@ -212,6 +214,28 @@
     }
   }
 
+  //判断设备参数是否为空  空不传递给后端
+
+  const setTwo = (data: any, type: any) => {
+    let top = ['forwardSpeed', 'uniformTightness', 'reduceTightness', 'crawlSpeed', 'angle', 'backSpeed', 'accelerationTightness', 'crawlTightness', 'crawlDistance', 'accelerationWeight']
+    let bottom = ['minKnifeFrequency', 'maxKnifeFrequency', 'knifeSpeed', 'knifeAngle', 'minKnifeDistance', 'emptyRatio']
+
+    if (type === 'top') {
+      top.forEach(item => {
+        if (data[item] === 0) {
+          data[item] = null
+        }
+      })
+    }
+    if (type === 'bottom') {
+      bottom.forEach(item => {
+        if ([0, '0', null, undefined].includes(data[item])) {
+          data[item] = null
+        }
+      })
+    }
+    return data
+  }
   // 保存
   const save = () => {
     //必填项不可为空
@@ -259,9 +283,9 @@
         deviceId: state.list.one.deviceId,
 
         // 2-上
-        spreadTaskParam: state.list.two.top,
+        spreadTaskParam: !isEmpty(state.list.two.top) ? setTwo(state.list.two.top, 'top') : null,
         // 2-下
-        cutTaskParam: state.list.two.bottom,
+        cutTaskParam: !isEmpty(state.list.two.bottom) ? setTwo(state.list.two.bottom, 'bottom') : null,
         //3-时间
         bedPalnTaskTimeDTO: state.list.three
       }
@@ -370,7 +394,7 @@
       box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
     }
   }
-  .layCloth-img{
+  .layCloth-img {
     width: 200px;
   }
 </style>

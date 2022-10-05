@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-23 14:39:26
+ * @LastEditTime: 2022-09-29 10:22:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -47,6 +47,7 @@
 
 <style>
   .footer {
+    float: right;
     width: 65px;
     margin-top: 20px;
     height: 30px;

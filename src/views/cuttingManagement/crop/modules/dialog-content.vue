@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-23 14:15:30
+ * @LastEditTime: 2022-09-28 11:34:48
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -44,9 +44,25 @@
             </el-form-item>
           </div>
 
+          <div v-if="item.type === 'number'">
+            <el-form-item :label="`${item.name}`">
+              <div class="layCloth-row">
+                <el-input-number v-model="state.form[item.model]" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+                <span>mm</span>
+              </div>
+            </el-form-item>
+          </div>
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker  :disabled="disable(item.disabled)" v-model="state.form[item.model]"  value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm"  @change="setTime" />
+              <el-date-picker
+                v-model="state.form[item.model]"
+                :disabled="disable(item.disabled)"
+                value-format="x"
+                type="datetime"
+                placeholder="计划开始时间"
+                format="YYYY-MM-DD HH:mm"
+                @change="setTime"
+              />
             </el-form-item>
           </div>
         </div>
@@ -59,9 +75,27 @@
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
+
+          <div v-if="item.type === 'number'">
+            <el-form-item :label="`${item.name}`">
+              <div class="layCloth-row">
+                <el-input-number v-model="state.form[item.model]" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+                <span>mm</span>
+              </div>
+            </el-form-item>
+          </div>
+
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker  :disabled="disable(item.disabled)" v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
+              <el-date-picker
+                v-model="state.form[item.model]"
+                :disabled="disable(item.disabled)"
+                type="datetime"
+                placeholder="计划结束时间"
+                format="YYYY-MM-DD HH:mm"
+                value-format="x"
+                @change="setTime"
+              />
             </el-form-item>
           </div>
         </div>
@@ -74,7 +108,7 @@
     </div>
   </el-form>
 
-  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible"  :title="state.messageTitle" width="700px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.messageTitle" width="700px">
     <Crop :list="props.list" :row="state.form" :type="props.dialogType" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
@@ -255,3 +289,22 @@
     state.dialogTableVisible = false
   }
 </script>
+<style scoped lang="less">
+  .layCloth-row {
+    .el-input {
+      width: 100px !important;
+    }
+    .spreadClothLength {
+      margin-left: 44px;
+    }
+    span {
+      width: 58px;
+      text-align: center;
+      background-color: #eaeaea;
+      display: inline-block;
+    }
+  }
+  .setting {
+    cursor: pointer;
+  }
+</style>

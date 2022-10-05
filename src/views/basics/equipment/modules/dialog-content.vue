@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-23 14:02:59
+ * @LastEditTime: 2022-10-05 11:31:27
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -46,6 +46,12 @@
               </template>
             </el-form-item>
           </div>
+
+          <div v-if="item.type === 'remark'">
+            <el-form-item :label="`${item.name}`" prop="remark">
+              <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :rows="2" type="textarea" :disabled="disable(item.disabled)" />
+            </el-form-item>
+          </div>
         </div>
       </el-col>
       <!-- right -->
@@ -63,9 +69,16 @@
               </el-select>
             </el-form-item>
           </div>
-          <div v-if="item.type === 'remark'">
-            <el-form-item :label="`${item.name}`" prop="remark">
-              <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :rows="2" type="textarea" :disabled="disable(item.disabled)" />
+          <div v-if="item.type === 'relationOperaterList'">
+            <el-form-item :label="item.name" prop="relationOperaterList" class="buttonContainer">
+              <el-select v-model="state.form.relationOperaterList" multiple :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)">
+                <el-option v-for="(item, index) in state.operatorData" :key="index" :label="item.label" :value="item.value" />
+              </el-select>
+              <template #append>
+                <el-tooltip class="box-item" effect="dark" content="铺布机关联贴标机  贴标机关联裁床 " placement="right-start">
+                  <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
+                </el-tooltip>
+              </template>
             </el-form-item>
           </div>
         </div>
@@ -77,7 +90,7 @@
     </div>
   </el-form>
 
-  <el-dialog :draggable="false"  v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
     <DialogForms :list="state.echoDefaultParam" :row="props.row" :type="state.type" :operation="operation" :form="state.form" />
   </el-dialog>
 </template>
@@ -85,7 +98,7 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { isEmpty } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
 
   import { QuestionFilled } from '@element-plus/icons-vue'
   import { equipmentType } from '@/components/conifgs.ts'
@@ -119,7 +132,9 @@
     //提示信息
     prop: dataRule,
     messageTitle: '铺布建议参数',
-    relationDevice: []
+    relationDevice: [],
+    operator: [],
+    operatorData: []
   })
 
   //获取关联设备
@@ -161,6 +176,22 @@
         state.title = arr
       })
     }
+    //关联操作员
+    let data = {
+      systemId: localStorage.getItem('v1@systemId'),
+      tenantCode: localStorage.getItem('v1@tenantCode')
+    }
+    proxy.$baseService.get('/njp-plus-admin-api/sys/user/page', data).then((res: any) => {
+      let data = res.data.list
+      if (!isEmpty(data)) {
+        data.map((item: any) => {
+          ;(item.label = item.realName), (item.value = item.id)
+        })
+        state.operatorData = data
+      } else {
+        state.operatorData = []
+      }
+    })
   }
   init()
 
@@ -173,8 +204,6 @@
   const getData = (e: any) => {
     if (e.type === 'img') {
       if (!isEmpty(e.data)) {
-        // console.log(e.data)
-
         state.form.img = e.data
       } else {
         state.form.img = ''
@@ -193,14 +222,37 @@
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
+      let formData = cloneDeep(state.form)
+
       if (valid) {
-        if (!isEmpty(state.form.img)) {
-          state.form.img = state.form.img[0].url
-        }else{
-          state.form.img = ''
+        if (!isEmpty(formData.img)) {
+          formData.img = formData.img[0].url
+        } else {
+          formData.img = ''
         }
 
-        proxy.$baseService.post('/jack-ics-api/device/save', state.form).then((res: any) => {
+        if (!isEmpty(formData.relationOperaterList)) {
+          let data = formData.relationOperaterList
+
+          let list: any = []
+          data.forEach((item: any) => {
+            state.operatorData.forEach((v: any) => {
+              if (item === v.id) {
+                list.push({
+                  operationName: v.realName,
+                  operationId: v.id
+                })
+              }
+            })
+          })
+          formData.relationOperaterList = list
+        }
+
+        //选择贴标清除 默认参数
+        if (formData.type === '2') {
+          formData.defaultParam = ''
+        }
+        proxy.$baseService.post('/jack-ics-api/device/save', formData).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',
@@ -260,7 +312,6 @@
       //暂存回显数据
       state.echoDefaultParam = e.data.list
 
-      // console.log('赋值成功', form)
       state.dialogTableVisible = false
     }
   }

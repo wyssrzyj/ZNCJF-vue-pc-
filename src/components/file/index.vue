@@ -3,7 +3,9 @@
     <el-button icon="upload" :disabled="true">上传文件</el-button>
   </div>
   <div v-if="disabled === false">
-    <el-upload
+
+    <div class="file-upload">
+          <el-upload
       v-if="state.fileType !== null"
       :file-list="state.targetArr[0]['fileList']"
       :accept="props.pictureType.accept"
@@ -24,8 +26,13 @@
           <Warning />
         </el-icon>
         {{ props.upload.title }}
+    
+
       </div>
     </el-upload>
+
+    </div>
+
   </div>
 </template>
 
@@ -169,9 +176,13 @@
     ElMessage.error('系统有点繁忙，请稍后重试！')
     state.uploadFileLoading = false
   }
-
+  //删除
   const beforeRemove = (file: any, fileList: any) => {
-    state.uploadFileLoading = false
+    // console.log(file);
+    // console.log(fileList);
+    // console.log("删除");
+    // state.uploadFileLoading = false
+    // return false 
   }
 
   const setType = (name: string) => {
@@ -253,5 +264,9 @@
   /deep/.el-upload-list__item {
     width: 260px;
     margin-right: 20px;
+  }
+  .file-upload{
+    width: 200px;
+    min-height:50px;
   }
 </style>

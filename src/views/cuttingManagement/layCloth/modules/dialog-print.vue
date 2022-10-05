@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-26 16:12:00
+ * @LastEditTime: 2022-10-03 17:48:17
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,7 +10,6 @@
     <div>
       <div class="topContainer">
         <div class="topRight">
-          <div>浙江杰克智联智能设备科技有限公司</div>
           <div class="title">裁剪拉布单</div>
         </div>
       </div>
@@ -37,6 +36,7 @@
     () => props.data,
     data => {
       state.data=data
+
      }
   )
 </script>

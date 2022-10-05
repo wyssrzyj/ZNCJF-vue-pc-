@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-26 09:39:26
+ * @LastEditTime: 2022-09-30 14:19:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -26,7 +26,6 @@
     disabled: boolean
     upload: any
   }>()
-
   // type 类型
   // getData 传递出去
   // value 数据

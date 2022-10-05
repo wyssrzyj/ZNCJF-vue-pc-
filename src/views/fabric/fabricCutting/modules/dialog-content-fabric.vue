@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-26 17:20:14
+ * @LastEditTime: 2022-10-02 13:58:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -102,11 +102,13 @@ vue
       type: props.form.fabricType,
       fabricWeightMin: props.form.fabricWeight.left,
       fabricWeightMax: props.form.fabricWeight.right,
-      templateType: '3'
+      templateType: '3',
+      templateId: props.form.templateDTO?props.form.templateDTO.id:null
+
     }
     proxy.$baseService.get('/jack-ics-api/fabric/noParamFabricList', sum).then((res: any) => {
       if (res.code === 0) {
-        let list = res.data.list
+        let list = res.data
         if (!isEmpty(list)) {
           let fabricList: any = []
           list.forEach((item: any) => {

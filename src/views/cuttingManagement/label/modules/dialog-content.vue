@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-23 14:13:15
+ * @LastEditTime: 2022-09-28 11:32:53
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,10 +40,18 @@
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
+          <div v-if="item.type === 'shelfWidth'">
+            <el-form-item :label="`${item.name}`">
+              <div class="layCloth-row">
+                <el-input-number v-model="state.form[item.model]" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+                <span>mm</span>
+              </div>
+            </el-form-item>
+          </div>
 
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker :disabled="disable(false)"  v-model="state.form[item.model]"  value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm"  @change="setTime" />
+              <el-date-picker v-model="state.form[item.model]" :disabled="disable(false)" value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -51,14 +59,23 @@
       <!-- right -->
       <el-col :span="8">
         <div v-for="(item, index) in state.right" :key="index">
-          <div v-if="item.type === null"> 
+          <div v-if="item.type === null">
             <el-form-item :label="`${item.name}`">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
+          <div v-if="item.type === 'number'">
+            <el-form-item :label="`${item.name}`">
+              <div class="layCloth-row">
+                <el-input-number v-model="state.form[item.model]" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+                <span>mm</span>
+              </div>
+            </el-form-item>
+          </div>
+
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
-              <el-date-picker :disabled="disable(false)"  v-model="state.form[item.model]" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
+              <el-date-picker v-model="state.form[item.model]" :disabled="disable(false)" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
             </el-form-item>
           </div>
         </div>
@@ -233,3 +250,22 @@
     formEl.resetFields()
   }
 </script>
+<style scoped lang="less">
+  .layCloth-row {
+    .el-input {
+      width: 100px !important;
+    }
+    .spreadClothLength {
+      margin-left: 44px;
+    }
+    span {
+      width: 58px;
+      text-align: center;
+      background-color: #eaeaea;
+      display: inline-block;
+    }
+  }
+  .setting {
+    cursor: pointer;
+  }
+</style>

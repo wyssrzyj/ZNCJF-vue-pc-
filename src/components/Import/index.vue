@@ -122,10 +122,8 @@
     state.uploadFileLoading = true
   }
   const uploadSuccess = (res: any, uploadFile: any, uploadFiles: any) => {
-
     // // 传递给父级
-    props.gitFile({ data: uploadFiles })
-
+    props.gitFile({ data: uploadFile })
     state.targetArr[state.fileType]['fileList'] = uploadFiles
    
   }

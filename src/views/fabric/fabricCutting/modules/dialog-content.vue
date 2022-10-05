@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-23 10:30:37
+ * @LastEditTime: 2022-10-02 14:01:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -90,7 +90,7 @@
         arr.fabricType = fabricType
         arr.img = [{ url: imageUrl }]
         arr.fabricWeight = { left: Number(fabricWeightMin), right: Number(fabricWeightMax) }
-
+        arr.fabricType=arr.fabricType.toString()
         state.form = arr
         state.initForm = arr
       })

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-09-22 22:13:54
+ * @LastEditTime: 2022-09-30 14:12:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -36,7 +36,7 @@
        
       if (!isEmpty(props.value.img)) {
         if (item.img[0].url) {
-          console.log(item.img);
+          
           state.fileList = item.img
         }else{
         state.fileList=[]
@@ -65,12 +65,12 @@
   .pictureImg {
     padding: 10px;
     background: #bbbdbb;
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
   }
   .disabledImg {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     padding: 10px;
   }
 </style>

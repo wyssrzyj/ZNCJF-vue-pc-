@@ -68,7 +68,7 @@
           :disabled="disable(false)"
           :clearable="false"
           type="datetime"
-          format="YYYY-MM-DD hh:mm"
+          format="YYYY-MM-DD HH:mm"
           value-format="x"
           :suffix-icon="Calendar"
           @change="setTime"
@@ -91,7 +91,7 @@
     type: any
     setData: any
     value: any
-    row: any
+    bedPlanId: any
   }>()
 
   const state: any = reactive({
@@ -116,10 +116,10 @@
   })
 
   const setList = () => {
-    if (props.row) {
+    if (props.bedPlanId) {
       proxy.$baseService
         .get('/jack-ics-api/spreadTask/getTime', {
-          bedPlanId: props.row.bedPlanId
+          bedPlanId: props.bedPlanId
         })
         .then((res: any) => {
           if (res.code === 0) {
@@ -137,31 +137,22 @@
             props.setData('3', state.rightForm)
           }
         })
-
-      //判断贴标是否可用
-      proxy.$baseService.get('/jack-ics-api/device/listTaskTypeByDeviceId', { deviceId: props.row.deviceId }).then((res: any) => {
-        if (res.data[1] === 2) {
-          state.planType = true
-        } else {
-          state.planType = false
-        }
-      })
     }
   }
 
   //设备是否选择了有贴标机的
-  const setPlanType = (e: any) => {
-    if (e.labelingName && e.labelingSn) {
-      state.planType = true
-    } else {
-      state.planType = false
-    }
+  const setPlanType = () => {
+    proxy.$baseService.get('/jack-ics-api/device/listTaskTypeByDeviceId', { deviceId: props.bedPlanId }).then((res: any) => {
+      if (res.data[1] === 2) {
+        state.planType = true
+      } else {
+        state.planType = false
+      }
+    })
   }
 
   const init = () => {
-    if (!isEmpty(props.value.one)) {
-      setPlanType(props.value.one)
-    }
+    setPlanType()
 
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.three)) {

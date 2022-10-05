@@ -1,12 +1,5 @@
 <template>
-  <el-form
-    ref="rightFormRef"
-    :rules="state.prop"
-    :model="state.rightForm"
-    :inline="true"
-    label-width="auto"
-    label-position="top"
-  >
+  <el-form ref="rightFormRef" :rules="state.prop" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
     <el-form-item label="生产订单：">
       <el-input v-model="state.rightForm.produceOrderCode" disabled />
     </el-form-item>
@@ -17,7 +10,7 @@
     <el-form-item label="床次计划号：" required prop="bedPlanNo">
       <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号：`">
         <template #append>
-          <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 --> 
+          <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
           <span class="setting"
             ><el-icon><Setting color="#3e8ff7" /></el-icon
           ></span>
@@ -38,26 +31,26 @@
     </el-form-item>
     <el-form-item label="唛架长度：">
       <div class="layCloth-row">
-        <el-input v-model="state.rightForm.shelfLength" disabled />
-        <span>米</span>
+        <el-input-number v-model="state.rightForm.shelfLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+        <span class="numberRight">mm</span>
       </div>
     </el-form-item>
     <el-form-item label="唛架门幅：">
       <div class="layCloth-row">
-        <el-input v-model="state.rightForm.shelfWidth" disabled />
-        <span>米</span>
+        <el-input-number v-model="state.rightForm.shelfWidth" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+        <span class="numberRight">mm</span>
       </div>
     </el-form-item>
     <el-form-item label="铺布长度：">
       <div class="layCloth-row">
-        <el-input v-model="state.rightForm.spreadClothLength" disabled />
-        <span>米</span>
+        <el-input-number v-model="state.rightForm.spreadClothLength" class="spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+        <span class="numberRight">mm</span>
       </div>
     </el-form-item>
     <el-form-item label="设备编号：" required prop="deviceSn">
       <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`">
         <template #append>
-          <span  class="setting" @click="setDeviceSn"
+          <span class="setting" @click="setDeviceSn"
             ><el-icon><Setting color="#3e8ff7" /></el-icon
           ></span>
         </template>
@@ -80,170 +73,157 @@
     </el-form-item>
   </el-form>
   <!-- 床次计划 -->
-  <el-dialog
-  :draggable="false"
-  :close-on-click-modal="false"
-    v-if="state.bedPlanNoType"
-    v-model="state.bedPlanNoType"
-    title="床次计划"
-    width="1100px"
-  >
+  <el-dialog v-if="state.bedPlanNoType" v-model="state.bedPlanNoType" :draggable="false" :close-on-click-modal="false" title="床次计划" width="1100px">
     <DeviceSn :type="props.type" :operation="operation" />
   </el-dialog>
   <!-- 设备编号 -->
-  <el-dialog
-  :draggable="false"
-  :close-on-click-modal="false"
-    v-if="state.deviceSnType"
-    v-model="state.deviceSnType"
-    title="设备编号"
-    width="1100px"
-  >
+  <el-dialog v-if="state.deviceSnType" v-model="state.deviceSnType" :draggable="false" :close-on-click-modal="false" title="设备编号" width="1100px">
     <DeviceSnType :type="props.type" :operation="setDeviceSnType" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { reactive, defineExpose, ref, defineEmits, watch } from "vue";
-import { ElMessage } from "element-plus";
-import DeviceSn from "./dialog-content-deviceSn.vue";
-import DeviceSnType from "./dialog-content-deviceSnType.vue";
+  import { reactive, defineExpose, ref, defineEmits, watch } from 'vue'
+  import { ElMessage } from 'element-plus'
+  import DeviceSn from './dialog-content-deviceSn.vue'
+  import DeviceSnType from './dialog-content-deviceSnType.vue'
 
-import { selectDevice } from "./conifgs";
-const { formData, dataRule } = selectDevice;
+  import { selectDevice } from './conifgs'
+  const { formData, dataRule } = selectDevice
 
-const emit = defineEmits(["changeFrom"]);
+  const emit = defineEmits(['changeFrom'])
 
-const rightFormRef = ref<any>();
-const props = defineProps<{
-  type: any;
-  setData: any;
-  value: any;
-}>();
+  const rightFormRef = ref<any>()
+  const props = defineProps<{
+    type: any
+    setData: any
+    value: any
+  }>()
 
-const state: any = reactive({
-  rightForm: formData,
-  prop: dataRule,
+  const state: any = reactive({
+    rightForm: formData,
+    prop: dataRule,
 
-  //设备
-  device: {
-    deviceId: "",
-    deviceSn: "",
-  },
-  bedPlanNoType: false,
-  deviceSnType: false,
-});
-
-//初始渲染赋值
-const init = () => {
-  state.rightForm = props.value;
-};
-init();
-
-
-watch(
-  () => props.value,
-  (item: any) => {
-    state.device.deviceId = item.deviceId;
-    state.device.deviceSn = item.deviceSn;
-
-    state.rightForm = item;
-    props.setData("1", state.rightForm);
-  }
-);
-
-const validateFrom = () => {
-  submitForm(rightFormRef);
-};
-// 校验表单
-const submitForm = async (formEl: any | undefined | any) => {
-  if (!formEl) return;
-  await formEl.value.validate((valid: any) => {
-    if (valid) {
-      emit("changeFrom", state.rightForm);
-    }
-  });
-};
-
-defineExpose({ validateFrom });
-
-const setBedPlanNo = () => {
-  state.bedPlanNoType = true;
-};
-const setDeviceSn = () => {
-  if(!props.type){
-  state.deviceSnType = true;
-
-  }
-};
-//设置床次数据
-const operation = (e: any) => {
-  
-  if (e.type === "cancel") {
-    state.bedPlanNoType = false;
-  }
-  if (e.type === "confirm") {
-    
-    e.data.bedPlanId = e.data.id;
     //设备
-    // e.data.deviceId = state.device.deviceId;
-    // e.data.deviceSn = state.device.deviceSn;
+    device: {
+      deviceId: '',
+      deviceSn: ''
+    },
+    bedPlanNoType: false,
+    deviceSnType: false
+  })
 
-    state.rightForm = e.data;
-    props.setData("1", state.rightForm);
-
-    ElMessage({
-      message: "床次计划号添加成功",
-      type: "success",
-    });
-    state.bedPlanNoType = false;
+  //初始渲染赋值
+  const init = () => {
+    state.rightForm = props.value
   }
-};
-//设置设备编号数据
+  init()
 
-const setDeviceSnType = (e: any) => {
-  if (e.type === "cancel") {
-    
+  watch(
+    () => props.value,
+    (item: any) => {
+      state.device.deviceId = item.deviceId
+      state.device.deviceSn = item.deviceSn
 
-    state.deviceSnType = false;
+      state.rightForm = item
+      props.setData('1', state.rightForm)
+    }
+  )
+
+  const validateFrom = () => {
+    submitForm(rightFormRef)
   }
-  if (e.type === "confirm") {
-    //存一份用于回显111
-    state.device.deviceId = e.data.id;
-    state.device.deviceSn = e.data.sn;
-
-    state.rightForm.deviceId = e.data.id;
-    state.rightForm.deviceSn = e.data.sn;
-
-    state.rightForm.deviceName = e.data.equipmentName;
-    
-    state.rightForm.labelingSn = e.data.labelingSn;
-    state.rightForm.labelingName = e.data.labelingName;
-
-    props.setData("1", state.rightForm);
-
-    ElMessage({
-      message: "设备编号添加成功",
-      type: "success",
-    });
-    state.deviceSnType = false;
+  // 校验表单
+  const submitForm = async (formEl: any | undefined | any) => {
+    if (!formEl) return
+    await formEl.value.validate((valid: any) => {
+      if (valid) {
+        emit('changeFrom', state.rightForm)
+      }
+    })
   }
-};
+
+  defineExpose({ validateFrom })
+
+  // const setBedPlanNo = () => {
+  //   state.bedPlanNoType = true
+  // }
+  const setDeviceSn = () => {
+    if (!props.type) {
+      state.deviceSnType = true
+    }
+  }
+  //设置床次数据
+  const operation = (e: any) => {
+    if (e.type === 'cancel') {
+      state.bedPlanNoType = false
+    }
+    if (e.type === 'confirm') {
+      e.data.bedPlanId = e.data.id
+      //设备
+      // e.data.deviceId = state.device.deviceId;
+      // e.data.deviceSn = state.device.deviceSn;
+
+      state.rightForm = e.data
+      props.setData('1', state.rightForm)
+
+      ElMessage({
+        message: '床次计划号添加成功',
+        type: 'success'
+      })
+      state.bedPlanNoType = false
+    }
+  }
+  //设置设备编号数据
+  const setDeviceSnType = (e: any) => {
+    if (e.type === 'cancel') {
+      state.deviceSnType = false
+    }
+    if (e.type === 'confirm') {
+      //存一份用于回显111
+      state.device.deviceId = e.data.id
+      state.device.deviceSn = e.data.sn
+      state.rightForm.deviceId = e.data.id
+      state.rightForm.deviceSn = e.data.sn
+
+      state.rightForm.deviceName = e.data.equipmentName
+
+      state.rightForm.labelingSn = e.data.labelingSn
+      state.rightForm.labelingName = e.data.labelingName
+      console.log(state.rightForm.deviceId)
+
+      props.setData('1', state.rightForm)
+      // ElMessage({
+      //   message: '设备编号添加成功',
+      //   type: 'success'
+      // })
+      state.deviceSnType = false
+    }
+  }
 </script>
 
 <style scoped lang="less">
-.layCloth-row {
-  .el-input {
-    width: 192px !important;
+  .layCloth-row {
+    position: relative;
+    .el-input {
+      width: 100px !important;
+    }
+    .spreadClothLength {
+      margin-left: 100px;
+    }
   }
-  span {
+
+  .numberRight {
+    position: absolute;
+   right: -100px;
+   top: 0;
     width: 58px;
     text-align: center;
     background-color: #eaeaea;
     display: inline-block;
   }
-}
-.setting {
-  cursor: pointer;
-}
+
+  .setting {
+    cursor: pointer;
+  }
 </style>

@@ -1,53 +1,45 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-23 13:16:59
+ * @LastEditTime: 2022-10-03 17:47:16
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="informationTitle">成衣明细</div>
-  <div class="container">
+  <div class="work-container">
     <!--表头 -->
     <div class="work-top-head">
       <div class="work-ready-two">面料颜色</div>
       <div class="work-ready-two">拉布层数</div>
-      <div>
-        <div class="work-ready-block">尺码</div>
-        <div class="work-ready-block">单层件数</div>
-      </div>
-      <div v-for="(item, index) in state.list" :key="index">
-        <div class="work-dynamic">{{ item.size }}</div>
-        <div class="work-dynamic">{{ item.levelClothSum }}</div>
-      </div>
-
-      <div>
-        <div class="work-ready-block-l"></div>
-        <div class="work-ready-block-l"></div>
+      <div class="work-ready-two">尺码配比</div>
+      <div class="dynamic">
+        <div v-for="(item, index) in state.list" :key="index">
+          <div :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item.size }}</div>
+          <div :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item.levelClothSum }}</div>
+        </div>
       </div>
       <div>
         <div class="work-ready-block-r">件数</div>
         <div class="work-ready-block-r">{{ state.levelClothSums }}</div>
       </div>
     </div>
-
-    <div v-for="(item, index) in state.color" :key="index" class="work-top">
+    <!-- 列表数据 -->
+    <div v-for="(item, i) in state.color" :key="i" class="work-top-data">
       <div class="work-ready-one">{{ item.color }}</div>
       <div class="work-ready-one">{{ item.spreadClothLevel }}</div>
-      <div class="work-ready-one">{{ item.color }}件数</div>
-      <div v-for="(v, index) in state.list" :key="index" class="work-dynamic">{{ item[v.size] }}</div>
-      <div class="work-ready-block-l"></div>
-      <div class="work-ready-block-r">{{ item.sum }}</div>
+      <div class="work-ready-one">{{ item.color }}</div>
+      <div class="dynamic">
+        <div v-for="(v, index) in state.list" :key="index" :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item[v.size] }}</div>
+      </div>
+      <div>
+        <div class="work-ready-block-r">{{ item.sum }}</div>
+      </div>
     </div>
-
     <!-- 尾部 -->
     <div class="work-top-bottom">
-      <div class="work-ready-one-bottom"></div>
-      <div class="work-ready-one-bottom"></div>
-      <div class="work-ready-one-bottom"></div>
-      <div v-for="(item, index) in state.list" :key="index" class="work-dynamic-bottom"></div>
-      <div class="work-ready-block-l-bottom">合计</div>
-      <div class="work-ready-block-r-bottom">{{state.sum}}</div>
+      <div class="work-ready-one-bottom">合计</div>
+      <div class="work-ready-block-r-bottom">{{ state.sum }}</div>
     </div>
   </div>
 </template>
@@ -63,7 +55,8 @@
     list: [],
     color: [],
     levelClothSums: 0,
-    sum: 0//合计
+    sum: 0, //合计
+    width: 1000
   })
 
   //  获取当前项总和
@@ -92,14 +85,10 @@
 
   //添加对应的字段并赋值
   const setSize = (v: any, item: any) => {
-    
     let topData = item.sizeAndAmountList //动态头
     let data = cloneDeep(v)
     let size = item.colorAndSizeList
     //给每一项添加对应的字段
-
-   
-
     size.forEach((i: any) => {
       if (data.color === i.color) {
         data[i.size] = addData(i.size, topData, data)
@@ -112,7 +101,6 @@
 
   //处理数据格式
   const setDataFormat = (item: any) => {
-    
     let list = cloneDeep(item.colorAndLevelList)
     let arr: any = []
     //添加对应字段
@@ -129,7 +117,7 @@
     item => {
       // 动态头部
       let dynamic = item.sizeAndAmountList
-
+      
       if (!isEmpty(dynamic)) {
         let sum = 0
         dynamic.forEach((item: any) => {
@@ -140,6 +128,10 @@
       }
 
       state.list = dynamic
+
+      if(!isEmpty(dynamic)){
+      state.width = 1000 / dynamic.length
+      }
       // 列表
       state.color = setDataFormat(item)
       //合计
@@ -153,14 +145,13 @@
 </script>
 
 <style>
-  .container {
-    width: 1000px;
+  .work-container {
+    width: 1550px;
     height: 100%;
   }
   /* 动态的 */
   .work-dynamic {
     font-size: 12px !important;
-    width: 50px;
     height: 50px;
     text-align: center;
     line-height: 50px;
@@ -172,10 +163,9 @@
   .work-top-head {
     margin-bottom: 50px;
     display: flex;
-    width: 100%;
     height: 50px;
   }
-  .work-top {
+  .work-top-data {
     display: flex;
     width: 100%;
     height: 50px;
@@ -183,7 +173,7 @@
 
   .work-ready-two {
     font-size: 12px !important;
-    width: 100px;
+    width: 150px;
     height: 100px;
     text-align: center;
     line-height: 100px;
@@ -192,85 +182,59 @@
   }
   .work-ready-one {
     font-size: 12px !important;
-    width: 100px;
+    width: 150px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     border-left: 1px solid #000;
     border-top: 1px solid #000;
   }
-  .work-ready-block {
+
+  .work-ready-one-bottom {
     font-size: 12px !important;
-    width: 100px;
+    width: 150px;
     height: 50px;
     text-align: center;
     line-height: 50px;
     border-left: 1px solid #000;
     border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
   }
+
   .work-ready-block-r {
     font-size: 12px !important;
     width: 100px;
     height: 50px;
     text-align: center;
     line-height: 50px;
-    border-right: 1px solid #000;
-    border-top: 1px solid #000;
-  }
-  .work-ready-block-l {
-    font-size: 12px !important;
-    width: 100px;
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    border-right: 1px solid #000;
     border-left: 1px solid #000;
+    border-right: 1px solid #000;
     border-top: 1px solid #000;
   }
 
   /* 底部 */
   .work-top-bottom {
     display: flex;
-    width: 100%;
     height: 50px;
-  }
-
-  .work-ready-one-bottom {
-    font-size: 12px !important;
-    width: 100px;
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    border-left: 1px solid #000;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-  }
-  .work-dynamic-bottom {
-    font-size: 12px !important;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    border-left: 1px solid #000;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
   }
   .work-ready-block-r-bottom {
+    flex: 1;
     font-size: 12px !important;
-    width: 100px;
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    border-right: 1px solid #000;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
-  }
-  .work-ready-block-l-bottom {
-    font-size: 12px !important;
-    width: 100px;
+    /* width: 1250px; */
     height: 50px;
     text-align: center;
     line-height: 50px;
     border: 1px solid #000;
+  }
+  .work-top {
+    display: flex;
+    width: 100%;
+    height: 50px;
+  }
+  /* 动态 */
+  .dynamic {
+    width: 1000px;
+    /* height: 50px; */
+    display: flex;
   }
 </style>

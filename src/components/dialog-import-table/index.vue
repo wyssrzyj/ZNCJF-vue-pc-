@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-23 16:17:16
+ * @LastEditTime: 2022-10-05 11:30:57
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,10 +17,10 @@
 
   <!-- 表格 -->
   <div v-if="props.export.type !== ''">
-    <el-dialog :draggable="false"  v-if="state.importType" v-model="state.importType" :close-on-click-modal="false" title="导入" width="800px">
-      <DialogTable :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
+    <el-dialog v-if="state.importType" v-model="state.importType" :draggable="false" :close-on-click-modal="false" title="导入" :width="props.export.width">
+      <DialogTable v-if="state.importType" :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
       <template #footer>
-        <el-button style="order: 3" @click="state.importType = false">取消</el-button>
+        <el-button style="order: 3" @click="cancel()">取消</el-button>
         <el-button type="primary" style="order: 3" @click="exportEvents(false)">确认</el-button>
       </template>
     </el-dialog>
@@ -30,9 +30,9 @@
 <script lang="ts" setup>
   import { reactive } from 'vue'
   import { ElMessage } from 'element-plus'
-
   import UploadModule from '@/components/dialog-upload.vue'
   import DialogTable from './dialog-table.vue'
+  import { isEmpty, cloneDeep } from 'lodash'
 
   const props = defineProps<{
     type: any
@@ -43,15 +43,19 @@
 
   const state: any = reactive({
     importType: false,
-    fileList: [] //表格数据
+    fileList: [], //表格数据
+    saveData: [] //表格更新数据 用于保存判断
   })
 
   const getData = (e: any) => {
-    state.fileList = e.data
-    state.importType = true
-    //床次计划直接关闭
-    if (props.type === 'bedSchedule') {
-      props.confirm()
+    state.fileList = [e.data]
+    if (!isEmpty(e.data)) {
+      state.importType = true
+    } else {
+      ElMessage({
+        message: '导入失败',
+        type: 'warning'
+      })
     }
   }
 
@@ -73,14 +77,56 @@
 
   //传递给父级
   const getTableData = (e: any) => {
+    state.saveData = e
     props.getList(e)
   }
 
+  const cancel = () => {
+    state.importType = false
+    state.fileList = cloneDeep([])
+  }
   //关闭弹窗
   const exportEvents = (type: any) => {
-    state.importType = type
- 
-    props.confirm()
+    // if()
+    if (!isEmpty(state.saveData)) {
+      let allMeet = false
+
+      //设备、面料管理
+      if (props.export.type === 'equipment' || props.export.type === 'fabric') {
+        let equipmentType = state.saveData.every((item: any) => {
+          return item.sn !== '' && item.spec !== '' && item.name !== '' && item.type !== ''
+        })
+        allMeet = equipmentType
+      }
+      //床次
+      if (props.export.type === 'bedSchedule') {
+        let equipmentType = state.saveData.every((item: any) => {
+          return (
+            item.styleCode !== '' &&
+            item.styleName !== '' &&
+            item.produceOrderCode !== '' &&
+            item.spreadClothLevel !== '' &&
+            item.fabricCode !== '' &&
+            item.fabricName !== '' &&
+            item.fabricColor !== '' &&
+            item.spreadClothLevel !== '' &&
+            !isEmpty(item.shelfImageList) &&
+            item.shelfScale !== ''
+          )
+        })
+        allMeet = equipmentType
+      }
+
+      if (allMeet) {
+        state.importType = type
+        props.confirm()
+      } else {
+        ElMessage({
+          message: '必填项不可为空',
+          type: 'warning'
+        })
+      }
+    }
   }
 </script>
 <style>

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2022-09-21 08:54:11
+ * @LastEditTime: 2022-09-30 13:54:07
  * @Description:
  * @LastEditors: lyj
  */
@@ -10,23 +10,33 @@ export const exportData = [
   {
     prop: 'image',
     label: '设备图片',
-    type:"img"
+    type:"img",
+    required:false,
+  },
+    {
+    prop: 'sn',
+    label: '设备编号',
+     type:null,
+    required:true,
   },
   {
-    prop: 'sn',
+    prop: 'spec',
     label: '设备型号',
-     type:null
+     type:null,
+    required:true,
   },
   {
     prop: 'name',
     label: '设备名称',
-     type:null
+     type:null,
+    required:true,
 
   },
   {
     prop: 'type',
     label: '设备类型',
-    type:"type"
+    type:"type",
+    required:true,
   }
 ]
 //---------------content-----------------
@@ -39,17 +49,20 @@ export const content  = {
     spec: '',
     type: '',
     remark: '',
-    defaultParam: ''
+    defaultParam: '',
+    relationOperaterList:''
   },
   formMiddleData: [
     { name: '设备编号', model: 'sn', prop: 'sn', type: 'sn', disabled: false },
     { name: '设备名称', model: 'name', prop: 'name', type: 'name', disabled: false },
-    { name: '关联设备', model: 'relationDevice', prop: null, type: 'relationDevice', disabled: false }
+    { name: '关联设备', model: 'relationDevice', prop: null, type: 'relationDevice', disabled: false },
+    { name: '备注', model: 'remark', prop: null, type: 'remark', disabled: false }
+ 
   ],
   formRightData: [
     { name: '设备型号', model: 'spec', prop: 'spec', type: 'spec', disabled: false },
     { name: '设备类型', model: 'type', prop: 'type', type: 'type', disabled: false },
-    { name: '备注', model: 'remark', prop: null, type: 'remark', disabled: false }
+    { name: '关联操作员', model: 'relationOperaterList', prop: null, type: 'relationOperaterList', disabled: false }
   ],
   dataRule: {
     sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

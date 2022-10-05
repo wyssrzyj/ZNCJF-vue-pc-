@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-26 10:29:01
+ * @LastEditTime: 2022-10-05 11:30:23
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -21,12 +21,12 @@
       <el-col :span="8">
         <div v-for="(item, index) in state.middle" :key="index">
           <div v-if="item.type === 'sn'">
-            <el-form-item label="面料编号" prop="sn">
+            <el-form-item label="面料编号" :prop="item.prop">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'type'">
-            <el-form-item label="面料类型" prop="type">
+            <el-form-item label="面料类型" :prop="item.prop">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
                 <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
@@ -57,15 +57,18 @@
             </el-form-item>
           </div> -->
           <div v-if="item.type === 'spreadTemplateId'">
-            <el-form-item :label="`${item.name}`" prop="spreadTemplateId">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
                 <el-option v-for="item in state.spreadTemplateId" :key="item.id" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </div>
-          <div v-if="item.type === 'color'">
-            <el-form-item :label="`${item.name}`" prop="color">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="textarea" />
+          <div v-if="item.type === 'primaryFlag'">
+            <el-form-item :label="`${item.name}`" :prop="item.prop">
+              <el-radio-group v-model="radio1" :disabled="disable(item.disabled)" class="ml-4">
+                <el-radio :label="1" size="large">主料</el-radio>
+                <el-radio :label="2" size="large">辅料</el-radio>
+              </el-radio-group>
             </el-form-item>
           </div>
         </div>
@@ -94,6 +97,11 @@
               </el-select>
             </el-form-item>
           </div>
+          <div v-if="item.type === 'color'">
+            <el-form-item :label="`${item.name}`" prop="color">
+              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="textarea" />
+            </el-form-item>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -120,7 +128,7 @@
 
   const { proxy } = getCurrentInstance()
   const ruleFormRef = ref<any>()
-
+  const radio1 = ref(1)
   const props = defineProps<{
     dialogType: boolean
     close: any
@@ -171,11 +179,16 @@
         state.cutTemplateId = structure(res.data)
       }
     })
+
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/fabric/get', { id: props.row.id }).then((res: any) => {
         // 图片
         res.data.img = [{ url: res.data.img }]
-
+        //类型
+        res.data.type = res.data.type.toString()
+        if (res.data.primaryFlag) {
+          radio1.value = res.data.primaryFlag
+        }
         state.form = res.data
       })
     }
@@ -201,11 +214,13 @@
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
         let data = cloneDeep(state.form) //防止污染
+        data.primaryFlag = radio1.value
+
         // 图片
         if (!isEmpty(data.img)) {
           data.img = data.img[0].url
-        }else{
-          data.img = ""
+        } else {
+          data.img = ''
         }
 
         //其他附件

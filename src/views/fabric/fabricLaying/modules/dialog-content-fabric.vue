@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-26 17:21:30
+ * @LastEditTime: 2022-10-05 11:30:12
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -102,7 +102,8 @@ vue
       type: props.form.fabricType,
       fabricWeightMin: props.form.fabricWeight.left,
       fabricWeightMax: props.form.fabricWeight.right,
-      templateType: '1'
+      templateType: '1',
+      templateId: props.form.templateDTO ? props.form.templateDTO.id : null
     }
     proxy.$baseService.get('/jack-ics-api/fabric/noParamFabricList', sum).then((res: any) => {
       if (res.code === 0) {

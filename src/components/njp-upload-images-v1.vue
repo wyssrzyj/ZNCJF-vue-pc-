@@ -60,6 +60,7 @@
   const dialogVisible = ref(false)
 
   const props = defineProps({
+  
     modelValue: {
       type: Array,
       default() {
@@ -69,7 +70,8 @@
     limit: {
       type: Number,
       default: 1000
-    }
+    },
+   imgApi:String,
   })
 
   const state = reactive({
