@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-03 17:56:23
+ * @LastEditTime: 2022-10-05 13:23:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -49,14 +49,7 @@
           <div v-if="item.type === 'shelfWidth'">
             <el-form-item label="唛架门幅" prop="shelfWidth">
               <div>
-                <el-input-number
-                  v-model="state.form[item.model]"
-                 :precision="0"
-                  controls-position="right"
-                  :min="0"
-                  :disabled="disable(item.disabled)"
-                  @change="setUtilization"
-                />
+                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
                 <span class="titleRight">mm</span>
               </div>
               <!-- <el-input-number v-model="form[item.model]" :precision="2"  :disabled="disable(item.disabled)">
@@ -90,8 +83,7 @@
       <!-- right -->
       <el-col :span="8">
         <div v-for="(item, index) in state.right" :key="index">
-
-            <div v-if="item.type === 'bedPlanNo'">
+          <div v-if="item.type === 'bedPlanNo'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text">
                 <template #append>
@@ -105,12 +97,8 @@
 
           <div v-if="item.type === 'styleBedNo'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-input-number
-                  v-model="state.form[item.model]"
-                  controls-position="right"
-                  :min="1"
-                />
-                  <div>
+              <el-input-number v-model="state.form[item.model]" controls-position="right" :min="1" />
+              <div>
                 <el-tooltip class="box-item" effect="dark" content="根据款式自动加1" placement="right-start">
                   <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
                 </el-tooltip>
@@ -129,7 +117,7 @@
           <div v-if="item.type === 'shelfLength'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
-                <el-input-number :precision="0" v-model="state.form[item.model]" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
+                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
                 <span class="titleRight">mm</span>
               </div>
             </el-form-item>
@@ -137,14 +125,7 @@
           <div v-if="item.type === 'spreadClothLength'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
-                <el-input-number
-                  v-model="state.form[item.model]"
-                 :precision="0"
-                  controls-position="right"
-                  :min="0"
-                  :disabled="disable(item.disabled)"
-                  @change="setUtilization"
-                />
+                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
                 <span class="titleRight">mm</span>
               </div>
             </el-form-item>
@@ -184,12 +165,11 @@
     </div>
   </el-form>
 
-  <el-dialog :close-on-click-modal="false" :draggable="false" v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" title="排唛比例" width="1000px">
     <PopModule v-if="state.dialogTableVisible" :type="props.dialogType" :operation="operation" :form="state.form" />
   </el-dialog>
   <div style="height: 0; overflow: hidden">
     <Work :id="state.printId" />
-    <!-- <Work  :id="'1567443329765433346'"111 /> -->
   </div>
 </template>
 
@@ -217,24 +197,22 @@
     row: any
   }>()
 
-
   const state: any = reactive({
-    form: cloneDeep(formData) ,
+    form: cloneDeep(formData),
     type: props.dialogType,
-    middle: cloneDeep (formMiddleData) ,
-    right: cloneDeep(formRightData) ,
+    middle: cloneDeep(formMiddleData),
+    right: cloneDeep(formRightData),
     dialogTableVisible: false,
     //提示信息
     prop: dataRule,
     fabricName: [],
     effectiveArea: 0, //有效面积
-    printId: '',
+    printId: ''
     // printType: false
   })
 
   const setPrint = () => {
     if (props.row.statu === 2) {
-      
       print({
         printable: 'work',
         type: 'html',
@@ -309,9 +287,9 @@
           })
           res.data.shelfList = shelfList
         }
-         
-        let  sum =res.data.shelfWidth*res.data.spreadClothLength
-        state.effectiveArea=(res.data.useRate/100)*sum//有效面积x`
+
+        let sum = res.data.shelfWidth * res.data.spreadClothLength
+        state.effectiveArea = (res.data.useRate / 100) * sum //有效面积x`
         state.form = res.data
       })
     }
@@ -337,7 +315,7 @@
         const { heigh, width, sumArea } = shelfFile
         state.form.shelfWidth = heigh //唛架门幅
         state.form.shelfLength = width //唛架长度
-        state.form.spreadClothLength = Number(width) +30//铺布长度
+        state.form.spreadClothLength = Number(width) + 30 //铺布长度
         state.effectiveArea = sumArea //有效面积
 
         //利用率
@@ -362,7 +340,7 @@
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
-    state.form.useRate = (state.effectiveArea / product)*100
+    state.form.useRate = (state.effectiveArea / product) * 100
   }
 
   // 表单提交
@@ -374,9 +352,8 @@
         // 图片
         if (!isEmpty(data.styleImage)) {
           data.styleImage = data.styleImage[0].url
-        }else{
-          data.styleImage = ""
-
+        } else {
+          data.styleImage = ''
         }
 
         // 唛架图处理
