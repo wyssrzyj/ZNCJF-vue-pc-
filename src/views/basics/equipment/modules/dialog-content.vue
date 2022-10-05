@@ -1,14 +1,14 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-05 11:31:27
+ * @LastEditTime: 2022-10-05 11:35:12
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
-      <!-- left -->
+      <!-- left1 -->
       <el-col :span="8">
         <el-form-item label="设备图片" class="layclothImg" prop="img">
           <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
