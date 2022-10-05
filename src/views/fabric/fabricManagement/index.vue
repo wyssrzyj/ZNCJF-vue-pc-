@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-04 09:17:41
+ * @LastEditTime: 2022-10-05 13:47:37
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -103,7 +103,6 @@
       name: ''
     },
 
-    dialogVisible: false,
     title: '上传',
     fileList: [],
     rowData: { type: '' },
