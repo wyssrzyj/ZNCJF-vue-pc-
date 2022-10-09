@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-05 13:23:49
+ * @LastEditTime: 2022-10-07 11:33:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -160,7 +160,7 @@
 
     <div class="dialogBottom">
       <el-button v-if="!disable(false)" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
-      <el-button v-if="disable(false) && props.row.statu === 2" type="primary" class="preservation" @click="setPrint">打印</el-button>
+      <el-button v-if="disable(false) && props.row.statu !== 1" type="primary" class="preservation" @click="setPrint">打印</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
     </div>
   </el-form>
@@ -212,14 +212,14 @@
   })
 
   const setPrint = () => {
-    if (props.row.statu === 2) {
+    // if (props.row.statu !== 1) {
       print({
         printable: 'work',
         type: 'html',
         targetStyles: ['*'],
         maxWidth: 5000
       })
-    }
+    // }
     //添加状态
   }
 

@@ -91,7 +91,7 @@
     type: any
     setData: any
     value: any
-    bedPlanId: any
+    ids: any
   }>()
 
   const state: any = reactive({
@@ -99,27 +99,27 @@
     rightForm: {
       //铺布
       spreadTaskTime: {
-        planStartTime: '',
-        planEndTime: ''
+        planStartTime: null,
+        planEndTime: null
       },
       //贴标
       pasteTaskTime: {
-        planStartTime: '',
-        planEndTime: ''
+        planStartTime: null,
+        planEndTime: null
       },
       //裁剪
       cutTaskTime: {
-        planStartTime: '',
-        planEndTime: ''
+        planStartTime: null,
+        planEndTime: null
       }
     }
   })
 
   const setList = () => {
-    if (props.bedPlanId) {
+    if (props.ids) {
       proxy.$baseService
         .get('/jack-ics-api/spreadTask/getTime', {
-          bedPlanId: props.bedPlanId
+          bedPlanId: props.ids.bedPlanId
         })
         .then((res: any) => {
           if (res.code === 0) {
@@ -142,7 +142,7 @@
 
   //设备是否选择了有贴标机的
   const setPlanType = () => {
-    proxy.$baseService.get('/jack-ics-api/device/listTaskTypeByDeviceId', { deviceId: props.bedPlanId }).then((res: any) => {
+    proxy.$baseService.get('/jack-ics-api/device/listTaskTypeByDeviceId', { deviceId: props.ids.deviceId }).then((res: any) => {
       if (res.data[1] === 2) {
         state.planType = true
       } else {

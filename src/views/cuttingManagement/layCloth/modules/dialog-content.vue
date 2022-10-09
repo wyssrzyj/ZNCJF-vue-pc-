@@ -31,7 +31,7 @@
         <!--设备参数-->
         <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" @changeFrom="devParamSub" />
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :bed-plan-id="state.bedPlanId" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
       </div>
     </div>
     <div class="foot">
@@ -65,24 +65,50 @@
     row: any
   }>()
 
+ 
+   
   const state: any = reactive({
     type: props.type,
     list: { one: {}, two: {}, three: {} }, //保存数据
     form: formData,
     topCurrent: 0,
-    bedPlanId: props.row.bedPlanId, //设备id
+    ids:{
+     bedPlanId:  props.row.bedPlanId,
+     deviceId:  props.row.deviceId
+    }, //设备id
     topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
     leftForm: {
       styleNo: '',
       styleName: ''
     },
+
+
     // 选择设备表单数据
     selectDeviceData: {},
     // 设备参数表单数据
     devParamData: {},
     // 计划时间表单数据
-    plannedTimeData: {}
+    plannedTimeData: {},
+    //【用于未点击计划时间-》保存】
+    rightForm: {
+      //铺布
+      spreadTaskTime: {
+        planStartTime: null,
+        planEndTime: null
+      },
+      //贴标
+      pasteTaskTime: {
+        planStartTime: null,
+        planEndTime: null
+      },
+      //裁剪
+      cutTaskTime: {
+        planStartTime: null,
+        planEndTime: null
+      }
+    }
   })
+  
   const leftFormRules = reactive<FormRules>({
     styleName: [
       {
@@ -118,6 +144,42 @@
         state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
+
+      //设备参数
+          const data = {
+        bedPlanId: props.row.bedPlanId,
+        deviceId: props.row.deviceId,
+        spreadClothLevel: props.row.spreadClothLevel
+      }
+        proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
+        if (res.code === 0) {
+         setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
+        }
+      })
+
+      //计划时间
+       if (state.ids) {
+      proxy.$baseService
+        .get('/jack-ics-api/spreadTask/getTime', {
+          bedPlanId: state.ids.bedPlanId
+        })
+        .then((res: any) => {
+          if (res.code === 0) {
+            if (res.data.spreadTaskTime) {
+              state.rightForm.spreadTaskTime = res.data.spreadTaskTime
+            }
+            if (res.data.pasteTaskTime) {
+              state.rightForm.pasteTaskTime = res.data.pasteTaskTime
+            }
+            if (res.data.cutTaskTime) {
+              state.rightForm.cutTaskTime = res.data.cutTaskTime
+            }
+
+            // state.rightForm = res.data
+            setData('3', state.rightForm)
+          }
+        })
+    }
     }
   }
 
@@ -160,7 +222,7 @@
           }
         ]
       }
-      state.bedPlanId = e.deviceId
+      state.ids.deviceId = e.deviceId
       state.form = cloneForm
       state.list.one = e
     }
@@ -288,7 +350,10 @@
         cutTaskParam: !isEmpty(state.list.two.bottom) ? setTwo(state.list.two.bottom, 'bottom') : null,
         //3-时间
         bedPalnTaskTimeDTO: state.list.three
+      
       }
+      console.log(data);
+      
 
       proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
         if (res.code === 0) {

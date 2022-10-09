@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-09-26 16:12:27
+ * @LastEditTime: 2022-10-09 12:48:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,12 +10,11 @@
     <div>
       <el-tabs v-model="state.tabPosition" editable tab-position="left" @edit="handleTabsEdit" @tab-click="handleClick">
         <div class="handleTabsEdit">
-          <el-tab-pane :lazy="true" v-for="item in state.list" :key="item.title" :label="item.title" :name="item.title" >
-          </el-tab-pane>
+          <el-tab-pane v-for="item in state.list" :key="item.title" :lazy="true" :label="item.title" :name="item.title" />
         </div>
       </el-tabs>
     </div>
-    <RightFrom :type="props.type" :current="state.current" :update="update" />
+    <RightFrom v-if="state.current"  :type="props.type" :current="state.current" :update="update" />
   </div>
 </template>
 
@@ -26,7 +25,6 @@
   import './index.less'
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
-
   const props = defineProps<{
     data: any
     type: any
@@ -152,9 +150,8 @@
 
   //添加
   const increase = () => {
-    let cloneData=cloneDeep (state.data)//防止污染原始数据
+    let cloneData = cloneDeep(state.data) //防止污染原始数据
     if (!isEmpty(state.list)) {
-
       let lastItem = state.list[state.list.length - 1]
       let min = Number(lastItem.spreadTemplateParam.maxLevel) + 1
       let max = Number(min) + 1
@@ -229,32 +226,64 @@
     }
   }
 
+  // 处理数据更新操作
+  const updateOperation = (subscript: any, data: any, arr: any) => {
+    state.list.splice(subscript, 1, data)
+    //更改头部
+    arr.map((item: any) => {
+      item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
+      return item
+    })
+    //选中值
+    //排序
+    arr.sort((a: any, b: any) => {
+      return a.spreadTemplateParam.minLevel - b.spreadTemplateParam.minLevel
+    })
+    state.list = arr
+    state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
+    console.log("当前最新的1",data);
+    
+    state.current=cloneDeep(data)//当前最新的数据
+    props.getList(state.list)
+  }
+
+  //最大层数判断逻辑
+  const setMaxLevel = (data: any, subscript: any) => {
+    //data 当前项
+    //subscript 下标
+    let arr = state.list //总数据
+    let maxLevel = data.spreadTemplateParam.maxLevel //当前输入的值
+    let maxList = arr[arr.length - 1] //最大
+    data.spreadTemplateParam.MaxLevelType = false //不满足就添加状态-用于判断
+
+    // 先判断当前是否是最大的
+    if (data.title !== maxList.title) {
+      //现在点击的不是最大的那个
+      //当前项大一层的最小值
+      let min = arr[subscript + 1].spreadTemplateParam.minLevel
+      if (maxLevel >= min) {
+        ElMessage({
+          message: '不能大于上一项的最小值',
+          type: 'warning'
+        })
+        data.spreadTemplateParam.MaxLevelType = true//不满足就添加状态-用于判断
+        data.spreadTemplateParam.max = min
+        data.spreadTemplateParam.maxLevel = min-1 //数据超出 使用下一层的最小值-1
+        updateOperation(subscript, data, arr)
+        //得刷新数据
+      }else{
+        updateOperation(subscript, data, arr)
+      }
+    } else {
+      updateOperation(subscript, data, arr)
+    }
+  }
+
   //数据更新
   const update = (data: any) => {
-    
     const subscript = state.list.findIndex((item: any) => item.title === data.title)
-    
     if (subscript !== -1) {
-      state.list.splice(subscript, 1, data)
-
-      let arr =  cloneDeep(state.list)
-      //更改头部
-      arr.map((item: any) => {
-        item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
-        return item
-      })
-
-      //选中值
-      //排序
-      arr.sort((a: any, b: any) => {
-        return a.spreadTemplateParam.minLevel - b.spreadTemplateParam.minLevel
-      })
-
-      state.list=arr
-      // console.log("排序",state.list);
-      
-      state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
-      props.getList(state.list)
+      setMaxLevel(data, subscript) //最大层数的数据判断处理
     }
   }
 </script>

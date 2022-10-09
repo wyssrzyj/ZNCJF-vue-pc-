@@ -301,9 +301,6 @@
 </script>
 
 <style>
-  .el-table__header-wrapper .el-checkbox {
-    display: none;
-  }
   .image {
     width: 100px;
     height: 100px;

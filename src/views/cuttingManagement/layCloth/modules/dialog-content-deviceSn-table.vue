@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-22 22:12:30
+ * @LastEditTime: 2022-10-06 15:10:01
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -128,7 +128,5 @@
 </script>
 
 <style>
-  .el-table__header-wrapper .el-checkbox {
-    display: none;
-  }
+ 
 </style>

@@ -59,7 +59,7 @@
 
       <div class="title">裁床建议参数</div>
       <el-row :gutter="20">
-        <el-col :span="8">
+        <el-col :span="9">
           <el-form-item label="最小磨刀频率：">
             <div class="devParam-row">
               <el-input-number v-model="state.bottomForm.minKnifeFrequency" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
@@ -199,7 +199,7 @@
 
 <style scoped lang="less">
   .layClothRight {
-    margin-left: 80px;
+    transform: translateX(70px);
   }
   .BottomTable {
     width: 100%;

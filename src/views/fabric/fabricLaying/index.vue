@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-04 09:26:07
+ * @LastEditTime: 2022-10-06 09:52:18
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -26,7 +26,7 @@
     </template>
 
     <template #fabricType="{ row }">
-      <span> {{ fabric.get(row.fabricType) }}</span>
+      <span> {{ fabric.get(row.fabricType.toString() ) }}</span>
     </template>
     <template #fabricWeight="{ row }">
       <span> {{ row.fabricWeightMin }}~{{ row.fabricWeightMax }}</span>

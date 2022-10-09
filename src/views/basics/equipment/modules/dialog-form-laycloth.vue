@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-02 18:58:09
+ * @LastEditTime: 2022-10-07 13:04:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -30,9 +30,9 @@
            <template #append>°</template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="cutSpeed" label="切布段速">
+       <!-- <el-form-item prop="cutSpeed" label="切布段速">
           <el-input-number v-model="state.form.cutSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
-        </el-form-item>
+        </el-form-item>  -->
       </el-col>
       <el-col :span="12">
         <el-form-item prop="backSpeed" label="后退速度">
@@ -55,9 +55,9 @@
         <el-form-item prop="accelerationWeight" label="加速权重">
           <el-input v-model="state.form.accelerationWeight" placeholder="请输入加速权重" type="text" :disabled="disabled(false)" />
         </el-form-item>
-        <el-form-item prop="cutLength" label="切布长度">
+        <!-- <el-form-item prop="cutLength" label="切布长度">
           <el-input-number v-model="state.form.cutLength" :min="0" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
-        </el-form-item>
+        </el-form-item> -->
       </el-col>
 
       <div class="dialogBottom">

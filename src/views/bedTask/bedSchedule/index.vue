@@ -91,7 +91,9 @@
       width:"1500px",
       importType: false,
       list: [],
-      template: 'http://10.18.4.25/template/bedPlan.xlsx',
+      // template: 'http://10.18.4.25/template/bedPlan.xlsx',
+      template: 'http://192.168.1.3/template/bedPlan.xlsx',
+
       interface: '/jack-ics-api/bedPlan/import'
     },
     //打印状态

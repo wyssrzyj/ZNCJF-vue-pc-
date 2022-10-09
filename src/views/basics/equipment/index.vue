@@ -1,6 +1,7 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
+      
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
       </el-form-item>
@@ -96,7 +97,9 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      template: 'http://10.18.4.25/template/device.xlsx',
+      // template: 'http://10.18.4.25/template/device.xlsx',
+      template: 'http://192.168.1.3/template/device.xlsx',
+      // 192.168.1.3
       interface: '/jack-ics-api/device/import'
     },
 

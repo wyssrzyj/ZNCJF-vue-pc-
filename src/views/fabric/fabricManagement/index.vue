@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-05 13:47:37
+ * @LastEditTime: 2022-10-06 09:54:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -27,7 +27,7 @@
     </template>
 
     <template #type="{ row }">
-      {{ mapType.get(row.type) }}
+      {{ fabric.get(row.type.toString() ) }}
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -65,15 +65,14 @@
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
+    import { fabric } from '@/components/conifgs.ts'
+  import ImportDialog from '@/components/dialog-import-table/index.vue'
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
-  import ImportDialog from '@/components/dialog-import-table/index.vue'
   import { exportData } from './modules/conifgs.ts'
   const { proxy }: any = getCurrentInstance()
 
-  let mapType = new Map()
-  mapType.set(1, '针织面料')
-  mapType.set(2, '梭织面料')
+
 
   const styleLibListEl = ref()
 
@@ -87,7 +86,8 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      template: 'http://10.18.4.25/template/fabric.xlsx',
+      // template: 'http://10.18.4.25/template/fabric.xlsx',
+      template: 'http://192.168.1.3/template/fabric.xlsx',
       interface: '/jack-ics-api/fabric/import'
     },
 

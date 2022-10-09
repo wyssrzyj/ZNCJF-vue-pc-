@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-02 13:52:26
+ * @LastEditTime: 2022-10-06 09:46:23
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -214,7 +214,9 @@
             relationFabricList: !isEmpty(state.form.relationFabricList) ?state.form.relationFabricList:null
           },
           levelParamVOList: changeStructure(state.form.levelParamVOList)
+
         }
+      
         proxy.$baseService.post('/jack-ics-api/spreadTemplateParam/save', arr).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
@@ -235,6 +237,7 @@
   }
 
   const getList = (e: any) => {
+    console.log("getList",e);
     state.form.levelParamVOList = e
   }
   // 取消
