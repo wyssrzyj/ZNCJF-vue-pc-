@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-28 11:32:53
+ * @LastEditTime: 2022-10-09 13:03:38
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -176,7 +176,6 @@
 
   //时间
   const setTime = (e: any) => {
-    // console.log('触发', e)
   }
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {

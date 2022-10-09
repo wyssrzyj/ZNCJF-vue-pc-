@@ -86,8 +86,6 @@
   watch(
     () => props.current,
     item => {
-      // console.log(item.cutTemplateParam.bottomTable)
-
       state.bottomTable = item.cutTemplateParam.bottomTable
       state.form = item.cutTemplateParam
     }

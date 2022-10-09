@@ -106,7 +106,6 @@
 
   // 上传
   const getData = (e: any) => {
-    // console.log('最终展示', e)
     if (e.type === 'img') {
       state.form.img = e.data
     }

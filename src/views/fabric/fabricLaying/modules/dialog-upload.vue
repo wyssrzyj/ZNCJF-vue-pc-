@@ -38,7 +38,6 @@
     props.getData(e)
   }
   const gitFile = (e: any) => {
-    // console.log('文件上传gitFile', e)
     props.getData(e)
   }
 </script>

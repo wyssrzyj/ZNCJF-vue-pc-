@@ -74,8 +74,6 @@
         state.tabPosition = cloneData[0].title //选中第几个
       }
       if (type === 'initForm') {
-        // console.log("initForm");
-
         state.tabPosition = cloneData[0].title
         state.current = cloneData[0]
       }

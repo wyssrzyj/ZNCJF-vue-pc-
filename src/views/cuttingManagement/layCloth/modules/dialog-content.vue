@@ -352,7 +352,6 @@
         bedPalnTaskTimeDTO: state.list.three
       
       }
-      console.log(data);
       
 
       proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {

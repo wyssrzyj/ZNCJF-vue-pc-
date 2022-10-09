@@ -174,7 +174,6 @@
     //预览图片
     state.img=uploadFiles[0].response.data.shelfImage
     state.srcList=[uploadFiles[0].response.data.shelfImage]
-    console.log(state.img);
     // 传递给父级
     props.gitFile({ data: uploadFiles })
 

@@ -107,8 +107,6 @@
   })
 
   const toView = (row: any) => {
-    // console.log(8848)
-
     proxy.$routerToView({
       path: `/data-assets/style-library-v2/view-style-library`,
       query: {

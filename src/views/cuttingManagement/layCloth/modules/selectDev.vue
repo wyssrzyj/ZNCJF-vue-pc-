@@ -190,7 +190,6 @@
 
       state.rightForm.labelingSn = e.data.labelingSn
       state.rightForm.labelingName = e.data.labelingName
-      console.log(state.rightForm.deviceId)
 
       props.setData('1', state.rightForm)
       // ElMessage({

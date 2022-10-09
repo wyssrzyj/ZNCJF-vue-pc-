@@ -178,9 +178,6 @@
   }
   //删除
   const beforeRemove = (file: any, fileList: any) => {
-    // console.log(file);
-    // console.log(fileList);
-    // console.log("删除");
     // state.uploadFileLoading = false
     // return false 
   }

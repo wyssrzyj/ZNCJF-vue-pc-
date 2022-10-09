@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-09-28 11:34:48
+ * @LastEditTime: 2022-10-09 13:03:26
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -189,8 +189,6 @@
     }
     //唛架图
     if (e.type === 'shelfFile') {
-      // console.log(e.data);
-
       state.form.shelfFile = e.data
     }
   }
@@ -262,7 +260,6 @@
             formEl.resetFields()
             props.close()
           } else {
-            // console.log(res.msg)
           }
         })
       }

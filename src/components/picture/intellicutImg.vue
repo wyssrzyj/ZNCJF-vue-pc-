@@ -111,8 +111,6 @@
   const emits = defineEmits(['update:modelValue'])
 
   const handleSuccess = (res, uploadFile, uploadFiles) => {
-    // console.log('成功', uploadFiles)
-
     state.fileList = uploadFiles
     emits('update:modelValue', formartFileList(state.fileList))
     state.loading = false
@@ -155,8 +153,6 @@
   }
 
   const beforeUpload = rawFile => {
-    console.log("~~~~~~~~~~~~~",rawFile);
-    
     if (!/image\/*/.test(rawFile.type)) {
       ElMessage.warning(`请上传图片类型文件！`)
       return false

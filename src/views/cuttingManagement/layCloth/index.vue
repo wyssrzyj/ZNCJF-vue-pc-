@@ -170,7 +170,6 @@
 
   //关闭 弹窗
   const close = () => {
-    console.log('关闭 弹窗')
     state.dialogTableVisible = false
     refreshTable()
   }

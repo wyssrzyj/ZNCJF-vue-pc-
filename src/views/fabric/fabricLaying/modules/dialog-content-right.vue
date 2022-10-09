@@ -241,8 +241,6 @@
     })
     state.list = arr
     state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
-    console.log("当前最新的1",data);
-    
     state.current=cloneDeep(data)//当前最新的数据
     props.getList(state.list)
   }

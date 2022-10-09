@@ -49,7 +49,6 @@
 
   //子组件数据
   const getData = (val: any) => {
-    // console.log('为啥不传递', val)
     state.list = val
   }
 </script>

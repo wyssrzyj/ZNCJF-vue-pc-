@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-30 16:36:42
+ * @LastEditTime: 2022-10-09 13:03:00
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -294,7 +294,6 @@
   watch(
     () => state.tableData,
     item => {
-      console.log(state.tableData);
       props.getTableData(item)
     }
   )
