@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-05 11:30:57
+ * @LastEditTime: 2022-10-12 13:07:00
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -30,7 +30,7 @@
 <script lang="ts" setup>
   import { reactive } from 'vue'
   import { ElMessage } from 'element-plus'
-  import UploadModule from '@/components/dialog-upload.vue'
+  import UploadModule from '@/components/upload/index.vue'
   import DialogTable from './dialog-table.vue'
   import { isEmpty, cloneDeep } from 'lodash'
 

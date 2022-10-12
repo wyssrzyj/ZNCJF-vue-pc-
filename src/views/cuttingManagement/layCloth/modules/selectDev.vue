@@ -35,18 +35,18 @@
         <span class="numberRight">mm</span>
       </div>
     </el-form-item>
-    <el-form-item label="唛架门幅：">
-      <div class="layCloth-row">
-        <el-input-number v-model="state.rightForm.shelfWidth" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-        <span class="numberRight">mm</span>
-      </div>
+
+       <el-form-item label="唛架门幅：">
+      <el-input v-model="state.rightForm.shelfWidth" disabled >
+        <template #append>mm</template>
+      </el-input>
     </el-form-item>
     <el-form-item label="铺布长度：">
       <div class="layCloth-row">
-        <el-input-number v-model="state.rightForm.spreadClothLength" class="spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+        <el-input-number v-model="state.rightForm.spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
         <span class="numberRight">mm</span>
       </div>
-    </el-form-item>
+    </el-form-item> 
     <el-form-item label="设备编号：" required prop="deviceSn">
       <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`">
         <template #append>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-06 09:54:03
+ * @LastEditTime: 2022-10-12 13:11:09
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -162,7 +162,7 @@
         data.push({
           color: item.color,
           primaryFlag: item.primaryFlag,
-          image: item.image ? item.image : '',
+          image: !isEmpty(item.styleUrlList) ? item.styleUrlList[0].url : null, //款图
           name: item.name,
           sn: item.sn,
           type: item.type,

@@ -206,7 +206,7 @@
 
       saveData.forEach((item: any) => {
         data.push({
-          image: item.image ? item.image : '',
+          image: !isEmpty(item.styleUrlList) ? item.styleUrlList[0].url : null, //款图
           name: item.name,
           sn: item.sn,
           spec: item.spec,

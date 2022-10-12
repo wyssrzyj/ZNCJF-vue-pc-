@@ -48,10 +48,12 @@
   import type { FormRules } from 'element-plus'
   import { FormInstance } from 'element-plus'
 
+  import UploadModule from '@/components/upload/index.vue'
+
+  
   import SelectDev from './selectDev.vue'
   import DevParam from './devParam.vue'
   import PlannedTime from './plannedTime.vue'
-  import UploadModule from './dialog-upload.vue'
   import { content } from './conifgs'
 
   const leftForm = ref<FormInstance>()
@@ -352,8 +354,6 @@
         bedPalnTaskTimeDTO: state.list.three
       
       }
-      
-
       proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
         if (res.code === 0) {
           ElMessage({

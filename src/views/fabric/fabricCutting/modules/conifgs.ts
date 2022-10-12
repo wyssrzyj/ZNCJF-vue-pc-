@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-21 08:54:17
+ * @LastEditTime: 2022-10-10 13:03:36
  * @Description:
  * @LastEditors: lyj
  */
@@ -62,22 +62,25 @@ export const customFormData = {
     acceleration: '',
     creeping: '',
     distance: '',
-    accelerationWeight: ''
+    accelerationWeight: '',
+    file:"",
   },
   formMiddleData: [
     { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
+    { name: '参数文件', model: 'file', prop: 'file', type: "file", disabled: false, },
     { name: '最小刀频', model: 'minKnifeFrequency', prop: 'minKnifeFrequency', type: null, disabled: false, title: 'U/min' },
     { name: '刀速', model: 'knifeSpeed', prop: 'knifeSpeed', type: null, disabled: false, title: 'm/min' },
     { name: '最小磨刀距离', model: 'minKnifeDistance', prop: 'minKnifeDistance', type: null, disabled: false, title: 'mm' }
   ],
   formRightData: [
     { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
+    { name: '参数文件', model: 'file', prop: null, type: "file", disabled: false, title: 'U/min' },
     { name: '最大刀频', model: 'maxKnifeFrequency', prop: 'maxKnifeFrequency', type: null, disabled: false, title: 'U/min' },
     { name: '提刀角度', model: 'knifeAngle', prop: 'knifeAngle', type: null, disabled: false, title: '°' },
     { name: '真空率', model: 'emptyRatio', prop: 'emptyRatio', type: null, disabled: false, title: '%' }
   ],
   dataRule: {
-    equipmentNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    file: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentModel: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]

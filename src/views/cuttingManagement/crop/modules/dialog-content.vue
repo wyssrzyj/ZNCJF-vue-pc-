@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-09 13:03:26
+ * @LastEditTime: 2022-10-10 11:01:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,7 +12,7 @@
       <!-- left -->
       <el-col :span="8">
         <el-form-item label="款图" class="layclothImg">
-          <UploadModule v-model="state.form.styleImage" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
+          <UploadModule v-model="state.form.styleImage" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
         <el-form-item label="款式编号">
           <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
@@ -24,7 +24,7 @@
           <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
         </el-form-item>
         <el-form-item label="其他附件">
-          <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+          <UploadModule :disabled="disable(true)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
         </el-form-item>
       </el-col>
 
@@ -116,11 +116,12 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
+  import { ElMessage } from 'element-plus'
 
+
+  import UploadModule from '@/components/upload/index.vue'
   import { content } from './conifgs'
 
-  import UploadModule from './dialog-upload.vue'
-  import { ElMessage } from 'element-plus'
   import './index.less'
   import Crop from './dialog-form-crop.vue'
 

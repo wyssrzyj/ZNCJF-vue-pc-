@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-09-22 14:42:58
+ * @LastEditTime: 2022-10-11 10:12:15
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,21 +12,29 @@
   <MarkerFile v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 其他上传 -->
   <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <!-- 导入模块 -->
+  <ImportTable :interface="props.interface" v-if="props.type === 'import'" :upload="props.upload" :picture-type="state.importNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <!-- 通用上传 -->
+ <CurrencyFile v-if="state.type === 'currencyFile'" :upload="props.upload"  :git-file="gitFile" :value="props.value" :disabled="disabled" />
+
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'
 
-  import File from '@/components/file/index.vue'
-  import MarkerFile from '@/components/markerFile/index.vue'
-  import Picture from '@/components/picture/index.vue'
-  const props = defineProps<{
-    type: string
-    getData: any
-    value: []
-    disabled: boolean
-    upload: any
-  }>()
+  import File from '@/components/upload/file/index.vue'
+  import CurrencyFile from '@/components/upload/currencyFile/index.vue'
+  import MarkerFile from '@/components/upload/markerFile/index.vue'
+  import Picture from '@/components/upload/picture/index.vue'
+  import ImportTable from '@/components/upload/Import/index.vue'
 
+  const props = defineProps<{
+    type: any
+    getData: any
+    value: any
+    disabled: any
+    upload: any
+    interface:any
+  }>()
   // type 类型
   // getData 传递出去
   // value 数据
@@ -37,8 +45,9 @@
     value: props.value,
     type: props.type,
     //文件上传类型
-    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt .GBR ', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt GBR' },
-    pictureTypeNow: { accept: '', availableSuffix: '' }
+    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt,.GBR ', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt GBR' },
+    pictureTypeNow: { accept: '', availableSuffix: '' },
+    importNow: { accept: '.xlsx,', availableSuffix: 'xlsx' }
   })
 
   const gitImg = (e: any) => {

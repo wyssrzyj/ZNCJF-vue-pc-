@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-28 11:01:11
+ * @LastEditTime: 2022-10-12 09:15:33
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -29,9 +29,7 @@
     list: []
   })
 
-  // const cancel = (e: any) => {
-  //   props.operation({ type: 'cancel', data: {} })
-  // }
+
   const preservation = (e: any) => {
     let type = state.list.every((item: any) => {
       return item.size !== ''&& item.color !== ''

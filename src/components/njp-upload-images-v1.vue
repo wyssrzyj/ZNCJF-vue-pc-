@@ -19,7 +19,7 @@
       <template #file="{ file }">
         <div>
           <div class="uploadimg">
-            <el-image ref="previewImage" :src="file.url" :initial-index="4" fit="contain" />
+            <img class="equipmentImg" ref="previewImage" :src="file.url" :initial-index="4" fit="contain" />
             <div v-if="file.topic" class="cornermark">主图</div>
           </div>
           <span class="el-upload-list__item-actions">
@@ -206,5 +206,9 @@
       line-height: 48px;
       text-indent: 4px;
     }
+  }
+     .equipmentImg {
+    width: 150px;
+    height: 150px;
   }
 </style>

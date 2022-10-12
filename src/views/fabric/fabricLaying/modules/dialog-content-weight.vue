@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-07 17:36:26
+ * @LastEditTime: 2022-10-12 10:21:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,8 +40,8 @@
     }
   )
   const data = (list: any) => {
-    if (list.left > 0 && list.left > 0) {
-      props.fabricWeight(list)
+    if (list.right > 0 ) {
+        props.fabricWeight(list)
     }
   }
   const handleChange = (e: number, type: string) => {

@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-10-02 13:58:40
+ * @LastEditTime: 2022-10-12 10:34:35
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -83,6 +83,7 @@ vue
 
       let type = item.fabricType
       let right = item.fabricWeight.right
+      
       if (type !== undefined && right > 0) {
         disable(true)
       } else {

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-10-02 19:07:11
+ * @LastEditTime: 2022-10-10 16:44:41
  * @Description:
  * @LastEditors: lyj
  */
@@ -21,6 +21,7 @@ export const content: any = {
     relatedFabric: '',
     fabric: '',
     right: [],
+   
     levelParamVOList: [
       {
         spreadTemplateParam: {
@@ -111,6 +112,7 @@ export const customFormData = {
     creeping: '',
     distance: '',
     accelerationWeight: '',
+     file:[],
     bottomTable: [
       {
         date: '布斗匀速',
@@ -155,6 +157,7 @@ export const customFormData = {
   },
   formMiddleData: [
     { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
+    { name: '参数文件', model: 'file', prop: 'file', type: "file", disabled: false, },
     { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: 'forwardSpeed', disabled: false },
     { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
     { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
@@ -163,6 +166,7 @@ export const customFormData = {
   ],
   formRightData: [
     { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
+    { name: '参数文件', model: 'file', prop: null, type: "file", disabled: false, title: 'U/min' },
     { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: 'backSpeed', disabled: false },
     { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
     { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
@@ -170,6 +174,7 @@ export const customFormData = {
     { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }
   ],
   dataRule: {
+    file: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentNumber: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     equipmentModel: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

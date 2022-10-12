@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-05 11:30:23
+ * @LastEditTime: 2022-10-11 13:47:55
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -65,7 +65,7 @@
           </div>
           <div v-if="item.type === 'primaryFlag'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-radio-group v-model="radio1" :disabled="disable(item.disabled)" class="ml-4">
+              <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio :label="1" size="large">主料</el-radio>
                 <el-radio :label="2" size="large">辅料</el-radio>
               </el-radio-group>
@@ -123,7 +123,7 @@
 
   import { formData, formMiddleData, formRightData, dataRule } from './conifgs'
   import './index.less'
-  import UploadModule from './dialog-upload.vue'
+    import UploadModule from '@/components/upload/index.vue'
   import { fabricType } from '@/components/conifgs.ts'
 
   const { proxy } = getCurrentInstance()
@@ -186,9 +186,9 @@
         res.data.img = [{ url: res.data.img }]
         //类型
         res.data.type = res.data.type.toString()
-        if (res.data.primaryFlag) {
-          radio1.value = res.data.primaryFlag
-        }
+        // if (res.data.primaryFlag) {
+        //   radio1.value = res.data.primaryFlag
+        // }
         state.form = res.data
       })
     }
@@ -214,23 +214,20 @@
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
         let data = cloneDeep(state.form) //防止污染
-        data.primaryFlag = radio1.value
-
         // 图片
         if (!isEmpty(data.img)) {
           data.img = data.img[0].url
         } else {
           data.img = ''
         }
+          let attachmentList: any = []
 
         //其他附件
         if (!isEmpty(data.attachmentList)) {
-          let arr: any = []
-
           data.attachmentList.forEach((item: any) => {
             //组件返回格式
             if (!isEmpty(item.response)) {
-              arr.push({
+              attachmentList.push({
                 name: item.name,
                 url: item.response.data.src,
                 size: item.size,
@@ -238,7 +235,7 @@
               })
             } else {
               // 后端返回格式
-              arr.push({
+              attachmentList.push({
                 name: item.name,
                 url: item.url,
                 size: item.size,
@@ -246,9 +243,11 @@
               })
             }
           })
-          data.attachmentList = arr
         }
-
+        data.attachmentList = attachmentList
+        console.log(data.attachmentList);
+        
+        
         proxy.$baseService.post('/jack-ics-api/fabric/save', data).then((res: any) => {
           if (res.data === true) {
             ElMessage({
@@ -266,6 +265,7 @@
   // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
+      console.log(e.data);
       state.form.attachmentList = e.data
     }
   }

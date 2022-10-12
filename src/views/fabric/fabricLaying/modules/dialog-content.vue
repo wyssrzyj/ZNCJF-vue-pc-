@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-06 09:46:23
+ * @LastEditTime: 2022-10-12 10:17:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -48,15 +48,16 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
-  import { content } from './conifgs'
-  import './index.less'
   import { ElMessage } from 'element-plus'
-  import { fabricType } from '@/components/conifgs.ts'
 
-  import UploadModule from './dialog-upload.vue'
+  import { fabricType } from '@/components/conifgs.ts'
+  import UploadModule from '@/components/upload/index.vue'
+
+  import { content } from './conifgs'
   import FabricWeight from './dialog-content-weight.vue'
   import Option from './dialog-content-right.vue'
   import RelatedFabric from './dialog-content-fabric.vue'
+  import './index.less'
   const { proxy } = getCurrentInstance()
 
   const ruleFormRef = ref<any>()
@@ -156,6 +157,7 @@
     state.form.fabricWeightMax = e.right
     const cloneForm = cloneDeep(state.form)
     state.form = cloneForm
+   
   }
   //  面料类型 赋值
   const change = (e: any) => {
@@ -195,6 +197,26 @@
     return cloneData
   }
 
+    //参数文件是否 填写
+  const parameterFile = (list: any) => {
+    let arr = list.filter((item: any) => isEmpty(item.spreadTemplateParam.attachmentList))
+
+    if (!isEmpty(arr)) {
+      let title: any = []
+      arr.forEach((v: any) => {
+        title.push(v.title)
+      })
+      ElMessage({
+        message: `必填项不能为空,【${title.join('，')}】`,
+        type: 'warning'
+      })
+
+      return false
+    } else {
+      return true
+    }
+  }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
@@ -202,7 +224,8 @@
       if (valid) {
         const { fabricType, fabricWeightMax, fabricWeightMin, img, name, sn } = state.form
         // 格式处理
-        let arr = {
+        // if (parameterFile(state.form.levelParamVOList)) {
+            let arr = {
           templateDTO: {
             id: props.row.id,
             fabricType: Number(fabricType),
@@ -232,7 +255,9 @@
             })
           }
         })
-      }
+
+        }
+      // }
     })
   }
 

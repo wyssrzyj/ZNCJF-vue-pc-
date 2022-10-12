@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-02 14:01:32
+ * @LastEditTime: 2022-10-11 15:28:09
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -52,7 +52,7 @@
   import { ElMessage } from 'element-plus'
   import { fabricType } from '@/components/conifgs.ts'
 
-  import UploadModule from './dialog-upload.vue'
+  import UploadModule from '@/components/upload/index.vue'
   import FabricWeight from './dialog-content-weight.vue'
   import Option from './dialog-content-right.vue'
   import RelatedFabric from './dialog-content-fabric.vue'
@@ -69,14 +69,37 @@
   }>()
 
   const state = reactive({
-    form: cloneDeep(formData) ,
-    initForm: cloneDeep (formData),
+    form: cloneDeep(formData),
+    initForm: cloneDeep(formData),
     type: props.dialogType,
     dialogTableVisible: false,
     //提示信息
     prop: dataRule,
     fabricType: fabricType
   })
+
+  //处理参数文件回显
+  let setLevelParamVOList = (list: any) => {
+    if (!isEmpty(list)) {
+      list.map((item: any) => {
+        let arr = item.cutTemplateParam
+        if (isEmpty(arr.attachmentList)) {
+          if (arr.paramFileName) {
+            arr.attachmentList = [
+              {
+                name: arr.paramFileName,
+                response: {
+                  data: { src: arr.paramFile }
+                }
+              }
+            ]
+          }
+        }
+        item.cutTemplateParam = arr
+      })
+      return list
+    }
+  }
 
   const init = () => {
     //获取接口数据赋值form
@@ -90,7 +113,10 @@
         arr.fabricType = fabricType
         arr.img = [{ url: imageUrl }]
         arr.fabricWeight = { left: Number(fabricWeightMin), right: Number(fabricWeightMax) }
-        arr.fabricType=arr.fabricType.toString()
+        arr.fabricType = arr.fabricType.toString()
+
+        //处理参数文件回显
+        arr.levelParamVOList=setLevelParamVOList(arr.levelParamVOList)
         state.form = arr
         state.initForm = arr
       })
@@ -130,6 +156,26 @@
     state.form.relationFabricList = e
   }
 
+  //参数文件是否 填写
+  const parameterFile = (list: any) => {
+    let arr = list.filter((item: any) => isEmpty(item.cutTemplateParam.attachmentList))
+
+    if (!isEmpty(arr)) {
+      let title: any = []
+      arr.forEach((v: any) => {
+        title.push(v.title)
+      })
+      ElMessage({
+        message: `必填项不能为空,【${title.join('，')}】`,
+        type: 'warning'
+      })
+
+      return false
+    } else {
+      return true
+    }
+  }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
@@ -137,35 +183,38 @@
       if (valid) {
         const { fabricType, fabricWeightMax, fabricWeightMin, img, name, sn } = state.form
 
-        // 格式处理
-        let arr = {
-          templateDTO: {
-            id: props.row.id,
-            fabricType: Number(fabricType),
-            fabricWeightMax: Number(fabricWeightMax),
-            fabricWeightMin: Number(fabricWeightMin),
-            imageUrl: !isEmpty(img) ? img[0].url : '',
-            name: name,
-            sn: sn,
-            relationFabricList: !isEmpty(state.form.relationFabricList) ?state.form.relationFabricList:null
-          },
-          levelParamVOList: state.form.levelParamVOList
-        }
-        proxy.$baseService.post('/jack-ics-api/cutTemplateParam/save', arr).then((res: any) => {
-          if (res.code === 0) {
-            ElMessage({
-              message: '保存成功',
-              type: 'success'
-            })
-            formEl.resetFields()
-            props.close('preservation')
-          } else {
-            ElMessage({
-              message: res.msg,
-              type: 'warning'
-            })
+        //判断必填项是否填写
+        if (parameterFile(state.form.levelParamVOList)) {
+          let arr = {
+            templateDTO: {
+              id: props.row.id,
+              fabricType: Number(fabricType),
+              fabricWeightMax: Number(fabricWeightMax),
+              fabricWeightMin: Number(fabricWeightMin),
+              imageUrl: !isEmpty(img) ? img[0].url : '',
+              name: name,
+              sn: sn,
+              relationFabricList: !isEmpty(state.form.relationFabricList) ? state.form.relationFabricList : null
+            },
+            levelParamVOList: state.form.levelParamVOList
           }
-        })
+          // 格式处理
+          proxy.$baseService.post('/jack-ics-api/cutTemplateParam/save', arr).then((res: any) => {
+            if (res.code === 0) {
+              ElMessage({
+                message: '保存成功',
+                type: 'success'
+              })
+              formEl.resetFields()
+              props.close('preservation')
+            } else {
+              ElMessage({
+                message: res.msg,
+                type: 'warning'
+              })
+            }
+          })
+        }
       }
     })
   }

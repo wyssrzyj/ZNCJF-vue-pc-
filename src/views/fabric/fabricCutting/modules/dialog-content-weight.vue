@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-09-07 10:24:45
+ * @LastEditTime: 2022-10-12 10:22:30
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,7 +40,7 @@
     }
   )
   const data = (list: any) => {
-    if (list.left > 0 && list.left > 0) {
+    if (list.right > 0 ) {
       props.fabricWeight(list)
     }
   }

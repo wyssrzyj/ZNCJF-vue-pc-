@@ -1,20 +1,24 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-10-09 12:48:42
+ * @LastEditTime: 2022-10-12 08:36:37
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="option">
     <div>
-      <el-tabs v-model="state.tabPosition" editable tab-position="left" @edit="handleTabsEdit" @tab-click="handleClick">
-        <div class="handleTabsEdit">
-          <el-tab-pane v-for="item in state.list" :key="item.title" :lazy="true" :label="item.title" :name="item.title" />
+      <div class="cloth-increase" @click="handleTabsEdit(null, 'add')">+</div>
+      <div v-for="item in state.list" :key="item.title" class="cloth-for">
+        <div :class="state.tabPosition === item.title ? 'cloth-layer-choice' : 'cloth-layer'">
+          <span @click="handleClick(item.title)">{{ item.title }}</span>
+          <el-icon class="cloth-icon" @click="handleTabsEdit(item.title, 'remove')"><Close /></el-icon>
         </div>
-      </el-tabs>
+      </div>
     </div>
-    <RightFrom v-if="state.current"  :type="props.type" :current="state.current" :update="update" />
+    <div class="rightFrom">
+      <RightFrom v-if="state.current" :type="props.type" :current="state.current" :update="update" />
+    </div>
   </div>
 </template>
 
@@ -96,25 +100,46 @@
   const getTitle = (small: any, large: any) => {
     return `${small}-${large}层`
   }
-  //点击
-  const handleClick = (tab: TabsPaneContext, event: Event) => {
-    let title = tab.props.label
-    state.tabPosition = title
 
-    let arr = state.list.filter((item: any) => item.title === title)
-    state.current = arr[0]
+  //添加需要的最大值-maxLevelMax
+  const setMaxLevelMax = (title: any, list: any) => {
+    //title 当前的标题
+    //list 总数据
+    // "获取当前需要的最大值
+    const subscript = list.findIndex((item: any) => item.title === title)
+    let arr = list[subscript]
+    //必须数据长度大于1 -> 且还不能是最后一个
+    if (list.length > 1) {
+      if (arr !== list[list.length - 1]) {
+        //才获取当前项的后一个的最小值
+        let min = list[subscript + 1].spreadTemplateParam.minLevel
+        arr.spreadTemplateParam.maxLevelMax = min - 1
+        return arr
+      } else {
+        return arr
+      }
+    } else {
+      return arr
+    }
   }
 
-  // 初始格式处理
+  //点击
+  const handleClick = (title: TabsPaneContext) => {
+    state.tabPosition = title
+    state.current = setMaxLevelMax(title, state.list)
+  }
 
   //初始设置数据
   const init = (data: any, type: any) => {
     let cloneData = cloneDeep(data)
+    let list = cloneDeep(state.list)
 
-    if (!isEmpty(data)) {
-      //添加标题
-      cloneData.map((item: any) => {
+    if (!isEmpty(cloneData)) {
+      //添加标题-和最大层数最大值
+      cloneData.map((item: any, index: any) => {
         item.title = getTitle(item.spreadTemplateParam.minLevel, item.spreadTemplateParam.maxLevel)
+
+        return item
       })
 
       if (type === 'init') {
@@ -126,7 +151,10 @@
         state.tabPosition = cloneData[0].title
         state.current = cloneData[0]
       }
-
+      //初始添加需要的最大值-maxLevelMax
+      if (cloneData.length > 1) {
+        cloneData[0].spreadTemplateParam.maxLevelMax = cloneData[1].spreadTemplateParam.minLevel
+      }
       state.list = cloneData
     }
   }
@@ -166,7 +194,6 @@
       }
       state.list.push(newlyAdded)
       state.current = newlyAdded
-
       state.tabPosition = title
 
       //传递给父级
@@ -200,22 +227,11 @@
       if (type === 'remove') {
         if (state.list.length > 1) {
           let arr = state.list.filter((item: any) => item.title !== e)
-          if (!isEmpty(arr)) {
-            state.tabPosition = arr[0].title
-            state.current = arr[0]
-          } else {
-            let newlyAdded = {
-              title: '',
-              spreadTemplateParam: {
-                minLevel: 0,
-                maxLevel: 0,
-                ...state.data
-              }
-            }
-            state.current = newlyAdded
-          }
-          state.list = arr
-          props.getList(state.list)
+            // 最后一项 最大值重新赋值~
+          arr[arr.length-1].spreadTemplateParam.maxLevelMax="999999999999999999999999999"
+          state.list = cloneDeep(arr)
+          state.current = arr[0]
+          state.tabPosition = arr[0].title
         } else {
           ElMessage({
             message: '至少保留一项',
@@ -241,7 +257,7 @@
     })
     state.list = arr
     state.tabPosition = getTitle(data.spreadTemplateParam.minLevel, data.spreadTemplateParam.maxLevel)
-    state.current=cloneDeep(data)//当前最新的数据
+    state.current = cloneDeep(data) //当前最新的数据
     props.getList(state.list)
   }
 
@@ -252,24 +268,23 @@
     let arr = state.list //总数据
     let maxLevel = data.spreadTemplateParam.maxLevel //当前输入的值
     let maxList = arr[arr.length - 1] //最大
-    data.spreadTemplateParam.MaxLevelType = false //不满足就添加状态-用于判断
 
     // 先判断当前是否是最大的
     if (data.title !== maxList.title) {
-      //现在点击的不是最大的那个
-      //当前项大一层的最小值
+    
       let min = arr[subscript + 1].spreadTemplateParam.minLevel
       if (maxLevel >= min) {
         ElMessage({
           message: '不能大于上一项的最小值',
           type: 'warning'
         })
-        data.spreadTemplateParam.MaxLevelType = true//不满足就添加状态-用于判断
-        data.spreadTemplateParam.max = min
-        data.spreadTemplateParam.maxLevel = min-1 //数据超出 使用下一层的最小值-1
+        //最大值数据更新根据 下一项的最小值来做
+        //点击方法 handleClick
+        //点击的是否给数据添加 maxLevelMax 用于最大值得范围 2022-10-9 16.17
+
         updateOperation(subscript, data, arr)
         //得刷新数据
-      }else{
+      } else {
         updateOperation(subscript, data, arr)
       }
     } else {
@@ -286,4 +301,67 @@
   }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+  .cloth-for {
+    transform: translateX(-20px);
+    margin-right: 20px;
+  }
+  .cloth-layer {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    line-height: 45px;
+    text-align: center;
+    //  color: #a1a3a5;
+    border-right: 2px solid #d9d9da;
+  }
+
+  .cloth-layer:hover {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    line-height: 45px;
+    text-align: center;
+    color: #409eff;
+    border-right: 2px solid #409eff;
+  }
+
+  .cloth-layer-choice {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    line-height: 45px;
+    text-align: center;
+    color: #409eff;
+    border-right: 2px solid #409eff;
+  }
+
+  .cloth-icon {
+    margin-left: 5px;
+  }
+  .cloth-icon:hover {
+    margin-left: 5px;
+    background: rgb(197, 193, 193);
+    border-radius: 100%;
+  }
+  .cloth-increase {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    line-height: 18px;
+    color: rgb(197, 193, 193);
+    text-align: center;
+    border: 1px solid rgb(197, 193, 193);
+    border-radius: 1px;
+    // transform: translateX(82px);
+    // transform: translateY(10px);
+    transform: translate(90px, 30px);
+  }
+  .cloth-increase:hover {
+    color: #409eff;
+  }
+  .rightFrom {
+    height: 600px;
+    overflow-y: scroll;
+  }
+</style>

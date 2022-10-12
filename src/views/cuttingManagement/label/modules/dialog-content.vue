@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-09 13:03:38
+ * @LastEditTime: 2022-10-10 10:55:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -94,8 +94,9 @@
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
+  import UploadModule from '@/components/upload/index.vue'
+
   import { content } from './conifgs'
-  import UploadModule from './dialog-upload.vue'
   import './index.less'
   const { formData, formMiddleData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
@@ -175,8 +176,7 @@
   }
 
   //时间
-  const setTime = (e: any) => {
-  }
+  const setTime = (e: any) => {}
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return

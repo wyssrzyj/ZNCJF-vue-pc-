@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-07 11:33:10
+ * @LastEditTime: 2022-10-12 13:26:26
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -50,7 +50,7 @@
             <el-form-item label="唛架门幅" prop="shelfWidth">
               <div>
                 <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="titleRight">mm</span>
+                <span class="bedSchedule-titleRight">mm</span>
               </div>
               <!-- <el-input-number v-model="form[item.model]" :precision="2"  :disabled="disable(item.disabled)">
                 <template #append>mm</template>
@@ -97,7 +97,7 @@
 
           <div v-if="item.type === 'styleBedNo'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-input-number v-model="state.form[item.model]" controls-position="right" :min="1" />
+              <el-input-number :disabled="disable(item.disabled)" v-model="state.form[item.model]" controls-position="right" :min="1" />
               <div>
                 <el-tooltip class="box-item" effect="dark" content="根据款式自动加1" placement="right-start">
                   <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
@@ -118,7 +118,7 @@
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
                 <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
-                <span class="titleRight">mm</span>
+                <span class="bedSchedule-titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
@@ -126,7 +126,7 @@
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
                 <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="titleRight">mm</span>
+                <span class="bedSchedule-titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
@@ -179,9 +179,9 @@
   import print from 'print-js'
 
   import { QuestionFilled } from '@element-plus/icons-vue'
-  import { content } from './conifgs'
+  import UploadModule from '@/components/upload/index.vue'
 
-  import UploadModule from './dialog-upload.vue'
+  import { content } from './conifgs'
   import { ElMessage } from 'element-plus'
   import PopModule from './dialog-forms.vue'
   import Work from './dialog-work.vue'
@@ -213,12 +213,12 @@
 
   const setPrint = () => {
     // if (props.row.statu !== 1) {
-      print({
-        printable: 'work',
-        type: 'html',
-        targetStyles: ['*'],
-        maxWidth: 5000
-      })
+    print({
+      printable: 'work',
+      type: 'html',
+      targetStyles: ['*'],
+      maxWidth: 5000
+    })
     // }
     //添加状态
   }
@@ -254,6 +254,7 @@
     let dataClone = cloneDeep(state.fabricName)
     let arr = dataClone.filter((item: any) => item.value === e)[0]
     state.form.fabricColor = arr.color
+    state.form.shelfList = [] //清除排麦比例的旧值只用联动数据
     state.form.fabricCode = arr.sn
   }
   const init = () => {

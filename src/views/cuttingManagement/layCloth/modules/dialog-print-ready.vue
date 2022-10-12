@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-03 17:47:16
+ * @LastEditTime: 2022-10-12 16:22:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -13,10 +13,18 @@
       <div class="work-ready-two">面料颜色</div>
       <div class="work-ready-two">拉布层数</div>
       <div class="work-ready-two">尺码配比</div>
-      <div class="dynamic">
+
+      <div v-if="state.list.length > 0" class="dynamic">
         <div v-for="(item, index) in state.list" :key="index">
           <div :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item.size }}</div>
           <div :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item.levelClothSum }}</div>
+        </div>
+      </div>
+
+      <div v-if="state.list.length === 0" class="dynamic">
+        <div>
+          <div :style="{ width: `1000px` }" class="work-dynamic">{{}}</div>
+          <div :style="{ width: `1000px` }" class="work-dynamic">{{}}</div>
         </div>
       </div>
       <div>
@@ -29,8 +37,11 @@
       <div class="work-ready-one">{{ item.color }}</div>
       <div class="work-ready-one">{{ item.spreadClothLevel }}</div>
       <div class="work-ready-one">{{ item.color }}</div>
-      <div class="dynamic">
+      <div v-if="state.list.length > 0" class="dynamic">
         <div v-for="(v, index) in state.list" :key="index" :style="{ width: `${state.width}px` }" class="work-dynamic">{{ item[v.size] }}</div>
+      </div>
+      <div v-if="state.list.length === 0" class="dynamic">
+        <div :style="{ width: `1000px` }" class="work-dynamic">{{}}</div>
       </div>
       <div>
         <div class="work-ready-block-r">{{ item.sum }}</div>
@@ -117,7 +128,7 @@
     item => {
       // 动态头部
       let dynamic = item.sizeAndAmountList
-      
+
       if (!isEmpty(dynamic)) {
         let sum = 0
         dynamic.forEach((item: any) => {
@@ -127,10 +138,10 @@
         state.levelClothSums = sum
       }
 
-      state.list = dynamic
+      state.list = !isEmpty(dynamic) ? dynamic : []
 
-      if(!isEmpty(dynamic)){
-      state.width = 1000 / dynamic.length
+      if (!isEmpty(dynamic)) {
+        state.width = 1000 / dynamic.length
       }
       // 列表
       state.color = setDataFormat(item)

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-05 11:35:12
+ * @LastEditTime: 2022-10-12 13:45:06
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -102,8 +102,8 @@
 
   import { QuestionFilled } from '@element-plus/icons-vue'
   import { equipmentType } from '@/components/conifgs.ts'
+  import UploadModule from '@/components/upload/index.vue'
 
-  import UploadModule from './dialog-upload.vue'
   import DialogForms from './dialog-forms.vue'
   import { content } from './conifgs'
 
@@ -171,9 +171,10 @@
         res.data.img = res.data.img !== '' ? [{ url: res.data.img }] : []
 
         state.form = res.data
-
-        let arr = res.data.defaultParam.split(',')
-        state.title = arr
+        if (!isEmpty(res.data.defaultParam)) {
+          let arr = res.data.defaultParam.split(',')
+          state.title = arr
+        }
       })
     }
     //关联操作员
@@ -214,8 +215,9 @@
   // 设备类型更改
   const change = (e: any) => {
     setRelationDevice(e)
-
     state.echoDefaultParam = {}
+    //关联设备初始
+    state.form.relationDevice = null
   }
 
   // 表单提交

@@ -1,12 +1,8 @@
 <template>
-  <div v-if="disabled === true">
-    <el-button icon="upload" :disabled="true">上传文件</el-button>
-  </div>
-  <div v-if="disabled === false">
-
     <div class="file-upload">
           <el-upload
       v-if="state.fileType !== null"
+      :disabled="props.disabled"
       :file-list="state.targetArr[0]['fileList']"
       :accept="props.pictureType.accept"
       :action="state.ossAction"
@@ -16,11 +12,12 @@
       :on-progress="uploadProgress"
       :on-success="uploadSuccess"
       :before-remove="beforeRemove"
+      :on-remove="remove"
       :on-error="uploadError"
       :limit="props.upload.limit"
       :on-preview="download"
     >
-      <el-button icon="upload">上传文件</el-button>
+      <el-button :disabled="props.disabled"  icon="upload">上传文件</el-button>
       <div v-if="state.fileType !== null" class="subtip">
         <el-icon>
           <Warning />
@@ -32,8 +29,6 @@
     </el-upload>
 
     </div>
-
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -181,6 +176,10 @@
     // state.uploadFileLoading = false
     // return false 
   }
+   //删除
+  const remove = (uploadFile: any, uploadFiles: any) => {
+    props.gitFile({ data: uploadFiles })
+  }
 
   const setType = (name: string) => {
     if (props.pictureType.accept === '') return true
@@ -264,6 +263,7 @@
   }
   .file-upload{
     width: 200px;
-    min-height:50px;
+    height:80px;
+    overflow-y: scroll;
   }
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-09-30 16:20:05
+ * @LastEditTime: 2022-10-09 16:29:00
  * @Description:
  * @LastEditors: lyj
  */
@@ -67,6 +67,7 @@ export const formData = {
   shrinkHours: '',
   looseClothHours: '',
   cutTemplateId: '',
+  primaryFlag:1,
 }
 
 export const formMiddleData = [
@@ -75,7 +76,7 @@ export const formMiddleData = [
   // { name: '需要对纹', model: 'alignLineFlag', prop: 'alignLineFlag', type: 'alignLineFlag', disabled: false },
   // { name: '需要松布', model: 'looseClothFlag', prop: 'looseClothFlag', type: 'looseClothFlag', disabled: false },
   // { name: '需要预缩', model: 'shrinkFlag', prop: 'shrinkFlag', type: 'shrinkFlag', disabled: false },
-  { name: '铺布参数模板', model: 'spreadTemplateId', prop: null, type: 'spreadTemplateId', disabled: false },
+  { name: '铺布参数模板', model: 'spreadTemplateId', prop: "spreadTemplateId", type: 'spreadTemplateId', disabled: false },
   { name: '主/辅料', model: 'primaryFlag', prop: 'primaryFlag', type: 'primaryFlag', disabled: false },
 
 ]

@@ -1,7 +1,9 @@
 <template>
   <div>
-    <el-form ref="rightFormRef" :rules="rightFormRules" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
-      <div class="title">铺布机建议参数</div>
+    <el-form ref="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
+      <div class="title">
+        <div>铺布机建议参数</div>
+      </div>
 
       <el-row :gutter="20">
         <el-col :span="9">
@@ -57,9 +59,20 @@
         </el-col>
       </el-row>
 
-      <div class="title">裁床建议参数</div>
+      <div class="title">
+        <div>裁床建议参数</div>
+        <div class="unitSearch">
+          <el-select v-model="value">
+            <el-option v-for="item in state.options" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </div>
+      </div>
+
       <el-row :gutter="20">
-        <el-col :span="9">
+        <UploadModule :disabled="disable(false)" :type="'currencyFile'" :get-data="getAttachmentList" :value="state.bottomForm.attachmentList" :upload="upload" />
+
+        <!-- 暂时隐藏 -->
+        <!-- <el-col :span="9">
           <el-form-item label="最小磨刀频率：">
             <div class="devParam-row">
               <el-input-number v-model="state.bottomForm.minKnifeFrequency" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
@@ -99,18 +112,20 @@
               <span>%</span>
             </div>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { customFormData } from './conifgs'
-
-  import { isEmpty } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
   import { reactive, ref, defineEmits, defineExpose, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
+
+  import UploadModule from '@/components/upload/index.vue'
+  import { customFormData } from './conifgs'
+
   const { proxy } = getCurrentInstance()
 
   const emit = defineEmits(['changeFrom'])
@@ -125,8 +140,20 @@
   }>()
 
   const { formData } = customFormData
+  const value = ref('2')
   const state: any = reactive({
     form: formData, //form
+    options: [
+      // {
+      //   value: '1',
+      //   label: '参数配置',
+      //   disabled: true,
+      // },
+      {
+        value: '2',
+        label: '参数文件'
+      }
+    ],
     rightForm: {
       forwardSpeed: '',
       backSpeed: '',
@@ -148,7 +175,33 @@
       knifeAngle: ''
     }
   })
+  //上传
+  const upload = reactive({
+    shelfFile: { limit: 1, title: '最多上传一个' },
+    pictureType: { accept: ' .xpr', availableSuffix: ' xpr' },
+    api: '/jack-ics-api/oss/upload'
+  })
 
+  //处理参数文件回显
+  const setAttachmentList = (arr: any) => {
+    //处理格式问题
+    if (isEmpty(arr.attachmentList)) {
+      if (arr.paramFileName) {
+        arr.attachmentList = [
+          {
+            name: arr.paramFileName,
+            response: {
+              data: { src: arr.paramFile }
+            }
+          }
+        ]
+      } else {
+        arr.attachmentList = []
+      }
+    }
+
+    return arr
+  }
   const setData = () => {
     if (props.row) {
       const data = {
@@ -163,7 +216,9 @@
           }
 
           if (!isEmpty(res.data.cutTaskParam)) {
-            state.bottomForm = res.data.cutTaskParam
+            //处理参数文件回显
+            let arr = res.data.cutTaskParam
+            state.bottomForm = setAttachmentList(arr)
           }
           props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
         }
@@ -174,7 +229,11 @@
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.two)) {
       state.rightForm = props.value.two.top
-      state.bottomForm = props.value.two.bottom
+      let arr = props.value.two.bottom
+      //异步处理 不然watch监听不到
+      setTimeout(function () {
+        state.bottomForm = setAttachmentList(arr)
+      }, 100)
     } else {
       setData()
     }
@@ -194,6 +253,23 @@
   const disable = (type: any) => {
     return props.type === true ? true : type
   }
+
+  // 通用上传
+  const getAttachmentList = (e: any) => {
+    if (e.type === 'currencyFile') {
+      if (!isEmpty(e.data)) {
+        state.bottomForm.attachmentList = e.data
+        state.bottomForm.paramFileName = e.data[0].name
+        state.bottomForm.paramFile = e.data[0].response.data.src
+        props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
+      } else {
+        state.bottomForm.paramFileName = ""
+        state.bottomForm.paramFile = ""
+        props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
+
+      }
+    }
+  }
   defineExpose({ submitForm })
 </script>
 
@@ -209,8 +285,10 @@
     }
   }
   .title {
-    display: block;
+    display: flex;
     width: 100%;
+    height: 33px;
+    line-height: 33px;
     font-size: 14px;
     font-weight: bold;
     color: #333333;
@@ -221,7 +299,7 @@
     &::after {
       content: '';
       position: absolute;
-      top: 2px;
+      top: 8px;
       left: -8px;
       width: 3px;
       height: 16px;
@@ -246,5 +324,9 @@
     // .layClothTow {
     //   margin-left: 30px;
     // }
+  }
+  .unitSearch {
+    width: 100px;
+    margin-left: 5px;
   }
 </style>
