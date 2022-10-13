@@ -37,20 +37,13 @@
     </template>
   </njp-table-config>
 
- <!-- 删除 -->
-   <el-dialog
-    v-model="state.dialogVisible"
-    title="提示"
-    width="30%"
-    :before-close="handleClose"
-  >
+  <!-- 删除 -->
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="state.dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmDelete"
-          >确认</el-button
-        >
+        <el-button type="primary" @click="confirmDelete">确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -83,12 +76,12 @@
   const styleLibListEl = ref()
 
   const state: any = reactive({
-    dialogVisible:false,//删除弹窗
+    dialogVisible: false, //删除弹窗
     //导出
     export: {
       type: 'bedSchedule',
       data: exportData,
-      width:"1500px",
+      width: '1500px',
       importType: false,
       list: [],
       // template: 'http://10.18.4.25/template/bedPlan.xlsx',
@@ -138,12 +131,12 @@
     state.dialogTableVisible = true
   }
 
-//审核
+  //审核
   const examine = () => {
     if (!isEmpty(state.ids)) {
       proxy.$baseService.post('/jack-ics-api/bedPlan/audit', { idList: Object.values(state.ids) }).then((res: any) => {
         if (res.code === 0) {
-          state.ids=[] //清空选中项
+          state.ids = [] //清空选中项
           ElMessage({
             message: '审核成功',
             type: 'success'
@@ -165,9 +158,9 @@
   }
 
   //删除
- const mov = () => {
+  const mov = () => {
     if (!isEmpty(state.ids)) {
-     state.dialogVisible=true
+      state.dialogVisible = true
     } else {
       ElMessage({
         message: '至少选择一个',
@@ -175,24 +168,23 @@
       })
     }
   }
-  const confirmDelete=()=>{
-     proxy.$baseService.delete('/jack-ics-api/bedPlan/delete', state.ids).then((res: any) => {
-        if (res.code === 0) {
-          state.ids=[] //清空选中项
-          ElMessage({
-            message: '删除成功',
-            type: 'success'
-          })
-          state.dialogVisible = false
-          refreshTable()
-        } else {
-          ElMessage({
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-
+  const confirmDelete = () => {
+    proxy.$baseService.delete('/jack-ics-api/bedPlan/delete', state.ids).then((res: any) => {
+      if (res.code === 0) {
+        state.ids = [] //清空选中项
+        ElMessage({
+          message: '删除成功',
+          type: 'success'
+        })
+        state.dialogVisible = false
+        refreshTable()
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'warning'
+        })
+      }
+    })
   }
 
   //关闭 弹窗
@@ -241,32 +233,32 @@
           //处理唛架图问题
           ;(item.shelfWidth = heigh), //唛架门幅
             (item.shelfLength = width), //唛架长度
-            (item.spreadClothLength = Number(width) + 30), //铺布长度
+            (item.spreadClothLength = Number(width) + 30), //铺布长度1
             (item.useRate = useRate)
         }
       })
       //处理排麦比例的返回值
       data.map((item: any) => {
         let shelfScale = item.shelfScale.split(',')
-        let shelfScaleDome:any=[]
-        let  levelClothSum=0
-        let  bedSum=0
+        let shelfScaleDome: any = []
+        let levelClothSum = 0
+        let bedSum = 0
 
         if (!isEmpty(shelfScale)) {
           shelfScale.map((v: any) => {
             let index = v.lastIndexOf(':')
-            shelfScaleDome.push(v.slice(index+1)) 
+            shelfScaleDome.push(v.slice(index + 1))
           })
         }
 
-        if(!isEmpty(shelfScaleDome)){
-          shelfScaleDome.forEach((i:any)=>{
-          levelClothSum+=Number(i) 
-          bedSum+=i*item.spreadClothLevel
+        if (!isEmpty(shelfScaleDome)) {
+          shelfScaleDome.forEach((i: any) => {
+            levelClothSum += Number(i)
+            bedSum += i * item.spreadClothLevel
           })
         }
-        item.levelClothSum=levelClothSum
-        item.bedSum=bedSum
+        item.levelClothSum = levelClothSum
+        item.bedSum = bedSum
       })
       proxy.$baseService.post('/jack-ics-api/bedPlan/saveBatch', { bedPLanList: data }).then((res: any) => {
         refreshTable()
