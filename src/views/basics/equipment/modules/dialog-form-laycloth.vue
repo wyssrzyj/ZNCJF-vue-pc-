@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-07 13:04:03
+ * @LastEditTime: 2022-10-14 10:50:19
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,8 +10,8 @@
     <el-row :gutter="0">
       <el-col :span="12">
         <el-form-item prop="forwardSpeed" label="前进速度">
-          <el-input-number v-model="state.form.forwardSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入前进速度" type="text" :disabled="disabled(false)" />
-          <span class="equipmentCompany">mm/s</span>
+          <el-input-number  class="equipment-number" :controls="false"  :precision="0" v-model="state.form.forwardSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入前进速度" type="text" :disabled="disabled(false)" />
+          <span class="equipmentCompany">段</span>
         </el-form-item>
         <el-form-item prop="uniformTightness" label="匀速松紧值">
           <el-input v-model="state.form.uniformTightness" placeholder="请输入匀速松紧值" type="text" :disabled="disabled(false)" />
@@ -25,19 +25,19 @@
           
           </el-input>
         </el-form-item>
-        <el-form-item prop="angle" label="布斗目标角度">
+        <!-- <el-form-item prop="angle" label="布斗目标角度">
           <el-input v-model="state.form.angle" placeholder="请输入布斗目标角度" type="text" :disabled="disabled(false)" >
            <template #append>°</template>
           </el-input>
-        </el-form-item>
+        </el-form-item> -->
        <!-- <el-form-item prop="cutSpeed" label="切布段速">
           <el-input-number v-model="state.form.cutSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
         </el-form-item>  -->
       </el-col>
       <el-col :span="12">
         <el-form-item prop="backSpeed" label="后退速度">
-          <el-input-number v-model="state.form.backSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入后退速度" type="text" :disabled="disabled(false)" />
-             <span class="equipmentCompany">mm/s</span>
+          <el-input-number class="equipment-number" :controls="false" :precision="0" v-model="state.form.backSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入后退速度" type="text" :disabled="disabled(false)" />
+             <span class="equipmentCompany">段</span>
         </el-form-item>
         <el-form-item prop="accelerationTightness" label="加速松紧值">
           <el-input v-model="state.form.accelerationTightness" placeholder="请输入加速松紧值" type="text" :disabled="disabled(false)" />
@@ -52,9 +52,9 @@
           <template #append>mm</template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="accelerationWeight" label="加速权重">
+        <!-- <el-form-item prop="accelerationWeight" label="加速权重">
           <el-input v-model="state.form.accelerationWeight" placeholder="请输入加速权重" type="text" :disabled="disabled(false)" />
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item prop="cutLength" label="切布长度">
           <el-input-number v-model="state.form.cutLength" :min="0" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
         </el-form-item> -->

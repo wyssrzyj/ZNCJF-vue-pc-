@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div class="plannedTime">
+    <div class="layCloth-img">
+      <div  @click="see">
+    <el-icon><PictureFilled /></el-icon>
+      </div>
+  </div>
     <el-form ref="rightFormRef" :rules="rightFormRules" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
       <div class="title">任务时间设置</div>
       <el-form-item label="铺布任务开始时间：">
@@ -75,6 +80,10 @@
         />
       </el-form-item>
     </el-form>
+
+        <el-dialog v-if="state.imgType" v-model="state.imgType" :close-on-click-modal="false" :draggable="false" title="查看甘特图"  width="1100px" hei>
+          <ChartDisplay/>
+        </el-dialog>
   </div>
 </template>
 
@@ -84,6 +93,7 @@
   import { isEmpty } from 'lodash'
 
   import { Calendar } from '@element-plus/icons-vue'
+  import ChartDisplay  from  "./chartDisplay-img.vue"
   const { proxy } = getCurrentInstance()
 
   const rightFormRef = ref<FormInstance>()
@@ -96,6 +106,7 @@
 
   const state: any = reactive({
     planType: true, //贴标时间是否可用
+    imgType:false,
     rightForm: {
       //铺布
       spreadTaskTime: {
@@ -114,6 +125,10 @@
       }
     }
   })
+  const see=()=>{
+    state.imgType=true
+
+  }
 
   const setList = () => {
     if (props.ids) {

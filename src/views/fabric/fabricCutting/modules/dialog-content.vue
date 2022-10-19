@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-11 15:28:09
+ * @LastEditTime: 2022-10-14 13:32:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,7 +10,7 @@
     <!-- form -->
     <el-col :span="8">
       <div>
-        <el-form ref="ruleFormRef" class="dialogContentForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+        <el-form label-position="top"  ref="ruleFormRef" class="FabricLayingForm" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
           <el-form-item label="模板面料图片" class="layclothImg" prop="img">
             <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
@@ -21,7 +21,7 @@
             <el-input v-model="state.form.name" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
           </el-form-item>
           <el-form-item label="面料类型" prop="fabricType">
-            <el-select v-model="state.form.fabricType" :disabled="disable(false)">
+            <el-select v-model="state.form.fabricType" :disabled="disable(false)" @change="change">
               <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -116,7 +116,11 @@
         arr.fabricType = arr.fabricType.toString()
 
         //处理参数文件回显
-        arr.levelParamVOList=setLevelParamVOList(arr.levelParamVOList)
+        arr.levelParamVOList = setLevelParamVOList(arr.levelParamVOList)
+
+        if (!isEmpty(arr.templateDTO)) {
+          state.form.relationFabricList = arr.templateDTO.relationFabricList
+        }
         state.form = arr
         state.initForm = arr
       })
@@ -142,15 +146,24 @@
     state.form.fabricWeightMin = e.left
     state.form.fabricWeightMax = e.right
     const cloneForm = cloneDeep(state.form)
+    //类型、克重操作重置面料
+    if (!isEmpty(props.row)) {
+      cloneForm.templateDTO.relationFabricList = []
+    }
+
     state.form = cloneForm
   }
   //  面料类型 赋值
-  //  const change=(e:any)=>{
-  //   state.form.fabricType=e
-  //     const cloneForm = cloneDeep(state.form)
-  //     state.form = cloneForm
+  const change = (e: any) => {
+    state.form.fabricType = e
+    const cloneForm = cloneDeep(state.form)
+    //类型、克重操作重置面料
+    if (!isEmpty(props.row)) {
+      cloneForm.templateDTO.relationFabricList = []
+    }
 
-  //  }
+    state.form = cloneForm
+  }
   //关联面料
   const setFabric = (e: any) => {
     state.form.relationFabricList = e
@@ -194,7 +207,7 @@
               imageUrl: !isEmpty(img) ? img[0].url : '',
               name: name,
               sn: sn,
-              relationFabricList: !isEmpty(state.form.relationFabricList) ? state.form.relationFabricList : null
+              relationFabricList: !isEmpty(state.form.relationFabricList) ? state.form.relationFabricList : []
             },
             levelParamVOList: state.form.levelParamVOList
           }

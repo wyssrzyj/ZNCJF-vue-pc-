@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-10-09 16:29:00
+ * @LastEditTime: 2022-10-13 14:17:14
  * @Description:
  * @LastEditors: lyj
  */
@@ -34,7 +34,7 @@ export const exportData = [
   },
     {
     prop: 'primaryFlag',
-    label: '主、副料',
+    label: '主/辅料',
     type: 'primaryFlag',
     required: true
   },

@@ -1,22 +1,20 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 12:48:07
- * @LastEditTime: 2022-09-07 14:16:55
+ * @LastEditTime: 2022-10-14 13:57:47
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <div>
-    <div class="bottomTableTitle">布斗速度</div>
-    <el-table :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" border>
-      <el-table-column prop="date" label="段速" width="60" />
-      <el-table-column v-for="(item, i) in state.data" :key="i" :label="item.name" width="60">
-        <template #default="scope">
-          <el-input-number v-model="scope.row[item.model]" :disabled="props.type" class="fabricLayingInput" :controls="false" :precision="1" :step="0.1" @change="handleChange" />
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <div class="bottomTableTitle">布斗速度</div>
+  <el-table :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" border>
+    <el-table-column prop="date" label="段速" width="60" />
+    <el-table-column v-for="(item, i) in state.data" :key="i" :label="item.name" width="60">
+      <template #default="scope">
+        <el-input-number v-model="scope.row[item.model]" :disabled="props.type" class="fabricLayingInput" :controls="false" :precision="1" :step="0.1" @change="handleChange" />
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script lang="ts" setup>
@@ -55,4 +53,8 @@
   }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+  .bottomTable {
+    width: 900px;
+  }
+</style>

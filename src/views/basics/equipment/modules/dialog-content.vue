@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-12 13:45:06
+ * @LastEditTime: 2022-10-17 15:59:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -15,10 +15,13 @@
         </el-form-item>
 
         <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam">
-          <el-icon class="proportionsLeft" :size="30" @click="shippingMarks"><Edit /></el-icon>
+          <el-icon class="equipment-proportionsLeft" :size="20" @click="shippingMarks"><Edit /></el-icon>
           <br />
 
-          <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}</span>
+          <div class="defaultParam">
+          <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}， <br></span>
+          </div>
+
         </el-form-item>
       </el-col>
 
@@ -179,6 +182,8 @@
     }
     //关联操作员
     let data = {
+      page: 1,
+      limit: 999999,
       systemId: localStorage.getItem('v1@systemId'),
       tenantCode: localStorage.getItem('v1@tenantCode')
     }
@@ -324,3 +329,21 @@
     props.close('cancel')
   }
 </script>
+<style lang="less" scoped>
+
+.equipment-proportionsLeft{
+  // width: 10px;
+  font-size: 15px;
+  position: absolute;
+  top: -29px;
+  right:79px;
+  color: rgb(69, 167, 231);
+  cursor: pointer;
+}
+.defaultParam{
+  width: 200px;
+  height: 100px;
+  overflow-y: scroll;
+}
+
+</style>

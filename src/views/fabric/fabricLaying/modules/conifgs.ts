@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-10-10 16:44:41
+ * @LastEditTime: 2022-10-13 10:20:29
  * @Description:
  * @LastEditors: lyj
  */
@@ -162,7 +162,7 @@ export const customFormData = {
     { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
     { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
     { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: "crawlSpeed", disabled: false },
-    { name: '布斗目标角度', model: 'angle', prop: 'angle', type: "angle", disabled: false }
+    // { name: '布斗目标角度', model: 'angle', prop: 'angle', type: "angle", disabled: false }//暂时隐藏 2022-10-13 10.20
   ],
   formRightData: [
     { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
@@ -171,7 +171,7 @@ export const customFormData = {
     { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
     { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
     { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: "crawlDistance", disabled: false },
-    { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }
+    // { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }//暂时隐藏 2022-10-13 10.20
   ],
   dataRule: {
     file: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

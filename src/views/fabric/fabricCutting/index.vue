@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-06 09:55:08
+ * @LastEditTime: 2022-10-13 09:23:35
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,7 +17,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增裁剪模块', {})">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增裁剪模版', {})">新增</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
@@ -55,8 +55,8 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看裁剪模块', row)">查看</el-button>
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪模块', row)">编辑</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看裁剪模板', row)">查看</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪模板', row)">编辑</el-button>
     </template>
 
     <el-dialog v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="1100px">

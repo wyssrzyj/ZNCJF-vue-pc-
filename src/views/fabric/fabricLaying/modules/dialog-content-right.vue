@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-10-12 08:36:37
+ * @LastEditTime: 2022-10-19 11:36:45
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -132,8 +132,6 @@
   //初始设置数据
   const init = (data: any, type: any) => {
     let cloneData = cloneDeep(data)
-    let list = cloneDeep(state.list)
-
     if (!isEmpty(cloneData)) {
       //添加标题-和最大层数最大值
       cloneData.map((item: any, index: any) => {
@@ -361,7 +359,6 @@
     color: #409eff;
   }
   .rightFrom {
-    height: 600px;
     overflow-y: scroll;
   }
 </style>

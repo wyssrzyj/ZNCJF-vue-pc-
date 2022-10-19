@@ -1,16 +1,17 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-12 13:26:26
+ * @LastEditTime: 2022-10-19 11:07:59
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
-  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
+  <div class="bedSchedule">
+    <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left -->
-      <el-col :span="8">
+      <el-col :span="8" class="bedSchedule-left">
         <el-form-item label="款图" class="layclothImg">
           <UploadModule v-model="state.form.styleImage" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
@@ -23,9 +24,7 @@
         <el-form-item label="唛架图" prop="shelfFile">
           <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
         </el-form-item>
-        <el-form-item label="其他附件">
-          <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
-        </el-form-item>
+       
       </el-col>
 
       <el-col :span="8">
@@ -49,27 +48,19 @@
           <div v-if="item.type === 'shelfWidth'">
             <el-form-item label="唛架门幅" prop="shelfWidth">
               <div>
-                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="bedSchedule-titleRight">mm</span>
+                <el-input-number  class="number-styleBedNo" :controls="false"  v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
+                <span class="fabricLaying-titleRight">mm</span>
               </div>
-              <!-- <el-input-number v-model="form[item.model]" :precision="2"  :disabled="disable(item.disabled)">
-                <template #append>mm</template>
-              </el-input-number> -->
-            </el-form-item>
-          </div>
-          <div v-if="item.type === 'spreadClothLevel'">
-            <el-form-item label="总铺布层数" prop="spreadClothLevel">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(true)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'levelClothSum'">
             <el-form-item :label="`${item.name}`">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
+              <el-input-number :controls="false" v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
           <div v-if="item.type === 'bedSum'">
             <el-form-item :label="`${item.name}`">
-              <el-input-number v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
+              <el-input-number :controls="false" v-model="state.form[item.model]" :disabled="disable(item.disabled)" controls-position="right" :min="0" type="text" />
             </el-form-item>
           </div>
 
@@ -97,10 +88,10 @@
 
           <div v-if="item.type === 'styleBedNo'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-input-number :disabled="disable(item.disabled)" v-model="state.form[item.model]" controls-position="right" :min="1" />
-              <div>
+              <el-input-number class="number-styleBedNo" :controls="false" :disabled="disable(item.disabled)" v-model="state.form[item.model]" controls-position="right" :min="1" />
+              <div class="fabricLaying-titleRight">
                 <el-tooltip class="box-item" effect="dark" content="根据款式自动加1" placement="right-start">
-                  <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
+                  <el-icon class="styleBedNo" :size="20"><QuestionFilled /></el-icon>
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -117,16 +108,16 @@
           <div v-if="item.type === 'shelfLength'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
-                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
-                <span class="bedSchedule-titleRight">mm</span>
+                <el-input-number  class="number-styleBedNo" :controls="false" v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" />
+                <span class="fabricLaying-titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
           <div v-if="item.type === 'spreadClothLength'">
             <el-form-item :label="`${item.name}`" :prop="item.prop">
               <div>
-                <el-input-number v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
-                <span class="bedSchedule-titleRight">mm</span>
+                <el-input-number  class="number-styleBedNo" :controls="false" v-model="state.form[item.model]" :precision="0" controls-position="right" :min="0" :disabled="disable(item.disabled)" @change="setUtilization" />
+                <span class="fabricLaying-titleRight">mm</span>
               </div>
             </el-form-item>
           </div>
@@ -140,10 +131,10 @@
           </div>
           <div v-if="item.type === 'useRate'">
             <el-form-item :label="`${item.name}`" :prop="item.prop" class="buttonContainer">
-              <el-input-number v-model="state.form[item.model]" :precision="2" controls-position="right" :disabled="disable(item.disabled)" />
-              <div>
+              <el-input-number  class="number-styleBedNo"  :controls="false" v-model="state.form[item.model]" :precision="2" controls-position="right" :disabled="disable(item.disabled)" />
+              <div class="fabricLaying-titleRight">
                 <el-tooltip class="box-item" effect="dark" content="【选择唛架图获取有效面积】有效面积/(铺布长度*唛架门幅)" placement="right-start">
-                  <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
+                  <el-icon class="styleBedNo" :size="20"><QuestionFilled /></el-icon>
                 </el-tooltip>
               </div>
             </el-form-item>
@@ -156,14 +147,20 @@
           </div>
         </div>
       </el-col>
+       <el-form-item label="其他附件">
+        <div class="bedSchedule-file">
+          <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+        </div>
+        </el-form-item>
     </el-row>
-
-    <div class="dialogBottom">
+  </el-form>
+  </div>
+  
+   <div class="dialogBottom">
       <el-button v-if="!disable(false)" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
       <el-button v-if="disable(false) && props.row.statu !== 1" type="primary" class="preservation" @click="setPrint">打印</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
     </div>
-  </el-form>
 
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" title="排唛比例" width="1000px">
     <PopModule v-if="state.dialogTableVisible" :type="props.dialogType" :operation="operation" :form="state.form" />

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-12 13:07:00
+ * @LastEditTime: 2022-10-13 14:27:22
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -91,13 +91,24 @@
     if (!isEmpty(state.saveData)) {
       let allMeet = false
 
-      //设备、面料管理
-      if (props.export.type === 'equipment' || props.export.type === 'fabric') {
+      //设备
+      if (props.export.type === 'equipment' ) {
         let equipmentType = state.saveData.every((item: any) => {
           return item.sn !== '' && item.spec !== '' && item.name !== '' && item.type !== ''
         })
         allMeet = equipmentType
       }
+
+      // 面料
+       if ( props.export.type === 'fabric') {
+        console.log(state.saveData);
+
+        let equipmentType = state.saveData.every((item: any) => {
+          return item.sn !== ''  && item.name !== '' && item.type !== ''&& item.primaryFlag !== ''&& item.primaryFlag !== null
+        })
+        allMeet = equipmentType
+      }
+
       //床次
       if (props.export.type === 'bedSchedule') {
         let equipmentType = state.saveData.every((item: any) => {

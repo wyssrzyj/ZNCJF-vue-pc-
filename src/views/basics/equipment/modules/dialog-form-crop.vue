@@ -1,14 +1,14 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-12 11:25:24
+ * @LastEditTime: 2022-10-14 11:05:37
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
-    <el-row :gutter="0">
-      <el-col :span="12">
+  <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" >
+    <el-row :gutter="0" >
+      <el-col :span="12" class="crop-left">
         <el-form-item prop="minKnifeFrequency" label="最小磨刀频率">
           <el-input v-model="state.form.minKnifeFrequency" placeholder="最小磨刀频率" type="text" :disabled="disabled(false)">
             <template #append>U/min</template>
@@ -25,7 +25,7 @@
           </el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12" class="crop-right" >
         <el-form-item prop="maxKnifeFrequency" label="刀频">
           <el-input v-model="state.form.maxKnifeFrequency" placeholder="请输入刀频" type="text" :disabled="disabled(false)">
             <template #append>U/min</template>

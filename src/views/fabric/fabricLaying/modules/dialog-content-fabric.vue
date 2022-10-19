@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-10-12 10:32:39
+ * @LastEditTime: 2022-10-19 11:36:27
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -36,7 +36,7 @@ vue
 </template>
 
 <script lang="ts" setup>
-  import { isEmpty } from 'lodash'
+  import { isEmpty,cloneDeep } from 'lodash'
   import { ref, reactive, getCurrentInstance, watch } from 'vue'
   import { QuestionFilled } from '@element-plus/icons-vue'
   const { proxy } = getCurrentInstance()
@@ -62,21 +62,28 @@ vue
   const setTitle = (e: any) => {
     let data: any = []
     if (!isEmpty(e)) {
-      e.forEach((item: any) => {
-        data.push({
-          value: item.id,
-          name: item.name,
-          id: item.id
+      if (e[0] !== null) {
+        e.forEach((item: any) => {
+          data.push({
+            value: item.id,
+            name: item.name,
+            id: item.id,
+            ...item
+          })
         })
-      })
-      state.title = data
+        state.title = data
+      }
     }
   }
   watch(
     () => props.form,
     item => {
       if (!isEmpty(item.templateDTO)) {
-        setTitle(item.templateDTO.relationFabricList)
+        if (!isEmpty(item.templateDTO.relationFabricList)) {
+          setTitle(item.templateDTO.relationFabricList)
+        } else {
+          state.title = []
+        }
       } else {
         state.title = []
       }
@@ -92,7 +99,10 @@ vue
   )
 
   const handleClose = (tag: string) => {
-    state.title.splice(state.title.indexOf(tag), 1)
+   state.title.splice(state.title.indexOf(tag), 1)
+   let  title=cloneDeep (state.title)
+   //深拷贝一次 用于watch监听
+   state.title= title
   }
 
   const open = () => {
@@ -114,6 +124,8 @@ vue
             fabricList.push({ name: item.name, id: item.id })
           })
           state.options = fabricList
+        }else{
+          state.options = []
         }
       }
     })
@@ -155,11 +167,17 @@ vue
       })
     }
     state.title = checkValues
-    // 暴露出去
-    props.setFabric(checkValues)
-
     dialogVisible.value = false
   }
+
+  
+//数据更新传递给父级
+    watch(
+    () => state.title,
+    item => {
+    props.setFabric(item)
+    }
+  )
 </script>
 
 <style>

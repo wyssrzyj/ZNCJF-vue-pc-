@@ -97,9 +97,7 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      // template: 'http://10.18.4.25/template/device.xlsx',
-      template: 'http://192.168.1.3/template/device.xlsx',
-      // 192.168.1.3
+      template: 'http://192.168.99.184/template/device.xlsx',
       interface: '/jack-ics-api/device/import'
     },
 

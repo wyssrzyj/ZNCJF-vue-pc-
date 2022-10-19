@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-11 15:34:58
+ * @LastEditTime: 2022-10-19 11:35:24
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -27,8 +27,8 @@
 
               <div v-if="item.type === 'forwardSpeed'">
                 <el-form-item :label="`${item.name}`">
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
-                  <span class="fabricLayingCompany">mm/s</span>
+                  <el-input-number :min="1" :max="10" v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
+                  <span class="fabricLayingCompany">段</span>
                 </el-form-item>
               </div>
 
@@ -77,8 +77,8 @@
 
               <div v-if="item.type === 'backSpeed'">
                 <el-form-item :label="`${item.name}`">
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
-                  <span class="fabricLayingCompany">mm/s</span>
+                  <el-input-number :min="1" :max="10" v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
+                  <span class="fabricLayingCompany">段</span>
                 </el-form-item>
               </div>
               <div v-if="item.type === 'crawlDistance'">
@@ -98,19 +98,20 @@
         </el-row>
       </el-form>
     </div>
-    <div>
+    <!-- 暂时隐藏 2022-10-13 10.20 -->
+    <!-- <div>
       <BottomTable :type="props.type" :on-chang="onChang" :bottom-table="state.bottomTable" />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts" setup>
   import { reactive, watch } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
-  import UploadModule from '@/components/upload/index.vue'
+  // import UploadModule from '@/components/upload/index.vue'
   import './index.less'
   import { customFormData } from './conifgs'
-  import BottomTable from './dialog-content-table.vue'
+  // import BottomTable from './dialog-content-table.vue'
   const { formData, formMiddleData, formRightData, dataRule } = customFormData
   const props = defineProps<{
     current: any
@@ -130,11 +131,11 @@
   })
 
   //上传
-  const upload = reactive({
-    shelfFile: { limit: 1, title: '最多上传一个' },
-    pictureType: { accept: ' .xpr', availableSuffix: ' xpr' },
-    api: '/jack-ics-api/oss/upload'
-  })
+  // const upload = reactive({
+  //   shelfFile: { limit: 1, title: '最多上传一个' },
+  //   pictureType: { accept: ' .xpr', availableSuffix: ' xpr' },
+  //   api: '/jack-ics-api/oss/upload'
+  // })
 
   // 初始
   const init = () => {
@@ -175,16 +176,16 @@
     props.update(data)
   }
   // table修改的返回值
-  const onChang = (e: any) => {
-    let data = props.current
-    data.spreadTemplateParam.bottomTable = e
-    props.update(data)
-  }
+  // const onChang = (e: any) => {
+  //   let data = props.current
+  //   data.spreadTemplateParam.bottomTable = e
+  //   props.update(data)
+  // }
 
   // 是否可用
-  const disable = (type: any) => {
-    return state.type === true ? true : type
-  }
+  // const disable = (type: any) => {
+  //   return state.type === true ? true : type
+  // }
 
   // // 通用上传
   // const getAttachmentList = (e: any) => {

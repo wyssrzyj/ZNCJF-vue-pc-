@@ -1,15 +1,17 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-10-12 10:22:30
+ * @LastEditTime: 2022-10-14 13:05:41
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-input-number v-model="state.list.left" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false" size="large" @change="e => handleChange(e, 'left')" />~
-  <el-input-number v-model="state.list.right" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false" size="large" @change="e => handleChange(e, 'right')" />
 
+  <div class="fabricWeight">
+      <el-input-number v-model="state.list.left" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false"  @change="e => handleChange(e, 'left')" />~
+  <el-input-number v-model="state.list.right" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false"  @change="e => handleChange(e, 'right')" />
   <span class="fabricWeight-right">g/m²</span>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -56,11 +58,20 @@
   }
 </script>
 
-<style>
+<style lang="less" scoped>
+
+.fabricWeight{
+     padding: 5px;
+    width: 200px;
+    height: 45px;
+  background: #eaeaea;
+  border: 1px solid #ddd;
+}
   .fabricWeightInput {
     width: 50px;
+    height: 50px;
   }
   .fabricWeight-right {
-    margin-left: 10px;
+    margin-left: 28px;
   }
 </style>

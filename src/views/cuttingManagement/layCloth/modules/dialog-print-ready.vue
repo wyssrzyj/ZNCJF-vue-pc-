@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-12 16:22:10
+ * @LastEditTime: 2022-10-17 15:41:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -96,12 +96,15 @@
 
   //添加对应的字段并赋值
   const setSize = (v: any, item: any) => {
-    let topData = item.sizeAndAmountList //动态头
+      let topData = item.sizeAndAmountList //动态头
     let data = cloneDeep(v)
     let size = item.colorAndSizeList
     //给每一项添加对应的字段
     size.forEach((i: any) => {
+      console.log(data.color);
+      console.log(i.color);
       if (data.color === i.color) {
+        console.log(addData(i.size, topData, data));
         data[i.size] = addData(i.size, topData, data)
       }
     })
@@ -136,15 +139,22 @@
         })
         //单层件树总和
         state.levelClothSums = sum
-      }
+      }else{
+        state.levelClothSums = 0
 
+      }
+      
       state.list = !isEmpty(dynamic) ? dynamic : []
+
 
       if (!isEmpty(dynamic)) {
         state.width = 1000 / dynamic.length
       }
       // 列表
       state.color = setDataFormat(item)
+
+      console.log("测试",state.color);
+
       //合计
       const dataSum = state.color.reduce((total, current: any) => {
         total += current.sum

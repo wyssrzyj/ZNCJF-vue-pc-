@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-12 08:46:53
+ * @LastEditTime: 2022-10-14 08:32:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
 <template>
   <div class="rightForm">
     <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
-      <el-row :gutter="0">
+      <el-row :gutter="8">
         <el-col :span="12">
           <div v-for="(item, index) in state.middle" :key="index">
             <div v-if="item.type === 'minLevel'">

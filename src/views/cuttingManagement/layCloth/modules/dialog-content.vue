@@ -439,7 +439,7 @@
       /deep/ .el-input {
         width: 250px;
       }
-      .left-from {
+      .left-form{
         width: 250px;
       }
       .right-from {

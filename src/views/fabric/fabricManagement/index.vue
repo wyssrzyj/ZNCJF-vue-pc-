@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-12 13:11:09
+ * @LastEditTime: 2022-10-19 11:37:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -47,7 +47,7 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
     <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
 
@@ -86,8 +86,7 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      // template: 'http://10.18.4.25/template/fabric.xlsx',
-      template: 'http://192.168.1.3/template/fabric.xlsx',
+      template: 'http://192.168.99.184/template/fabric.xlsx',
       interface: '/jack-ics-api/fabric/import'
     },
 
@@ -169,6 +168,8 @@
           weight: item.weight
         })
       })
+      
+      
       proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
         state.export.importType = false
         ElMessage({

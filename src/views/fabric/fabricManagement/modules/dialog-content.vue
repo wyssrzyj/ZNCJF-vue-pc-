@@ -1,38 +1,43 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-11 13:47:55
+ * @LastEditTime: 2022-10-19 11:01:07
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
-    <el-row :gutter="20" style="margin: 2px 2px 0 10px">
-      <!-- left -->
-      <el-col :span="8">
-        <el-form-item label="面料图片" class="layclothImg" prop="img">
+    <!-- top -->
+    <div class="fabric-form">
+      <div class="fabric-top">
+        <el-form-item  label="面料图片" class="layclothImg" prop="img">
           <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
         <el-form-item label="其他附件">
+          <div class="fabricManagement-file">
           <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+          </div>
         </el-form-item>
-      </el-col>
+      </div>
 
-      <el-col :span="8">
-        <div v-for="(item, index) in state.middle" :key="index">
-          <div v-if="item.type === 'sn'">
-            <el-form-item label="面料编号" :prop="item.prop">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-            </el-form-item>
-          </div>
-          <div v-if="item.type === 'type'">
-            <el-form-item label="面料类型" :prop="item.prop">
-              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </div>
-          <!-- <div v-if="item.type === 'antipattern'">
+      <div>
+        <el-row :gutter="20" style="margin: 2px 2px 0 10px">
+          <!-- left -->
+          <el-col :span="12">
+            <div v-for="(item, index) in state.middle" :key="index">
+              <div v-if="item.type === 'sn'">
+                <el-form-item label="面料编号" :prop="item.prop">
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+                </el-form-item>
+              </div>
+              <div v-if="item.type === 'type'">
+                <el-form-item label="面料类型" :prop="item.prop">
+                  <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" @change="onchange">
+                    <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
+                  </el-select>
+                </el-form-item>
+              </div>
+              <!-- <div v-if="item.type === 'antipattern'">
             <el-form-item label="需要对纹" prop="antipattern">
               <el-radio-group v-model="form.antipattern" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio label="1" size="large">是</el-radio>
@@ -40,7 +45,7 @@
               </el-radio-group>
             </el-form-item>
           </div> -->
-          <!-- <div v-if="item.type === 'looseClothFlag'">
+              <!-- <div v-if="item.type === 'looseClothFlag'">
             <el-form-item label="需要松布" prop="looseClothFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio :label="1" size="large">是</el-radio>
@@ -48,7 +53,7 @@
               </el-radio-group>
             </el-form-item>
           </div> -->
-          <!-- <div v-if="item.type === 'shrinkFlag'">
+              <!-- <div v-if="item.type === 'shrinkFlag'">
             <el-form-item label="需要预缩" prop="shrinkFlag">
               <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
                 <el-radio :label="1" size="large">是</el-radio>
@@ -56,55 +61,58 @@
               </el-radio-group>
             </el-form-item>
           </div> -->
-          <div v-if="item.type === 'spreadTemplateId'">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option v-for="item in state.spreadTemplateId" :key="item.id" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </div>
-          <div v-if="item.type === 'primaryFlag'">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
-                <el-radio :label="1" size="large">主料</el-radio>
-                <el-radio :label="2" size="large">辅料</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </div>
-        </div>
-      </el-col>
-      <!-- right -->
-      <el-col :span="8">
-        <div v-for="(item, index) in state.right" :key="index">
-          <div v-if="item.type === 'name'">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-            </el-form-item>
-          </div>
+              <div v-if="item.type === 'spreadTemplateId'">
+                <el-form-item :label="`${item.name}`" :prop="item.prop">
+                  <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" placeholder="先输入类型和克重再选择">
+                    <el-option v-for="item in state.spreadTemplate" :key="item.id" :label="item.label" :value="item.value" />
+                  </el-select>
+                </el-form-item>
+              </div>
+              <div v-if="item.type === 'primaryFlag'">
+                <el-form-item :label="`${item.name}`" :prop="item.prop">
+                  <el-radio-group v-model="state.form[item.model]" :disabled="disable(item.disabled)" class="ml-4">
+                    <el-radio :label="1" size="large">主料</el-radio>
+                    <el-radio :label="2" size="large">辅料</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </div>
+            </div>
+          </el-col>
+          <!-- right -->
+          <el-col :span="12">
+            <div v-for="(item, index) in state.right" :key="index">
+              <div v-if="item.type === 'name'">
+                <el-form-item :label="`${item.name}`" :prop="item.prop">
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+                </el-form-item>
+              </div>
 
-          <div v-if="item.type === null">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text">
-                <template #append>{{ item.append }}</template>
-              </el-input>
-            </el-form-item>
-          </div>
+              <div v-if="item.type === null">
+                <el-form-item :label="`${item.name}`" :prop="item.prop">
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" @change="onchange">
+                    <template #append>{{ item.append }}</template>
+                  </el-input>
+                </el-form-item>
+              </div>
 
-          <div v-if="item.type === 'cutTemplateId'">
-            <el-form-item :label="`${item.name}`" :prop="item.prop">
-              <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)">
-                <el-option v-for="item in state.cutTemplateId" :key="item.id" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </div>
-          <div v-if="item.type === 'color'">
-            <el-form-item :label="`${item.name}`" prop="color">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="textarea" />
-            </el-form-item>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+              <div v-if="item.type === 'cutTemplateId'">
+                <el-form-item :label="`${item.name}`" :prop="item.prop">
+                  <el-select v-model="state.form[item.model]" :disabled="disable(item.disabled)" placeholder="选择类型和输入克重后再选择">
+                    <el-option v-for="item in state.cutTemplate" :key="item.id" :label="item.label" :value="item.value" />
+                  </el-select>
+                </el-form-item>
+              </div>
+              <div v-if="item.type === 'color'">
+                <el-form-item :label="`${item.name}`" prop="color">
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="textarea" />
+                </el-form-item>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+
     <div class="dialogBottom">
       <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
       <el-button @click="resetForm(ruleFormRef)">取消</el-button>
@@ -123,7 +131,7 @@
 
   import { formData, formMiddleData, formRightData, dataRule } from './conifgs'
   import './index.less'
-    import UploadModule from '@/components/upload/index.vue'
+  import UploadModule from '@/components/upload/index.vue'
   import { fabricType } from '@/components/conifgs.ts'
 
   const { proxy } = getCurrentInstance()
@@ -146,8 +154,8 @@
     middle: formMiddleData,
     right: formRightData,
     dialogTableVisible: false,
-    spreadTemplateId: [],
-    cutTemplateId: [],
+    spreadTemplate: [],
+    cutTemplate: [],
     //提示信息
     prop: dataRule,
     fabricType: fabricType
@@ -166,20 +174,24 @@
     }
     return sum
   }
-  const init = () => {
+
+  //获取参数模板
+  let getParam = (data: any) => {
     //铺布参数模板
-    proxy.$baseService.get('/jack-ics-api/spreadTemplateParam/listName').then((res: any) => {
+    proxy.$baseService.get('/jack-ics-api/spreadTemplateParam/listName', data).then((res: any) => {
       if (res.code === 0) {
-        state.spreadTemplateId = structure(res.data)
+        state.spreadTemplate = structure(res.data)
       }
     })
     //裁床参数模板
-    proxy.$baseService.get('/jack-ics-api/cutTemplateParam/listName').then((res: any) => {
+    proxy.$baseService.get('/jack-ics-api/cutTemplateParam/listName', data).then((res: any) => {
       if (res.code === 0) {
-        state.cutTemplateId = structure(res.data)
+        state.cutTemplate = structure(res.data)
       }
     })
+  }
 
+  const init = () => {
     if (props.row) {
       proxy.$baseService.get('/jack-ics-api/fabric/get', { id: props.row.id }).then((res: any) => {
         // 图片
@@ -189,6 +201,9 @@
         // if (res.data.primaryFlag) {
         //   radio1.value = res.data.primaryFlag
         // }
+
+        let data = { fabricType: res.data.type, fabricWeight: res.data.weight }
+        getParam(data)
         state.form = res.data
       })
     }
@@ -208,6 +223,11 @@
     }
   }
 
+  const onchange = () => {
+    let data = { fabricType: state.form.type, fabricWeight: state.form.weight }
+    getParam(data)
+  }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
@@ -220,7 +240,7 @@
         } else {
           data.img = ''
         }
-          let attachmentList: any = []
+        let attachmentList: any = []
 
         //其他附件
         if (!isEmpty(data.attachmentList)) {
@@ -245,9 +265,8 @@
           })
         }
         data.attachmentList = attachmentList
-        console.log(data.attachmentList);
-        
-        
+        console.log(data.attachmentList)
+
         proxy.$baseService.post('/jack-ics-api/fabric/save', data).then((res: any) => {
           if (res.data === true) {
             ElMessage({
@@ -265,7 +284,7 @@
   // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
-      console.log(e.data);
+      console.log(e.data)
       state.form.attachmentList = e.data
     }
   }

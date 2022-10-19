@@ -21,7 +21,7 @@
     <template #operationExtBtn>
       <!-- <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button> -->
       <el-button type="success" style="order: 3" @click="examine">审核</el-button>
-      <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
+      <!-- <el-button type="danger" style="order: 3" @click="mov">删除</el-button> -->
     </template>
 
     <template #styleImage="{ row }">
@@ -48,7 +48,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1100px" hei>
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1000px" hei>
       <DialogContent :type="state.dialogType" :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -63,7 +63,7 @@
 <script lang="ts" setup>
   import print from 'print-js'
   import { reactive, ref, getCurrentInstance, nextTick } from 'vue'
-  import { isEmpty } from 'lodash'
+  import { isEmpty,cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
   import { tagType, mapType } from '@/components/conifgs.ts'
@@ -139,8 +139,8 @@
 
       proxy.$baseService.get('/jack-ics-api/print/getTaskCompleteInfo', { bedPlanId: row.bedPlanId }).then((res: any) => {
         if (!isEmpty(res.data)) {
-          state.printData = res.data
-          nextTick(() => {
+            state.printData = cloneDeep(res.data) 
+            nextTick(() => {
             print({
               printable: 'print',
               type: 'html',
@@ -184,17 +184,18 @@
     }
   }
 
-  //删除
-  const mov = () => {
-    if (!isEmpty(state.ids)) {
-      state.dialogVisible = true
-    } else {
-      ElMessage({
-        message: '至少选择一个',
-        type: 'warning'
-      })
-    }
-  }
+  //删除->暂时隐藏 2022-10-13-10.07
+  
+  // const mov = () => {
+  //   if (!isEmpty(state.ids)) {
+  //     state.dialogVisible = true
+  //   } else {
+  //     ElMessage({
+  //       message: '至少选择一个',
+  //       type: 'warning'
+  //     })
+  //   }
+  // }
   const confirmDelete = () => {
     proxy.$baseService.delete('/jack-ics-api/spreadTask/delete', state.ids).then((res: any) => {
       if (res.code === 0) {

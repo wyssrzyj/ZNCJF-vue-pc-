@@ -10,7 +10,7 @@
           <el-form-item label="前进速度：">
             <div class="devParam-row">
               <el-input-number v-model="state.rightForm.forwardSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
-              <span>mm/s</span>
+              <span>段</span>
             </div>
           </el-form-item>
           <el-form-item label="匀速松紧值：">
@@ -25,18 +25,18 @@
               <span>mm/s</span>
             </div>
           </el-form-item>
-          <el-form-item label="布斗目标角度：">
+          <!-- <el-form-item label="布斗目标角度：">
             <div class="devParam-row">
               <el-input-number v-model="state.rightForm.angle" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
               <span>°</span>
             </div>
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
         <el-col :span="9" class="layClothRight">
           <el-form-item label="后退速度：">
             <div class="devParam-row">
               <el-input-number v-model="state.rightForm.backSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
-              <span>mm/s</span>
+              <span>段</span>
             </div>
           </el-form-item>
 
@@ -52,10 +52,9 @@
               <span>mm</span>
             </div>
           </el-form-item>
-
-          <el-form-item label="加速权重：">
+          <!-- <el-form-item label="加速权重：">
             <el-input-number v-model="state.rightForm.accelerationWeight" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
       </el-row>
 
@@ -228,7 +227,10 @@
   const init = () => {
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.two)) {
-      state.rightForm = props.value.two.top
+      if (!isEmpty(props.value.two.top)) {
+        state.rightForm = props.value.two.top
+      }
+
       let arr = props.value.two.bottom
       //异步处理 不然watch监听不到
       setTimeout(function () {
@@ -263,10 +265,9 @@
         state.bottomForm.paramFile = e.data[0].response.data.src
         props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
       } else {
-        state.bottomForm.paramFileName = ""
-        state.bottomForm.paramFile = ""
+        state.bottomForm.paramFileName = ''
+        state.bottomForm.paramFile = ''
         props.setData('2', { top: state.rightForm, bottom: state.bottomForm })
-
       }
     }
   }
