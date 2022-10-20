@@ -21,7 +21,9 @@
             </div>
           </el-form-item>
           <el-form-item label="其他附件">
-            <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+            <div class="layCloth-file">
+              <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -50,7 +52,6 @@
 
   import UploadModule from '@/components/upload/index.vue'
 
-  
   import SelectDev from './selectDev.vue'
   import DevParam from './devParam.vue'
   import PlannedTime from './plannedTime.vue'
@@ -67,23 +68,20 @@
     row: any
   }>()
 
- 
-   
   const state: any = reactive({
     type: props.type,
     list: { one: {}, two: {}, three: {} }, //保存数据
     form: formData,
     topCurrent: 0,
-    ids:{
-     bedPlanId:  props.row.bedPlanId,
-     deviceId:  props.row.deviceId
+    ids: {
+      bedPlanId: props.row.bedPlanId,
+      deviceId: props.row.deviceId
     }, //设备id
     topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
     leftForm: {
       styleNo: '',
       styleName: ''
     },
-
 
     // 选择设备表单数据
     selectDeviceData: {},
@@ -110,7 +108,7 @@
       }
     }
   })
-  
+
   const leftFormRules = reactive<FormRules>({
     styleName: [
       {
@@ -148,40 +146,40 @@
       })
 
       //设备参数
-          const data = {
+      const data = {
         bedPlanId: props.row.bedPlanId,
         deviceId: props.row.deviceId,
         spreadClothLevel: props.row.spreadClothLevel
       }
-        proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
         if (res.code === 0) {
-         setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
+          setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
         }
       })
 
       //计划时间
-       if (state.ids) {
-      proxy.$baseService
-        .get('/jack-ics-api/spreadTask/getTime', {
-          bedPlanId: state.ids.bedPlanId
-        })
-        .then((res: any) => {
-          if (res.code === 0) {
-            if (res.data.spreadTaskTime) {
-              state.rightForm.spreadTaskTime = res.data.spreadTaskTime
-            }
-            if (res.data.pasteTaskTime) {
-              state.rightForm.pasteTaskTime = res.data.pasteTaskTime
-            }
-            if (res.data.cutTaskTime) {
-              state.rightForm.cutTaskTime = res.data.cutTaskTime
-            }
+      if (state.ids) {
+        proxy.$baseService
+          .get('/jack-ics-api/spreadTask/getTime', {
+            bedPlanId: state.ids.bedPlanId
+          })
+          .then((res: any) => {
+            if (res.code === 0) {
+              if (res.data.spreadTaskTime) {
+                state.rightForm.spreadTaskTime = res.data.spreadTaskTime
+              }
+              if (res.data.pasteTaskTime) {
+                state.rightForm.pasteTaskTime = res.data.pasteTaskTime
+              }
+              if (res.data.cutTaskTime) {
+                state.rightForm.cutTaskTime = res.data.cutTaskTime
+              }
 
-            // state.rightForm = res.data
-            setData('3', state.rightForm)
-          }
-        })
-    }
+              // state.rightForm = res.data
+              setData('3', state.rightForm)
+            }
+          })
+      }
     }
   }
 
@@ -352,7 +350,6 @@
         cutTaskParam: !isEmpty(state.list.two.bottom) ? setTwo(state.list.two.bottom, 'bottom') : null,
         //3-时间
         bedPalnTaskTimeDTO: state.list.three
-      
       }
       proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
         if (res.code === 0) {
@@ -439,8 +436,8 @@
       /deep/ .el-input {
         width: 250px;
       }
-      .left-form{
-        width: 250px;
+      .left-form {
+        width: 450px;
       }
       .right-from {
         width: 555px;
@@ -460,5 +457,8 @@
   }
   .layCloth-img {
     width: 200px;
+  }
+  .layCloth-file {
+    width: 450px;
   }
 </style>

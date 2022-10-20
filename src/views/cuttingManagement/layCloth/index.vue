@@ -48,7 +48,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1000px" hei>
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1100px" hei>
       <DialogContent :type="state.dialogType" :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
@@ -63,7 +63,7 @@
 <script lang="ts" setup>
   import print from 'print-js'
   import { reactive, ref, getCurrentInstance, nextTick } from 'vue'
-  import { isEmpty,cloneDeep } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
   import { tagType, mapType } from '@/components/conifgs.ts'
@@ -139,8 +139,8 @@
 
       proxy.$baseService.get('/jack-ics-api/print/getTaskCompleteInfo', { bedPlanId: row.bedPlanId }).then((res: any) => {
         if (!isEmpty(res.data)) {
-            state.printData = cloneDeep(res.data) 
-            nextTick(() => {
+          state.printData = cloneDeep(res.data)
+          nextTick(() => {
             print({
               printable: 'print',
               type: 'html',
@@ -185,7 +185,7 @@
   }
 
   //删除->暂时隐藏 2022-10-13-10.07
-  
+
   // const mov = () => {
   //   if (!isEmpty(state.ids)) {
   //     state.dialogVisible = true

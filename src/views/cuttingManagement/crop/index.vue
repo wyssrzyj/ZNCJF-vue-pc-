@@ -29,7 +29,7 @@
       <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪任务', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="800px">
+    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="850px">
       <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>

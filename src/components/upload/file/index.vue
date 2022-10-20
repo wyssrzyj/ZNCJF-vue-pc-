@@ -22,14 +22,17 @@
         <!-- 操作 -->
         <el-table-column align="right">
           <template #header>
-            <el-button size="small" type="primary" @click="added">新增</el-button>
+            <el-button :disabled="props.disabled" size="small" type="primary" @click="added">新增</el-button>
           </template>
           <template #default="scope">
-             <div class="fileAdded">
-               <span class="file-download" @click="fileDownload(scope)">下载</span>
-            <span class="file-delete" @click="mov(scope)">删除</span>
-             </div>
-           
+            <div v-if="props.disabled === false" class="fileAdded">
+              <span class="file-download" @click="fileDownload(scope)">下载</span>
+              <span class="file-delete" @click="mov(scope)">删除</span>
+            </div>
+            <div v-if="props.disabled === true" class="fileAdded">
+              <span class="file-disabled">下载</span>
+              <span class="file-disabled">删除</span>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -211,8 +214,6 @@
 
     // 传递给父级
     props.gitFile({ data: uploadFiles })
-    console.log('保存数据', formatProcessing(uploadFiles))
-
     state.tableData = formatProcessing(uploadFiles) //自定义样式需要的数据
 
     state.targetArr[state.fileType]['fileList'] = uploadFiles //原始组件需要
@@ -262,8 +263,6 @@
     }
   }
 
-
-
   //新增
   const added = () => {
     // 自定义组件 只展示样式  数据逻辑还是走原始数据流
@@ -288,7 +287,7 @@
     props.gitFile({ data: list }) //传递给父级
   }
 
-    defineExpose({
+  defineExpose({
     showDialog,
     state
   })
@@ -350,7 +349,7 @@
     height: 130px;
     // overflow-y: scroll;
   }
-  .fileAdded{
+  .fileAdded {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -362,6 +361,9 @@
   .file-download {
     color: #409eff;
     cursor: pointer;
+  }
+  .file-disabled {
+    color: #595a5a;
   }
   .upload-hide {
     width: 0;
