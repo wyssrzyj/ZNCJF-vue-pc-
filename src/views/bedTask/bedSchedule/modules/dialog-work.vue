@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-09 13:01:27
+ * @LastEditTime: 2022-10-25 09:15:57
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -11,7 +11,6 @@
       <div class="topContainer">
         <vue-qr :text="state.data.bedPlanId" margin="5" size="120" />
         <div class="topRight">
-          <!-- <div>浙江杰克智联智能设备科技有限公司</div> ..-->
           <div class="title">裁铺任务工单</div>
         </div>
       </div>

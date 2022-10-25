@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-19 11:37:05
+ * @LastEditTime: 2022-10-25 10:41:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -47,7 +47,7 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="750px">
     <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
 
@@ -86,7 +86,9 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      template: 'http://192.168.99.184/template/fabric.xlsx',
+      // template: 'http://192.168.99.184/template/fabric.xlsx',
+      template: '/template/面料管理模板.xlsx',//引入的是V1的
+
       interface: '/jack-ics-api/fabric/import'
     },
 

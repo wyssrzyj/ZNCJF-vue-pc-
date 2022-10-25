@@ -1,37 +1,30 @@
 <template>
   <!-- 通用上传  -->
-  <div v-if="disabled === true">
-    <el-button icon="upload" :disabled="true">上传文件</el-button>
-  </div>
-  <div v-if="disabled === false">
-    <div class="file-upload">
-      <el-upload
-        v-if="state.fileType !== null"
-        :disabled="props.disabled"
-        :file-list="state.targetArr[0]['fileList']"
-        :accept="props.upload.pictureType.accept"
-        :action="state.ossAction"
-        multiple
-        :headers="{ token: getToken() }"
-        :before-upload="beforeAvatarUpload"
-        :on-progress="uploadProgress"
-        :on-success="uploadSuccess"
-        :before-remove="beforeRemove"
-        :on-remove="remove"
-        :on-error="uploadError"
-        :limit="props.upload.shelfFile.limit"
-        :on-preview="download"
-      >
-        <el-button :disabled="props.disabled" icon="upload">上传文件</el-button>
-        <div v-if="state.fileType !== null" class="subtip">
-          <el-icon>
-            <Warning />
-          </el-icon>
-          {{ props.upload.shelfFile.title }}
-        </div>
-      </el-upload>
-    </div>
-  </div>
+    <el-upload
+      v-if="state.fileType !== null"
+      :disabled="props.disabled"
+      :file-list="state.targetArr[0]['fileList']"
+      :accept="props.upload.pictureType.accept"
+      :action="state.ossAction"
+      multiple
+      :headers="{ token: getToken() }"
+      :before-upload="beforeAvatarUpload"
+      :on-progress="uploadProgress"
+      :on-success="uploadSuccess"
+      :before-remove="beforeRemove"
+      :on-remove="remove"
+      :on-error="uploadError"
+      :limit="props.upload.shelfFile.limit"
+      :on-preview="download"
+    >
+      <el-button :disabled="props.disabled" icon="upload">上传文件</el-button>
+      <div v-if="state.fileType !== null" class="subtip">
+        <el-icon>
+          <Warning />
+        </el-icon>
+        {{ props.upload.shelfFile.title }}
+      </div>
+    </el-upload>
 </template>
 
 <script lang="ts" setup>

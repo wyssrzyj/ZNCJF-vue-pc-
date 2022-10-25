@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-10-14 10:39:26
+ * @LastEditTime: 2022-10-25 14:23:20
  * @Description:
  * @LastEditors: lyj
  */
@@ -42,8 +42,8 @@ export const exportData = [
     required: false
   },
   {
-    prop: 'spreadClothLevel',
-    label: '床次总件数',
+    prop: 'styleBedNo',
+    label: '床次',
     required: true
   },
   {

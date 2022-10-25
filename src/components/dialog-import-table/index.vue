@@ -35,7 +35,6 @@
   import { isEmpty, cloneDeep } from 'lodash'
 
   const props = defineProps<{
-    type: any
     getList: any
     export: any
     confirm: any

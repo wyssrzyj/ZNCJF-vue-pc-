@@ -1,74 +1,62 @@
 <template>
   <el-form ref="rightFormRef" :rules="state.prop" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
-    <el-form-item label="生产订单：">
+    <el-form-item label="生产订单">
       <el-input v-model="state.rightForm.produceOrderCode" disabled />
     </el-form-item>
 
-    <el-form-item label="款式床次号：">
+    <el-form-item label="款式床次号">
       <el-input v-model="state.rightForm.styleBedNo" disabled />
     </el-form-item>
-    <el-form-item label="床次计划号：" required prop="bedPlanNo">
-      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号：`">
-        <template #append>
+    <el-form-item label="床次计划号" required prop="bedPlanNo" class="deviceSn">
+      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号`"/>
           <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
-          <span class="setting"
-            ><el-icon><Setting color="#3e8ff7" /></el-icon
-          ></span>
-        </template>
-      </el-input>
+      <div class="bedPlanNo-img">
+ <el-icon  ><Search /></el-icon>
+      </div>
     </el-form-item>
-    <el-form-item label="铺布任务号：">
+    <el-form-item label="铺布任务号">
       <el-input v-model="state.rightForm.taskCode" disabled />
     </el-form-item>
-    <el-form-item label="面料编号：">
+    <el-form-item label="面料编号">
       <el-input v-model="state.rightForm.fabricCode" disabled />
     </el-form-item>
-    <el-form-item label="面料名称：">
+    <el-form-item label="面料名称">
       <el-input v-model="state.rightForm.fabricName" disabled />
     </el-form-item>
-    <el-form-item label="面料颜色：">
+    <el-form-item label="面料颜色">
       <el-input v-model="state.rightForm.fabricColor" disabled />
     </el-form-item>
-    <el-form-item label="唛架长度：">
+    <el-form-item label="唛架长度 (mm)">
       <div class="layCloth-row">
         <el-input-number v-model="state.rightForm.shelfLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-        <span class="numberRight">mm</span>
       </div>
     </el-form-item>
 
-       <el-form-item label="唛架门幅：">
-      <el-input v-model="state.rightForm.shelfWidth" disabled >
-        <template #append>mm</template>
-      </el-input>
+    <el-form-item label="唛架门幅 (mm)">
+      <el-input v-model="state.rightForm.shelfWidth" disabled />
     </el-form-item>
-    <el-form-item label="铺布长度：">
+    <el-form-item label="铺布长度 (mm)">
       <div class="layCloth-row">
         <el-input-number v-model="state.rightForm.spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-        <span class="numberRight">mm</span>
       </div>
-    </el-form-item> 
-    <el-form-item label="设备编号：" required prop="deviceSn">
-      <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`">
-        <template #append>
-          <span class="setting" @click="setDeviceSn"
-            ><el-icon><Setting color="#3e8ff7" /></el-icon
-          ></span>
-        </template>
-      </el-input>
     </el-form-item>
-    <el-form-item label="设备名称：">
+    <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
+      <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" />
+      <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" />
+    </el-form-item>
+    <el-form-item label="设备名称">
       <el-input v-model="state.rightForm.deviceName" disabled />
     </el-form-item>
-    <el-form-item label="铺布层数：">
+    <el-form-item label="铺布层数">
       <el-input v-model="state.rightForm.spreadClothLevel" disabled />
     </el-form-item>
-    <el-form-item label="损耗率%：">
+    <el-form-item label="损耗率%">
       <el-input v-model="state.rightForm.useRate" disabled />
     </el-form-item>
-    <el-form-item label="单层件数：">
+    <el-form-item label="单层件数">
       <el-input v-model="state.rightForm.levelClothSum" disabled />
     </el-form-item>
-    <el-form-item label="床次总件数：">
+    <el-form-item label="床次总件数">
       <el-input v-model="state.rightForm.bedSum" disabled />
     </el-form-item>
   </el-form>
@@ -83,15 +71,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, defineExpose, ref, defineEmits, watch } from 'vue'
+  import { reactive,  ref,  watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import DeviceSn from './dialog-content-deviceSn.vue'
   import DeviceSnType from './dialog-content-deviceSnType.vue'
 
+  import equipmentIcon from '@/components/icon/equipment-icon.png'
+
   import { selectDevice } from './conifgs'
   const { formData, dataRule } = selectDevice
 
-  const emit = defineEmits(['changeFrom'])
+  // const emit = defineEmits(['changeFrom'])
 
   const rightFormRef = ref<any>()
   const props = defineProps<{
@@ -130,20 +120,20 @@
     }
   )
 
-  const validateFrom = () => {
-    submitForm(rightFormRef)
-  }
-  // 校验表单
-  const submitForm = async (formEl: any | undefined | any) => {
-    if (!formEl) return
-    await formEl.value.validate((valid: any) => {
-      if (valid) {
-        emit('changeFrom', state.rightForm)
-      }
-    })
-  }
+  // const validateFrom = () => {
+  //   submitForm(rightFormRef)
+  // }
+  // // 校验表单
+  // const submitForm = async (formEl: any | undefined | any) => {
+  //   if (!formEl) return
+  //   await formEl.value.validate((valid: any) => {
+  //     if (valid) {
+  //       // emit('changeFrom', state.rightForm)
+  //     }
+  //   })
+  // }
 
-  defineExpose({ validateFrom })
+  // defineExpose({ validateFrom })
 
   // const setBedPlanNo = () => {
   //   state.bedPlanNoType = true
@@ -213,9 +203,10 @@
   }
 
   .numberRight {
-    position: absolute;
-   right: -100px;
-   top: 0;
+    position: relative;
+
+    right: -100px;
+    top: 0;
     width: 58px;
     text-align: center;
     background-color: #eaeaea;
@@ -223,6 +214,25 @@
   }
 
   .setting {
+    cursor: pointer;
+  }
+
+  .deviceSn {
+    position: relative;
+  }
+
+  .setting-img {
+    position: absolute;
+    right: 2px;
+    top: -7px;
+    width: 42px;
+    cursor: pointer;
+  }
+    .bedPlanNo-img {
+    position: absolute;
+    right: -16px;
+    top: 2px;
+    width: 42px;
     cursor: pointer;
   }
 </style>

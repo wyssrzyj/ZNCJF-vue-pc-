@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" >
     <template #queryFormItem>
       <el-form-item label="生产订单" prop="produceOrderCode">
         <el-input v-model="state.queryFormData.produceOrderCode" placeholder="请输入" clearable />
@@ -18,7 +18,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增床次计划')">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增床次计划',null)">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <el-button type="success" style="order: 3" @click="examine">审核</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
@@ -38,7 +38,7 @@
   </njp-table-config>
 
   <!-- 删除 -->
-  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" >
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
@@ -84,8 +84,9 @@
       width: '1500px',
       importType: false,
       list: [],
-      // template: 'http://10.18.4.25/template/bedPlan.xlsx',
-      template: 'http://192.168.99.184/template/bedPlan.xlsx',
+      // template: 'http://192.168.99.184/template/bedPlan.xlsx',
+      template: '/template/床次计划模板.xlsx',//引入的是V1的
+
 
       interface: '/jack-ics-api/bedPlan/import'
     },
@@ -110,8 +111,6 @@
       styleCode: '',
       statu: ''
     },
-
-    dialogVisible: false,
     title: '上传',
     fileList: [],
     rowData: {},

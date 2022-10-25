@@ -2,7 +2,9 @@
   <div class="plannedTime">
     <div class="layCloth-img">
       <div  @click="see">
-    <el-icon><PictureFilled /></el-icon>
+        <img :src="layClothImg" alt="" class="time-img">
+     <!-- <el-icon><PictureFilled /></el-icon> -->
+     <!-- <el-icon><TrendCharts /></el-icon> -->
       </div>
   </div>
     <el-form ref="rightFormRef" :rules="rightFormRules" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
@@ -91,9 +93,11 @@
   import { onMounted, reactive, ref, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
+  // import  from  "./"
 
   import { Calendar } from '@element-plus/icons-vue'
   import ChartDisplay  from  "./chartDisplay-img.vue"
+    import layClothImg from '@/components/icon/layCloth.png'
   const { proxy } = getCurrentInstance()
 
   const rightFormRef = ref<FormInstance>()

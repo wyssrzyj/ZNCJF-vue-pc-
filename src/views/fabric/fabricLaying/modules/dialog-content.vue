@@ -1,15 +1,16 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-19 11:36:58
+ * @LastEditTime: 2022-10-25 10:49:29
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-row :gutter="70" style="margin: 2px 2px 0 20px">
+  <div>
+      <el-row :gutter="70" style="margin: 2px 2px 0 20px">
     <!-- form -->
     <el-col :span="6">
-      <div>
+      <div class="fabricLaying-left">
         <el-form class="FabricLayingForm" label-position="top"  ref="ruleFormRef"  :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
           <el-form-item label="模板面料图片"  prop="img">
             <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
@@ -38,11 +39,13 @@
     <el-col :span="18" class="dialogBottomRight">
       <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
     </el-col>
-    <div class="dialogBottom">
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-    </div>
+   
   </el-row>
+  </div>
+   <div class="fabricLayingFoot">
+      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
+    </div>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'

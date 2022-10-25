@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-14 08:32:42
+ * @LastEditTime: 2022-10-24 13:48:33
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -14,7 +14,7 @@
           <div v-for="(item, index) in state.middle" :key="index">
             <div v-if="item.type === 'minLevel'">
               <el-form-item :label="`${item.name}`">
-                <el-input-number v-model="state.form[item.model]" disabled :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
+                <el-input-number class="fabricCutting-number" v-model="state.form[item.model]" disabled :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
               </el-form-item>
             </div>
             <!--  参数上传 -->
@@ -25,10 +25,10 @@
             </div>
 
             <div v-if="item.type === null">
-              <el-form-item :label="`${item.name}`">
+              <el-form-item :label="`${item.name} (${item.title})`">
                 <div class="titleData">
-                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
-                  <span class="titleRight">{{ item.title }}</span>
+                  <el-input-number class="fabricCutting-number" v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" @change="handleChange" />
+                  <!-- <span class="titleRight">{{ item.title }}</span> -->
                 </div>
               </el-form-item>
             </div>
@@ -41,7 +41,7 @@
                 <el-input-number
                   v-model="state.form[item.model]"
                   :disabled="props.type"
-                  class="fabricLayingForm"
+                  class="fabricCutting-number"
                   :controls="false"
                   :min="Number(state.form[item.min]) + 1"
                   :max="Number(state.form.maxLevelMax)"
@@ -56,10 +56,9 @@
             </div>
 
             <div v-if="item.type === null">
-              <el-form-item :label="`${item.name}`">
+              <el-form-item :label="`${item.name} (${item.title })`">
                 <div class="titleData">
-                  <el-input-number @change="handleChange"  v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" />
-                  <span class="titleRight">{{ item.title }}</span>
+                  <el-input-number  class="fabricCutting-number" @change="handleChange"  v-model="state.form[item.model]" :disabled="props.type" :controls="false" :min="0" :max="state.form[item.max]" type="text" />
                 </div>
               </el-form-item>
             </div>
@@ -139,7 +138,7 @@
 
   // 是否可用
   const disable = (type: any) => {
-    return state.type === true ? true : type
+    return props.type === true ? true : type
   }
 
   // 通用上传

@@ -1,29 +1,22 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-19 11:01:07
+ * @LastEditTime: 2022-10-25 14:52:02
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
-    <!-- top -->
     <div class="fabric-form">
-      <div class="fabric-top">
-        <el-form-item  label="面料图片" class="layclothImg" prop="img">
-          <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
-        </el-form-item>
-        <el-form-item label="其他附件">
-          <div class="fabricManagement-file">
-          <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
-          </div>
-        </el-form-item>
-      </div>
-
-      <div>
         <el-row :gutter="20" style="margin: 2px 2px 0 10px">
+          <el-col :span="8">
+            <el-form-item label="面料图片" class="layclothImg" prop="img">
+              <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
+            </el-form-item>
+         
+          </el-col>
           <!-- left -->
-          <el-col :span="12">
+          <el-col :span="8">
             <div v-for="(item, index) in state.middle" :key="index">
               <div v-if="item.type === 'sn'">
                 <el-form-item label="面料编号" :prop="item.prop">
@@ -79,7 +72,7 @@
             </div>
           </el-col>
           <!-- right -->
-          <el-col :span="12">
+          <el-col :span="8">
             <div v-for="(item, index) in state.right" :key="index">
               <div v-if="item.type === 'name'">
                 <el-form-item :label="`${item.name}`" :prop="item.prop">
@@ -88,10 +81,8 @@
               </div>
 
               <div v-if="item.type === null">
-                <el-form-item :label="`${item.name}`" :prop="item.prop">
-                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" @change="onchange">
-                    <template #append>{{ item.append }}</template>
-                  </el-input>
+                <el-form-item :label="`${item.name}  (${item.append})`" :prop="item.prop">
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" @change="onchange" />
                 </el-form-item>
               </div>
 
@@ -111,13 +102,18 @@
           </el-col>
         </el-row>
       </div>
-    </div>
-
-    <div class="dialogBottom">
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-    </div>
+         <el-form-item label="其他附件">
+              <div class="fabricManagement-file">
+                <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
+              </div>
+            </el-form-item>
+            
+   
   </el-form>
+   <div class="dialogFoot">
+      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+    </div>
 
   <!-- <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" title="排唛比例" width="1000px">
     <PopModule :operation="operation" :form="form" />
@@ -136,7 +132,6 @@
 
   const { proxy } = getCurrentInstance()
   const ruleFormRef = ref<any>()
-  const radio1 = ref(1)
   const props = defineProps<{
     dialogType: boolean
     close: any
@@ -265,8 +260,6 @@
           })
         }
         data.attachmentList = attachmentList
-        console.log(data.attachmentList)
-
         proxy.$baseService.post('/jack-ics-api/fabric/save', data).then((res: any) => {
           if (res.data === true) {
             ElMessage({
@@ -284,7 +277,6 @@
   // 其他附件
   const getAttachmentList = (e: any) => {
     if (e.type === 'file') {
-      console.log(e.data)
       state.form.attachmentList = e.data
     }
   }

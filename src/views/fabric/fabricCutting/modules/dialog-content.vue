@@ -1,12 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-14 13:32:20
+ * @LastEditTime: 2022-10-25 10:50:35
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-row :gutter="30" style="margin: 2px 2px 0 10px">
+  <div>
+      <el-row :gutter="30" style="margin: 2px 2px 0 10px">
     <!-- form -->
     <el-col :span="8">
       <div>
@@ -38,11 +39,14 @@
     <el-col :span="16" class="dialogBottomRight">
       <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
     </el-col>
-    <div class="dialogBottom">
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-    </div>
+  
   </el-row>
+  </div>
+
+    <div class="fabricCuttingFoot">
+      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
+    </div>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'

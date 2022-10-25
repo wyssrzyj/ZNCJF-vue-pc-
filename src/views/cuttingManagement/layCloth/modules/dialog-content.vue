@@ -29,11 +29,11 @@
       </div>
       <div class="right-from">
         <!--选择设备-->
-        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" @changeFrom="selectDeviceSub" />
+        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData"  />
         <!--设备参数-->
-        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" @changeFrom="devParamSub" />
+        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData"  />
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" @changeFrom="plannedTimeSub" />
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  />
       </div>
     </div>
     <div class="foot">
@@ -123,6 +123,17 @@
   const devParam = ref<any>(null)
   const plannedTime = ref<any>(null)
 
+    //设置设备参数
+  let setGetParam=(data:any)=>{
+  
+      proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
+        if (res.code === 0) {
+          setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
+        }
+      })
+
+  }
+
   const init = () => {
     //面料名称
 
@@ -144,18 +155,14 @@
         state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
-
-      //设备参数
-      const data = {
+      
+        const data = {
         bedPlanId: props.row.bedPlanId,
         deviceId: props.row.deviceId,
         spreadClothLevel: props.row.spreadClothLevel
       }
-      proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
-        if (res.code === 0) {
-          setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
-        }
-      })
+
+      setGetParam(data)
 
       //计划时间
       if (state.ids) {
@@ -225,6 +232,14 @@
       state.ids.deviceId = e.deviceId
       state.form = cloneForm
       state.list.one = e
+
+       const data = {
+        bedPlanId: e.bedPlanId,
+        deviceId: e.deviceId,
+        spreadClothLevel: e.spreadClothLevel
+      }
+      setGetParam(data)
+      
     }
     if (type === '2') {
       state.list.two = e

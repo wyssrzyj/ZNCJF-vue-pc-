@@ -40,6 +40,18 @@
 }
 .preservation {
   margin-left: 10px;
+
+}
+.empty {
+  margin-left: 10px;
+  color: #fff;
+  background: #FB602D;
+  
+}
+.empty:hover{
+   margin-left: 10px;
+  color: #fff;
+  background: #FB602D;
 }
 .layclothImg {
   position: relative;
@@ -102,11 +114,61 @@
   background: #9093991c;
 }
 .equipment-number{
-  width: 234px;
+  width: 315px;
 }
 .crop-left{
-  transform: translateX(10px);  
+  // transform: translateX(10px);  
 }
 .crop-right{
-  transform: translateX(50px);  
+  // transform: translateX(50px);  
+}
+.equipment-right{
+  height: 330px;
+  position: relative;
+}
+.equipment-spec{
+  // position: absolute;
+  // left: 10px;
+  // bottom: 0;
+  // width: 450px;
+// 
+}
+.equipment{
+  display: flex;
+  flex-direction:column;
+  height: 400px;
+  overflow:auto
+  // align-items: center;
+  
+
+}
+.equipment-top{
+  display: flex;
+}
+
+.equipmentFoot{
+  position: absolute;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      height: 52px;
+      background:#fff;
+      box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
+      z-index: 99;
+}
+.crop{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+.cropContainer{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

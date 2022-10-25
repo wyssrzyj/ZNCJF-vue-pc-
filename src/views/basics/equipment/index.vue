@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" >
     <template #queryFormItem>
       
       <el-form-item label="设备型号" prop="spec">
@@ -17,14 +17,6 @@
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
-      <!-- <el-button type="primary" style="order: 3" @click="downloadTemplate">测试1</el-button>
-
-      <a href="@/static/lyj.xlsx" download>下载1</a>
-      <a href="./lxr.xlsx" download>下载2</a>
-      <img src="@/static/jack.png" alt="" /> -->
-
-      <!-- <el-button type="primary" style="order: 1" @click="handleUploadStyle"> 导入 </el-button> -->
-      <!-- <el-button type="primary" style="order: 2" @click="handleUploadFile"> 批量导入文件 </el-button> -->
     </template>
 
     <template #img="{ row }">
@@ -46,7 +38,7 @@
     </template>
   </njp-table-config>
   <!-- 删除 -->
-  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" >
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
@@ -74,19 +66,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref } from 'vue'
+  import { reactive, getCurrentInstance, ref,computed } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
   import { equipment } from '@/components/conifgs.ts'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
-
   import DialogContent from './modules/dialog-content.vue'
   import DefaultParam from './modules/dialog-forms.vue'
   import { exportData } from './modules/conifgs.ts'
   const { proxy }: any = getCurrentInstance()
   const styleLibListEl = ref()
-
   const state = reactive({
     dialogVisible: false,
     ids: [],
@@ -97,7 +87,8 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      template: 'http://192.168.99.184/template/device.xlsx',
+      // template: 'http://192.168.99.184/template/device.xlsx',
+      template: '/template/面料管理模板.xlsx',//引入的是V1的
       interface: '/jack-ics-api/device/import'
     },
 
@@ -122,8 +113,6 @@
     data: {
       row: {}
     },
-
-    dialogVisible: false,
     title: '上传',
     fileList: [],
     rowData: {},

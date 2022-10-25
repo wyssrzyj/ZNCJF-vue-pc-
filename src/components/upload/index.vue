@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-10-11 10:12:15
+ * @LastEditTime: 2022-10-24 09:50:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,7 +10,7 @@
   <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="props.value" :disabled="disabled" />
   <!-- 唛架图 -->
   <MarkerFile v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
-  <!-- 其他上传 -->
+  <!-- 其他附件 -->
   <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 导入模块 -->
   <ImportTable :interface="props.interface" v-if="props.type === 'import'" :upload="props.upload" :picture-type="state.importNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />

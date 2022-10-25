@@ -3,9 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.vue",
-    "tests/**/*.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx"],
+   "exclude": ["node_modules"]
+  // "include": [
+  //   "src/**/*.ts",
+  //   "src/**/*.vue",
+  //   "tests/**/*.ts"
+  // ],
 }

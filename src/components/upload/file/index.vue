@@ -23,15 +23,14 @@
         <el-table-column align="right">
           <template #header>
             <el-button :disabled="props.disabled" size="small" type="primary" @click="added">新增</el-button>
+            <!-- <span class="file-download"  @click="added">新增</span>
+            <span  @click="added">新增</span> -->
           </template>
           <template #default="scope">
-            <div v-if="props.disabled === false" class="fileAdded">
+            <div class="fileAdded">
               <span class="file-download" @click="fileDownload(scope)">下载</span>
-              <span class="file-delete" @click="mov(scope)">删除</span>
-            </div>
-            <div v-if="props.disabled === true" class="fileAdded">
-              <span class="file-disabled">下载</span>
-              <span class="file-disabled">删除</span>
+              <span v-if="props.disabled === false" class="file-delete" @click="mov(scope)">删除</span>
+              <span v-if="props.disabled === true" class="file-disabled">删除</span>
             </div>
           </template>
         </el-table-column>
@@ -355,7 +354,7 @@
     justify-content: space-around;
   }
   .file-delete {
-    color: #ffa631;
+    color: #fb602d;
     cursor: pointer;
   }
   .file-download {

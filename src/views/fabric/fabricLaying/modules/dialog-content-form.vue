@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-19 11:35:24
+ * @LastEditTime: 2022-10-24 13:51:17
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -15,7 +15,7 @@
             <div v-for="(item, index) in state.middle" :key="index">
               <div v-if="item.type === 'minLevel'">
                 <el-form-item :label="`${item.name}`">
-                  <el-input-number v-model="state.form[item.model]" disabled class="fabricLayingForm" :controls="false" :min="1" :max="state.form[item.max]" type="text" />
+                  <el-input-number v-model="state.form[item.model]" disabled class="fabricLaying-number" :controls="false" :min="1" :max="state.form[item.max]" type="text" />
                 </el-form-item>
               </div>
               <!--  参数上传 -->
@@ -26,30 +26,26 @@
               </div> -->
 
               <div v-if="item.type === 'forwardSpeed'">
-                <el-form-item :label="`${item.name}`">
-                  <el-input-number :min="1" :max="10" v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
-                  <span class="fabricLayingCompany">段</span>
+                <el-form-item :label="`${item.name} (段)`">
+                  <el-input-number v-model="state.form[item.model]" :min="1" :max="10" :disabled="props.type" class="fabricLaying-number" :controls="false" type="text" @change="handleChange" />
+                  <!-- <span class="fabricLayingCompany">段</span> -->
                 </el-form-item>
               </div>
 
               <div v-if="item.type === 'crawlSpeed'">
-                <el-form-item :label="`${item.name}`">
-                  <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange">
-                    <template #append>mm/s</template>
-                  </el-input>
+                <el-form-item :label="`${item.name} (mm/s)`">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" type="text" class="fabricLaying-number" :controls="false" @change="handleChange" />
                 </el-form-item>
               </div>
               <div v-if="item.type === 'angle'">
-                <el-form-item :label="`${item.name}`">
-                  <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange">
-                    <template #append>°</template>
-                  </el-input>
+                <el-form-item :label="`${item.name} (°)`">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" type="text" class="fabricLaying-number" :controls="false" @change="handleChange" />
                 </el-form-item>
               </div>
 
               <div v-if="item.type === null">
                 <el-form-item :label="`${item.name}`">
-                  <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange" />
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" type="text" class="fabricLaying-number" :controls="false" @change="handleChange" />
                 </el-form-item>
               </div>
             </div>
@@ -61,7 +57,7 @@
                   <el-input-number
                     v-model="state.form[item.model]"
                     :disabled="props.type"
-                    class="fabricLayingForm"
+                    class="fabricLaying-number"
                     :controls="false"
                     :min="Number(state.form[item.min]) + 1"
                     :max="Number(state.form.maxLevelMax)"
@@ -76,21 +72,18 @@
               </div> -->
 
               <div v-if="item.type === 'backSpeed'">
-                <el-form-item :label="`${item.name}`">
-                  <el-input-number :min="1" :max="10" v-model="state.form[item.model]" :disabled="props.type" class="fabricLayingForm" :controls="false" type="text" @change="handleChange" />
-                  <span class="fabricLayingCompany">段</span>
+                <el-form-item :label="`${item.name} (段)`">
+                  <el-input-number v-model="state.form[item.model]" :min="1" :max="10" :disabled="props.type" class="fabricLaying-number" :controls="false" type="text" @change="handleChange" />
                 </el-form-item>
               </div>
               <div v-if="item.type === 'crawlDistance'">
-                <el-form-item :label="`${item.name}`">
-                  <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange">
-                    <template #append>mm</template>
-                  </el-input>
+                <el-form-item :label="`${item.name} (mm)`">
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" type="text" class="fabricLaying-number" :controls="false" @change="handleChange" />
                 </el-form-item>
               </div>
               <div v-if="item.type === null">
                 <el-form-item :label="`${item.name}`">
-                  <el-input v-model="state.form[item.model]" :disabled="props.type" type="text" @change="handleChange" />
+                  <el-input-number v-model="state.form[item.model]" :disabled="props.type" type="text" class="fabricLaying-number" :controls="false" @change="handleChange" />
                 </el-form-item>
               </div>
             </div>

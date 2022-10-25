@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-23 14:18:11
+ * @LastEditTime: 2022-10-25 14:50:54
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -42,7 +42,7 @@
           </el-input>
         </el-form-item>
         <div class="dialogBottom">
-          <el-button type="primary" :disabled="disabled(false)" class="preservation" @click="submitForm(formRef)">确认</el-button>
+          <el-button v-if="props.type !== true" type="primary" :disabled="disabled(false)" class="preservation" @click="submitForm(formRef)">确认</el-button>
           <el-button type="warning" :disabled="disabled(false)" class="preservation" @click="empty(formRef)">清空</el-button>
           <el-button @click="resetForm()">取消</el-button>
         </div>
@@ -96,7 +96,9 @@
         }
         proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
           if (!isEmpty(res.data)) {
-            state.form = res.data.cutTaskParam
+            if (isEmpty(res.data.cutTaskParam)) {
+              state.form = res.data.cutTaskParam
+            }
           }
         })
       }
