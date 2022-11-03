@@ -1,7 +1,6 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" >
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
       </el-form-item>
@@ -38,7 +37,7 @@
     </template>
   </njp-table-config>
   <!-- 删除 -->
-  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" >
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
@@ -66,15 +65,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref,computed } from 'vue'
+  import { reactive, getCurrentInstance, ref, computed } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
-  import { equipment } from '@/components/conifgs.ts'
+  import { equipment } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import DefaultParam from './modules/dialog-forms.vue'
-  import { exportData } from './modules/conifgs.ts'
+  import { exportData } from './modules/conifgs'
   const { proxy }: any = getCurrentInstance()
   const styleLibListEl = ref()
   const state = reactive({
@@ -88,7 +87,7 @@
       importType: false,
       list: [], //导出数据
       // template: 'http://192.168.99.184/template/device.xlsx',
-      template: '/template/面料管理模板.xlsx',//引入的是V1的
+      template: '/template/设备管理模板.xlsx', //引入的是V1的
       interface: '/jack-ics-api/device/import'
     },
 
@@ -165,7 +164,7 @@
       state.defaultParam.defaultParamType = false
     }
     if (e.type === 'confirm') {
-      refreshTable()
+      // refreshTable()
       state.defaultParam.defaultParamType = false
     }
   }
@@ -225,8 +224,6 @@
   //   a.click()
   //   // a.remove();
   // }
-
-
 
   //删除
   const mov = () => {

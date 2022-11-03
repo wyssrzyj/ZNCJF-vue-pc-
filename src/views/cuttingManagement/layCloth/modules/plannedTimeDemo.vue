@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <!-- 甘特图 -->
-    <div class="title">甘特图</div>
-    <div class="gunter" @click="see">
-      <img :src="layClothImg" alt="" class="time-img" />
-      <div class="gunter-txt">查看甘特图</div>
+  <div class="plannedTime">
+    <div class="layCloth-img">
+      <div @click="see">
+        <img :src="layClothImg" alt="" class="time-img" />
+        <!-- <el-icon><PictureFilled /></el-icon> -->
+        <!-- <el-icon><TrendCharts /></el-icon> -->
+      </div>
     </div>
-
     <el-form ref="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
       <!-- 铺布任务 -->
       <div class="title">铺布任务</div>
@@ -19,7 +19,7 @@
           format="YYYY-MM-DD HH:mm"
           type="datetime"
           :suffix-icon="Calendar"
-          @change="setTime"
+          @change="setTime(1)"
         />
       </el-form-item>
       <el-form-item label="铺布任务结束时间：">
@@ -31,13 +31,13 @@
           format="YYYY-MM-DD HH:mm"
           type="datetime"
           :suffix-icon="Calendar"
-          @change="setTime"
+          @change="setTime(2)"
         />
       </el-form-item>
       <!-- 打标任务 -->
       <div v-if="state.planType">
         <div class="title">
-          打标任务 <span> <el-switch v-model="state.spreadTaskTimeType" :disabled="disable(false)" @change="spreadTaskType" /></span>
+          打标任务 <span> <el-switch v-model="state.spreadTaskTimeType" @change="spreadTaskType" /></span>
         </div>
         <div v-if="state.spreadTaskTimeType" class="pasteTaskTime">
           <el-form-item label="贴标任务开始时间：">
@@ -49,7 +49,7 @@
               format="YYYY-MM-DD HH:mm"
               type="datetime"
               :suffix-icon="Calendar"
-              @change="setTime"
+              @change="setTime(3)"
             />
           </el-form-item>
           <el-form-item label="贴标任务结束时间：">
@@ -61,7 +61,7 @@
               format="YYYY-MM-DD HH:mm"
               type="datetime"
               :suffix-icon="Calendar"
-              @change="setTime"
+              @change="setTime(4)"
             />
           </el-form-item>
         </div>
@@ -78,7 +78,7 @@
           format="YYYY-MM-DD HH:mm"
           type="datetime"
           :suffix-icon="Calendar"
-          @change="setTime"
+          @change="setTime(5)"
         />
       </el-form-item>
       <el-form-item label="裁剪任务结束时间：">
@@ -90,7 +90,7 @@
           format="YYYY-MM-DD HH:mm"
           value-format="x"
           :suffix-icon="Calendar"
-          @change="setTime"
+          @change="setTime(6)"
         />
       </el-form-item>
     </el-form>
@@ -123,14 +123,13 @@
   const state: any = reactive({
     planType: true, //贴标时间是否可用
     imgType: false,
-    spreadTaskTimeType: true, //是否跳过打标
+    spreadTaskTimeType: true,
     rightForm: {
       //铺布
       spreadTaskTime: {
         planStartTime: null,
         planEndTime: null
       },
-      isSkipPaste: 0, //是否跳过打标
       //贴标
       pasteTaskTime: {
         planStartTime: null,
@@ -164,9 +163,7 @@
             if (res.data.cutTaskTime) {
               state.rightForm.cutTaskTime = res.data.cutTaskTime
             }
-            let isSkipPaste = state.rightForm.isSkipPaste
 
-            state.spreadTaskTimeType = isSkipPaste === 0 ? true : false
             // state.rightForm = res.data
             props.setData('3', state.rightForm)
           }
@@ -191,12 +188,6 @@
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.three)) {
       state.rightForm = props.value.three
-      console.log(props.value.three)
-
-      let isSkipPaste = state.rightForm.isSkipPaste
-      console.log(isSkipPaste)
-
-      state.spreadTaskTimeType = isSkipPaste === 0 ? true : false
     } else {
       setList()
     }
@@ -216,16 +207,21 @@
   })
   //是否关闭贴标时间
   const spreadTaskType = (e: any) => {
+    console.log(e)
     state.spreadTaskTimeType = e
-    let isSkipPaste = e === true ? 0 : 1
-    state.rightForm.isSkipPaste = isSkipPaste
-    console.log(state.rightForm.isSkipPaste)
+    //
   }
 
   const setTime = (type: any) => {
+    console.log(type)
     // 铺布- 1.5
     // 打标-25分钟
     // 裁剪-35分钟
+    if (type === 1) {
+      // spreadTaskTime
+      console.log(state.rightForm)
+      console.log(state.rightForm.spreadTaskTime.planStartTime)
+    }
     props.setData('3', state.rightForm)
   }
   // 是否可用
@@ -235,47 +231,47 @@
 
   // 监听时间更改
 
-  // //铺布任务开始
-  // watch(
-  //   () => state.rightForm.spreadTaskTime.planStartTime,
-  //   item => {
-  //     state.rightForm.spreadTaskTime.planEndTime = item + 5400000
-  //   }
-  // )
-  // //铺布任务结束
-  // watch(
-  //   () => state.rightForm.spreadTaskTime.planEndTime,
-  //   item => {
-  //     //是否
-  //     if(state.spreadTaskTimeType){
-  //     state.rightForm.pasteTaskTime.planStartTime = item + 5400000
-  //     }else{
-  //     state.rightForm.cutTaskTime.planStartTime = item + 5400000
-  //     }
-  //   }
-  // )
+  //铺布任务开始
+  watch(
+    () => state.rightForm.spreadTaskTime.planStartTime,
+    item => {
+      state.rightForm.spreadTaskTime.planEndTime = item + 5400000
+    }
+  )
+  //铺布任务结束
+  watch(
+    () => state.rightForm.spreadTaskTime.planEndTime,
+    item => {
+      //是否
+      if (state.spreadTaskTimeType) {
+        state.rightForm.pasteTaskTime.planStartTime = item + 5400000
+      } else {
+        state.rightForm.cutTaskTime.planStartTime = item + 5400000
+      }
+    }
+  )
 
-  // // 贴标任务开始
-  // watch(
-  //   () => state.rightForm.pasteTaskTime.planStartTime,
-  //   item => {
-  //     state.rightForm.pasteTaskTime.planEndTime = item + 1500000
-  //   }
-  // )
-  // // 贴标任务结束
-  // watch(
-  //   () => state.rightForm.pasteTaskTime.planEndTime,
-  //   item => {
-  //     state.rightForm.cutTaskTime.planStartTime = item + 1500000
-  //   }
-  // )
-  // // 裁剪任务开始
-  // watch(
-  //   () => state.rightForm.cutTaskTime.planStartTime,
-  //   item => {
-  //     state.rightForm.cutTaskTime.planEndTime = item + 2100000
-  //   }
-  // )
+  // 贴标任务开始
+  watch(
+    () => state.rightForm.pasteTaskTime.planStartTime,
+    item => {
+      state.rightForm.pasteTaskTime.planEndTime = item + 1500000
+    }
+  )
+  // 贴标任务结束
+  watch(
+    () => state.rightForm.pasteTaskTime.planEndTime,
+    item => {
+      state.rightForm.cutTaskTime.planStartTime = item + 1500000
+    }
+  )
+  // 裁剪任务开始
+  watch(
+    () => state.rightForm.cutTaskTime.planStartTime,
+    item => {
+      state.rightForm.cutTaskTime.planEndTime = item + 2100000
+    }
+  )
 </script>
 
 <style scoped lang="less">
@@ -325,14 +321,5 @@
   }
   .pasteTaskTime {
     display: flex;
-  }
-  .gunter {
-    width: 120px;
-    cursor: pointer;
-    display: flex;
-  }
-  .gunter-txt {
-    color: #3e8ff7;
-    transform: translate(4px, 8px);
   }
 </style>

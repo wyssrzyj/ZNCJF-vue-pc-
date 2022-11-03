@@ -1,4 +1,4 @@
-let colors = ['red', '#C6E8EF', 'red', '#ABC8E6', '#EDE0F7'] //红绿蓝
+const colors = ['red', '#C6E8EF', 'red', '#ABC8E6', '#EDE0F7'] //红绿蓝
 
 import * as echarts from 'echarts'
 
@@ -7,14 +7,14 @@ export const echartsOpt = {
     color: colors,
     tooltip: {
       //提示框
-      formatter: function (params) {
-        const  {name,produceOrderCode,time,styleCode,styleName}=params.data
-         var htmlStr = '';
-          htmlStr += `<div></div>设备名字 : ${name}<br/>`;
-          htmlStr += `<div></div>生产单号 : ${produceOrderCode}<br/>`;
-          htmlStr += `<div></div>计划时间 : ${time}<br/>`;
-          htmlStr += `<div></div>款式编码 : ${styleCode}<br/>`;
-          htmlStr += `<div></div>款式名称 :${styleName}<br/>`;
+      formatter: function (params: any) {
+        const { name, produceOrderCode, time, styleCode, styleName } = params.data
+        let htmlStr = ''
+        htmlStr += `<div></div>设备名字 : ${name}<br/>`
+        htmlStr += `<div></div>生产单号 : ${produceOrderCode}<br/>`
+        htmlStr += `<div></div>计划时间 : ${time}<br/>`
+        htmlStr += `<div></div>款式编码 : ${styleCode}<br/>`
+        htmlStr += `<div></div>款式名称 :${styleName}<br/>`
         return htmlStr
 
         // return params.name + ':' + params.value[1] + '~' + params.value[2]
@@ -114,23 +114,23 @@ export const echartsOpt = {
     series: [
       {
         type: 'custom',
-        renderItem: (params, api) => {
+        renderItem: (params: any, api: any) => {
           //开发者自定义的图形元素渲染逻辑，是通过书写 renderItem 函数实现的
-          let categoryIndex = api.value(0) //这里使用 api.value(0) 取出当前 dataItem 中第一个维度的数值。
-          let start = api.coord([api.value(1), categoryIndex]) // 这里使用 api.coord(...) 将数值在当前坐标系中转换成为屏幕上的点的像素值。
-          let end = api.coord([api.value(2), categoryIndex])
-          let height = api.size([0, 1])[1]
+          const categoryIndex = api.value(0) //这里使用 api.value(0) 取出当前 dataItem 中第一个维度的数值。
+          const start = api.coord([api.value(1), categoryIndex]) // 这里使用 api.coord(...) 将数值在当前坐标系中转换成为屏幕上的点的像素值。
+          const end = api.coord([api.value(2), categoryIndex])
+          const height = api.size([0, 1])[1]
           return {
             type: 'rect', // 表示这个图形元素是矩形。还可以是 'circle', 'sector', 'polygon' 等等。
             shape: echarts.graphic.clipRectByRect(
               {
                 // 矩形的位置和大小。
                 x: start[0],
-                y: start[1]-30 ,
+                y: start[1] - 30,
                 // y: 100,
                 width: end[0] - start[0],
                 // height: height
-                height: 50  
+                height: 50
               },
               {
                 // 当前坐标系的包围盒。
@@ -181,15 +181,14 @@ export const echartsOpt = {
         // endValue: 4, // 数据窗口范围的结束数值（一页显示多少条数据）
         start: 100, //数据窗口范围的起始百分比,表示30%
         // end:20,//数据窗口范围的结束百分比,表示70%
-        startValue:0,//数据窗口范围的起始数值
-        endValue:10,//数据窗口范围的结束数值。 
+        startValue: 0, //数据窗口范围的起始数值
+        endValue: 10, //数据窗口范围的结束数值。
 
         // yAxisIndex: [0, 1], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
-        yAxisIndex: [1,0], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
+        yAxisIndex: [1, 0], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
         width: 1, //滚动条高度
         height: '90%', //滚动条显示位置
-        left: 220, // 距离右边
-   
+        left: 220 // 距离右边
       }
     ]
   }

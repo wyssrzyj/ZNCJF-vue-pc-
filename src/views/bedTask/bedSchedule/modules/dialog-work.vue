@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-25 09:15:57
+ * @LastEditTime: 2022-11-03 15:55:36
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -26,13 +26,13 @@
   import VueQr from 'vue-qr/src/packages/vue-qr.vue'
   import Information from './dialog-work-information.vue'
   import Ready from './dialog-work-ready.vue'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
     id: any
   }>()
 
-  const state = reactive({
+  const state: any = reactive({
     data: []
   })
 

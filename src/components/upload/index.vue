@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-10-24 09:50:25
+ * @LastEditTime: 2022-10-28 14:00:55
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -13,10 +13,9 @@
   <!-- 其他附件 -->
   <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 导入模块 -->
-  <ImportTable :interface="props.interface" v-if="props.type === 'import'" :upload="props.upload" :picture-type="state.importNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <ImportTable v-if="props.type === 'import'" :interface="props.interface" :upload="props.upload" :picture-type="state.importNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 通用上传 -->
- <CurrencyFile v-if="state.type === 'currencyFile'" :upload="props.upload"  :git-file="gitFile" :value="props.value" :disabled="disabled" />
-
+  <CurrencyFile v-if="state.type === 'currencyFile'" :upload="props.upload" :git-file="gitFile" :value="props.value" :disabled="disabled" />
 </template>
 <script lang="ts" setup>
   import { reactive } from 'vue'
@@ -28,12 +27,14 @@
   import ImportTable from '@/components/upload/Import/index.vue'
 
   const props = defineProps<{
-    type: any
-    getData: any
-    value: any
-    disabled: any
-    upload: any
-    interface:any
+    type: any //组件类型
+    getData: any //数据传递给父级
+
+    value?: any //数据
+    disabled?: any //是否可用
+
+    upload?: any //上传的数量和提示
+    interface?: any //导入使用的数据
   }>()
   // type 类型
   // getData 传递出去

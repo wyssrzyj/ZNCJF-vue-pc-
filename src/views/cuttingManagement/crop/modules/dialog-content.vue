@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-25 10:31:49
+ * @LastEditTime: 2022-11-03 16:22:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -41,26 +41,19 @@
                 </el-form-item>
               </div>
 
-              <div v-if="item.type === 'spreadClothLevel'">
-                <el-form-item :label="`${item.name}`" prop="spreadClothLevel">
-                  <div class="level">
-                    <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" />
-                    <el-icon class="proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
-                  </div>
+              <div v-if="item.type === 'deviceSn'">
+                <el-form-item :label="`${item.name}`" prop="deviceSn">
+                  <!-- <div class="level"> -->
+                  <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+                  <!-- <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" /> -->
+                  <el-icon class="proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
+                  <!-- </div> -->
                 </el-form-item>
               </div>
 
               <div v-if="item.type === 'time'">
                 <el-form-item :label="`${item.name}`">
-                  <el-date-picker
-                    v-model="state.form[item.model]"
-                    :disabled="disable(item.disabled)"
-                    value-format="x"
-                    type="datetime"
-                    placeholder="计划开始时间"
-                    format="YYYY-MM-DD HH:mm"
-                    @change="setTime"
-                  />
+                  <el-date-picker v-model="state.form[item.model]" :disabled="disable(item.disabled)" value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm" />
                 </el-form-item>
               </div>
             </div>
@@ -82,15 +75,7 @@
 
               <div v-if="item.type === 'time'">
                 <el-form-item :label="`${item.name}`">
-                  <el-date-picker
-                    v-model="state.form[item.model]"
-                    :disabled="disable(item.disabled)"
-                    type="datetime"
-                    placeholder="计划结束时间"
-                    format="YYYY-MM-DD HH:mm"
-                    value-format="x"
-                    @change="setTime"
-                  />
+                  <el-date-picker v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" />
                 </el-form-item>
               </div>
             </div>
@@ -105,13 +90,13 @@
     </div>
 
     <div class="cropFoot">
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+      <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+      <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
     </div>
   </div>
 
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.messageTitle" width="700px">
-    <Crop :list="props.list" :row="state.form" :type="props.dialogType" :cancel="cancel" :preservation="preservation" />
+    <Crop :row="state.form" :type="props.dialogType" :cancel="cancel" :preservation="preservation" />
   </el-dialog>
 </template>
 
@@ -128,7 +113,7 @@
 
   const { formData, formMiddleData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
     dialogType: boolean
@@ -171,8 +156,8 @@
             }
           }
         ]
-        ;(res.data.deviceSn = 1), //设备编号测试~
-          (state.form = res.data)
+        // (res.data.deviceSn = 1), //设备编号测试~
+        state.form = res.data
       })
     }
   }
@@ -282,7 +267,7 @@
     state.dialogTableVisible = false
   }
   //确认
-  const preservation = (e: any, type: string, title: any) => {
+  const preservation = (e: any) => {
     state.form.cutTaskParam = e //赋值
 
     state.dialogTableVisible = false

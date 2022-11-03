@@ -1,22 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-10-06 15:10:01
+ * @LastEditTime: 2022-11-03 16:13:54
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-table
-    ref="table"
-    height="500"
-    style="width: 100%"
-    :header-cell-style="{ 'text-align': 'center' }"
-    :cell-style="{ 'text-align': 'center' }"
-    :data="state.tableData"
-    border
-    stripe
-    @selection-change="handleSelectionChange"
-  >
+  <el-table ref="table" height="500" style="width: 100%" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" border stripe>
     <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed" width="120">
       <template #default="{ row }">
         <div v-if="item.dataIndex !== 'styleImage' && item.dataIndex !== 'statu'">
@@ -42,9 +32,6 @@
     v-model:currentPage="page"
     v-model:page-size="limit"
     :page-sizes="[10, 20, 50, 100]"
-    :small="small"
-    :disabled="disabled"
-    :background="background"
     layout="total, sizes, prev, pager, next, jumper"
     :total="state.total"
     @size-change="handleSizeChange"
@@ -54,13 +41,13 @@
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance, watch } from 'vue'
-  import { tagType, mapType } from '@/components/conifgs.ts'
+  import { tagType, mapType } from '@/components/conifgs'
 
   import ImgModular from '@/components/imgModular/index.vue'
 
   import { tableColumns } from './conifgs'
   import './index.less'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const page = ref(1)
   const limit = ref(10)
@@ -127,6 +114,4 @@
   }
 </script>
 
-<style>
- 
-</style>
+<style></style>

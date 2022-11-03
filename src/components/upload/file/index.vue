@@ -2,18 +2,9 @@
   <div class="file-upload">
     <!-- 自定义样式-  -->
     <div>
-      <el-table
-        :height="130"
-        :border="true"
-        :data="state.tableData"
-        :header-cell-style="{ 'text-align': 'center' }"
-        :cell-style="{ 'text-align': 'center' }"
-        style="width: 100%"
-        @current-change="handleCurrentChange"
-      >
+      <el-table :height="130" :border="true" :data="state.tableData" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" style="width: 100%">
         <el-table-column label="附件名称" prop="fileName" />
         <el-table-column label="附件格式" prop="format" />
-
         <el-table-column label="附件大小" prop="fileSize">
           <template #default="scope">
             <span>{{ scope.row.fileSize }}M</span>
@@ -22,7 +13,11 @@
         <!-- 操作 -->
         <el-table-column align="right">
           <template #header>
-            <el-button :disabled="props.disabled" size="small" type="primary" @click="added">新增</el-button>
+            <div>
+              <div v-if="props.disabled === false" class="added" @click="added">新增</div>
+              <div v-if="props.disabled === true">新增</div>
+            </div>
+            <!-- <el-button :disabled="props.disabled" size="small" type="primary" @click="added">新增</el-button> -->
             <!-- <span class="file-download"  @click="added">新增</span>
             <span  @click="added">新增</span> -->
           </template>
@@ -154,7 +149,7 @@
         item.fileName = item.NameType[0]
         item.format = item.NameType[1]
         //附件大小
-        item.used = item.size / 1024
+        item.used = item.size / 1024 / 1024
         item.fileSize = item.used.toFixed(1) > 0 ? item.used.toFixed(1) : 0.1
       })
     }
@@ -368,5 +363,9 @@
     width: 0;
     height: 0;
     overflow: hidden;
+  }
+  .added {
+    cursor: pointer;
+    color: #409eff;
   }
 </style>

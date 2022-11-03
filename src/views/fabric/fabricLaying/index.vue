@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-14 13:22:46
+ * @LastEditTime: 2022-11-03 15:50:02
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
       <el-form-item label="面料编号" prop="sn">
         <el-input v-model="state.queryFormData.sn" placeholder="请输入" clearable />
@@ -26,7 +26,7 @@
     </template>
 
     <template #fabricType="{ row }">
-      <span> {{ fabric.get(row.fabricType.toString() ) }}</span>
+      <span> {{ fabric.get(row.fabricType.toString()) }}</span>
     </template>
     <template #fabricWeight="{ row }">
       <span> {{ row.fabricWeightMin }}~{{ row.fabricWeightMax }}</span>
@@ -49,12 +49,12 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布模板', row)">编辑</el-button>
     </template>
 
-    <el-dialog v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="1250px">
+    <el-dialog v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="1130px">
       <DialogContent v-if="state.dialogTableVisible" :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
     </el-dialog>
   </njp-table-config>
   <!-- 删除 -->
-  <el-dialog v-model="state.dialogVisibleMov" title="提示" width="30%" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisibleMov" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
@@ -70,10 +70,10 @@
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
   import ImgModular from '@/components/imgModular/index.vue'
-  import { fabric } from '@/components/conifgs.ts'
+  import { fabric } from '@/components/conifgs'
 
   import DialogContent from './modules/dialog-content.vue'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
   // const { proxy }: any = getCurrentInstance()
 
   const styleLibListEl = ref()

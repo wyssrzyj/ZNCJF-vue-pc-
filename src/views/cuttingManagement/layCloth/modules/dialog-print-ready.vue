@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-17 15:41:49
+ * @LastEditTime: 2022-11-03 16:14:43
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -62,7 +62,7 @@
     data: any
   }>()
 
-  const state = reactive({
+  const state: any = reactive({
     list: [],
     color: [],
     levelClothSums: 0,
@@ -96,15 +96,15 @@
 
   //添加对应的字段并赋值
   const setSize = (v: any, item: any) => {
-      let topData = item.sizeAndAmountList //动态头
+    let topData = item.sizeAndAmountList //动态头
     let data = cloneDeep(v)
     let size = item.colorAndSizeList
     //给每一项添加对应的字段
     size.forEach((i: any) => {
-      console.log(data.color);
-      console.log(i.color);
+      console.log(data.color)
+      console.log(i.color)
       if (data.color === i.color) {
-        console.log(addData(i.size, topData, data));
+        console.log(addData(i.size, topData, data))
         data[i.size] = addData(i.size, topData, data)
       }
     })
@@ -139,13 +139,11 @@
         })
         //单层件树总和
         state.levelClothSums = sum
-      }else{
+      } else {
         state.levelClothSums = 0
-
       }
-      
-      state.list = !isEmpty(dynamic) ? dynamic : []
 
+      state.list = !isEmpty(dynamic) ? dynamic : []
 
       if (!isEmpty(dynamic)) {
         state.width = 1000 / dynamic.length
@@ -153,10 +151,10 @@
       // 列表
       state.color = setDataFormat(item)
 
-      console.log("测试",state.color);
+      console.log('测试', state.color)
 
       //合计
-      const dataSum = state.color.reduce((total, current: any) => {
+      const dataSum = state.color.reduce((total: any, current: any) => {
         total += current.sum
         return total
       }, 0)

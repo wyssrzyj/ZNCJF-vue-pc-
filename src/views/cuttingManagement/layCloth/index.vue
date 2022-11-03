@@ -2,7 +2,7 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="床次计划号" prop="bedPlanNo">
+      <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="铺布任务号" prop="taskCode">
@@ -38,7 +38,7 @@
       <!-- <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button> -->
     </template>
     <!-- 删除 -->
-    <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
+    <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
       <span>确定要删除该数据吗？</span>
       <template #footer>
         <span class="dialog-footer">
@@ -66,11 +66,11 @@
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
-  import { tagType, mapType } from '@/components/conifgs.ts'
+  import { tagType, mapType } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   import Print from './modules/dialog-print.vue'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const styleLibListEl = ref()
 
@@ -102,7 +102,6 @@
     rowData: {},
     limit: 6,
     printData: '',
-    ids: [], //选中id,
     printType: false
   })
   const refreshTable = () => {

@@ -1,16 +1,15 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-10-14 13:05:41
+ * @LastEditTime: 2022-11-02 14:25:50
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-
   <div class="fabricWeight">
-      <el-input-number v-model="state.list.left" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false"  @change="e => handleChange(e, 'left')" />~
-  <el-input-number v-model="state.list.right" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false"  @change="e => handleChange(e, 'right')" />
-  <span class="fabricWeight-right">g/m²</span>
+    <el-input-number v-model="state.list.left" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false" @change="(e:any) => handleChange(e, 'left')" />~
+    <el-input-number v-model="state.list.right" :disabled="props.type" class="fabricWeightInput" :min="0" :controls="false" @change="(e:any) => handleChange(e, 'right')" />
+    <span class="fabricWeight-right">g/m²</span>
   </div>
 </template>
 
@@ -23,7 +22,7 @@
     data: any
   }>()
 
-  const state = reactive({
+  const state: any = reactive({
     list: {
       left: '',
       right: ''
@@ -42,7 +41,7 @@
     }
   )
   const data = (list: any) => {
-    if (list.right > 0 ) {
+    if (list.right > 0) {
       props.fabricWeight(list)
     }
   }
@@ -59,14 +58,13 @@
 </script>
 
 <style lang="less" scoped>
-
-.fabricWeight{
-     padding: 5px;
-    width: 200px;
+  .fabricWeight {
+    padding: 5px;
+    width: 190px;
     height: 45px;
-  background: #eaeaea;
-  border: 1px solid #ddd;
-}
+    background: #eaeaea;
+    border: 1px solid #ddd;
+  }
   .fabricWeightInput {
     width: 50px;
     height: 50px;

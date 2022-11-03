@@ -7,11 +7,11 @@
     <el-form-item label="款式床次号">
       <el-input v-model="state.rightForm.styleBedNo" disabled />
     </el-form-item>
-    <el-form-item label="床次计划号" required prop="bedPlanNo" class="deviceSn">
-      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次计划号`"/>
-          <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
+    <el-form-item label="床次" required prop="bedPlanNo" class="deviceSn">
+      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次`" />
+      <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
       <div class="bedPlanNo-img">
- <el-icon  ><Search /></el-icon>
+        <el-icon><Search /></el-icon>
       </div>
     </el-form-item>
     <el-form-item label="铺布任务号">
@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive,  ref,  watch } from 'vue'
+  import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import DeviceSn from './dialog-content-deviceSn.vue'
   import DeviceSnType from './dialog-content-deviceSnType.vue'
@@ -158,7 +158,7 @@
       props.setData('1', state.rightForm)
 
       ElMessage({
-        message: '床次计划号添加成功',
+        message: '床次添加成功',
         type: 'success'
       })
       state.bedPlanNoType = false
@@ -228,7 +228,7 @@
     width: 42px;
     cursor: pointer;
   }
-    .bedPlanNo-img {
+  .bedPlanNo-img {
     position: absolute;
     right: -16px;
     top: 2px;

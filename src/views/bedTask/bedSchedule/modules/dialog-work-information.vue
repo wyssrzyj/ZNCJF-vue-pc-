@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-03 17:32:30
+ * @LastEditTime: 2022-10-28 15:26:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -20,7 +20,7 @@
     </div>
     <div class="work-row">
       <div class="work-infBlockLeft">面料类型：</div>
-      <div class="work-infBlock">{{ fabric.get((state.list.fabricType) ) }}</div>
+      <div class="work-infBlock">{{ fabric.get(state.list.fabricType) }}</div>
       <div class="work-infBlock-title">面料编号：</div>
       <div class="work-infBlock">{{ state.list.fabricCode }}</div>
       <div class="work-infBlock-title">面料名称：</div>
@@ -59,13 +59,29 @@
 
 <script lang="ts" setup>
   import { reactive, watch } from 'vue'
-  import {  fabric } from '@/components/conifgs.ts'
+  import { fabric } from '@/components/conifgs'
   const props = defineProps<{
     data: any
   }>()
 
   const state = reactive({
-    list: {}
+    list: {
+      bedPlanNo: '',
+      styleBedNo: '',
+      styleCode: '',
+      styleName: '',
+      fabricType: '',
+      fabricCode: '',
+      fabricName: '',
+      fabricColor: '',
+      shelfWidth: '',
+      shelfLength: '',
+      spreadClothLength: '',
+      planSpreadClothLevel: '',
+      shelfFileName: '',
+      shelfFileUrl: '',
+      remark: ''
+    }
   })
   watch(
     () => props.data,
@@ -100,14 +116,13 @@
     font-size: 15px;
   }
 
- 
   .work-row {
     display: flex;
     width: 1550px;
     height: 50px;
     border-top: 1px solid #000;
   }
-   .work-infRow {
+  .work-infRow {
     margin-top: 15px;
     display: flex;
     width: 1550px;
@@ -116,12 +131,12 @@
     border-bottom: 1px solid #000;
   }
   .work-bottom {
-     width: 1550px;
+    width: 1550px;
     height: 1px;
     background: #000;
   }
   .work-infBlockLeft {
-    width: 150px; 
+    width: 150px;
     font-size: 12px !important;
     height: 50px;
     text-align: center;
@@ -157,7 +172,7 @@
     line-height: 50px;
     border-right: 1px solid #000;
   }
-  .work-remarks{
+  .work-remarks {
     width: 1450px;
     height: 50px;
     text-align: center;
@@ -165,7 +180,7 @@
     border-right: 1px solid #000;
   }
   /* 版图 */
-   .work-infBlockLeft-bottom{
+  .work-infBlockLeft-bottom {
     width: 150px;
     font-size: 12px !important;
     height: 65px;
@@ -174,7 +189,7 @@
     border-left: 1px solid #000;
     border-right: 1px solid #000;
   }
-    .infThree-bottom{
+  .infThree-bottom {
     width: 625px;
     height: 65px;
     text-align: center;
@@ -184,7 +199,7 @@
     word-wrap: break-word;
     word-break: normal;
   }
-    .work-infBlock-title-bottom{
+  .work-infBlock-title-bottom {
     width: 150px;
     font-size: 12px !important;
     height: 65px;

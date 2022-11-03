@@ -1,58 +1,57 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-25 10:49:29
+ * @LastEditTime: 2022-11-03 15:51:37
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <div>
-      <el-row :gutter="70" style="margin: 2px 2px 0 20px">
-    <!-- form -->
-    <el-col :span="6">
-      <div class="fabricLaying-left">
-        <el-form class="FabricLayingForm" label-position="top"  ref="ruleFormRef"  :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
-          <el-form-item label="模板面料图片"  prop="img">
-            <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
-          </el-form-item>
-          <el-form-item label="参数模板编号" prop="sn">
-            <el-input v-model="state.form.sn" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
-          </el-form-item>
-          <el-form-item label="参数模板名称" prop="name">
-            <el-input v-model="state.form.name" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
-          </el-form-item>
-          <el-form-item label="面料类型" prop="fabricType">
-            <el-select v-model="state.form.fabricType" :disabled="disable(false)" @change="change">
-              <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="面料克重" prop="fabricWeight">
-            <FabricWeight v-model="state.form.fabricWeight" :data="state.form" :type="state.type" :fabric-weight="fabricWeight" />
-          </el-form-item>
-          <el-form-item label="关联面料">
-            <RelatedFabric :form="state.form" :type="state.type" :set-fabric="setFabric" />
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-col>
-    <!-- 自定义 -->
-    <el-col :span="18" class="dialogBottomRight">
-      <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
-    </el-col>
-   
-  </el-row>
+  <div class="fabricLaying">
+    <el-row :gutter="70" style="margin: 2px 2px 0 20px">
+      <!-- form -->
+      <el-col :span="6">
+        <div class="fabricLaying-left">
+          <el-form ref="ruleFormRef" class="FabricLayingForm" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+            <el-form-item label="模板面料图片" prop="img">
+              <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
+            </el-form-item>
+            <el-form-item label="参数模板编号" prop="sn">
+              <el-input v-model="state.form.sn" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
+            </el-form-item>
+            <el-form-item label="参数模板名称" prop="name">
+              <el-input v-model="state.form.name" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
+            </el-form-item>
+            <el-form-item label="面料类型" prop="fabricType">
+              <el-select v-model="state.form.fabricType" :disabled="disable(false)" :placeholder="`请选择面料类型`" @change="change">
+                <el-option v-for="item in state.fabricType" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="面料克重(g/m²)" prop="fabricWeight">
+              <FabricWeight v-model="state.form.fabricWeight" :data="state.form" :type="state.type" :fabric-weight="fabricWeight" />
+            </el-form-item>
+            <el-form-item label="关联面料">
+              <RelatedFabric :form="state.form" :type="state.type" :set-fabric="setFabric" />
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-col>
+      <!-- 自定义 -->
+      <el-col :span="18" class="dialogBottomRight">
+        <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
+      </el-col>
+    </el-row>
   </div>
-   <div class="fabricLayingFoot">
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)"> 确认 </el-button>
-    </div>
+  <div class="fabricLayingFoot">
+    <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+    <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+  </div>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
-  import { fabricType } from '@/components/conifgs.ts'
+  import { fabricType } from '@/components/conifgs'
   import UploadModule from '@/components/upload/index.vue'
 
   import { content } from './conifgs'
@@ -60,7 +59,7 @@
   import Option from './dialog-content-right.vue'
   import RelatedFabric from './dialog-content-fabric.vue'
   import './index.less'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const ruleFormRef = ref<any>()
   const { formData, dataRule } = content
@@ -68,7 +67,6 @@
   const props = defineProps<{
     dialogType: boolean
     close: any
-    current: any
     row: any
   }>()
 

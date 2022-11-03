@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-12 11:25:47
+ * @LastEditTime: 2022-11-03 10:39:38
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -18,7 +18,7 @@
 
   import { getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
     operation: any
@@ -31,24 +31,26 @@
   //确认、子组件数据
   const preservation = (e: any, type: string, title: any) => {
     let data = { ...e, defaultParam: title, deviceId: props.row.id }
+
     //铺布
     if (type === 'layCloth') {
       proxy.$baseService.post('/jack-ics-api/spreadDefaultParam/save', data).then((res: any) => {
         props.operation({ type: 'confirm', data: { list: e, title: title, paramId: res.data } })
-        ElMessage({
-          message: '保存成功',
-          type: 'success'
-        })
+        // ElMessage({
+        //   message: '保存成功',
+        //   type: 'success'
+        // })
       })
     }
     // 裁剪
     if (type === 'crop') {
       proxy.$baseService.post('/jack-ics-api/cutDefaultParam/save', data).then((res: any) => {
-        props.operation({ type: 'confirm', data: { list: e, title: title, paramId: res.data } })
-        ElMessage({
-          message: '保存成功',
-          type: 'success'
-        })
+        // props.operation({ type: 'confirm', data: { list: e, title: title, paramId: res.data } })
+        props.operation({ type: 'confirm', data: { list: e, title: [], paramId: res.data } })
+        // ElMessage({
+        //   message: '保存成功',
+        //   type: 'success'
+        // })
       })
     }
   }

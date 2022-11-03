@@ -30,7 +30,7 @@
       <div class="block-fl">{{ state.list.fabricColor }}</div>
       <div class="rightBro"></div>
     </div>
-     <div class="print-row">
+    <div class="print-row">
       <div class="block-f-title">计划拉布层数：</div>
       <div class="block-f">{{ state.list.planSpreadClothLevel }}</div>
 
@@ -38,11 +38,11 @@
       <div class="block-f">{{ state.list.actualSpreadClothLevel }}</div>
       <div class="block-f-title">主料：</div>
       <div class="block-f">
-         <el-icon  v-if="state.list.primaryFlag===1"><Select /></el-icon>
+        <el-icon v-if="state.list.primaryFlag === 1"><Select /></el-icon>
       </div>
       <div class="block-f-title">辅料：</div>
       <div class="block-fl">
-      <el-icon  v-if="state.list.primaryFlag===0"><Select /></el-icon>
+        <el-icon v-if="state.list.primaryFlag === 0"><Select /></el-icon>
       </div>
       <div class="rightBro"></div>
     </div>
@@ -99,8 +99,8 @@
 
 <script lang="ts" setup>
   import { reactive, watch } from 'vue'
-  import { fabric } from '@/components/conifgs.ts'
- import { cloneDeep } from 'lodash'
+  import { fabric } from '@/components/conifgs'
+  import { cloneDeep } from 'lodash'
   const props = defineProps<{
     data: any
   }>()
@@ -111,8 +111,7 @@
   watch(
     () => props.data,
     item => {
-      state.list = cloneDeep(item) 
-     
+      state.list = cloneDeep(item)
     }
   )
 </script>

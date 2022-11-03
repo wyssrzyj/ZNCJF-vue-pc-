@@ -29,16 +29,18 @@
       </div>
       <div class="right-from">
         <!--选择设备-->
-        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData"  />
+        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
         <!--设备参数-->
-        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData"  />
+        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  />
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
+        <!-- 时间更新  新功能 -->
+        <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
       </div>
     </div>
     <div class="foot">
-      <el-button @click="close">取消</el-button>
-      <el-button :disabled="disable(false)" type="primary" @click="save">保存</el-button>
+      <el-button @click="close"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+      <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -55,10 +57,11 @@
   import SelectDev from './selectDev.vue'
   import DevParam from './devParam.vue'
   import PlannedTime from './plannedTime.vue'
+  import plannedTimeDemo from './plannedTimeDemo.vue'
   import { content } from './conifgs'
 
   const leftForm = ref<FormInstance>()
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const { formData } = content
 
@@ -123,15 +126,13 @@
   const devParam = ref<any>(null)
   const plannedTime = ref<any>(null)
 
-    //设置设备参数
-  let setGetParam=(data:any)=>{
-  
-      proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
-        if (res.code === 0) {
-          setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
-        }
-      })
-
+  //设置设备参数
+  let setGetParam = (data: any) => {
+    proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {
+      if (res.code === 0) {
+        setData('2', { top: res.data.spreadTaskParam, bottom: res.data.cutTaskParam })
+      }
+    })
   }
 
   const init = () => {
@@ -155,8 +156,8 @@
         state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
-      
-        const data = {
+
+      const data = {
         bedPlanId: props.row.bedPlanId,
         deviceId: props.row.deviceId,
         spreadClothLevel: props.row.spreadClothLevel
@@ -181,8 +182,7 @@
               if (res.data.cutTaskTime) {
                 state.rightForm.cutTaskTime = res.data.cutTaskTime
               }
-
-              // state.rightForm = res.data
+              state.rightForm.isSkipPaste = res.data.isSkipPaste
               setData('3', state.rightForm)
             }
           })
@@ -233,13 +233,12 @@
       state.form = cloneForm
       state.list.one = e
 
-       const data = {
+      const data = {
         bedPlanId: e.bedPlanId,
         deviceId: e.deviceId,
         spreadClothLevel: e.spreadClothLevel
       }
       setGetParam(data)
-      
     }
     if (type === '2') {
       state.list.two = e
@@ -364,7 +363,9 @@
         // 2-下
         cutTaskParam: !isEmpty(state.list.two.bottom) ? setTwo(state.list.two.bottom, 'bottom') : null,
         //3-时间
-        bedPalnTaskTimeDTO: state.list.three
+        bedPalnTaskTimeDTO: state.list.three,
+
+        isSkipPaste: state.list.three.isSkipPaste
       }
       proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
         if (res.code === 0) {

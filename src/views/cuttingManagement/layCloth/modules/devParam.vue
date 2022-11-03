@@ -7,7 +7,9 @@
 
       <el-row :gutter="20">
         <el-col :span="9">
-          <el-form-item label="前进速度 (段)">
+          <el-form-item label="前进速度">
+            <Tips title="1-10段" />
+
             <el-input-number v-model="state.rightForm.forwardSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="匀速松紧值">
@@ -27,7 +29,8 @@
           </el-form-item> -->
         </el-col>
         <el-col :span="9" class="layClothRight">
-          <el-form-item label="后退速度 (段)">
+          <el-form-item label="后退速度">
+            <Tips title="1-10段" />
             <el-input-number v-model="state.rightForm.backSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
 
@@ -49,7 +52,7 @@
       <div class="title">
         <div>裁床建议参数</div>
         <div class="unitSearch">
-          <el-select v-model="value" style="width:50px" class="unitSearch-option">
+          <el-select v-model="value" style="width: 50px" class="unitSearch-option">
             <el-option v-for="item in state.options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </div>
@@ -110,10 +113,11 @@
   import { reactive, ref, defineEmits, defineExpose, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
 
+  import Tips from '@/components/tips/index.vue'
   import UploadModule from '@/components/upload/index.vue'
   import { customFormData } from './conifgs'
 
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const emit = defineEmits(['changeFrom'])
 
@@ -316,9 +320,8 @@
   }
   .unitSearch {
     margin-left: 5px;
-    el-input el-input--suffix{
+    el-input el-input--suffix {
       width: 50px !important;
-
     }
     // .unitSearch-option{
     //   width: 50px;

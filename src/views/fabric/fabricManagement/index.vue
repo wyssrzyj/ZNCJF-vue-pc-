@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-10-25 10:41:32
+ * @LastEditTime: 2022-11-03 15:48:06
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
       <el-form-item label="面料编号" prop="sn">
         <el-input v-model="state.queryFormData.sn" placeholder="请输入" clearable />
@@ -17,7 +17,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料')"> 新增 </el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增面料', null)"> 新增 </el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
@@ -27,7 +27,7 @@
     </template>
 
     <template #type="{ row }">
-      {{ fabric.get(row.type.toString() ) }}
+      {{ fabric.get(row.type.toString()) }}
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -37,7 +37,7 @@
   </njp-table-config>
 
   <!-- 删除 -->
-  <el-dialog v-model="state.dialogVisible" title="提示" width="30%" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
     <template #footer>
       <span class="dialog-footer">
@@ -65,14 +65,12 @@
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
-    import { fabric } from '@/components/conifgs.ts'
+  import { fabric } from '@/components/conifgs'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
   import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
-  import { exportData } from './modules/conifgs.ts'
+  import { exportData } from './modules/conifgs'
   const { proxy }: any = getCurrentInstance()
-
-
 
   const styleLibListEl = ref()
 
@@ -87,7 +85,7 @@
       importType: false,
       list: [], //导出数据
       // template: 'http://192.168.99.184/template/fabric.xlsx',
-      template: '/template/面料管理模板.xlsx',//引入的是V1的
+      template: '/template/面料管理模板.xlsx', //引入的是V1的
 
       interface: '/jack-ics-api/fabric/import'
     },
@@ -170,8 +168,7 @@
           weight: item.weight
         })
       })
-      
-      
+
       proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
         state.export.importType = false
         ElMessage({

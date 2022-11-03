@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 12:48:07
- * @LastEditTime: 2022-10-14 13:57:47
+ * @LastEditTime: 2022-11-03 15:51:58
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
   import { reactive, watch } from 'vue'
-  import { customTableData } from './conifgs.ts'
+  import { customTableData } from './conifgs'
   import './index.less'
 
   const { tableMiddleData, tableData } = customTableData

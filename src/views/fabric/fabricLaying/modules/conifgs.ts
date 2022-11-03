@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-10-13 10:20:29
+ * @LastEditTime: 2022-11-03 11:19:09
  * @Description:
  * @LastEditors: lyj
  */
@@ -21,7 +21,7 @@ export const content: any = {
     relatedFabric: '',
     fabric: '',
     right: [],
-   
+
     levelParamVOList: [
       {
         spreadTemplateParam: {
@@ -103,7 +103,7 @@ export const customFormData = {
   formData: {
     forwardSpeed: '1',
     uniformTension: '',
-    relationFabricList:null,
+    relationFabricList: null,
     slowDown: '',
     creepSpeed: '',
     targetAngle: '',
@@ -112,7 +112,7 @@ export const customFormData = {
     creeping: '',
     distance: '',
     accelerationWeight: '',
-     file:[],
+    file: [],
     bottomTable: [
       {
         date: '布斗匀速',
@@ -156,21 +156,20 @@ export const customFormData = {
     ]
   },
   formMiddleData: [
-    { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel' },
-    { name: '参数文件', model: 'file', prop: 'file', type: "file", disabled: false, },
-    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: 'forwardSpeed', disabled: false },
-    { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false },
-    { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false },
-    { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: "crawlSpeed", disabled: false },
+    { name: '最小层数', model: 'minLevel', prop: 'minLevel', type: 'minLevel', disabled: false, max: 'maxLevel', company: '' },
+    { name: '参数文件', model: 'file', prop: 'file', type: 'file', disabled: false },
+    { name: '前进速度', model: 'forwardSpeed', prop: 'forwardSpeed', type: null, disabled: false, company: '(段)' },
+    { name: '匀速松紧值', model: 'uniformTightness', prop: 'uniformTightness', type: null, disabled: false, company: '' },
+    { name: '减速松紧值', model: 'reduceTightness', prop: 'reduceTightness', type: null, disabled: false, company: '' },
+    { name: '爬行速度', model: 'crawlSpeed', prop: 'crawlSpeed', type: null, disabled: false, company: '(mm/s)' }
     // { name: '布斗目标角度', model: 'angle', prop: 'angle', type: "angle", disabled: false }//暂时隐藏 2022-10-13 10.20
   ],
   formRightData: [
-    { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel' },
-    { name: '参数文件', model: 'file', prop: null, type: "file", disabled: false, title: 'U/min' },
-    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: 'backSpeed', disabled: false },
-    { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false },
-    { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false },
-    { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: "crawlDistance", disabled: false },
+    { name: '最大层数', model: 'maxLevel', prop: 'maxLevel', type: 'maxLevel', min: 'minLevel', company: '' },
+    { name: '后退速度', model: 'backSpeed', prop: 'backSpeed', type: null, disabled: false, company: '(段)' },
+    { name: '加速松紧值', model: 'accelerationTightness', prop: 'accelerationTightness', type: null, disabled: false, company: '' },
+    { name: '爬行松紧值', model: 'crawlTightness', prop: 'crawlTightness', type: null, disabled: false, company: '' },
+    { name: '爬行距离', model: 'crawlDistance', prop: 'crawlDistance', type: null, disabled: false, company: '(mm)' }
     // { name: '加速权重', model: 'accelerationWeight', prop: 'accelerationWeight', type: null, disabled: false }//暂时隐藏 2022-10-13 10.20
   ],
   dataRule: {

@@ -1,22 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-10-06 15:09:57
+ * @LastEditTime: 2022-11-03 16:14:19
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-table
-    ref="table"
-    height="500"
-    style="width: 100%"
-    :header-cell-style="{ 'text-align': 'center' }"
-    :cell-style="{ 'text-align': 'center' }"
-    :data="state.tableData"
-    border
-    stripe
-    @selection-change="handleSelectionChange"
-  >
+  <el-table ref="table" height="500" style="width: 100%" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" border stripe>
     <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed" />
 
     <el-table-column fixed="right" label="操作" width="120">
@@ -33,7 +23,7 @@
 
   import './index.less'
   import { isEmpty } from 'lodash'
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const table: any = ref()
 
@@ -53,10 +43,10 @@
     if (!isEmpty(list)) {
       list.map((item: any) => {
         if (!isEmpty(item.taskDeviceList)) {
-          item.taskDeviceList.forEach((v:any) => {
+          item.taskDeviceList.forEach((v: any) => {
             if (v.type === 1) {
-              item.id=v.id
-              item.sn = v.sn//用于选择返回给父级的数据
+              item.id = v.id
+              item.sn = v.sn //用于选择返回给父级的数据
 
               item.equipmentSn = v.sn
               item.equipmentSn = v.sn
@@ -89,7 +79,10 @@
   watch(
     () => props.form,
     item => {
-      proxy.$baseService.get('/jack-ics-api/device/pageList', item).then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/device/taskDevice', item).then((res: any) => {
+        console.log(item)
+        console.log(res)
+
         setDataFormat(res.data.list)
       })
     }
@@ -105,5 +98,4 @@
   }
 </script>
 
-<style>
-</style>
+<style></style>

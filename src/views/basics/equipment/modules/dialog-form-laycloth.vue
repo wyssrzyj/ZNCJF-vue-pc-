@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-25 10:08:26
+ * @LastEditTime: 2022-11-03 11:05:22
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,50 +9,36 @@
   <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
     <el-row :gutter="0">
       <el-col :span="12">
-        <el-form-item prop="forwardSpeed" label="前进速度 (段)">
-          <el-input-number   class="equipment-number" :controls="false"  :precision="0" v-model="state.form.forwardSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入前进速度" type="text" :disabled="disabled(false)" />
+        <el-form-item v-for="(item, index) in state.middle" :key="index" :prop="item.prop" :label="`${item.name}${item.company}`">
+          <el-input-number
+            v-model="state.form[item.model]"
+            class="equipment-number"
+            :controls="false"
+            :precision="0"
+            :min="0"
+            :max="10"
+            controls-position="right"
+            :placeholder="`请输入${item.name}`"
+            type="text"
+            :disabled="disabled(false)"
+          />
         </el-form-item>
-        <el-form-item prop="uniformTightness" label="匀速松紧值">
-          <el-input v-model="state.form.uniformTightness" placeholder="请输入匀速松紧值" type="text" :disabled="disabled(false)" />
-        </el-form-item>
-        <el-form-item prop="reduceTightness" label="减速松紧值">
-          <el-input v-model="state.form.reduceTightness" placeholder="请输入减速松紧值" type="text" :disabled="disabled(false)" />
-        </el-form-item>
-        <el-form-item prop="crawlSpeed" label="爬行速度 (mm/s)">
-          <el-input v-model="state.form.crawlSpeed" placeholder="请输入爬行速度" type="text" :disabled="disabled(false)" >
-          </el-input>
-        </el-form-item>
-        <!-- <el-form-item prop="angle" label="布斗目标角度">
-          <el-input v-model="state.form.angle" placeholder="请输入布斗目标角度" type="text" :disabled="disabled(false)" >
-           <template #append>°</template>
-          </el-input>
-        </el-form-item> -->
-       <!-- <el-form-item prop="cutSpeed" label="切布段速">
-          <el-input-number v-model="state.form.cutSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
-        </el-form-item>  -->
       </el-col>
       <el-col :span="12">
-        <el-form-item prop="backSpeed" label="后退速度 (段)">
-          <el-input-number class="equipment-number" :controls="false" :precision="0" v-model="state.form.backSpeed" :min="0" :max="10" controls-position="right" placeholder="请输入后退速度" type="text" :disabled="disabled(false)" />
+        <el-form-item v-for="(item, index) in state.right" :key="index" :prop="item.prop" :label="`${item.name}${item.company}`">
+          <el-input-number
+            v-model="state.form[item.model]"
+            class="equipment-number"
+            :controls="false"
+            :precision="0"
+            :min="0"
+            :max="10"
+            controls-position="right"
+            :placeholder="`请输入${item.name}`"
+            type="text"
+            :disabled="disabled(false)"
+          />
         </el-form-item>
-        <el-form-item prop="accelerationTightness" label="加速松紧值">
-          <el-input v-model="state.form.accelerationTightness" placeholder="请输入加速松紧值" type="text" :disabled="disabled(false)" />
-        </el-form-item>
-        <el-form-item prop="crawlTightness" label="爬行松紧值">
-          <el-input v-model="state.form.crawlTightness" placeholder="请输入爬行松紧值" type="text" :disabled="disabled(false)" >
-        
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="crawlDistance" label="爬行距离 (mm)">
-          <el-input v-model="state.form.crawlDistance" placeholder="请输入爬行距离" type="text" :disabled="disabled(false)" >
-          </el-input>
-        </el-form-item>
-        <!-- <el-form-item prop="accelerationWeight" label="加速权重">
-          <el-input v-model="state.form.accelerationWeight" placeholder="请输入加速权重" type="text" :disabled="disabled(false)" />
-        </el-form-item> -->
-        <!-- <el-form-item prop="cutLength" label="切布长度">
-          <el-input-number v-model="state.form.cutLength" :min="0" controls-position="right" placeholder="请输入切布段速" type="text" :disabled="disabled(false)" />
-        </el-form-item> -->
       </el-col>
 
       <div class="dialogBottom">
@@ -68,12 +54,11 @@
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
-  import { layCloth } from './conifgs.ts'
+  import { layCloth } from './conifgs'
   import './index.less'
 
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
   const formRef = ref<FormInstance>()
-  let { formMiddleData, formRightData, dataRule, data } = layCloth
   const props = defineProps<{
     cancel: any //取消
     preservation: any //确认
@@ -82,21 +67,9 @@
     list: any
   }>()
 
+  let { formMiddleData, formRightData, dataRule, data, formData } = layCloth
   const state = reactive({
-    form: {
-      forwardSpeed: '',
-      uniformTightness: '',
-      reduceTightness: '',
-      crawlSpeed: '',
-      angle: '',
-      cutSpeed: '',
-      backSpeed: '',
-      accelerationTightness: '',
-      crawlTightness: '',
-      crawlDistance: '',
-      accelerationWeight: '',
-      cutLength: ''
-    },
+    form: formData,
     middle: formMiddleData,
     right: formRightData,
     dialogTableVisible: false,

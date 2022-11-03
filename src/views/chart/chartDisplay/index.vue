@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  //首页 home 源码  
+  //首页 home 源码
   import * as echarts from 'echarts'
- import { isEmpty } from 'lodash'
+  import { isEmpty } from 'lodash'
   import ImgModular from '@/components/imgModular/index.vue'
 
   import './index.less'
-  import { echartsOpt } from './config.js'
+  import { echartsOpt } from './config'
   import { onMounted, reactive, getCurrentInstance } from 'vue'
   const { proxy }: any = getCurrentInstance()
   const state: any = reactive({
@@ -33,7 +33,7 @@
     proxy.$baseService.get('/jack-ics-api/index/deviceTask', { ...state.equipmentPlanningTaskParam }).then((res: any) => {
       if (!isEmpty(res.data)) {
         let colorsIndex = 0
-        let echartsServerData:any = []
+        let echartsServerData: any = []
         let colors = ['#CCEED0', '#C6E8EF', '#B9D7FF', '#ABC8E6', '#EDE0F7']
         let device = res.data.map((item: any) => item.deviceName)
         res.data.map((item: any, i: any) => {
@@ -133,7 +133,7 @@
         <div class="table">
           <el-table ref="singleTableRef" height="300" :data="state.tableData" highlight-current-row style="width: 100%" @current-change="handleCurrentChange">
             <el-table-column property="produceOrderCode" label="生产订单" />
-            <el-table-column property="bedPlanNo" label="床次计划号" />
+            <el-table-column property="bedPlanNo" label="床次" />
             <el-table-column label="款式照片">
               <template #default="scope">
                 <ImgModular :img="scope.row.styleImage" />

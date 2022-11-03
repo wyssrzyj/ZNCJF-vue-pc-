@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-10-25 14:23:20
+ * @LastEditTime: 2022-11-02 15:52:41
  * @Description:
  * @LastEditors: lyj
  */
@@ -12,14 +12,13 @@ export const exportData = [
     prop: 'styleImage',
     label: '款式图片',
     required: false,
-    type :"styleImage"
+    type: 'styleImage'
   },
   {
     prop: 'shelfImage',
     label: '唛架图',
     required: true,
-    type :"shelfImage"
-
+    type: 'shelfImage'
   },
   {
     prop: 'styleCode',
@@ -56,7 +55,7 @@ export const exportData = [
     label: '面料名称',
     required: true
   },
-    {
+  {
     prop: 'fabricColor',
     label: '面料颜色',
     required: true
@@ -110,13 +109,13 @@ export const content: any = {
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true }
   ],
   formRightData: [
-    { name: '床次计划号', model: 'bedPlanNo', prop: null, type: "bedPlanNo", disabled: true },
+    { name: '床次', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
     { name: '款式床次号', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: false },
     { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
     { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
     { name: '铺布长度', model: 'spreadClothLength', prop: 'spreadClothLength', type: 'spreadClothLength', disabled: false },
     { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false },
-    { name: '利用率(%)', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
+    { name: '利用率', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
     { name: '备注', model: 'remark', prop: null, type: null }
   ],
   dataRule: {

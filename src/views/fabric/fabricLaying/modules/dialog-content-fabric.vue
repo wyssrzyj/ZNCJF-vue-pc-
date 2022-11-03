@@ -2,22 +2,29 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-10-19 11:36:27
+ * @LastEditTime: 2022-11-02 14:58:53
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
+  <!-- 提示 -->
+  <Tips title="【请先选择面料类型、填写面料克重】" />
+
   <el-tag v-for="tag in state.title" :key="tag" :closable="state.tagType" class="mx-1" :disable-transitions="false" @close="handleClose(tag)">
     {{ tag.name }}
   </el-tag>
-
-  <!-- 弹窗 -->
-  <el-button class="relatedFabric-btn" :disabled="state.btnType" size="small" @click="open"> +选择关联面料</el-button>
+  <!-- 按钮 -->
   <div>
-    <el-tooltip class="box-item" effect="dark" content="【请先选择面料类型、填写面料克重】" placement="right-start">
-      <el-icon class="filledIconRate" :size="20"><QuestionFilled /></el-icon>
-    </el-tooltip>
+    <div v-if="state.btnType === false" class="relatedFabric-btn" @click="open">
+      <el-icon class="relatedFabric-icon"><CirclePlus /></el-icon> <span>选择关联面料</span>
+    </div>
+    <div v-if="state.btnType === true" class="relatedFabric-false">
+      <el-icon class="relatedFabric-icon"><CirclePlus /></el-icon> <span>选择关联面料</span>
+    </div>
   </div>
+
+  <!-- <el-button class="relatedFabric-btn" :disabled="state.btnType" size="small" @click="open"> <el-icon><CirclePlus /></el-icon>选择关联面料</el-button> -->
+  <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :draggable="false" title="关联面料" width="30%">
     <div style="display: inline-block">
       <span style="margin-left: 10px">关联面料：</span>
@@ -36,10 +43,11 @@ vue
 </template>
 
 <script lang="ts" setup>
-  import { isEmpty,cloneDeep } from 'lodash'
+  import { isEmpty, cloneDeep } from 'lodash'
   import { ref, reactive, getCurrentInstance, watch } from 'vue'
   import { QuestionFilled } from '@element-plus/icons-vue'
-  const { proxy } = getCurrentInstance()
+  import Tips from '@/components/tips/index.vue'
+  const { proxy } = getCurrentInstance() as any
 
   const dialogVisible: any = ref(false)
 
@@ -99,10 +107,10 @@ vue
   )
 
   const handleClose = (tag: string) => {
-   state.title.splice(state.title.indexOf(tag), 1)
-   let  title=cloneDeep (state.title)
-   //深拷贝一次 用于watch监听
-   state.title= title
+    state.title.splice(state.title.indexOf(tag), 1)
+    let title = cloneDeep(state.title)
+    //深拷贝一次 用于watch监听
+    state.title = title
   }
 
   const open = () => {
@@ -124,7 +132,7 @@ vue
             fabricList.push({ name: item.name, id: item.id })
           })
           state.options = fabricList
-        }else{
+        } else {
           state.options = []
         }
       }
@@ -170,12 +178,11 @@ vue
     dialogVisible.value = false
   }
 
-  
-//数据更新传递给父级
-    watch(
+  //数据更新传递给父级
+  watch(
     () => state.title,
     item => {
-    props.setFabric(item)
+      props.setFabric(item)
     }
   )
 </script>
@@ -204,6 +211,6 @@ vue
   }
   .relatedFabric-btn {
     margin-top: 5px;
-    margin-left: 5px;
+    /* margin-left: 5px; */
   }
 </style>

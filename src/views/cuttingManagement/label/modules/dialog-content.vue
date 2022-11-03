@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-10-25 10:25:20
+ * @LastEditTime: 2022-11-03 16:20:30
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -82,8 +82,8 @@
       </el-form>
     </div>
     <div class="labelFoot">
-      <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-      <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+      <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+      <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
     </div>
   </div>
 </template>
@@ -99,7 +99,7 @@
   import './index.less'
   const { formData, formMiddleData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
     dialogType: boolean

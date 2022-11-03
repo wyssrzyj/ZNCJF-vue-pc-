@@ -1,39 +1,38 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-09-21 10:34:46
+ * @LastEditTime: 2022-10-26 13:49:29
  * @Description:
  * @LastEditors: lyj
  */
 
-
 export const selectDevice: any = {
   formData: {
-      produceOrderCode: '',
-      styleBedNo: '',
-      bedPlanNo: '',
-      taskCode: '',
-      fabricCode: '',
-      fabricName: '',
-      fabricColor: '',
-      shelfWidth: '',
-      spreadClothLength: '',
-      spreadClothLevel: '',
-      deviceName: '',
-      useRate: '',
-      levelClothSum: '',
-      bedSum: ''
+    produceOrderCode: '',
+    styleBedNo: '',
+    bedPlanNo: '',
+    taskCode: '',
+    fabricCode: '',
+    fabricName: '',
+    fabricColor: '',
+    shelfWidth: '',
+    spreadClothLength: '',
+    spreadClothLevel: '',
+    deviceName: '',
+    useRate: '',
+    levelClothSum: '',
+    bedSum: ''
   },
   dataRule: {
     deviceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    bedPlanNo: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    bedPlanNo: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }
 
 export const content: any = {
   formData: {
     //左侧数据格式
-    styleImage: "",
+    styleImage: '',
     styleCode: '',
     styleName: '',
     shelfFile: [],
@@ -55,7 +54,6 @@ export const content: any = {
     fabricWeight: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }
-
 
 export const customFormData = {
   formData: {
@@ -200,7 +198,7 @@ export const tableColumns = [
     width: 200
   },
   {
-    title: '床次计划号',
+    title: '床次',
     align: 'center',
     dataIndex: 'bedPlanNo',
     width: 200
@@ -291,8 +289,6 @@ export const tableColumns = [
   }
 ]
 
-
-
 //设备编号
 export const specData = [
   {
@@ -304,34 +300,31 @@ export const specData = [
   {
     title: '铺布设备名称',
     align: 'center',
-    dataIndex: 'equipmentName',
+    dataIndex: 'equipmentName'
     // width: 200
   },
   {
     title: '贴标设备编号',
     align: 'center',
-    dataIndex: 'labelingSn',
+    dataIndex: 'labelingSn'
     // width: 200
   },
   {
     title: '贴标设备名称',
     align: 'center',
-    dataIndex: 'labelingName',
+    dataIndex: 'labelingName'
     // width: 200
   },
   {
     title: '裁床设备编号',
     align: 'center',
-    dataIndex: 'cuttingSn',
+    dataIndex: 'cuttingSn'
     // width: 250
   },
   {
     title: '裁床设备名称',
     align: 'center',
-    dataIndex: 'cuttingName',
+    dataIndex: 'cuttingName'
     // width: 200
-  },
+  }
 ]
-
-
-

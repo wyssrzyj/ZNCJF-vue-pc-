@@ -1,110 +1,104 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-10-25 11:27:38
+ * @LastEditTime: 2022-11-03 13:18:15
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-    <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
-      <el-row :gutter="20" style="margin: 2px 2px 0 10px">
-        <!-- left1 -->
-        <el-col :span="8">
-          <el-form-item label="设备图片" class="layclothImg" prop="img">
-            <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
-          </el-form-item>
+  <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
+    <el-row :gutter="20" style="margin: 2px 2px 0 10px">
+      <!-- left1 -->
+      <el-col :span="8">
+        <el-form-item label="设备图片" class="layclothImg" prop="img">
+          <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
+        </el-form-item>
 
-          <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam">
-            <el-icon class="equipment-proportionsLeft" :size="20" @click="shippingMarks"><Edit /></el-icon>
-            <br />
+        <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam">
+          <el-icon class="equipment-proportionsLeft" :size="20" @click="shippingMarks"><Edit /></el-icon>
+          <br />
 
-            <div class="defaultParam">
-              <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}， <br /></span>
-            </div>
-          </el-form-item>
-        </el-col>
-
-        <el-col :span="16" >
-          <div class="equipment">
-              <div class="equipment-top">
-         <div>
-               <div v-for="(item, index) in state.middle" :key="index">
-            <div v-if="item.type === 'sn'">
-              <el-form-item :label="`${item.name}`" prop="sn">
-                <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
-              </el-form-item>
-            </div>
-            <div v-if="item.type === 'name'">
-              <el-form-item :label="`${item.name}`" prop="name">
-                <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
-              </el-form-item>
-            </div>
-            <div v-if="item.type === 'relationDevice'">
-              <el-form-item :label="item.name" prop="relationDevice" class="buttonContainer">
-                <el-select v-model="state.form.relationDevice" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)">
-                  <el-option v-for="(item, index) in state.relationDevice" :key="index" :label="item.label" :value="item.value" />
-                </el-select>
-                <template #append>
-                  <el-tooltip class="box-item" effect="dark" content="铺布机关联贴标机  贴标机关联裁床 " placement="right-start">
-                    <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
-                  </el-tooltip>
-                </template>
-              </el-form-item>
-            </div>
-
-           
+          <div class="defaultParam">
+            <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}， <br /></span>
           </div>
-          </div>
-        <!-- right -->
-          <div>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="16">
+        <div class="equipment">
+          <div class="equipment-top">
+            <div>
+              <div v-for="(item, index) in state.middle" :key="index">
+                <div v-if="item.type === 'sn'">
+                  <el-form-item :label="`${item.name}`" prop="sn">
+                    <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
+                  </el-form-item>
+                </div>
+                <div v-if="item.type === 'name'">
+                  <el-form-item :label="`${item.name}`" prop="name">
+                    <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
+                  </el-form-item>
+                </div>
+                <div v-if="item.type === 'relationDevice'">
+                  <el-form-item :label="item.name" prop="relationDevice" class="buttonContainer">
+                    <Tips :title="`请选择${item.name}`" />
+                    <el-select v-model="state.form.relationDevice" class="m-2" :disabled="disable(item.disabled)">
+                      <el-option v-for="(item, index) in state.relationDevice" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </div>
+            </div>
+            <!-- right -->
+            <div>
               <div v-for="(item, index) in state.right" :key="index">
-            <div v-if="item.type === 'type'">
-              <el-form-item label="设备类型" prop="type" class="buttonContainer">
-                <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
-                  <el-option v-for="item in state.equipmentType" :key="item.id" :label="item.name" :value="item.id" />
-                </el-select>
-              </el-form-item>
-            </div>
-            <div v-if="item.type === 'relationOperaterList'">
-              <el-form-item :label="item.name" prop="relationOperaterList" class="buttonContainer">
-                <el-select v-model="state.form.relationOperaterList" multiple :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)">
-                  <el-option v-for="(item, index) in state.operatorData" :key="index" :label="item.label" :value="item.value" />
-                </el-select>
-                <template #append>
-                  <el-tooltip class="box-item" effect="dark" content="铺布机关联贴标机  贴标机关联裁床 " placement="right-start">
-                    <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
-                  </el-tooltip>
-                </template>
-              </el-form-item>
-            </div>
+                <div v-if="item.type === 'type'">
+                  <el-form-item label="设备类型" prop="type" class="buttonContainer">
+                    <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
+                      <el-option v-for="item in state.equipmentType" :key="item.id" :label="item.name" :value="item.id" />
+                    </el-select>
+                  </el-form-item>
+                </div>
 
-            <div v-if="item.type === 'spec'">
-              <el-form-item :label="`${item.name}`" prop="spec">
-                <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
-              </el-form-item>
+                <div v-if="item.type === 'spec'">
+                  <el-form-item :label="`${item.name}`" prop="spec">
+                    <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
+                  </el-form-item>
+                </div>
+
+                <div v-if="item.type === 'relationOperaterList'">
+                  <el-form-item :label="item.name" prop="relationOperaterList" class="buttonContainer">
+                    <div class="relationOperaterList">
+                      <Tips :title="`请选择${item.name}`" />
+                    </div>
+                    <el-select v-model="state.form.relationOperaterList" multiple :disabled="disable(item.disabled)">
+                      <el-option v-for="(item, index) in state.operatorData" :key="index" :label="item.label" :value="item.value" />
+                    </el-select>
+                    <template #append>
+                      <el-tooltip class="box-item" effect="dark" content="铺布机关联贴标机  贴标机关联裁床 " placement="right-start">
+                        <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
+                      </el-tooltip>
+                    </template>
+                  </el-form-item>
+                </div>
+              </div>
             </div>
           </div>
-          </div>
-            </div>
           <!-- bottom -->
-              <el-form-item :label="`备注`" prop="remark" class="equipment-spec">
-             <el-input v-model="state.form.remark" :placeholder="`请输入备注`" :rows="2" type="textarea" :disabled="disable(false)" />
-              </el-form-item>
-          </div>
-        
+          <el-form-item :label="`备注`" prop="remark" class="equipment-spec">
+            <el-input v-model="state.form.remark" :placeholder="`请输入备注`" :rows="2" type="textarea" :disabled="disable(false)" />
+          </el-form-item>
+        </div>
+      </el-col>
+    </el-row>
+  </el-form>
 
-           
-          
-      
-       
-        </el-col>
-      </el-row>
-    </el-form>
   <div class="equipmentFoot">
-    <el-button @click="resetForm(ruleFormRef)">取消</el-button>
-    <el-button type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
+    <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+    <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
   </div>
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.messageTitle" width="700px">
+
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.messageTitle" width="500px">
     <DialogForms :list="state.echoDefaultParam" :row="props.row" :type="state.type" :operation="operation" :form="state.form" />
   </el-dialog>
 </template>
@@ -115,8 +109,9 @@
   import { isEmpty, cloneDeep } from 'lodash'
 
   import { QuestionFilled } from '@element-plus/icons-vue'
-  import { equipmentType } from '@/components/conifgs.ts'
+  import { equipmentType } from '@/components/conifgs'
   import UploadModule from '@/components/upload/index.vue'
+  import Tips from '@/components/tips/index.vue'
 
   import DialogForms from './dialog-forms.vue'
   import { content } from './conifgs'
@@ -126,7 +121,32 @@
   const { formData, formMiddleData, formRightData, dataRule } = content
 
   const ruleFormRef = ref<any>()
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
+
+  const value = ref('')
+
+  const options = [
+    {
+      value: 'Option1',
+      label: 'Option1'
+    },
+    {
+      value: 'Option2',
+      label: 'Option2'
+    },
+    {
+      value: 'Option3',
+      label: 'Option3'
+    },
+    {
+      value: 'Option4',
+      label: 'Option4'
+    },
+    {
+      value: 'Option5',
+      label: 'Option5'
+    }
+  ]
 
   const props = defineProps<{
     dialogType: boolean
@@ -320,15 +340,13 @@
       state.dialogTableVisible = false
     }
     if (e.type === 'confirm') {
-      let arr = e.data.title.split(',')
-      state.title = arr
-      state.form.defaultParam = e.data.title
-
-      // 新增的时候 需要传递一个设备默认保存返回的id
-      state.form.paramId = e.data.paramId
-
-      //暂存回显数据
-      state.echoDefaultParam = e.data.list
+      // let arr = e.data.title.split(',')
+      // state.title = arr
+      // state.form.defaultParam = e.data.title
+      // // 新增的时候 需要传递一个设备默认保存返回的id
+      // state.form.paramId = e.data.paramId
+      // //暂存回显数据
+      // state.echoDefaultParam = e.data.list
 
       state.dialogTableVisible = false
     }
@@ -354,5 +372,8 @@
     width: 200px;
     height: 100px;
     overflow-y: scroll;
+  }
+  .relationOperaterList {
+    transform: translateX(13px);
   }
 </style>

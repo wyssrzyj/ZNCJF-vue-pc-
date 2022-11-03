@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-09-07 14:54:34
+ * @LastEditTime: 2022-11-03 16:22:05
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-form ref="formRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form" label-width="130px">
+  <el-form ref="formRef" label-position="top" :inline="true" :model="state.form" label-width="130px">
     <el-row :gutter="0">
       <el-col :span="12">
         <el-form-item prop="minKnifeFrequency" label="最小磨刀频率">
@@ -55,10 +55,9 @@
   import type { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
   import { reactive, ref, getCurrentInstance } from 'vue'
-  import { crop } from './conifgs'
   import './index.less'
 
-  const { proxy } = getCurrentInstance()
+  const { proxy } = getCurrentInstance() as any
   const formRef = ref<FormInstance>()
 
   const props = defineProps<{
@@ -110,11 +109,6 @@
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
         let title: any = []
-        crop.forEach(item => {
-          if (!['', 0, undefined].includes(state.form[item.value])) {
-            title.push(`${item.name}:${state.form[item.value]}`)
-          }
-        })
 
         props.preservation(state.form, 'crop', title.toString())
       }

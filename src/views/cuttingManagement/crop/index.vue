@@ -1,7 +1,7 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
-      <el-form-item label="床次计划号" prop="bedPlanNo">
+      <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="裁剪任务号" prop="taskCode">
@@ -38,7 +38,7 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  import { tagType } from '@/components/conifgs.ts'
+  import { tagType } from '@/components/conifgs'
 
   import DialogContent from './modules/dialog-content.vue'
 

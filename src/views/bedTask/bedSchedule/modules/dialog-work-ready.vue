@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-12 16:20:14
+ * @LastEditTime: 2022-11-03 15:54:19
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -63,7 +63,7 @@
     data: any
   }>()
 
-  const state = reactive({
+  const state: any = reactive({
     list: [],
     color: [],
     levelClothSums: 0,
@@ -145,7 +145,7 @@
       // 列表
       state.color = setDataFormat(item)
       //合计
-      const dataSum = state.color.reduce((total, current: any) => {
+      const dataSum = state.color.reduce((total: any, current: any) => {
         total += current.sum
         return total
       }, 0)

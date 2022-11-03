@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-10-13 14:17:14
+ * @LastEditTime: 2022-11-02 10:22:32
  * @Description:
  * @LastEditors: lyj
  */
@@ -32,7 +32,7 @@ export const exportData = [
     type: 'type',
     required: true
   },
-    {
+  {
     prop: 'primaryFlag',
     label: '主/辅料',
     type: 'primaryFlag',
@@ -40,7 +40,7 @@ export const exportData = [
   },
   {
     prop: 'weight',
-    label: '面料克重',
+    label: '面料克重(g/m2)',
     type: null,
     required: false
   },
@@ -67,7 +67,7 @@ export const formData = {
   shrinkHours: '',
   looseClothHours: '',
   cutTemplateId: '',
-  primaryFlag:1,
+  primaryFlag: 1
 }
 
 export const formMiddleData = [
@@ -76,9 +76,8 @@ export const formMiddleData = [
   // { name: '需要对纹', model: 'alignLineFlag', prop: 'alignLineFlag', type: 'alignLineFlag', disabled: false },
   // { name: '需要松布', model: 'looseClothFlag', prop: 'looseClothFlag', type: 'looseClothFlag', disabled: false },
   // { name: '需要预缩', model: 'shrinkFlag', prop: 'shrinkFlag', type: 'shrinkFlag', disabled: false },
-  { name: '铺布参数模板', model: 'spreadTemplateId', prop: "spreadTemplateId", type: 'spreadTemplateId', disabled: false },
-  { name: '主/辅料', model: 'primaryFlag', prop: 'primaryFlag', type: 'primaryFlag', disabled: false },
-
+  { name: '铺布参数模板', model: 'spreadTemplateId', prop: 'spreadTemplateId', type: 'spreadTemplateId', disabled: false },
+  { name: '主/辅料', model: 'primaryFlag', prop: 'primaryFlag', type: 'primaryFlag', disabled: false }
 ]
 export const formRightData = [
   { name: '面料名称', model: 'name', prop: 'name', type: 'name', disabled: false },
@@ -87,7 +86,6 @@ export const formRightData = [
   // { name: '松布时间', model: 'looseClothHours', prop: 'looseClothHours', type: null, disabled: false, append: 'h' },
   { name: '裁床参数模板', model: 'cutTemplateId', prop: 'cutTemplateId', type: 'cutTemplateId', disabled: false },
   { name: '面料颜色', model: 'color', prop: null, type: 'color', disabled: false }
-
 ]
 export const dataRule = {
   sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

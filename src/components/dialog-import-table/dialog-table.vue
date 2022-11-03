@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-10-12 16:28:19
+ * @LastEditTime: 2022-11-02 09:38:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -17,7 +17,7 @@
     stripe
     @selection-change="handleSelectionChange"
   >
-    <el-table-column v-for="(item, index) in state.data" :key="index" :prop="item.prop" :min-width="110">
+    <el-table-column v-for="(item, index) in state.data" :key="index" :prop="item.prop" :min-width="150">
       <!-- 表头 -->
       <template #header>
         <span> <span v-if="item.required" class="required">*</span> {{ item.label }}</span>
@@ -65,13 +65,13 @@
           </el-select>
         </div>
       </template>
-       <!--面料类型-- 主、辅料 -->
-     <template v-if="item.type === 'primaryFlag'" #default="{ row }">
+      <!--面料类型-- 主、辅料 -->
+      <template v-if="item.type === 'primaryFlag'" #default="{ row }">
         <!-- 面料 -->
-          <el-select v-model="row[item.prop]">
-            <el-option label="主料" :value="1" />
-            <el-option label="辅料" :value="2" />
-          </el-select>
+        <el-select v-model="row[item.prop]">
+          <el-option label="主料" :value="1" />
+          <el-option label="辅料" :value="2" />
+        </el-select>
       </template>
 
       <!-- 其他 -->

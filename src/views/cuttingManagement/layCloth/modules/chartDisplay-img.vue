@@ -1,14 +1,11 @@
 <script lang="ts" setup>
   import { isEmpty } from 'lodash'
   import * as echarts from 'echarts'
-  import ImgModular from './imgModular.vue'
   import './index.less'
-  import { echartsOpt } from './config.js'
+  import { echartsOpt } from './config'
   import { onMounted, reactive, getCurrentInstance, ref } from 'vue'
   const { proxy }: any = getCurrentInstance()
 
-  const page = ref(1)
-  const limit = ref(10)
   const eChart: any = ref('eChart' + Date.now() + Math.random()) //生成id 防止切换路由不渲染
 
   const state: any = reactive({
@@ -39,7 +36,7 @@
     proxy.$baseService.get('/jack-ics-api/device/listDeviceUseTime', { ...state.equipmentPlanningTaskParam }).then((res: any) => {
       // if (!isEmpty(res.data)) {
       let myChart = echarts.init(document.getElementById(eChart.value))
-      myChart.clear()//清空数据缓存 重新加载
+      myChart.clear() //清空数据缓存 重新加载
       let colorsIndex = 0
       let echartsServerData: any = []
       let colors = ['#CCEED0', '#C6E8EF', '#B9D7FF', '#ABC8E6', '#EDE0F7']
@@ -82,8 +79,7 @@
       echartsOpt.gantt.yAxis.data = title
       // console.log("已处理",data);
       echartsOpt.gantt.series[0].data = echartsServerData
-      console.log(echartsServerData);
-      
+      console.log(echartsServerData)
 
       myChart.setOption(echartsOpt.gantt)
       window.onresize = () => {
@@ -126,35 +122,24 @@
   const setType = (e: any) => {
     state.type = e
   }
-
-  const handleSizeChange = (val: number) => {
-    let data = { ...state.taskProgressParam, page: page.value, limit: limit.value }
-    state.taskProgressParam = data
-    getPageList()
-  }
-  const handleCurrent = (val: number) => {
-    let data = { ...state.taskProgressParam, page: page.value, limit: limit.value }
-    state.taskProgressParam = data
-    getPageList()
-  }
 </script>
 
 <template>
   <div class="chartDisplay-img">
     <div class="homeContainer">
-        <div class="title">
-          <div class="form">
-            <el-form ref="rightFormRef" :model="state.equipmentPlanningTaskParam" :inline="true" label-width="auto">
-              <el-form-item label="时间范围:" prop="sn">
-                <el-date-picker v-model="state.equipmentPlanningTaskParam.time" :clearable="false" value-format="YYYY-MM-DD" type="date" @change="handleTime" />
-              </el-form-item>
-              <el-form-item label="设备名称:" prop="name">
-                <el-input v-model="state.equipmentPlanningTaskParam.deviceName" placeholder="请输入" clearable @change="ganttGet" />
-              </el-form-item>
-            </el-form>
-          </div>
+      <div class="title">
+        <div class="form">
+          <el-form ref="rightFormRef" :model="state.equipmentPlanningTaskParam" :inline="true" label-width="auto">
+            <el-form-item label="时间范围:" prop="sn">
+              <el-date-picker v-model="state.equipmentPlanningTaskParam.time" :clearable="false" value-format="YYYY-MM-DD" type="date" @change="handleTime" />
+            </el-form-item>
+            <el-form-item label="设备名称:" prop="name">
+              <el-input v-model="state.equipmentPlanningTaskParam.deviceName" placeholder="请输入" clearable @change="ganttGet" />
+            </el-form-item>
+          </el-form>
         </div>
-        <div :id="eChart" style="width: 100%; height: 600px"></div>
+      </div>
+      <div :id="eChart" style="width: 100%; height: 600px"></div>
     </div>
   </div>
 </template>

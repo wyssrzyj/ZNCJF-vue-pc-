@@ -1,22 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-09-28 08:48:27
+ * @LastEditTime: 2022-10-28 14:23:49
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-table
-    ref="table"
-    :header-cell-style="{ 'text-align': 'center' }"
-    :cell-style="{ 'text-align': 'center' }"
-    :data="state.tableData"
-    height="100%"
-    stripe
-    style="width: 100%"
-    @selection-change="handleSelectionChange"
-    @select="dialogCheck"
-  >
+  <el-table ref="table" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" height="100%" stripe style="width: 100%">
     <el-table-column v-for="item in state.tableColumns" :key="item.dataIndex" :prop="item.dataIndex" :label="item.title" :fixed="item.fixed">
       <template #default="scope">
         <div v-if="item.dataIndex === 'color'">
@@ -29,7 +19,7 @@
               placeholder="请选择颜色"
               size="large"
               @change="
-                e => {
+                ( e:any) => {
                   change(e, scope.row)
                 }
               "
@@ -44,7 +34,7 @@
             :disabled="disable(false)"
             placeholder="请输入尺码"
             @change="
-              e => {
+              ( e:any) => {
                 handleChange(e, scope.row, 'size')
               }
             "
@@ -58,7 +48,7 @@
             controls-position="right"
             placeholder="请输入入"
             @change="
-              e => {
+              ( e:any) => {
                 handleChange(e, scope.row, 'levelClothSum')
               }
             "
@@ -72,7 +62,7 @@
             controls-position="right"
             placeholder="请输入入"
             @change="
-              e => {
+              ( e:any) => {
                 handleChange(e, scope.row, 'spreadClothLevel')
               }
             "
@@ -89,7 +79,7 @@
         </el-button>
       </template>
       <template #default="scope">
-        <el-popconfirm v-if="state.tableData.length>1" :disabled="disable(false)" title="是否删除?" @confirm="taskHandle('delete', scope.row)">
+        <el-popconfirm v-if="state.tableData.length > 1" :disabled="disable(false)" title="是否删除?" @confirm="taskHandle('delete', scope.row)">
           <template #reference>
             <el-icon class="proportionsDelete" :size="20"><Remove /></el-icon>
           </template>

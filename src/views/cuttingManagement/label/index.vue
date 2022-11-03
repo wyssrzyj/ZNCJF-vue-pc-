@@ -1,7 +1,7 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
     <template #queryFormItem>
-      <el-form-item label="床次计划号" prop="bedPlanNo">
+      <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="贴标任务号" prop="taskCode">
