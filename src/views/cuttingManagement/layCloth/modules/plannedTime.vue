@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="plannedTime">
     <!-- 甘特图 -->
     <div class="title">甘特图</div>
     <div class="gunter" @click="see">
@@ -94,15 +94,14 @@
         />
       </el-form-item>
     </el-form>
-
-    <el-dialog v-if="state.imgType" v-model="state.imgType" :close-on-click-modal="false" :draggable="false" title="查看甘特图" width="1100px" hei>
-      <ChartDisplay />
-    </el-dialog>
   </div>
+  <el-dialog v-if="state.imgType" v-model="state.imgType" :close-on-click-modal="false" :draggable="false" title="查看甘特图" width="1100px" hei>
+    <ChartDisplay />
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, reactive, ref, getCurrentInstance, watch } from 'vue'
+  import { onMounted, reactive, ref, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
   // import  from  "./"
@@ -191,10 +190,8 @@
     //判断是否存过数据  存过不需要重复调取接口
     if (!isEmpty(props.value.three)) {
       state.rightForm = props.value.three
-      console.log(props.value.three)
 
       let isSkipPaste = state.rightForm.isSkipPaste
-      console.log(isSkipPaste)
 
       state.spreadTaskTimeType = isSkipPaste === 0 ? true : false
     } else {
@@ -219,7 +216,6 @@
     state.spreadTaskTimeType = e
     let isSkipPaste = e === true ? 0 : 1
     state.rightForm.isSkipPaste = isSkipPaste
-    console.log(state.rightForm.isSkipPaste)
   }
 
   const setTime = (type: any) => {
@@ -279,6 +275,9 @@
 </script>
 
 <style scoped lang="less">
+.plannedTime{
+  width: 540px;
+}
   .el-input__prefix-inner {
     /deep/ .el-input__icon {
       margin: 0 !important;
@@ -330,6 +329,7 @@
     width: 120px;
     cursor: pointer;
     display: flex;
+    margin-bottom: 20px;
   }
   .gunter-txt {
     color: #3e8ff7;

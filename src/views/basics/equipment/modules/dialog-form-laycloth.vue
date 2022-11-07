@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-03 11:05:22
+ * @LastEditTime: 2022-11-07 13:46:00
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,34 +10,72 @@
     <el-row :gutter="0">
       <el-col :span="12">
         <el-form-item v-for="(item, index) in state.middle" :key="index" :prop="item.prop" :label="`${item.name}${item.company}`">
-          <el-input-number
-            v-model="state.form[item.model]"
-            class="equipment-number"
-            :controls="false"
-            :precision="0"
-            :min="0"
-            :max="10"
-            controls-position="right"
-            :placeholder="`请输入${item.name}`"
-            type="text"
-            :disabled="disabled(false)"
-          />
+          <div v-if="item.type === 'forwardSpeed'">
+            <div class="equipment-forwardSpeed">
+              <Tips :title="`1-10段`" />
+            </div>
+            <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :precision="0"
+              :min="0"
+              :max="10"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+              :disabled="disabled(false)"
+            />
+          </div>
+          <div v-if="item.type !== 'forwardSpeed'">
+            <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :precision="0"
+              :min="0"
+              :max="10"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+              :disabled="disabled(false)"
+            />
+          </div>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item v-for="(item, index) in state.right" :key="index" :prop="item.prop" :label="`${item.name}${item.company}`">
-          <el-input-number
-            v-model="state.form[item.model]"
-            class="equipment-number"
-            :controls="false"
-            :precision="0"
-            :min="0"
-            :max="10"
-            controls-position="right"
-            :placeholder="`请输入${item.name}`"
-            type="text"
-            :disabled="disabled(false)"
-          />
+           <div v-if="item.type === 'backSpeed'">
+            <div class="equipment-forwardSpeed">
+              <Tips :title="`1-10段`" />
+            </div>
+            <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :precision="0"
+              :min="0"
+              :max="10"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+              :disabled="disabled(false)"
+            />
+          </div>
+          <div v-if="item.type !== 'backSpeed'">
+            <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :precision="0"
+              :min="0"
+              :max="10"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+              :disabled="disabled(false)"
+            />
+          </div>
         </el-form-item>
       </el-col>
 
@@ -55,6 +93,9 @@
   import { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
   import { layCloth } from './conifgs'
+
+  import Tips from '@/components/tips/index.vue'
+
   import './index.less'
 
   const { proxy } = getCurrentInstance() as any

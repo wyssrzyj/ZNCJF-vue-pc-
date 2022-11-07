@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-02 14:30:19
+ * @LastEditTime: 2022-11-07 09:42:35
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -115,6 +115,11 @@
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
   }
+    //清空选中项
+  const onFormQuery=(params={})=>{
+    styleLibListEl.value.onFormQuery()
+
+  }
 
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {
@@ -162,6 +167,7 @@
     proxy.$baseService.delete('/jack-ics-api/cutTemplateParam/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
+        onFormQuery()
         ElMessage({
           message: '删除成功',
           type: 'success'

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-03 15:50:02
+ * @LastEditTime: 2022-11-07 09:41:56
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -103,9 +103,15 @@
   const handleAddOrUpdate = (row: any) => {
     //根据有无row判断点击新增或编辑按钮
   }
-
+  
+  //刷新数据
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
+  }
+   //清空选中项
+  const onFormQuery=(params={})=>{
+    styleLibListEl.value.onFormQuery()
+
   }
 
   //新增、编辑、查看
@@ -154,6 +160,8 @@
     proxy.$baseService.delete('/jack-ics-api/spreadTemplateParam/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
+        onFormQuery()
+
         ElMessage({
           message: '删除成功',
           type: 'success'

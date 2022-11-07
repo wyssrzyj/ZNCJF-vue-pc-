@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-03 13:20:31
+ * @LastEditTime: 2022-11-07 13:50:34
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -82,9 +82,19 @@
               </el-form-item>
             </div>
 
-            <div v-if="item.type === null">
+            <div v-if="item.type === 'weight'">
               <el-form-item :label="`${item.name}  (${item.append})`" :prop="item.prop">
-                <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" @change="onchange" />
+
+                    <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :min="0"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+            />
+                <!-- <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" @change="onchange" /> -->
               </el-form-item>
             </div>
 

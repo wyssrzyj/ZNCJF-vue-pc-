@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange"  >
     <template #queryFormItem>
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, ref, computed } from 'vue'
+  import { reactive, getCurrentInstance, ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
   import { equipment } from '@/components/conifgs'
@@ -122,6 +122,10 @@
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
   }
+  //清空选中项
+  const onFormQuery=(params={})=>{
+    styleLibListEl.value.onFormQuery()
+  }
 
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {
@@ -160,11 +164,14 @@
 
   //关闭弹窗-【默认参数】
   const operation = (e: any) => {
-    if (e.type === 'cancel') {
+    if (e.type === 'layCloth') {
+      refreshTable()
       state.defaultParam.defaultParamType = false
     }
-    if (e.type === 'confirm') {
-      // refreshTable()
+    if (e.type === 'crop') {
+      state.defaultParam.defaultParamType = false
+    }
+     if (e.type === 'cancel') {
       state.defaultParam.defaultParamType = false
     }
   }
@@ -240,6 +247,7 @@
     proxy.$baseService.delete('/jack-ics-api/device/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
+        onFormQuery()
         ElMessage({
           message: '删除成功',
           type: 'success'

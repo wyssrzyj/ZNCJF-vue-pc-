@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-10-28 14:23:49
+ * @LastEditTime: 2022-11-07 17:41:34
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -136,6 +136,7 @@
   const setData = (size: any, list: any) => {
     let colorList: any = [] //老数据的颜色合计
     let difference: any = [] //新数据
+    // let data: any=[]
 
     list.forEach((item: any) => {
       if (colorList.indexOf(item.color) === -1) {
@@ -190,20 +191,21 @@
   }
 
   const init = () => {
+    // 面料颜色数据更新->使用面料颜色的最新数据
+
     const fabricColor = props.data.fabricColor
     const shelfIdList = props.data.shelfList //上次保存的数据||接口数据
     let sizeList = fabricColor.split('，')
+    
     let selectData: any = [] //下拉颜色
     let newList: any = [] //最新的数据+
 
-    //先判断老数据是否有有值
+    //回显数据
     if (!isEmpty(shelfIdList)) {
-      //是否新增
       const newListClone = setData(sizeList, shelfIdList)
       newListClone.map((item: any, index: any) => {
         item.unique = `${item + index}`
       })
-
       selectData = setColor(newListClone)
       newList = dataReuse(shelfIdList, newListClone) //唯一值是 名字+下标
     } else {

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-03 15:48:06
+ * @LastEditTime: 2022-11-07 13:31:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -87,6 +87,7 @@
       // template: 'http://192.168.99.184/template/fabric.xlsx',
       template: '/template/面料管理模板.xlsx', //引入的是V1的
 
+
       interface: '/jack-ics-api/fabric/import'
     },
 
@@ -114,6 +115,11 @@
 
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
+  }
+    //清空选中项
+  const onFormQuery=(params={})=>{
+    styleLibListEl.value.onFormQuery()
+
   }
 
   //新增、编辑、查看
@@ -208,6 +214,7 @@
     proxy.$baseService.delete('/jack-ics-api/fabric/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
+        onFormQuery()
         ElMessage({
           message: '删除成功',
           type: 'success'

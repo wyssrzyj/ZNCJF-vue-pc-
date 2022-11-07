@@ -29,10 +29,10 @@
     </template>
 
     <template #shelfLength="{ row }">
-      <span>{{ parseInt(row.shelfLength) }} </span>
+      <span>{{ row.shelfLength.toFixed(0) }} </span>
     </template>
     <template #spreadClothLength="{ row }">
-      <span>{{ parseInt(row.spreadClothLength) }} </span>
+      <span>{{ row.spreadClothLength.toFixed(0) }} </span>
     </template>
 
     <template #statu="{ row }">
@@ -129,6 +129,11 @@
     styleLibListEl.value.refreshTable()
   }
 
+  //清空选中项
+  const onFormQuery = (params = {}) => {
+    styleLibListEl.value.onFormQuery()
+  }
+
   //新增、编辑、查看
   const handleClick = (e: any, type: any, row: any) => {
     state.row = row
@@ -178,6 +183,7 @@
     proxy.$baseService.delete('/jack-ics-api/bedPlan/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
+        onFormQuery()
         ElMessage({
           message: '删除成功',
           type: 'success'
@@ -212,6 +218,19 @@
   const confirm = () => {
     exportEvents(true)
   }
+  //  中文英文兼容处理
+  const Demo = (v: any) => {
+    let chinese = v.lastIndexOf('：')
+    let english = v.lastIndexOf(':')
+    
+    if (chinese !== -1) {
+      return chinese
+    }
+    if (english !== -1) {
+      return english
+    }
+  }
+
   //关闭弹窗-【导出】-保存
   const exportEvents = (type: any) => {
     if (type === true) {
@@ -245,14 +264,15 @@
       })
       //处理排麦比例的返回值
       data.map((item: any) => {
-        let shelfScale = item.shelfScale.split(',')
+        let shelfScale = item.shelfScale.split('，')
+
         let shelfScaleDome: any = []
         let levelClothSum = 0
         let bedSum = 0
 
         if (!isEmpty(shelfScale)) {
           shelfScale.map((v: any) => {
-            let index = v.lastIndexOf(':')
+            let index = Demo(v)
             shelfScaleDome.push(v.slice(index + 1))
           })
         }
@@ -266,6 +286,8 @@
         item.levelClothSum = levelClothSum
         item.bedSum = bedSum
       })
+
+
       proxy.$baseService.post('/jack-ics-api/bedPlan/saveBatch', { bedPLanList: data }).then((res: any) => {
         refreshTable()
         state.export.importType = false

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-11-03 13:19:21
+ * @LastEditTime: 2022-11-07 17:42:59
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -158,7 +158,7 @@
                   <!-- <el-button type="primary" :disabled="disable(false)"  @click="shippingMarks">排麦比例调正</el-button> -->
                   <div class="shelfList" @click="shippingMarks">
                     <img class="bedScheduleLeft" :src="RowWheat" alt="" />
-                    <div>排麦比例调正</div>
+                    <div>排唛比例调整</div>
                   </div>
                 </el-form-item>
               </div>
@@ -221,7 +221,6 @@
   import { isEmpty, cloneDeep } from 'lodash'
   import print from 'print-js'
 
-  import { QuestionFilled } from '@element-plus/icons-vue'
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
   import RowWheat from '@/components/icon/rowWheat.png'
@@ -324,7 +323,8 @@
             }
           }
         ]
-
+        
+          
         //回显排唛比例-unique判断唯一值
         if (!isEmpty(res.data.shelfList)) {
           let shelfList = cloneDeep(res.data.shelfList)

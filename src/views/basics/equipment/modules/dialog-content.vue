@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-03 13:18:15
+ * @LastEditTime: 2022-11-07 17:42:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -123,30 +123,30 @@
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
 
-  const value = ref('')
+  // const value = ref('')
 
-  const options = [
-    {
-      value: 'Option1',
-      label: 'Option1'
-    },
-    {
-      value: 'Option2',
-      label: 'Option2'
-    },
-    {
-      value: 'Option3',
-      label: 'Option3'
-    },
-    {
-      value: 'Option4',
-      label: 'Option4'
-    },
-    {
-      value: 'Option5',
-      label: 'Option5'
-    }
-  ]
+  // const options = [
+  //   {
+  //     value: 'Option1',
+  //     label: 'Option1'
+  //   },
+  //   {
+  //     value: 'Option2',
+  //     label: 'Option2'
+  //   },
+  //   {
+  //     value: 'Option3',
+  //     label: 'Option3'
+  //   },
+  //   {
+  //     value: 'Option4',
+  //     label: 'Option4'
+  //   },
+  //   {
+  //     value: 'Option5',
+  //     label: 'Option5'
+  //   }
+  // ]
 
   const props = defineProps<{
     dialogType: boolean
@@ -336,20 +336,30 @@
 
   //弹窗事件
   const operation = (e: any) => {
-    if (e.type === 'cancel') {
-      state.dialogTableVisible = false
-    }
-    if (e.type === 'confirm') {
-      // let arr = e.data.title.split(',')
-      // state.title = arr
-      // state.form.defaultParam = e.data.title
-      // // 新增的时候 需要传递一个设备默认保存返回的id
-      // state.form.paramId = e.data.paramId
-      // //暂存回显数据
-      // state.echoDefaultParam = e.data.list
+
+    if (e.type === 'layCloth') {
+      state.form.paramId=e.data.paramId
+
+      let arr = e.data.title.split(',')
+      state.title = arr
+      state.form.defaultParam = e.data.title
+      // 新增的时候 需要传递一个设备默认保存返回的id
+      state.form.paramId = e.data.paramId
+      //暂存回显数据
+      state.echoDefaultParam = e.data.list
 
       state.dialogTableVisible = false
     }
+
+    if (e.type === 'crop') {
+      state.form.paramId=e.data.paramId
+      state.dialogTableVisible = false
+    }
+
+     if (e.type === 'cancel') {
+      state.dialogTableVisible = false
+    }
+
   }
 
   // 取消
