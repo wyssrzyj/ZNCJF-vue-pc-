@@ -11,7 +11,7 @@
     <div class="print-row">
       <div class="block-title">床次计划：</div>
       <div class="block">{{ state.list.bedPlanNo }}</div>
-      <div class="block-title">款式床次号：</div>
+      <div class="block-title">床次：</div>
       <div class="block">{{ state.list.styleBedNo }}</div>
       <div class="block-title">款号：</div>
       <div class="block">{{ state.list.styleCode }}</div>

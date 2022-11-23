@@ -1,64 +1,72 @@
 <template>
-  <el-form ref="rightFormRef" :rules="state.prop" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
-    <el-form-item label="生产订单">
-      <el-input v-model="state.rightForm.produceOrderCode" disabled />
-    </el-form-item>
-
-    <el-form-item label="款式床次号">
-      <el-input v-model="state.rightForm.styleBedNo" disabled />
-    </el-form-item>
-    <el-form-item label="床次" required prop="bedPlanNo" class="deviceSn">
-      <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次`" />
-      <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
-      <div class="bedPlanNo-img">
-        <el-icon><Search /></el-icon>
-      </div>
-    </el-form-item>
-    <el-form-item label="铺布任务号">
-      <el-input v-model="state.rightForm.taskCode" disabled />
-    </el-form-item>
-    <el-form-item label="面料编号">
-      <el-input v-model="state.rightForm.fabricCode" disabled />
-    </el-form-item>
-    <el-form-item label="面料名称">
-      <el-input v-model="state.rightForm.fabricName" disabled />
-    </el-form-item>
-    <el-form-item label="面料颜色">
-      <el-input v-model="state.rightForm.fabricColor" disabled />
-    </el-form-item>
-    <el-form-item label="唛架长度 (mm)">
-      <div class="layCloth-row">
-        <el-input-number v-model="state.rightForm.shelfLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-      </div>
-    </el-form-item>
-
-    <el-form-item label="唛架门幅 (mm)">
-      <el-input v-model="state.rightForm.shelfWidth" disabled />
-    </el-form-item>
-    <el-form-item label="铺布长度 (mm)">
-      <div class="layCloth-row">
-        <el-input-number v-model="state.rightForm.spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-      </div>
-    </el-form-item>
-    <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
-      <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" />
-      <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" />
-    </el-form-item>
-    <el-form-item label="设备名称">
-      <el-input v-model="state.rightForm.deviceName" disabled />
-    </el-form-item>
-    <el-form-item label="铺布层数">
-      <el-input v-model="state.rightForm.spreadClothLevel" disabled />
-    </el-form-item>
-    <el-form-item label="损耗率%">
-      <el-input v-model="state.rightForm.useRate" disabled />
-    </el-form-item>
-    <el-form-item label="单层件数">
-      <el-input v-model="state.rightForm.levelClothSum" disabled />
-    </el-form-item>
-    <el-form-item label="床次总件数">
-      <el-input v-model="state.rightForm.bedSum" disabled />
-    </el-form-item>
+  <el-form ref="rightFormRef" class="rightFormRef" :rules="state.prop" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
+    <el-row :gutter="20" style="margin: 2px 2px 0 10px">
+      <el-col :span="6">
+        <el-form-item label="生产订单">
+          <el-input v-model="state.rightForm.produceOrderCode" disabled />
+        </el-form-item>
+        <el-form-item label="床次">
+          <el-input v-model="state.rightForm.styleBedNo" disabled />
+        </el-form-item>
+        <el-form-item label="床次计划号" required prop="bedPlanNo" class="deviceSn">
+          <el-input disabled :value="state.rightForm.bedPlanNo" :placeholder="`请选择床次`" />
+          <!-- <span class="setting" @click="setBedPlanNo"  暂时注销 22.9.23 13-02 -->
+          <div class="bedPlanNo-img">
+            <el-icon><Search /></el-icon>
+          </div>
+        </el-form-item>
+        <el-form-item label="铺布任务号">
+          <el-input v-model="state.rightForm.taskCode" disabled />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="面料编号">
+          <el-input v-model="state.rightForm.fabricCode" disabled />
+        </el-form-item>
+        <el-form-item label="面料名称">
+          <el-input v-model="state.rightForm.fabricName" disabled />
+        </el-form-item>
+        <el-form-item label="面料颜色">
+          <el-input v-model="state.rightForm.fabricColor" disabled />
+        </el-form-item>
+        <el-form-item label="唛架长度 (mm)">
+          <div class="layCloth-row">
+            <el-input-number v-model="state.rightForm.shelfLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+          </div>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="唛架门幅 (mm)">
+          <el-input v-model="state.rightForm.shelfWidth" disabled />
+        </el-form-item>
+        <el-form-item label="铺布长度 (mm)">
+          <div class="layCloth-row">
+            <el-input-number v-model="state.rightForm.spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+          </div>
+        </el-form-item>
+        <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
+          <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" />
+          <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" />
+        </el-form-item>
+        <el-form-item label="设备名称">
+          <el-input v-model="state.rightForm.deviceName" disabled />
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="铺布层数">
+          <el-input v-model="state.rightForm.spreadClothLevel" disabled />
+        </el-form-item>
+        <el-form-item label="损耗率%">
+          <el-input v-model="state.rightForm.useRate" disabled />
+        </el-form-item>
+        <el-form-item label="单层件数">
+          <el-input v-model="state.rightForm.levelClothSum" disabled />
+        </el-form-item>
+        <el-form-item label="床次总件数">
+          <el-input v-model="state.rightForm.bedSum" disabled />
+        </el-form-item>
+      </el-col>
+    </el-row>
   </el-form>
   <!-- 床次计划 -->
   <el-dialog v-if="state.bedPlanNoType" v-model="state.bedPlanNoType" :draggable="false" :close-on-click-modal="false" title="床次计划" width="1100px">
@@ -66,7 +74,7 @@
   </el-dialog>
   <!-- 设备编号 -->
   <el-dialog v-if="state.deviceSnType" v-model="state.deviceSnType" :draggable="false" :close-on-click-modal="false" title="设备编号" width="1100px">
-    <DeviceSnType :type="props.type" :operation="setDeviceSnType" />
+    <DeviceSnType :type="props.type" :operation="setDeviceSnType" :value=" props.value" />
   </el-dialog>
 </template>
 
@@ -112,11 +120,16 @@
   watch(
     () => props.value,
     (item: any) => {
+     try {
       state.device.deviceId = item.deviceId
       state.device.deviceSn = item.deviceSn
-
       state.rightForm = item
       props.setData('1', state.rightForm)
+      
+     } catch (error) {
+      
+     }
+
     }
   )
 
@@ -223,16 +236,25 @@
 
   .setting-img {
     position: absolute;
-    right: 2px;
+    right: 3vw;
     top: -7px;
     width: 42px;
     cursor: pointer;
   }
   .bedPlanNo-img {
     position: absolute;
-    right: -16px;
+    right: 2vw;
     top: 2px;
     width: 42px;
     cursor: pointer;
+  }
+  .rightFormRef {
+    display: block;
+    /deep/ .el-input {
+      width: 300px;
+    }
+    /deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
   }
 </style>

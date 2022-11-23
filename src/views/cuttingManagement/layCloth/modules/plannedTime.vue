@@ -1,114 +1,113 @@
 <template>
-  <div class="plannedTime">
-    <!-- 甘特图 -->
-    <div class="title">甘特图</div>
-    <div class="gunter" @click="see">
-      <img :src="layClothImg" alt="" class="time-img" />
-      <div class="gunter-txt">查看甘特图</div>
-    </div>
-
-    <el-form ref="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
-      <!-- 铺布任务 -->
+  <!-- 甘特图 -->
+  <div class="title">甘特图</div>
+  <ChartDisplay :chart-date="state.chartDate" />
+  <el-form ref="rightFormRef" class="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
+    <!-- 铺布任务  -->
+    <div class="cloth">
       <div class="title">铺布任务</div>
-      <el-form-item label="铺布任务开始时间：">
-        <el-date-picker
-          v-model="state.rightForm.spreadTaskTime.planStartTime"
-          :disabled="disable(false)"
-          :clearable="false"
-          value-format="x"
-          format="YYYY-MM-DD HH:mm"
-          type="datetime"
-          :suffix-icon="Calendar"
-          @change="setTime"
-        />
-      </el-form-item>
-      <el-form-item label="铺布任务结束时间：">
-        <el-date-picker
-          v-model="state.rightForm.spreadTaskTime.planEndTime"
-          :disabled="disable(false)"
-          :clearable="false"
-          value-format="x"
-          format="YYYY-MM-DD HH:mm"
-          type="datetime"
-          :suffix-icon="Calendar"
-          @change="setTime"
-        />
-      </el-form-item>
-      <!-- 打标任务 -->
-      <div v-if="state.planType">
-        <div class="title">
+      <div class="flex">
+        <el-form-item label="铺布任务开始时间：">
+          <el-date-picker
+            v-model="state.rightForm.spreadTaskTime.planStartTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            value-format="x"
+            format="YYYY-MM-DD HH:mm"
+            type="datetime"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+        <el-form-item label="铺布任务结束时间：">
+          <el-date-picker
+            v-model="state.rightForm.spreadTaskTime.planEndTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            value-format="x"
+            format="YYYY-MM-DD HH:mm"
+            type="datetime"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+      </div>
+    </div>
+    <!-- 打标任务 -->
+    <div v-if="state.planType" class="labeling">
+      <div class="title">
+        <div class="labeling-title">
           打标任务 <span> <el-switch v-model="state.spreadTaskTimeType" :disabled="disable(false)" @change="spreadTaskType" /></span>
         </div>
-        <div v-if="state.spreadTaskTimeType" class="pasteTaskTime">
-          <el-form-item label="贴标任务开始时间：">
-            <el-date-picker
-              v-model="state.rightForm.pasteTaskTime.planStartTime"
-              :disabled="disable(false)"
-              :clearable="false"
-              value-format="x"
-              format="YYYY-MM-DD HH:mm"
-              type="datetime"
-              :suffix-icon="Calendar"
-              @change="setTime"
-            />
-          </el-form-item>
-          <el-form-item label="贴标任务结束时间：">
-            <el-date-picker
-              v-model="state.rightForm.pasteTaskTime.planEndTime"
-              :disabled="disable(false)"
-              :clearable="false"
-              value-format="x"
-              format="YYYY-MM-DD HH:mm"
-              type="datetime"
-              :suffix-icon="Calendar"
-              @change="setTime"
-            />
-          </el-form-item>
-        </div>
       </div>
-
-      <!-- 裁剪任务 -->
+      <div v-if="state.spreadTaskTimeType" class="pasteTaskTime">
+        <el-form-item label="贴标任务开始时间：">
+          <el-date-picker
+            v-model="state.rightForm.pasteTaskTime.planStartTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            value-format="x"
+            format="YYYY-MM-DD HH:mm"
+            type="datetime"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+        <el-form-item label="贴标任务结束时间：">
+          <el-date-picker
+            v-model="state.rightForm.pasteTaskTime.planEndTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            value-format="x"
+            format="YYYY-MM-DD HH:mm"
+            type="datetime"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+      </div>
+    </div>
+    <!-- 裁剪任务 -->
+    <div class="cropping">
       <div class="title">裁剪任务</div>
-      <el-form-item label="裁剪任务开始时间：">
-        <el-date-picker
-          v-model="state.rightForm.cutTaskTime.planStartTime"
-          :disabled="disable(false)"
-          :clearable="false"
-          value-format="x"
-          format="YYYY-MM-DD HH:mm"
-          type="datetime"
-          :suffix-icon="Calendar"
-          @change="setTime"
-        />
-      </el-form-item>
-      <el-form-item label="裁剪任务结束时间：">
-        <el-date-picker
-          v-model="state.rightForm.cutTaskTime.planEndTime"
-          :disabled="disable(false)"
-          :clearable="false"
-          type="datetime"
-          format="YYYY-MM-DD HH:mm"
-          value-format="x"
-          :suffix-icon="Calendar"
-          @change="setTime"
-        />
-      </el-form-item>
-    </el-form>
-  </div>
-  <el-dialog v-if="state.imgType" v-model="state.imgType" :close-on-click-modal="false" :draggable="false" title="查看甘特图" width="1100px" hei>
-    <ChartDisplay />
-  </el-dialog>
+      <div class="flex">
+        <el-form-item label="裁剪任务开始时间：">
+          <el-date-picker
+            v-model="state.rightForm.cutTaskTime.planStartTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            value-format="x"
+            format="YYYY-MM-DD HH:mm"
+            type="datetime"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+        <el-form-item label="裁剪任务结束时间：">
+          <el-date-picker
+            v-model="state.rightForm.cutTaskTime.planEndTime"
+            :disabled="disable(false)"
+            :clearable="false"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm"
+            value-format="x"
+            :suffix-icon="Calendar"
+            @change="setTime"
+          />
+        </el-form-item>
+      </div>
+    </div>
+  </el-form>
+  <el-dialog v-if="state.imgType" v-model="state.imgType" :close-on-click-modal="false" :draggable="false" title="查看甘特图" width="1100px" hei />
 </template>
 
 <script lang="ts" setup>
   import { onMounted, reactive, ref, getCurrentInstance } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { isEmpty } from 'lodash'
-  // import  from  "./"
 
   import { Calendar } from '@element-plus/icons-vue'
   import ChartDisplay from './chartDisplay-img.vue'
-  import layClothImg from '@/components/icon/layCloth.png'
   const { proxy } = getCurrentInstance() as any
 
   const rightFormRef = ref<FormInstance>()
@@ -140,11 +139,9 @@
         planStartTime: null,
         planEndTime: null
       }
-    }
+    },
+    chartDate: { api: '/jack-ics-api/device/listDeviceUseTime', type: 'time', height: '300px', deviceId: props.value.one.deviceId }
   })
-  const see = () => {
-    state.imgType = true
-  }
 
   const setList = () => {
     if (props.ids) {
@@ -275,9 +272,6 @@
 </script>
 
 <style scoped lang="less">
-.plannedTime{
-  width: 540px;
-}
   .el-input__prefix-inner {
     /deep/ .el-input__icon {
       margin: 0 !important;
@@ -291,25 +285,17 @@
     }
   }
   .title {
-    display: block;
     width: 100%;
+    height: 20px;
+    line-height: 20px;
+    border-left: 3px solid #3e8ff7;
+    padding-left: 10px;
+
     font-size: 14px;
     font-weight: bold;
     color: #333333;
-    //margin: 0;
     margin-left: 8px !important;
     margin-bottom: 20px;
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: -8px;
-      width: 3px;
-      height: 16px;
-      background: #3e8ff7;
-      border-radius: 1px 1px 1px 1px;
-    }
   }
   .row {
     /deep/ .el-input {
@@ -334,5 +320,37 @@
   .gunter-txt {
     color: #3e8ff7;
     transform: translate(4px, 8px);
+  }
+  .rightFormRef {
+    display: block;
+    width: 100%;
+  }
+  .cloth {
+    float: left;
+    width: 50%;
+  }
+  .labeling {
+    width: 50%;
+    float: left;
+  }
+  .cropping {
+    width: 50%;
+    float: left;
+  }
+  .flex {
+    // width: ;
+    display: flex;
+    // justify-content: space-around;
+    // align-items: center;
+  }
+  .labeling-title {
+    transform: translate(0, -3px);
+  }
+  /deep/ .el-date-editor.el-input {
+    width: 17vw;
+  }
+  .chartContainer {
+    width: 11000px;
+    height: 500px;
   }
 </style>

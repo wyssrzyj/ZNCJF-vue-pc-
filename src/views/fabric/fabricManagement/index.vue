@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-07 13:31:39
+ * @LastEditTime: 2022-11-08 17:11:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -174,15 +174,24 @@
           weight: item.weight
         })
       })
-
-      proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
+      if (!isEmpty(data)) {
+          proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
         state.export.importType = false
         ElMessage({
-          message: '添加成功',
+          message: '导入成功',
           type: 'success'
         })
         refreshTable()
       })
+
+      }else{
+          ElMessage({
+          message: '未导入模板',
+          type: 'warning'
+        })
+      }
+
+    
     }
     if (type === false) {
       state.export.importType = false

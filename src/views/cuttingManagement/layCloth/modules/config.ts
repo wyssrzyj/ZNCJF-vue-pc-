@@ -119,7 +119,7 @@ export const echartsOpt = {
           const categoryIndex = api.value(0) //这里使用 api.value(0) 取出当前 dataItem 中第一个维度的数值。
           const start = api.coord([api.value(1), categoryIndex]) // 这里使用 api.coord(...) 将数值在当前坐标系中转换成为屏幕上的点的像素值。
           const end = api.coord([api.value(2), categoryIndex])
-          const height = api.size([0, 1])[1]
+          // const height = api.size([0, 1])[1]
           return {
             type: 'rect', // 表示这个图形元素是矩形。还可以是 'circle', 'sector', 'polygon' 等等。
             shape: echarts.graphic.clipRectByRect(
@@ -182,7 +182,7 @@ export const echartsOpt = {
         start: 100, //数据窗口范围的起始百分比,表示30%
         // end:20,//数据窗口范围的结束百分比,表示70%
         startValue: 0, //数据窗口范围的起始数值
-        endValue: 10, //数据窗口范围的结束数值。
+        endValue: 19, //数据窗口范围的结束数值。
 
         // yAxisIndex: [0, 1], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
         yAxisIndex: [1, 0], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴

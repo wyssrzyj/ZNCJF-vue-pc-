@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-10-26 13:49:29
+ * @LastEditTime: 2022-11-11 13:18:55
  * @Description:
  * @LastEditors: lyj
  */
@@ -204,7 +204,7 @@ export const tableColumns = [
     width: 200
   },
   {
-    title: '款式床次号',
+    title: '床次',
     align: 'center',
     dataIndex: 'styleBedNo',
     width: 200

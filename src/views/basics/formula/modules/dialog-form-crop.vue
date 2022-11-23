@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-23 08:50:14
+ * @LastEditTime: 2022-11-23 08:51:08
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -129,7 +129,6 @@
   const getAttachmentList = (e: any) => {
     if (e.type === 'currencyFile') {
       if (!isEmpty(e.data)) {
-
         // let data = props.current
         state.form.attachmentList = e.data
         state.form.paramFileName = e.data[0].name

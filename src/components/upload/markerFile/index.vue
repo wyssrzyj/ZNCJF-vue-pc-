@@ -1,40 +1,54 @@
 <template>
-  <el-upload
-    v-if="state.fileType !== null"
-    :disabled="props.disabled"
-    :file-list="state.targetArr[0]['fileList']"
-    :accept="props.pictureType.accept"
-    :action="state.ossAction"
-    multiple
-    :headers="{ token: getToken() }"
-    :before-upload="beforeAvatarUpload"
-    :on-progress="uploadProgress"
-    :on-success="uploadSuccess"
-    :before-remove="beforeRemove"
-    :on-error="uploadError"
-    :limit="props.upload.limit"
-    :on-preview="download"
-  >
-    <el-button   :disabled="props.disabled"  icon="upload">上传文件</el-button>
-    <div v-if="state.fileType !== null" class="subtip">
-      <el-icon>
-        <Warning />
-      </el-icon>
-      {{ props.upload.title }}
+  <!-- 自定义样式 -->
+  <div>
+    <!-- 上传 -->
+    <div v-if="state.img === ''" :style="state.style" class="upload-img" @click="added" >
+      <div class="upload-title">
+        <span
+          ><el-icon class="plus-icon"><Plus /></el-icon
+        ></span>
+        <span >上传唛架图</span>
+      </div>
     </div>
-  </el-upload>
-
-    <div v-if="state.img!==''"   class="demo-image__preview">
-    <el-image
-      style="width: 200px; height: 100px"
-      :src="state.img"
-      :preview-src-list="state.srcList"
-      :initial-index="1"
-      fit="cover"
-    />
+    <!-- 展示 -->
+    <div v-if="state.img !== ''">
+      <div  class="demo-image__preview" >
+        <el-image :style="state.style" :src="state.img" :preview-src-list="state.srcList" :initial-index="1" fit="cover" />
+        <div v-if="!props.disabled" class="download" @click="beforeRemove" >
+          <el-icon class="download-icon"><Delete /></el-icon>
+        </div>
+      </div>
+      <!-- 查看的时候显示下载按钮 -->
+    </div>
   </div>
-  <!-- <img v-if="state.img!==''"  class="markerFile-pictureImg" :src="state.img" /> -->
 
+  <!-- 截取-隐藏样式 -->
+  <div class="upload-hide">
+    <el-upload
+      :disabled="props.disabled"
+      :file-list="state.targetArr[0]['fileList']"
+      :accept="props.pictureType.accept"
+      :action="state.ossAction"
+      multiple
+      :headers="{ token: getToken() }"
+      :before-upload="beforeAvatarUpload"
+      :on-progress="uploadProgress"
+      :on-success="uploadSuccess"
+      :before-remove="beforeRemove"
+       :on-remove="remove"
+      :on-error="uploadError"
+      :limit="props.upload.limit"
+      :on-preview="download"
+    >
+      <el-button id="initSlide-markerFile" :disabled="props.disabled" icon="upload">上传文件</el-button>
+      <div v-if="state.fileType !== null" class="subtip">
+        <el-icon>
+          <Warning />
+        </el-icon>
+        <!-- {{ props.upload.title }} -->
+      </div>
+    </el-upload>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -47,15 +61,16 @@
     // either: '必传且限定' | '其中一个' | '值' // 利用TS：限定父组件传 either 的值
     value: any[]
     gitFile: any
-    disabled: boolean
+    disabled: boolean //是否显示按钮
     pictureType: any
     upload: any
+    width?: any
   }>()
 
   const { proxy }: any = getCurrentInstance()
   const state: any = reactive({
-    img:"",//预览
-    srcList:[],
+    img: '', //预览
+    srcList: [],
     disabled: props.disabled,
     dialogVisible: false,
     title: '导入文件',
@@ -113,28 +128,54 @@
         fileList: []
       }
     ],
-    uploadFileLoading: false
+    uploadFileLoading: false,
+    style: props.width ? `width:${props.width}vw; height: 115px` : `width: 200px; height: 100px`
   })
 
   watch(
     () => props.value,
     item => {
       if (!isEmpty(props.value)) {
-        if(item[0].shelfImage){
-        state.img=item[0].shelfImage
-        state.srcList=[item[0].shelfImage]
-
+        if (item[0].shelfImage) {
+          state.img = item[0].shelfImage
+          state.srcList = [item[0].shelfImage]
         }
         state.targetArr[state.fileType]['fileList'] = item
         //
       }
     }
   )
+
+    //自定义删除
+  const beforeRemove = () => {
+    state.img = ''
+    state.uploadFileLoading = false
+    state.targetArr[0]['fileList']=[]
+    props.gitFile({ data: [] }) //传递给父级
+
+  }
+
+   const remove = (uploadFile: any, uploadFiles: any) => {
+    props.gitFile({ data: uploadFiles })
+  }
+
+
+  //新增
+  const added = () => {
+    //initSlide-markerFile ID必须唯一 否则获取不到
+
+    // 自定义组件 只展示样式  数据逻辑还是走原始数据流
+    let e = document.createEvent('MouseEvents')
+    e.initEvent('click', true, true)
+    let dome: any = document.getElementById('initSlide-markerFile')
+    dome.dispatchEvent(e)
+  }
+
   //点击下载
   const download = (e: any) => {
     //后端返回的
-    if (!isEmpty(e.url)) {
-      ownload(e.url)
+    if (!isEmpty(e.shelfImage)) {
+      ownload(e.shelfImage)
     } else {
       //组件返回的
       if (!isEmpty(e.response.data)) {
@@ -147,7 +188,6 @@
     if (!data) {
       return
     }
-
     const blobUrl = data
     // 这里的文件名根据实际情况从响应头或者url里获取
     const a = document.createElement('a')
@@ -172,8 +212,8 @@
       uploadFile.status = 'fail'
     }
     //预览图片
-    state.img=uploadFiles[0].response.data.shelfImage
-    state.srcList=[uploadFiles[0].response.data.shelfImage]
+    state.img = uploadFiles[0].response.data.shelfImage
+    state.srcList = [uploadFiles[0].response.data.shelfImage]
     // 传递给父级
     props.gitFile({ data: uploadFiles })
 
@@ -183,11 +223,6 @@
 
   const uploadError = (err: any, file: any, fileList: any) => {
     ElMessage.error('系统有点繁忙，请稍后重试！')
-    state.uploadFileLoading = false
-  }
-
-  const beforeRemove = (file: any, fileList: any) => {
-    state.img=""
     state.uploadFileLoading = false
   }
 
@@ -271,18 +306,78 @@
     width: 260px;
     margin-right: 20px;
   }
-.demo-image__error .image-slot {
-  font-size: 30px;
-}
-.demo-image__error .image-slot .el-icon {
-  font-size: 30px;
-}
-.demo-image__error .el-image {
-  width: 100%;
-  height: 200px;
-}
-.markerFile-pictureImg{
-  width: 100px;
-  height: 100px;
-}
+  .demo-image__error .image-slot {
+    font-size: 30px;
+  }
+  .demo-image__error .image-slot .el-icon {
+    font-size: 30px;
+  }
+  .demo-image__error .el-image {
+    width: 100%;
+    height: 200px;
+  }
+  .markerFile-pictureImg {
+    width: 100px;
+    height: 100px;
+  }
+  .demo-image__preview {
+    position: relative;
+
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+  }
+
+  .download {
+    cursor: pointer;
+    width: 50px;
+    height: 100px;
+    position: relative;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 28px;
+    color: #409eff;
+  }
+  .download-icon {
+    position: absolute;
+    right: 7px;
+    bottom: 6px;
+    font-size: 24px;
+    color: #409eff;
+  }
+  .upload-title {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #909399;
+    font-size: 20px;
+  }
+  .plus-icon {
+    font-size: 30px;
+    color: #909399;
+  }
+  .upload-img {
+    height: 115px;
+    border-radius: 10px;
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .upload-hide {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+  .mov {
+    position: absolute;
+    right: 60px;
+    bottom: 0;
+  }
+  .delete-icon {
+    font-size: 30px;
+  }
 </style>

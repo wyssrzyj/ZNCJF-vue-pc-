@@ -59,22 +59,15 @@
 
   const dialogVisible = ref(false)
 
-  const props = defineProps({
-    modelValue: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    limit: {
-      type: Number,
-      default: 1000
-    }
-  })
-
+    const props = defineProps<{
+    limit: any
+    value: any
+    getFileList: any
+  }>()
+  
   const state = reactive({
     loading: false,
-    fileList: cloneDeep(props.modelValue),
+    fileList: cloneDeep(props.value),
     imgAction: `${proxy.$baseService.app.api}/jack-ics-api/oss/upload`,
     initialIndex: 0
   })
@@ -89,7 +82,7 @@
 
   //赋值
   watch(
-    () => props.modelValue,
+    () => props.value,
     v => {
       if (!isEmpty(v)) {
         state.fileList = v
@@ -108,11 +101,12 @@
     }
   }
 
-  const emits = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:value'])
 
   const handleSuccess = (res, uploadFile, uploadFiles) => {
     state.fileList = uploadFiles
-    emits('update:modelValue', formartFileList(state.fileList))
+    props.getFileList(state.fileList)
+    emits('update:value', formartFileList(state.fileList))
     state.loading = false
   }
 
@@ -138,7 +132,7 @@
       return item.url == uploadFile.url
     })
     state.fileList.splice(index, 1)
-    emits('update:modelValue', formartFileList(state.fileList))
+    emits('update:value', formartFileList(state.fileList))
   }
 
   const handlePictureCardPreview: UploadProps['onPreview'] = uploadFile => {
@@ -168,7 +162,7 @@
     })
     state.fileList[index]['topic'] = 1
     state.fileList.unshift(state.fileList.splice(index, 1)[0])
-    emits('update:modelValue', formartFileList(state.fileList))
+    emits('update:value', formartFileList(state.fileList))
   }
 
   onMounted(() => {

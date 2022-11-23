@@ -1,46 +1,55 @@
 <template>
-  <div class="container">
-    <div class="top">
-      <p v-for="(item, i) in state.topList" :key="i" :class="state.topCurrent === i ? 'active' : ''" @click="switchMenu(i)">{{ item }}</p>
-    </div>
-    <div class="middle">
-      <div class="left-form">
-        <el-form ref="leftForm" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
-          <el-form-item label="款图" class="layclothImg">
-            <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
-          </el-form-item>
-          <el-form-item label="款式编号">
-            <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
-          </el-form-item>
-          <el-form-item label="款式名称">
-            <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
-          </el-form-item>
-          <el-form-item label="唛架图">
-            <div class="layCloth-img">
-              <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
-            </div>
-          </el-form-item>
-          <el-form-item label="其他附件">
-            <div class="layCloth-file">
-              <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
-            </div>
-          </el-form-item>
-        </el-form>
+  <div class="container"> 
+
+    <el-form ref="leftForm" class="tops" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
+      <el-form-item label="款图">
+        <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
+      </el-form-item>
+      <div class="top-input">
+        <el-form-item label="款式编号">
+          <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
+        </el-form-item>
+        <el-form-item label="款式名称">
+          <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
+        </el-form-item>
       </div>
-      <div class="right-from">
-        <!--选择设备-->
-        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
-        <!--设备参数-->
-        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
-        <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
-        <!-- 时间更新  新功能 -->
-        <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
+
+      <div class="top-shelfFile">
+        <el-form-item label="唛架图">
+          <div class="layCloth-img">
+            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="52" />
+          </div>
+        </el-form-item>
+      </div>
+    </el-form>
+    <!-- 选项 -->
+    <div class="option">
+      <div v-for="(item, i) in state.topList" :key="i" :class="item.type ? 'option-item-check' : 'option-item'" @click="option(item, i)">{{ item.name }}</div>
+    </div>
+    <!-- 内容  -->
+    <div class="middle-container">
+    
+      <div class="middle">
+          <!--选择设备-->
+          <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
+          <!--设备参数-->
+          <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
+          <!--计划时间-->
+          <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
+          <!-- 时间更新  新功能 -->
+          <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
+      </div>
+        <div class="enclosure">
+        <div class="enclosureTitle">其他附件</div>
+        <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
       </div>
     </div>
+
     <div class="foot">
       <el-button @click="close"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
-      <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="save">保存</el-button>
+
+      <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="save('1')">审核</el-button>
+      <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="save('2')">保存</el-button>
     </div>
   </div>
 </template>
@@ -48,39 +57,47 @@
 <script lang="ts" setup>
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
+  import { useRoute } from 'vue-router'
   import { reactive, ref, getCurrentInstance } from 'vue'
   import type { FormRules } from 'element-plus'
   import { FormInstance } from 'element-plus'
 
+  import emits from '@njpCommon/utils/emits'
+  import { EMitt } from '@njpCommon/constants/enum'
   import UploadModule from '@/components/upload/index.vue'
 
   import SelectDev from './selectDev.vue'
   import DevParam from './devParam.vue'
   import PlannedTime from './plannedTime.vue'
-  import plannedTimeDemo from './plannedTimeDemo.vue'
+  // import plannedTimeDemo from './plannedTimeDemo.vue'
   import { content } from './conifgs'
 
   const leftForm = ref<FormInstance>()
   const { proxy } = getCurrentInstance() as any
-
+  const route = useRoute()
   const { formData } = content
 
-  const props = defineProps<{
-    type: any
-    close: any
-    row: any
-  }>()
+  // const props = defineProps<{
+  //   type: any
+  //   close: any
+  //   row: any
+  // }>()
 
   const state: any = reactive({
-    type: props.type,
+    type: false,
     list: { one: {}, two: {}, three: {} }, //保存数据
     form: formData,
     topCurrent: 0,
     ids: {
-      bedPlanId: props.row.bedPlanId,
-      deviceId: props.row.deviceId
+      bedPlanId: route.query.bedPlanId,
+      deviceId: route.query.deviceId
     }, //设备id
-    topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
+    // topList: ['1.选择设备', '2.设备参数', '3.计划时间'],
+    topList: [
+      { name: '选择设备', type: true },
+      { name: '设备参数', type: false },
+      { name: '计划时间', type: false }
+    ],
     leftForm: {
       styleNo: '',
       styleName: ''
@@ -137,10 +154,10 @@
 
   const init = () => {
     //面料名称
-
+    state.type = route.query.typeValue === 'true' ? true : false
     //数据回显
-    if (props.row) {
-      proxy.$baseService.get('/jack-ics-api/spreadTask/get', { taskId: props.row.id }).then((res: any) => {
+    if (route.query.id) {
+      proxy.$baseService.get('/jack-ics-api/spreadTask/get', { taskId: route.query.id }).then((res: any) => {
         //唛架图
         res.data.shelfFile = [
           {
@@ -158,9 +175,9 @@
       })
 
       const data = {
-        bedPlanId: props.row.bedPlanId,
-        deviceId: props.row.deviceId,
-        spreadClothLevel: props.row.spreadClothLevel
+        bedPlanId: route.query.bedPlanId,
+        deviceId: route.query.deviceId,
+        spreadClothLevel: route.query.spreadClothLevel
       }
 
       setGetParam(data)
@@ -193,11 +210,20 @@
   init()
 
   //切换菜单
-  const switchMenu = (i: any) => {
+  const option = (v: any, i: any) => {
     let bedPlanNo = state.list.one.bedPlanNo
     let deviceSn = state.list.one.deviceSn
     if (bedPlanNo && deviceSn) {
+      let arr = cloneDeep(state.topList)
+      arr.map((item: any) => {
+        if (item.name === v.name) {
+          item.type = true
+        } else {
+          item.type = false
+        }
+      })
       state.topCurrent = i
+      state.topList = arr
     } else {
       ElMessage({
         message: '必填项不能为空',
@@ -209,26 +235,27 @@
   // 总数据
   const setData = (type: any, e: any) => {
     if (type === '1') {
-      let cloneForm = cloneDeep(state.form) //为了图片可以渲染
+      let cloneForm =  (state.form )
       cloneForm.styleCode = e.styleCode
       cloneForm.styleName = e.styleName
       cloneForm.deviceId = e.deviceId
+      // 暂时注销 床次计划号逻辑 22.9.23 13-02 
       // 图片
-      cloneForm.img = [{ url: e.styleImage }]
+      // cloneForm.img = [{ url: e.styleImage }]
       //唛架图
-      if (e.shelfFile.name) {
-        cloneForm.shelfFile = [
-          {
-            name: e.shelfFile.name,
-            shelfImage: e.shelfImage, //图暂时没有
-            response: {
-              data: {
-                src: e.shelfFile.url
-              }
-            }
-          }
-        ]
-      }
+      // if (e.shelfFile.name) {
+      //   cloneForm.shelfFile = [
+      //     {
+      //       name: e.shelfFile.name,
+      //       shelfImage: e.shelfImage, //图暂时没有
+      //       response: {
+      //         data: {
+      //           src: e.shelfFile.url
+      //         }
+      //       }
+      //     }
+      //   ]
+      // }
       state.ids.deviceId = e.deviceId
       state.form = cloneForm
       state.list.one = e
@@ -313,12 +340,12 @@
     return data
   }
   // 保存
-  const save = () => {
+  const save = (type: any) => {
     //必填项不可为空
 
     let bedPlanNo = state.list.one.bedPlanNo
     let deviceSn = state.list.one.deviceSn
-    let rowId = !isEmpty(props.row) ? props.row.id : null
+    let rowId = !isEmpty(route.query) ? route.query.id : null
     //其他附件
 
     if (bedPlanNo && deviceSn) {
@@ -367,13 +394,15 @@
 
         isSkipPaste: state.list.three.isSkipPaste
       }
-      proxy.$baseService.post('/jack-ics-api/spreadTask/save', data).then((res: any) => {
+      let api = type === '1' ? '/jack-ics-api/spreadTask/saveAndAudit' : '/jack-ics-api/spreadTask/save'
+
+      proxy.$baseService.post(api, data).then((res: any) => {
         if (res.code === 0) {
           ElMessage({
             message: '保存成功',
             type: 'success'
           })
-          props.close()
+          emits.emit(EMitt.OnCloseCurrTab)
         } else {
           ElMessage({
             message: res.msg,
@@ -391,7 +420,7 @@
 
   // 取消
   const close = (formEl: any) => {
-    props.close()
+    emits.emit(EMitt.OnCloseCurrTab)
   }
 </script>
 
@@ -443,23 +472,10 @@
     }
     .middle {
       width: 100%;
-      display: flex;
-      height: 585px;
-      overflow-y: auto;
-      //align-items: center;
-      justify-content: space-between;
-      margin: 20px 0 30px 0;
-      /deep/ .el-input {
-        width: 250px;
-      }
-      .left-form {
-        width: 450px;
-      }
-      .right-from {
-        width: 555px;
-      }
+      
     }
     .foot {
+      background: #fff;
       position: absolute;
       bottom: 0;
       left: 0;
@@ -471,10 +487,55 @@
       box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
     }
   }
-  .layCloth-img {
-    width: 200px;
+  .middle-container {
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+    // overflow-y: auto;
   }
+  .enclosure {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding-bottom: 50px;
+    width: 96%;
+    transform: translate(0, 220px);
+  }
+
   .layCloth-file {
     width: 450px;
   }
+  .enclosureTitle {
+    margin-bottom: 10px;
+  }
+
+  .option {
+    width: 100%;
+    border-bottom: 1px solid #dddddd;
+  }
+  .option-item {
+    cursor: pointer;
+    width: 100px;
+    height: 30px;
+    margin-right: 5px;
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid #dddddd;
+    border-bottom: none;
+  }
+  .option-item-check {
+    cursor: pointer;
+    width: 100px;
+    height: 30px;
+    margin-right: 5px;
+    text-align: center;
+    line-height: 30px;
+    background: #3e8ff7;
+    color: #fff;
+    border: 1px solid #dddddd;
+    border-bottom: none;
+  }
+   /deep/ .el-input {
+      width: 300px;
+    }
 </style>

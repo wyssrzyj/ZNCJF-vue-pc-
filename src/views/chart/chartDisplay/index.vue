@@ -141,7 +141,7 @@
             </el-table-column>
             <el-table-column property="styleName" label="款式名称" />
             <el-table-column property="styleCode" label="款式编号" />
-            <el-table-column property="styleBedNo" label="款式床次号" />
+            <el-table-column property="styleBedNo" label="床次" />
             <el-table-column property="customName" label="客户名称" />
           </el-table>
         </div>

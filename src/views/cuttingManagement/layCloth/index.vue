@@ -2,7 +2,7 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="床次" prop="bedPlanNo">
+      <el-form-item label="床次计划号" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="铺布任务号" prop="taskCode">
@@ -32,10 +32,9 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看铺布', row)">查看</el-button>
-      <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(false, '编辑铺布', row)">编辑 </el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
+      <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button>
       <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
-      <!-- <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button> -->
     </template>
     <!-- 删除 -->
     <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
@@ -48,9 +47,7 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1100px" hei>
-      <DialogContent :type="state.dialogType" :row="state.row" :close="close" :dialog-type="state.dialogType" />
-    </el-dialog>
+   
   </njp-table-config>
 
   <div>
@@ -68,7 +65,6 @@
 
   import { tagType, mapType } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
-  import DialogContent from './modules/dialog-content.vue'
   import Print from './modules/dialog-print.vue'
   const { proxy } = getCurrentInstance() as any
 
@@ -160,17 +156,24 @@
   }
 
   //新增、编辑、查看
-  const handleClick = (e: any, type: any, row: any) => {
+  const handleClick = ( row: any,type: any,) => {
     state.row = row
-    state.dialogTitle = type
-    state.dialogType = e
-    state.dialogTableVisible = true
+    toViewFun( row,type)
   }
 
-  //关闭 弹窗
-  const close = () => {
-    state.dialogTableVisible = false
-    refreshTable()
+  //跳转详情
+   const toViewFun = (row:any, type:any) => {
+    proxy.$routerToView({
+      path: `/cuttingManagement/layCloth/view-dialog-content`,
+      query: {
+        _mt: `铺布任务详情`,
+        id: row.id,
+        bedPlanId: row.bedPlanId,
+        deviceId: row.deviceId,
+        spreadClothLevel: row.spreadClothLevel,
+        typeValue: type
+      }
+    })
   }
 
   const handleSelectionChange = (val: any) => {

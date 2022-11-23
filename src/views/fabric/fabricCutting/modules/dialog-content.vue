@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-03 13:21:55
+ * @LastEditTime: 2022-11-17 15:18:11
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -243,3 +243,8 @@
     props.close()
   }
 </script>
+<style lang="less" scoped>
+/deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
+</style>

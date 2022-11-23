@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-28 15:26:05
+ * @LastEditTime: 2022-11-11 13:19:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,9 +9,9 @@
   <div>
     <div class="informationTitle">床次信息</div>
     <div class="work-row">
-      <div class="work-infBlockLeft">床次计划：</div>
+      <div class="work-infBlockLeft">床次计划号：</div>
       <div class="work-infBlock">{{ state.list.bedPlanNo }}</div>
-      <div class="work-infBlock-title">款式床次号：</div>
+      <div class="work-infBlock-title">床次：</div>
       <div class="work-infBlock">{{ state.list.styleBedNo }}</div>
       <div class="work-infBlock-title">款式编码：</div>
       <div class="work-infBlock">{{ state.list.styleCode }}</div>

@@ -1,12 +1,11 @@
 <template>
   <div>
-    <el-form ref="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
+    <el-form ref="rightFormRef" class="rightFormRef" :model="state.rightForm" :inline="true" label-width="auto" label-position="top">
       <div class="title">
         <div>铺布机建议参数</div>
       </div>
-
-      <el-row :gutter="20">
-        <el-col :span="9">
+      <div class="parameter" >
+        <div class="parameter-top">
           <el-form-item label="前进速度">
             <Tips title="1-10段" />
 
@@ -27,8 +26,8 @@
               <span>°</span>
             </div>
           </el-form-item> -->
-        </el-col>
-        <el-col :span="9" class="layClothRight">
+        </div>
+        <div class="parameter-foot">
           <el-form-item label="后退速度">
             <Tips title="1-10段" />
             <el-input-number v-model="state.rightForm.backSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
@@ -46,9 +45,8 @@
           <!-- <el-form-item label="加速权重">
             <el-input-number v-model="state.rightForm.accelerationWeight" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item> -->
-        </el-col>
-      </el-row>
-
+        </div>
+      </div>
       <div class="title">
         <div>裁床建议参数</div>
         <div class="unitSearch">
@@ -59,7 +57,9 @@
       </div>
 
       <el-row :gutter="20">
-        <UploadModule :disabled="disable(false)" :type="'currencyFile'" :get-data="getAttachmentList" :value="state.bottomForm.attachmentList" :upload="upload" />
+        <div class="currencyFile">
+          <UploadModule :disabled="disable(false)" :type="'currencyFile'" :get-data="getAttachmentList" :value="state.bottomForm.attachmentList" :upload="upload" />
+        </div>
 
         <!-- 暂时隐藏 -->
         <!-- <el-col :span="9">
@@ -326,5 +326,35 @@
     // .unitSearch-option{
     //   width: 50px;
     // }
+  }
+  .currencyFile {
+    margin-left: 10px;
+  }
+
+  .rightFormRef {
+    display: block;
+    /deep/ .el-input {
+      width: 300px;
+    }
+    /deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
+  }
+  .parameter{
+    transform: translate(-5vw, 0);  
+  }
+  .parameter-top{
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+  }
+   .parameter-foot{
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
   }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-11-10 15:49:00
+ * @LastEditTime: 2022-11-22 17:10:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,13 +10,14 @@
     ref="table"
     height="600"
     style="width: 100%"
+    :span-method="objectSpanMethod"
     :header-cell-style="{ 'text-align': 'center' }"
     :cell-style="{ 'text-align': 'center' }"
     :data="state.tableData"
     border
     stripe
   >
-    <el-table-column v-for="(item, index) in state.data" :key="index" :prop="item.prop" :min-width="150">
+    <el-table-column v-for="(item, index) in state.data" :key="index" :prop="item.prop" :min-width="150" :fixed="['fabricColor', 'spreadClothLevel', 'shelfScale'].includes(item.prop) ? 'right' :null">
       <!-- 表头 -->
       <template #header>
         <span> <span v-if="item.required" class="required">*</span> {{ item.label }}</span>
@@ -114,7 +115,7 @@
   </el-dialog>
 
   <!-- 唛架图片 -->
-  <el-dialog v-model="state.shelfImageType" title="上传唛架图" width="210px" :draggable="false">
+  <el-dialog v-model="state.shelfImageType" title="上传唛架图" width="810px" :draggable="false">
     <ShelfIma v-if="state.shelfImageType" v-model="state.shelfList" :picture-type="state.pictureType" :limit="state.limit" />
     <template #footer>
       <el-button @click="state.shelfImageType = false">{{ $t('cancel') }}</el-button>
@@ -158,7 +159,13 @@
     //唛架图片
     shelfImageType: false,
     shelfList: [],
-    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt' }
+    pictureType: { accept: ' .cut, .dat, .gbr, .ggt,.grb,.ict,.iso,.nc,.tac,.txt', availableSuffix: '  cut dat gbr ggt grb ict iso nc tac txt' },
+    //合并表格数据
+    consolidationNo: [ 0,1, 2, 3, 4, 5, 6, 7, 8], //***需要合并的表格序号**
+    spanArr: [], // 一个空的数组，用于存放每一行记录的合并数
+    pos: 0, // spanArr 的索引
+    contentSpanArr: [],
+    position: 0
   })
 
   //处理格式
@@ -201,16 +208,69 @@
     }
     return newArray
   }
+  //**特殊表格数据1**
+  const setSpanArr = (tableData: any) => {
+    for (let i = 0; i < tableData.length; i++) {
+      if (i === 0) {
+        state.spanArr.push(1)
+        state.pos = 0
+        state.contentSpanArr.push(1)
+        state.position = 0
+      } else {
+        // 判断当前元素与上一个元素是否相同(第1和第2列)
+        if (tableData[i].bedNo === tableData[i - 1].bedNo) {
+          state.spanArr[state.pos] += 1
+          state.spanArr.push(0)
+        } else {
+          state.spanArr.push(1)
+          state.pos = i
+        }
+        // 判断当前元素与上一个元素是否相同(第3列)
+        if (tableData[i].CONTENT === tableData[i - 1].CONTENT) {
+          state.contentSpanArr[state.position] += 1
+          state.contentSpanArr.push(0)
+        } else {
+          state.contentSpanArr.push(1)
+          state.position = i
+        }
+      }
+    }
+  }
+  //** 特殊表格数据2**
+  const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
+    if (state.consolidationNo.includes(columnIndex)) {
+      const _row = state.spanArr[rowIndex]
+      const _col = _row > 0 ? 1 : 0
+      return {
+        rowspan: _row,
+        colspan: _col
+      }
+    }
+    // else if (columnIndex === 3) {
+    //   const _row = state.contentSpanArr[rowIndex]
+    //   const _col = _row > 0 ? 1 : 0
+    //   return {
+    //     rowspan: _row,
+    //     colspan: _col
+    //   }
+    // }
+  }
+
+
+
 
   //分页功能
   const setPagination = (data: any) => {
     let list = getNewArray(data, limit.value)
     state.tableData = list[page.value - 1] //赋值展示数据  -1 数组从0开始
+    setSpanArr(state.tableData)
+    // 特殊表格数据1
   }
 
   const init = () => {
     let initData = setFormat(props.form)
     state.initData = initData
+    console.log(initData);
     props.getTableData(initData)
     state.total = initData.length //总长度
     //处理数据

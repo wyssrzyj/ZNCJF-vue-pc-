@@ -1,11 +1,10 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="设备型号" prop="spec">
-        <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
-      </el-form-item>
-      <el-form-item label="设备编号" prop="sn">
-        <el-input v-model="state.queryFormData.sn" placeholder="请输入" clearable />
+      <el-form-item label="计算类型" prop="spec">
+          <el-select v-model="state.queryFormData.statu" clearable filterable>
+          <el-option v-for="item in state.statu" :key="item.name" :label="item.name" :value="item.value" />
+        </el-select>
       </el-form-item>
       <el-form-item label="设备名称" prop="name">
         <el-input v-model="state.queryFormData.name" placeholder="请输入" clearable />
@@ -14,7 +13,6 @@
 
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '新增设备', {})">新增</el-button>
-      <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
@@ -51,18 +49,8 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
-  <!-- 表格修改 -->
-  <el-dialog v-if="state.defaultParam.defaultParamType" v-model="state.defaultParam.defaultParamType" :close-on-click-modal="false" :draggable="false" :title="state.defaultParam.Title" width="500px">
-    <DefaultParam :list="{}" :row="state.defaultParam.row" :type="false" :operation="operation" :form="state.defaultParam.form" />
-  </el-dialog>
-  <!-- 导出  -->
-  <el-dialog v-if="state.export.importType" v-model="state.export.importType" :draggable="false" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :export="state.export" :get-list="getList" :confirm="confirm" />
-    <template #footer>
-      <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
-      <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
-    </template>
-  </el-dialog>
+
+
 </template>
 
 <script lang="ts" setup>
@@ -71,26 +59,22 @@
   import { isEmpty } from 'lodash'
   import { equipment } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
-  import ImportDialog from '@/components/dialog-import-table/index.vue'
+  // import ImportDialog from '@/components/dialog-import-table/index.vue'
   import DialogContent from './modules/dialog-content.vue'
-  import DefaultParam from './modules/dialog-forms.vue'
-  import { exportData } from './modules/conifgs'
+  // import DefaultParam from './modules/dialog-forms.vue'
+  // import { exportData } from './modules/conifgs'
   const { proxy }: any = getCurrentInstance()
   const styleLibListEl = ref()
   const state = reactive({
     dialogVisible: false,
     ids: [],
-    //导出
-    export: {
-      type: 'equipment',
-      data: exportData,
-      width: '800px',
-      importType: false,
-      list: [], //导出数据
-      // template: 'http://192.168.99.184/template/device.xlsx',
-      template: '/template/设备管理模板.xlsx', //引入的是V1的
-      interface: '/jack-ics-api/device/import'
-    },
+   statu: [
+      { name: '未审核', value: '1' },
+      { name: '已审核', value: '2' },
+      { name: '进行中', value: '3' },
+      { name: '已完成', value: '4' }
+    ],
+ 
 
     dialogType: true,
     dialogTableVisible: false,
@@ -106,9 +90,8 @@
 
     // 查询数据
     queryFormData: {
-      spec: '',
-      sn: '',
-      name: ''
+      name: '',
+      statu:""
     },
     data: {
       row: {}
@@ -164,80 +147,17 @@
   }
 
   //关闭弹窗-【默认参数】
-  const operation = (e: any) => {
-    if (e.type === 'layCloth') {
-      refreshTable()
-      state.defaultParam.defaultParamType = false
-    }
-    if (e.type === 'crop') {
-      state.defaultParam.defaultParamType = false
-    }
-    if (e.type === 'cancel') {
-      state.defaultParam.defaultParamType = false
-    }
-  }
-
-  //------------------------------导出-------------------------------
-  //打开弹窗-【导出】
-  const importMethod = () => {
-    state.export.importType = true
-  }
-
-  //获取导出数据
-  const getList = (e: any) => {
-    state.export.list = e
-  }
-
-  const confirm = () => {
-    exportEvents(true)
-  }
-  //关闭弹窗-【导出】
-  const exportEvents = (type: any) => {
-    if (type === true) {
-      let saveData = state.export.list
-
-      let data: any = []
-
-      saveData.forEach((item: any) => {
-        data.push({
-          image: !isEmpty(item.styleUrlList) ? item.styleUrlList[0].url : null, //款图
-          name: item.name,
-          sn: item.sn,
-          spec: item.spec,
-          type: item.type.toString()
-        })
-      })
-      if (!isEmpty(data)) {
-        proxy.$baseService.post('/jack-ics-api/device/saveBatch', { deviceExcelDTOList: data }).then((res: any) => {
-          refreshTable()
-          state.export.importType = false
-          ElMessage({
-            message: '导入成功',
-            type: 'success'
-          })
-        })
-      } else {
-         ElMessage({
-          message: '未导入模板',
-          type: 'warning'
-        })
-      }
-    }
-    if (type === false) {
-      state.export.importType = false
-    }
-  }
-
-  // const downloadTemplate = () => {
-  //   let a = document.createElement('a')
-  //   a.setAttribute('download', '')
-  //   a.href = 'http://localhost:9000/static/lyj.xlsx'
-  //   console.log(a.href)
-  //   // a.download;
-  //   // a.style.display = "none";
-  //   // document.body.appendChild(a);
-  //   a.click()
-  //   // a.remove();
+  // const operation = (e: any) => {
+  //   if (e.type === 'layCloth') {
+  //     refreshTable()
+  //     state.defaultParam.defaultParamType = false
+  //   }
+  //   if (e.type === 'crop') {
+  //     state.defaultParam.defaultParamType = false
+  //   }
+  //   if (e.type === 'cancel') {
+  //     state.defaultParam.defaultParamType = false
+  //   }
   // }
 
   //删除

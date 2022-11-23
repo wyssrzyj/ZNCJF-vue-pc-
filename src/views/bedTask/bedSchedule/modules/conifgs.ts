@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-11-02 15:52:41
+ * @LastEditTime: 2022-11-17 15:07:50
  * @Description:
  * @LastEditors: lyj
  */
@@ -98,25 +98,34 @@ export const content: any = {
     useRate: 0,
     remark: ''
   },
-  formMiddleData: [
-    { name: '生产订单', model: 'produceOrderCode', prop: 'produceOrderCode', type: 'produceOrderCode', disabled: false },
+    formLeftData: [
     { name: '客户名称', model: 'customName', prop: null, type: null, disabled: false },
+    { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
+   
     { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: false },
     { name: '面料颜色', model: 'fabricColor', prop: 'fabricColor', type: 'fabricColor', disabled: false },
-    { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
-    { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: null, disabled: true },
-    { name: '单层件数', model: 'levelClothSum', prop: null, type: null, disabled: true },
-    { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true }
-  ],
-  formRightData: [
-    { name: '床次', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
-    { name: '款式床次号', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: false },
-    { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
-    { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
+   
     { name: '铺布长度', model: 'spreadClothLength', prop: 'spreadClothLength', type: 'spreadClothLength', disabled: false },
     { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false },
+
+  ],
+
+  formMiddleData: [
+    { name: '生产订单', model: 'produceOrderCode', prop: 'produceOrderCode', type: 'produceOrderCode', disabled: false },
+    { name: '单层件数', model: 'levelClothSum', prop: null, type: null, disabled: true },
+   
+    { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
+    { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: null, disabled: true },
     { name: '利用率', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
+
+  ],
+  formRightData: [
+    { name: '床次计划号', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
+    { name: '床次', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: false },
+    { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true },
+    { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
     { name: '备注', model: 'remark', prop: null, type: null }
+  
   ],
   dataRule: {
     produceOrderCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

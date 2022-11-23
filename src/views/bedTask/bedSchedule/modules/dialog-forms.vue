@@ -1,15 +1,14 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-12 09:15:33
+ * @LastEditTime: 2022-11-23 08:52:04
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <LayclothTbale :type="props.type" :data="props.form" @getData="getData" />
+  <NewTable :type="props.type" :data="props.form" :getData="getData" />
   <div class="bedTask-footer">
     <div class="footer-right">
-      <!-- <el-button @click="cancel">取消</el-button> -->
       <el-button type="primary" @click="preservation">保存</el-button>
     </div>
   </div>
@@ -17,8 +16,7 @@
 
 <script lang="ts" setup>
   import { reactive } from 'vue'
-  import LayclothTbale from './dialog-forms-table.vue'
-  import { ElMessage } from 'element-plus'
+  import NewTable from "./dialog-forms-table-new.vue"
   const props = defineProps<{
     operation: any
     form: any
@@ -28,21 +26,20 @@
   const state = reactive({
     list: []
   })
-
-
   const preservation = (e: any) => {
-    let type = state.list.every((item: any) => {
-      return item.size !== ''&& item.color !== ''
-    })
-
-    if (type) {
       props.operation({ type: 'confirm', data: state.list })
-    } else {
-      ElMessage({
-        message: '颜色和尺码不可为空',
-        type: 'warning'
-      })
-    }
+
+    // let type = state.list.every((item: any) => {
+    //   return item.size !== ''&& item.color !== ''
+    // })
+
+    // if (type) {
+    // } else {
+    //   ElMessage({
+    //     message: '颜色和尺码不可为空',
+    //     type: 'warning'
+    //   })
+    // }
   }
 
   //子组件数据

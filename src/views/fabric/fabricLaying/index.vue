@@ -1,17 +1,17 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-07 09:41:56
+ * @LastEditTime: 2022-11-11 13:51:56
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
-      <el-form-item label="面料编号" prop="sn">
+      <el-form-item label="参数模板编号" prop="sn">
         <el-input v-model="state.queryFormData.sn" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="面料名称" prop="name">
+      <el-form-item label="参数模板名称" prop="name">
         <el-input v-model="state.queryFormData.name" placeholder="请输入" clearable />
       </el-form-item>
     </template>

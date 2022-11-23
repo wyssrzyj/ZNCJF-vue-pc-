@@ -1,5 +1,5 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @row-dblclick="handleRowDbclick">
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" >
     <template #queryFormItem>
       <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
@@ -25,29 +25,24 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看贴标任务', row)">查看</el-button>
-      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑贴标任务', row)">编辑</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(row, true)">查看</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(row, false)">编辑</el-button>
     </template>
-
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="850px">
-      <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
-    </el-dialog>
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, getCurrentInstance } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  import { tagType } from '@/components/conifgs.ts'
-  import DialogContent from './modules/dialog-content.vue'
+  import { tagType } from '@/components/conifgs'
+
+  const { proxy }: any = getCurrentInstance()
 
   let mapType = new Map()
   mapType.set(2, '待执行')
   mapType.set(3, '进行中')
   mapType.set(4, '已完成')
 
-  // const dialogUploadFileEl = ref()
-  // const dialogUploadStyleEl = ref()
   const styleLibListEl = ref()
 
   const state: any = reactive({
@@ -79,31 +74,23 @@
     //根据有无row判断点击新增或编辑按钮
   }
 
-  // const handleUploadStyle = () => {
-  //   dialogUploadStyleEl.value.showDialog({
-  //     action: '/njp-dsr-api/dsr/dsrstyle/importStyleBatch'
-  //   })
-  // }
-
-  // const handleUploadFile = () => {
-  //   dialogUploadFileEl.value.showDialog()
-  // }
-
-  const refreshTable = () => {
-    styleLibListEl.value.refreshTable()
-  }
-
   //新增、编辑、查看
-  const handleClick = (e: any, type: any, row: any) => {
+  const handleClick = (row: any, type: any) => {
     state.row = row
-    state.dialogTitle = type
-    state.dialogType = e
-    state.dialogTableVisible = true
+    toViewFun(row, type)
   }
 
-  //关闭 弹窗
-  const close = () => {
-    state.dialogTableVisible = false
-    refreshTable()
+  //跳转详情
+  const toViewFun = (row: any, type: any) => {
+    proxy.$routerToView({
+      path: `/cuttingManagement/label/view-dialog-content`,
+      query: {
+        _mt: `贴标任务详情`,
+        id: row.id,
+        bedPlanId: row.bedPlanId,
+        deviceId: row.deviceId,
+        typeValue: type
+      }
+    })
   }
 </script>

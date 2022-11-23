@@ -2,7 +2,7 @@ vue
 <!--
  * @Author: lyj
  * @Date: 2022-08-24 17:37:15
- * @LastEditTime: 2022-11-02 14:58:53
+ * @LastEditTime: 2022-11-23 08:48:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -45,7 +45,7 @@ vue
 <script lang="ts" setup>
   import { isEmpty, cloneDeep } from 'lodash'
   import { ref, reactive, getCurrentInstance, watch } from 'vue'
-  import { QuestionFilled } from '@element-plus/icons-vue'
+  // import { QuestionFilled } from '@element-plus/icons-vue'
   import Tips from '@/components/tips/index.vue'
   const { proxy } = getCurrentInstance() as any
 
@@ -70,8 +70,9 @@ vue
   const setTitle = (e: any) => {
     let data: any = []
     if (!isEmpty(e)) {
-      if (e[0] !== null) {
-        e.forEach((item: any) => {
+      if (e[0] !== null ) {
+        try {
+              e.forEach((item: any) => {
           data.push({
             value: item.id,
             name: item.name,
@@ -80,6 +81,10 @@ vue
           })
         })
         state.title = data
+        } catch (error) {
+          
+        }
+      
       }
     }
   }

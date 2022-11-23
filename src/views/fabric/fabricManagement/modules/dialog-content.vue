@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-07 13:50:34
+ * @LastEditTime: 2022-11-17 15:16:21
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -85,7 +85,7 @@
             <div v-if="item.type === 'weight'">
               <el-form-item :label="`${item.name}  (${item.append})`" :prop="item.prop">
 
-                    <el-input-number
+               <el-input-number
               v-model="state.form[item.model]"
               class="equipment-number"
               :controls="false"
@@ -305,3 +305,8 @@
     props.close('cancel')
   }
 </script>
+<style lang="less" scoped>
+ /deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
+</style>

@@ -25,22 +25,19 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看裁剪任务', row)">查看</el-button>
-      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(false, '编辑裁剪任务', row)">编辑</el-button>
-    </template>
+     <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(row,false)">编辑</el-button>
+    </template> 
 
-    <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="850px">
-      <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
-    </el-dialog>
+
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref,getCurrentInstance } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  import { tagType } from '@/components/conifgs'
 
-  import DialogContent from './modules/dialog-content.vue'
+  const { proxy }: any = getCurrentInstance()
 
   let mapType = new Map()
   mapType.set(2, '待执行')
@@ -88,21 +85,27 @@
   //   dialogUploadFileEl.value.showDialog().
   // }
 
-  const refreshTable = () => {
-    styleLibListEl.value.refreshTable()
-  }
+  // const refreshTable = () => {
+  //   styleLibListEl.value.refreshTable()
+  // }
 
   //新增、编辑、查看
-  const handleClick = (e: any, type: any, row: any) => {
+  const handleClick = ( row: any,type: any,) => {
     state.row = row
-    state.dialogTitle = type
-    state.dialogType = e
-    state.dialogTableVisible = true
+    toViewFun( row,type)
   }
 
-  //关闭 弹窗
-  const close = () => {
-    state.dialogTableVisible = false
-    refreshTable()
+
+
+  //跳转详情
+   const toViewFun = (row:any, type:any) => {
+    proxy.$routerToView({
+      path: `/cuttingManagement/crop/view-dialog-content`,
+      query: {
+        _mt: `裁剪任务详情`,
+        id: row.id,
+        typeValue: type
+      }
+    })
   }
 </script>

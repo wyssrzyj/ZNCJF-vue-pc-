@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-09-29 10:22:05
+ * @LastEditTime: 2022-11-17 12:51:53
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <LayclothForm :set-value="setValue" />
+  <LayclothForm :set-value="setValue" :value="props.value" />
   <LayclothTbale :type="props.type" :form="state.formList" :select="select" />
   <div class="footer">
     <div class="footer-right">
@@ -22,6 +22,7 @@
   import LayclothForm from './dialog-content-deviceSnType-form.vue'
   import LayclothTbale from './dialog-content-deviceSnType-table.vue'
   const props = defineProps<{
+    value:any
     type:any
     operation: any
   }>()

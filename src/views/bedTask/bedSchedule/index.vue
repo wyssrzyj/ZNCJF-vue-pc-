@@ -1,4 +1,4 @@
-<template>
+ <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
       <el-form-item label="生产订单" prop="produceOrderCode">
@@ -18,7 +18,7 @@
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '新增床次计划', null)">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, null,'新增床次计划')">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
       <el-button type="success" style="order: 3" @click="examine">审核</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
@@ -40,8 +40,8 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(true, '查看床次计划', row)">查看</el-button>
-      <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(false, '编辑床次计划', row)">编辑</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(true,  row,'查看床次计划')">查看</el-button>
+      <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(false,  row,'编辑床次计划')">编辑</el-button>
     </template>
   </njp-table-config>
 
@@ -56,12 +56,10 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" :title="state.dialogTitle" width="1000px">
-    <DialogContent :row="state.row" :close="close" :dialog-type="state.dialogType" />
-  </el-dialog>
+
   <!-- 导出  -->
   <el-dialog v-if="state.export.importType" v-model="state.export.importType" :draggable="false" :close-on-click-modal="false" title="导入" width="400px">
-    <ImportDialog :type="'bedSchedule'" :export="state.export" :get-list="getList" :confirm="confirm" />
+    <ImportDialog  :export="state.export" :get-list="getList" :confirm="confirm" />
     <template #footer>
       <el-button style="order: 3" @click="exportEvents(false)">取消</el-button>
       <el-button type="primary" style="order: 3" @click="exportEvents(true)">确认</el-button>
@@ -77,11 +75,14 @@
   import { mapType, tagType } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
-  import DialogContent from './modules/dialog-content.vue'
   import { exportData } from './modules/conifgs'
   const { proxy } = getCurrentInstance() as any
 
   const styleLibListEl = ref()
+
+
+
+
 
   const state: any = reactive({
     dialogVisible: false, //删除弹窗
@@ -135,11 +136,36 @@
   }
 
   //新增、编辑、查看
-  const handleClick = (e: any, type: any, row: any) => {
-    state.row = row
-    state.dialogTitle = type
-    state.dialogType = e
-    state.dialogTableVisible = true
+  const handleClick = ( type: any, row: any,title:any) => {
+  state.row = row
+    toViewFun( row,type,title)
+  }
+
+    //跳转详情
+  const toViewFun = (row:any, type:any,title:any) => {
+    if(row){proxy.$routerToView({
+      path: `/bedTask/bedSchedule/view-dialog-content`,
+      query: {
+        _mt: title,
+        id: row.id,
+        typeValue: type,
+        
+        bedPlanId: row.bedPlanId,
+        deviceId: row.deviceId,
+        spreadClothLevel: row.spreadClothLevel,
+      }
+    })
+      
+    }else{
+      proxy.$routerToView({
+      path: `/bedTask/bedSchedule/view-dialog-content`,
+      query: {
+         _mt: title,
+        typeValue: type,
+      }
+    })
+    }
+   
   }
 
   //审核
@@ -200,10 +226,10 @@
   }
 
   //关闭 弹窗
-  const close = () => {
-    state.dialogTableVisible = false
-    refreshTable()
-  }
+  // const close = () => {
+  //   state.dialogTableVisible = false
+  //   refreshTable()
+  // }
   //------------------------------导出-------------------------------
   //打开弹窗-【导出】
   const importMethod = () => {
@@ -217,18 +243,6 @@
 
   const confirm = () => {
     exportEvents(true)
-  }
-  //  中文英文兼容处理
-  const Demo = (v: any) => {
-    let chinese = v.lastIndexOf('：')
-    let english = v.lastIndexOf(':')
-    
-    if (chinese !== -1) {
-      return chinese
-    }
-    if (english !== -1) {
-      return english
-    }
   }
 
   //关闭弹窗-【导出】-保存
@@ -263,32 +277,33 @@
         }
       })
       //处理排麦比例的返回值
-      data.map((item: any) => {
-        let shelfScale = item.shelfScale.split('，')
+      // data.map((item: any) => {
+        // let str = item.shelfScale.replaceAll(',','，');
+      //   let shelfScale = str.split('，')
 
-        let shelfScaleDome: any = []
-        let levelClothSum = 0
-        let bedSum = 0
+      //   let shelfScaleDome: any = []
+      //   let levelClothSum = 0
+      //   let bedSum = 0
 
-        if (!isEmpty(shelfScale)) {
-          shelfScale.map((v: any) => {
-            let index = Demo(v)
-            shelfScaleDome.push(v.slice(index + 1))
-          })
-        }
+      //   if (!isEmpty(shelfScale)) {
+      //     shelfScale.map((v: any) => {
+      //       let index = Demo(v)
+      //       shelfScaleDome.push(v.slice(index + 1))
+      //     })
+      //   }
 
-        if (!isEmpty(shelfScaleDome)) {
-          shelfScaleDome.forEach((i: any) => {
-            levelClothSum += Number(i)
-            bedSum += i * item.spreadClothLevel
-          })
-        }
-        item.levelClothSum = levelClothSum
-        item.bedSum = bedSum
-      })
-
-
-      proxy.$baseService.post('/jack-ics-api/bedPlan/saveBatch', { bedPLanList: data }).then((res: any) => {
+      //   if (!isEmpty(shelfScaleDome)) {
+      //     shelfScaleDome.forEach((i: any) => {
+      //       levelClothSum += Number(i)
+      //       bedSum += i * item.spreadClothLevel
+      //     })
+      //   }
+      //   item.levelClothSum = levelClothSum
+      //   item.bedSum = bedSum
+      // })
+  
+      if (!isEmpty(data)) {
+          proxy.$baseService.post('/jack-ics-api/bedPlan/saveBatch', { bedPLanList: data }).then((res: any) => {
         refreshTable()
         state.export.importType = false
         ElMessage({
@@ -296,6 +311,15 @@
           type: 'success'
         })
       })
+      
+      }else{
+         ElMessage({
+          message: '未导入模板',
+          type: 'warning'
+        })
+
+      }
+    
     }
     if (type === false) {
       state.export.importType = false

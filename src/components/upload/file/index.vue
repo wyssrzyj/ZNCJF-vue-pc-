@@ -17,9 +17,6 @@
               <div v-if="props.disabled === false" class="added" @click="added">新增</div>
               <div v-if="props.disabled === true">新增</div>
             </div>
-            <!-- <el-button :disabled="props.disabled" size="small" type="primary" @click="added">新增</el-button> -->
-            <!-- <span class="file-download"  @click="added">新增</span>
-            <span  @click="added">新增</span> -->
           </template>
           <template #default="scope">
             <div class="fileAdded">
@@ -52,7 +49,7 @@
         :limit="props.upload.limit"
         :on-preview="download"
       >
-        <el-button id="initSlide" :disabled="props.disabled" icon="upload">上传文件</el-button>
+        <el-button id="initSlide-file" :disabled="props.disabled" icon="upload">上传文件</el-button>
         <div v-if="state.fileType !== null" class="subtip">
           <el-icon>
             <Warning />
@@ -259,10 +256,12 @@
 
   //新增
   const added = () => {
+    //initSlide-file ID必须唯一 否则获取不到
+
     // 自定义组件 只展示样式  数据逻辑还是走原始数据流
     let e = document.createEvent('MouseEvents')
     e.initEvent('click', true, true)
-    let dome: any = document.getElementById('initSlide')
+    let dome: any = document.getElementById('initSlide-file')
     dome.dispatchEvent(e)
   }
 
@@ -271,11 +270,10 @@
     download(val.row)
   }
 
-  //删除
+  //自定义删除
   const mov = (e: any) => {
     let fileList = state.targetArr[state.fileType]['fileList']
     let list = fileList.filter((item: any) => item.id !== e.row.id)
-
     state.tableData = formatProcessing(list) //表格数据
     state.targetArr[state.fileType]['fileList'] = list //原生数据
     props.gitFile({ data: list }) //传递给父级

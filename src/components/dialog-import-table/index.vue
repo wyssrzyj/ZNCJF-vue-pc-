@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-07 17:10:05
+ * @LastEditTime: 2022-11-23 08:49:28
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -18,7 +18,14 @@
   <!-- 表格 -->
   <div v-if="props.export.type !== ''">
     <el-dialog v-if="state.importType" v-model="state.importType" :draggable="false" :close-on-click-modal="false" title="导入" :width="props.export.width">
+        <!-- 通用表格 -->
+      <div v-if="props.export.type!=='bedSchedule'">
       <DialogTable v-if="state.importType" :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
+     </div>
+    <!-- 床次【合并单元格】 表格 -->
+      <div v-if="props.export.type==='bedSchedule'">
+      <TableBedSchedule v-if="state.importType" :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
+      </div>
       <template #footer>
         <el-button style="order: 3" @click="cancel()">取消</el-button>
         <el-button type="primary" style="order: 3" @click="exportEvents(false)">确认</el-button>
@@ -31,7 +38,8 @@
   import { reactive } from 'vue'
   import { ElMessage } from 'element-plus'
   import UploadModule from '@/components/upload/index.vue'
-  import DialogTable from './dialog-table.vue'
+  import DialogTable from './dialog-table.vue'//通用表格
+  import TableBedSchedule from './dialog-table-bedSchedule.vue'//床次【合并单元格】 表格
   import { isEmpty, cloneDeep } from 'lodash'
 
   const props = defineProps<{
@@ -74,26 +82,84 @@
     document.body.removeChild(a)
   }
 
+
+
+  
+  //  **保存格式处理2**
+  const dataGrouping = (ids: any, list: any) => {
+    let nueDate: any = [] //分组的数据
+    list.map((item: any) => {
+      if (item.bedNo === ids) {
+        nueDate.push(item)
+      }
+    })
+
+    //添加 numList
+    //后端需要数据 color，number，proportion
+    if (!isEmpty(nueDate)) {
+      let numList: any = []
+      nueDate.map((item: any) => {
+        numList.push({
+          fabricColor: item.fabricColor,
+          spreadClothLevel: item.spreadClothLevel,
+          shelfScale: item.shelfScale
+        })
+      })
+      nueDate[0].numList = numList
+      delete nueDate[0].fabricColor
+      delete nueDate[0].spreadClothLevel
+      delete nueDate[0].shelfScale
+      return nueDate[0]
+    }
+  }
+  //  **保存格式处理1**
+  const saveFormat = (data: any) => {
+    // 数据分组
+    let typeIds: any = [] //bedNo 集合
+    let newList: any=[]
+    data.map((item: any) => {
+      typeIds.push(item.bedNo)
+    })
+    let newArr = typeIds.filter(function (value: any, index: any, self: any) {
+      return self.indexOf(value) === index
+    })
+    newArr.forEach((item: any) => {
+      let list = cloneDeep(data)
+      newList.push(dataGrouping(item, list))
+    })
+    
+    return newList
+  }
+
+
   //传递给父级
   const getTableData = (e: any) => {
-    state.saveData = e
-    props.getList(e)
+  let list =saveFormat(e)
+    state.saveData = list
+   
+    
+    props.getList(list)
   }
 
   const cancel = () => {
     state.importType = false
     state.fileList = cloneDeep([])
+    props.getList([])
   }
+
+
+  
   //关闭弹窗
   const exportEvents = (type: any) => {
-    // if()
     if (!isEmpty(state.saveData)) {
       let allMeet = false
-
       //设备
       if (props.export.type === 'equipment' ) {
         let equipmentType = state.saveData.every((item: any) => {
-          return item.sn !== '' && item.spec !== '' && item.name !== '' && item.type !== ''
+           return ![null, undefined,""].includes(item.sn) 
+           && ![null, undefined,""].includes(item.name)   
+           &&![null, undefined,""].includes(item.type)   
+           &&![null, undefined,""].includes(item.spec)  
         })
         allMeet = equipmentType
       }
@@ -112,7 +178,8 @@
 
       //床次
       if (props.export.type === 'bedSchedule') {
-        let equipmentType = state.saveData.every((item: any) => {
+        
+        let equipmentType =state.saveData.every((item: any) => {
           return (
             item.styleCode !== '' &&
             item.styleName !== '' &&

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 12:58:20
- * @LastEditTime: 2022-10-28 14:00:55
+ * @LastEditTime: 2022-11-17 16:26:09
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
   <!-- 图片 -->
   <Picture v-if="state.type === 'img'" :git-img="gitImg" :value="props.value" :disabled="disabled" />
   <!-- 唛架图 -->
-  <MarkerFile v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
+  <MarkerFile  :width="props.width" v-if="state.type === 'shelfFile'" :upload="props.upload" :picture-type="state.pictureType" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 其他附件 -->
   <File v-if="state.type === 'file'" :upload="props.upload" :picture-type="state.pictureTypeNow" :git-file="gitFile" :value="props.value" :disabled="disabled" />
   <!-- 导入模块 -->
@@ -35,6 +35,8 @@
 
     upload?: any //上传的数量和提示
     interface?: any //导入使用的数据
+    width?:any//唛架图宽度
+    imgStyle?:any//图片的样式
   }>()
   // type 类型
   // getData 传递出去
@@ -52,6 +54,7 @@
   })
 
   const gitImg = (e: any) => {
+    e.type = state.type
     props.getData(e)
   }
   const gitFile = (e: any) => {
