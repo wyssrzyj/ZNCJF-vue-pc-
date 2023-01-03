@@ -84,7 +84,6 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      // template: 'http://192.168.99.184/template/fabric.xlsx',
       template: '/template/面料管理模板.xlsx', //引入的是V1的
 
 

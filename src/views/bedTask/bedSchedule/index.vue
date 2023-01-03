@@ -20,7 +20,7 @@
     <template #operationExtBtn>
       <el-button type="primary" style="order: 3" @click="handleClick(false, null,'新增床次计划')">新增</el-button>
       <el-button type="primary" style="order: 3" @click="importMethod">导入</el-button>
-      <el-button type="success" style="order: 3" @click="examine">审核</el-button>
+      <el-button type="success" style="order: 3" @click="examine">审核</el-button> 
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
@@ -42,6 +42,7 @@
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(true,  row,'查看床次计划')">查看</el-button>
       <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(false,  row,'编辑床次计划')">编辑</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
     </template>
   </njp-table-config>
 
@@ -93,7 +94,6 @@
       width: '1500px',
       importType: false,
       list: [],
-      // template: 'http://192.168.99.184/template/bedPlan.xlsx',
       template: '/template/床次计划模板.xlsx', //引入的是V1的
 
       interface: '/jack-ics-api/bedPlan/import'
@@ -134,7 +134,23 @@
   const onFormQuery = (params = {}) => {
     styleLibListEl.value.onFormQuery()
   }
-
+  //撤销
+  const revoke=(row:any)=>{
+      proxy.$baseService.post('/jack-ics-api/bedPlan/cancel', { id: row.id }).then((res: any) => {
+        if(res.code===0){
+            ElMessage({
+            message: '撤销成功',
+            type: 'success'
+          })
+        }else{
+          ElMessage({
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+        refreshTable()
+      })
+  }
   //新增、编辑、查看
   const handleClick = ( type: any, row: any,title:any) => {
   state.row = row
@@ -145,6 +161,7 @@
   const toViewFun = (row:any, type:any,title:any) => {
     if(row){proxy.$routerToView({
       path: `/bedTask/bedSchedule/view-dialog-content`,
+      // /bedTask/bedSchedule/view-dialog-content
       query: {
         _mt: title,
         id: row.id,
@@ -277,8 +294,17 @@
         }
       })
       //处理排麦比例的返回值
+      data.map((item:any)=>{
+        if(!isEmpty(item.numList)){
+          //英文逗号全部转中文逗号
+          item.numList.map((v:any)=>{
+            v.shelfScale=v.shelfScale.replaceAll(',','，')
+          })
+
+        }
+      })
       // data.map((item: any) => {
-        // let str = item.shelfScale.replaceAll(',','，');
+      //   let str = item.shelfScale.replaceAll(',','，');
       //   let shelfScale = str.split('，')
 
       //   let shelfScaleDome: any = []
@@ -299,9 +325,10 @@
       //     })
       //   }
       //   item.levelClothSum = levelClothSum
-      //   item.bedSum = bedSum
+      //   item.bedSum = bedSu m
       // })
-  
+
+      // numList -》shelfScale
       if (!isEmpty(data)) {
           proxy.$baseService.post('/jack-ics-api/bedPlan/saveBatch', { bedPLanList: data }).then((res: any) => {
         refreshTable()
@@ -311,7 +338,6 @@
           type: 'success'
         })
       })
-      
       }else{
          ElMessage({
           message: '未导入模板',

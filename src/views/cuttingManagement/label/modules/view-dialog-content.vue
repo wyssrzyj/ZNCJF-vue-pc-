@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-11-17 15:23:06
+ * @LastEditTime: 2023-01-03 15:27:29
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -86,7 +86,7 @@
       </el-form-item>
     </el-form>
     <div class="labelFoot">
-      <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+      <el-button @click="resetForm()"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
       <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
     </div>
   </div>
@@ -95,7 +95,7 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
-  import { useRoute } from 'vue-router'
+  import { useRoute ,useRouter} from 'vue-router'
   import { ElMessage } from 'element-plus'
 
   import emits from '@njpCommon/utils/emits'
@@ -110,6 +110,7 @@
   const { proxy } = getCurrentInstance() as any
 
   const route = useRoute()
+  const router = useRouter();
 
   const state: any = reactive({
     form: formData,
@@ -181,6 +182,13 @@
 
   //时间
   const setTime = (e: any) => {}
+
+    // 取消
+  const resetForm = () => {
+    emits.emit(EMitt.OnCloseCurrTab)
+     router.push("/cuttingManagement/label");//跳转到列表
+  }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
@@ -237,7 +245,7 @@
               message: '保存成功',
               type: 'success'
             })
-            emits.emit(EMitt.OnCloseCurrTab)
+            resetForm()
           } else {
             ElMessage({
               message: `${res.msg}`,
@@ -249,13 +257,7 @@
     })
   }
 
-  // 取消
-  const resetForm = (formEl: any) => {
-    // props.close()
-    // if (!formEl) return
-    // formEl.resetFields()
-    emits.emit(EMitt.OnCloseCurrTab)
-  }
+
 </script>
 <style scoped lang="less">
   .layCloth-row {

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-11-03 15:55:36
+ * @LastEditTime: 2023-01-03 17:36:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -37,11 +37,14 @@
   })
 
   const init = () => {
-    proxy.$baseService.get('/jack-ics-api/print/getTaskInfo', { bedPlanId: props.id }).then((res: any) => {
+  if(props.id){
+     proxy.$baseService.get('/jack-ics-api/print/getTaskInfo', { bedPlanId: props.id }).then((res: any) => {
       if (!isEmpty(res.data)) {
         state.data = res.data
       }
     })
+  }
+   
   }
   init()
 </script>

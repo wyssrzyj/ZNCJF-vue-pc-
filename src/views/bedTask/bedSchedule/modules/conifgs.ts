@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-11-17 15:07:50
+ * @LastEditTime: 2023-01-03 17:09:48
  * @Description:
  * @LastEditors: lyj
  */
@@ -101,10 +101,8 @@ export const content: any = {
     formLeftData: [
     { name: '客户名称', model: 'customName', prop: null, type: null, disabled: false },
     { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
-   
     { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: false },
     { name: '面料颜色', model: 'fabricColor', prop: 'fabricColor', type: 'fabricColor', disabled: false },
-   
     { name: '铺布长度', model: 'spreadClothLength', prop: 'spreadClothLength', type: 'spreadClothLength', disabled: false },
     { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false },
 
@@ -113,7 +111,6 @@ export const content: any = {
   formMiddleData: [
     { name: '生产订单', model: 'produceOrderCode', prop: 'produceOrderCode', type: 'produceOrderCode', disabled: false },
     { name: '单层件数', model: 'levelClothSum', prop: null, type: null, disabled: true },
-   
     { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
     { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: null, disabled: true },
     { name: '利用率', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },

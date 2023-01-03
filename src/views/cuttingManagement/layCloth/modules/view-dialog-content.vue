@@ -1,6 +1,5 @@
 <template>
-  <div class="container"> 
-
+  <div class="container">
     <el-form ref="leftForm" class="tops" :rules="leftFormRules" :model="state.leftForm" label-width="auto" label-position="top">
       <el-form-item label="款图">
         <UploadModule v-model="state.form.img" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
@@ -17,7 +16,7 @@
       <div class="top-shelfFile">
         <el-form-item label="唛架图">
           <div class="layCloth-img">
-            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="52" />
+            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="53" />
           </div>
         </el-form-item>
       </div>
@@ -28,18 +27,17 @@
     </div>
     <!-- 内容  -->
     <div class="middle-container">
-    
       <div class="middle">
-          <!--选择设备-->
-          <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
-          <!--设备参数-->
-          <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
-          <!--计划时间-->
-          <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
-          <!-- 时间更新  新功能 -->
-          <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
+        <!--选择设备-->
+        <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
+        <!--设备参数-->
+        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
+        <!--计划时间-->
+        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
+        <!-- 时间更新  新功能 -->
+        <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
       </div>
-        <div class="enclosure">
+      <div class="enclosure">
         <div class="enclosureTitle">其他附件</div>
         <UploadModule :disabled="disable(false)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
       </div>
@@ -47,9 +45,9 @@
 
     <div class="foot">
       <el-button @click="close"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
-
-      <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="save('1')">审核</el-button>
-      <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="save('2')">保存</el-button>
+      <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="submitForm('1')">审核</el-button>
+      <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="submitForm('2')">保存</el-button>
+      <!-- <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="submitForm()">DEMO</el-button> -->
     </div>
   </div>
 </template>
@@ -57,7 +55,7 @@
 <script lang="ts" setup>
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
-  import { useRoute } from 'vue-router'
+  import { useRoute,useRouter } from 'vue-router'
   import { reactive, ref, getCurrentInstance } from 'vue'
   import type { FormRules } from 'element-plus'
   import { FormInstance } from 'element-plus'
@@ -75,6 +73,7 @@
   const leftForm = ref<FormInstance>()
   const { proxy } = getCurrentInstance() as any
   const route = useRoute()
+   const router = useRouter();
   const { formData } = content
 
   // const props = defineProps<{
@@ -170,6 +169,7 @@
             }
           }
         ]
+       res.data.img = [{ url: res.data.styleImage }]
         state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
@@ -235,11 +235,11 @@
   // 总数据
   const setData = (type: any, e: any) => {
     if (type === '1') {
-      let cloneForm =  (state.form )
+      let cloneForm = state.form
       cloneForm.styleCode = e.styleCode
       cloneForm.styleName = e.styleName
       cloneForm.deviceId = e.deviceId
-      // 暂时注销 床次计划号逻辑 22.9.23 13-02 
+      // 暂时注销 床次计划号逻辑 22.9.23 13-02
       // 图片
       // cloneForm.img = [{ url: e.styleImage }]
       //唛架图
@@ -339,10 +339,30 @@
     }
     return data
   }
+
+
+  let timeout: any
+  const debounce = (func: any, wait: any) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func()
+    }, wait)
+  }
+  const submitForm = (type: any) => {
+    debounce(function () {
+      save(type)
+    }, 300)
+  }
+
+    // 取消
+  const close = () => {
+    emits.emit(EMitt.OnCloseCurrTab)
+     router.push("/cuttingManagement/layCloth");//跳转到列表
+  }
+
   // 保存
   const save = (type: any) => {
     //必填项不可为空
-
     let bedPlanNo = state.list.one.bedPlanNo
     let deviceSn = state.list.one.deviceSn
     let rowId = !isEmpty(route.query) ? route.query.id : null
@@ -402,10 +422,11 @@
             message: '保存成功',
             type: 'success'
           })
-          emits.emit(EMitt.OnCloseCurrTab)
+          close()
         } else {
           ElMessage({
             message: res.msg,
+            
             type: 'warning'
           })
         }
@@ -418,10 +439,7 @@
     }
   }
 
-  // 取消
-  const close = (formEl: any) => {
-    emits.emit(EMitt.OnCloseCurrTab)
-  }
+
 </script>
 
 <style lang="less" scoped>
@@ -472,7 +490,6 @@
     }
     .middle {
       width: 100%;
-      
     }
     .foot {
       background: #fff;
@@ -535,7 +552,7 @@
     border: 1px solid #dddddd;
     border-bottom: none;
   }
-   /deep/ .el-input {
-      width: 300px;
-    }
+  /deep/ .el-input {
+    width: 300px;
+  }
 </style>

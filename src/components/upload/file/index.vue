@@ -28,7 +28,7 @@
         </el-table-column>
       </el-table>
       <!-- 备注 -->
-      <span>{{ props.upload.title }}</span>
+      <div class="file-remarks">{{ props.upload.title }}</div>
     </div>
     <!-- 截取-隐藏样式 -->
     <div class="upload-hide">
@@ -332,14 +332,10 @@
     flex-wrap: wrap;
   }
 
-  /deep/.el-upload-list__item {
-    // width: 260px;
-    // margin-right: 20px;
-  }
+
   .file-upload {
     min-width: 350px;
-    height: 130px;
-    // overflow-y: scroll;
+    height: 150px;
   }
   .fileAdded {
     display: flex;
@@ -365,5 +361,8 @@
   .added {
     cursor: pointer;
     color: #409eff;
+  }
+  .file-remarks{
+    margin-top: 5px;
   }
 </style>

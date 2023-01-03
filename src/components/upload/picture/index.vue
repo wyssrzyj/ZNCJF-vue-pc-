@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 15:35:46
- * @LastEditTime: 2022-11-17 16:35:21
+ * @LastEditTime: 2023-01-03 19:22:44
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -39,11 +39,14 @@
         if (item.img[0].url) {
           state.fileList = item.img
           state.srcList = [item.img[0].url]
+
         } else {
           state.fileList = []
+
         }
       } else {
         state.fileList = []
+        state.srcList = []
       }
     }
   )
@@ -68,10 +71,11 @@
     width: 100px;
     height: 100px;
   }
+  
   .disabledImg {
     width: 100px;
     height: 100px;
-    padding: 10px;
-    border-radius: 10px;
+    border-radius: 10px !important;
+
   }
 </style>

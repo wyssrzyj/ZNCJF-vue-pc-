@@ -1,14 +1,14 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-11-23 09:03:06
+ * @LastEditTime: 2023-01-03 19:40:49
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
   <div>
-    <div class="bedSchedule">
+    <div>
       <el-form ref="ruleFormRef" class="rightFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
         <!-- top -->
         <div class="top">
@@ -19,7 +19,8 @@
             <el-form-item label="款式编号 " prop="styleCode">
               <el-input v-model="state.form.styleCode" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
             </el-form-item>
-            <el-form-item label="款式名称" prop="styleName">
+            <br/>
+            <el-form-item label="款式名称" prop="styleName" class="bedSchedule-styleName">
               <el-input v-model="state.form.styleName" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
             </el-form-item>
           </div>
@@ -29,8 +30,8 @@
           </el-form-item>
         </div>
 
-        <div>
-          <el-row :gutter="20" style="margin: 2px 2px 0px 10px">
+        <div class="bedSchedule-content">
+          <el-row :gutter="20" style="margin: 2px 2px 0px 0px">
             <el-col :span="8">
               <div v-for="(item, index) in state.left" :key="index">
                 <div v-if="item.type === null">
@@ -153,7 +154,7 @@
               <div v-for="(item, index) in state.right" :key="index">
                 <div v-if="item.type === 'bedPlanNo'">
                   <el-form-item :label="`${item.name}`" :prop="item.prop">
-                    <div class="fabricColor">
+                    <div class="fabricColor-bedPlanNo">
                       <Tips title="数字 自动生成" />
                     </div>
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
@@ -162,7 +163,7 @@
 
                 <div v-if="item.type === 'styleBedNo'">
                   <el-form-item :label="`${item.name}`" :prop="item.prop">
-                    <div class="fabricColor">
+                    <div class="fabricColor-styleBedNo">
                       <Tips title="根据款式自动加1" />
                     </div>
 
@@ -211,8 +212,8 @@
       </el-form>
     </div>
     <div class="dialogFoot">
-      <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
-      <el-button v-if="disable(false) && route.query.statu !== 1" type="primary" class="preservation" @click="setPrint">打印</el-button>
+      <el-button @click="resetForm()"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+      <el-button v-if="disable(false) && route.query.statu !== 1" type="primary" class="preservation" @click="setPrint"> 打印</el-button>
       <!-- <el-button v-if="!disable(false)" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button> -->
 
       <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef, '1')">审核</el-button>
@@ -229,29 +230,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, getCurrentInstance } from 'vue'
+  import { reactive, ref, getCurrentInstance ,watch} from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
   import print from 'print-js'
-  import { useRoute } from 'vue-router'
+  import { useRoute ,useRouter} from 'vue-router'
 
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
   import RowWheat from '@/components/icon/rowWheat.png'
-  import emits from '@njpCommon/utils/emits'
-  import { EMitt } from '@njpCommon/constants/enum'
 
   import { content } from './conifgs'
   import { ElMessage } from 'element-plus'
   import PopModule from './dialog-forms.vue'
   import Work from './dialog-work.vue'
+  import { EMitt } from '@njpCommon/constants/enum'
+import emits from '@njpCommon/utils/emits'
+
 
   import './index.less'
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
   const route = useRoute()
-
-
+   const router = useRouter();
 
   const state: any = reactive({
     form: formData,
@@ -319,11 +320,14 @@
     //面料名称
     getFabricName('')
     //数据回显
-    if (route.query) {
+    if (route.query.id) {
       state.printId = route.query.id
+
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: route.query.id }).then((res: any) => {
         // 图片
+        if(res.data.styleImage){
         res.data.img = [{ url: res.data.styleImage }]
+        }
         //唛架图
         res.data.shelfFile = [
           {
@@ -348,12 +352,35 @@
 
         let sum = res.data.shelfWidth * res.data.spreadClothLength
         state.effectiveArea = (res.data.useRate / 100) * sum //有效面积x`
+        //铺布长度添加10    //后续需要注销 等后端代码更新 2022-12-19 越也
+        res.data.spreadClothLength=res.data.spreadClothLength+10
+
         state.form = res.data
       })
+    }else{
+      if(route.query._mt==="新增床次计划"){
+        let data=formData
+      // state.form=formData
+      //置空
+      data.styleImage=[]
+      data.shelfFile=[]
+      state.form=cloneDeep(data) 
+      }
     }
   }
+  
+  watch(
+  () => router.currentRoute.value,
+  (newValue: any) => {
+     init()
+  },
+  { immediate: true }
+)
+  // init()
 
-  init()
+//  onMounted(() => {
+//    })
+
 
   // 是否可用
   const disable = (type: any) => {
@@ -373,7 +400,7 @@
         const { heigh, width, sumArea } = shelfFile
         state.form.shelfWidth = heigh //唛架门幅
         state.form.shelfLength = width //唛架长度
-        state.form.spreadClothLength = Number(width) + 30 //铺布长度
+        state.form.spreadClothLength = Number(width) + 40 //铺布长度
         state.effectiveArea = sumArea //有效面积
 
         //利用率
@@ -455,22 +482,28 @@
     return newArr
   }
   //单层间数的计算
-  const setLevelClothSum=(size:any,data:any)=>{
-    let arr = data.filter((item:any)=>item.size===size)
-    arr.map((item:any)=>{
-      item.levelClothSum=item.levelClothSum===undefined?0:item.levelClothSum
+  const setLevelClothSum = (size: any, data: any) => {
+    let arr = data.filter((item: any) => item.size === size)
+    arr.map((item: any) => {
+      item.levelClothSum = item.levelClothSum === undefined ? 0 : item.levelClothSum
     })
-    let max =Math.max.apply(Math,arr.map((item:any) => { return item.levelClothSum }))
-    //获取当前尺码的最大值 
+    let max = Math.max.apply(
+      Math,
+      arr.map((item: any) => {
+        return item.levelClothSum
+      })
+    )
+    //获取当前尺码的最大值
+
     return max
   }
+  //
   //排唛比例- 保存- 数据处理
   const setShelfList = (e: any) => {
     let list = e.data
 
     let bedSum = 0 //床次总件数
     let levelClothSum = 0 //单层件数
-    let spreadClothLevel = 0
     let data: any = { color: [], size: [], newColor: [], newSize: [] }
 
     //尺码
@@ -482,7 +515,6 @@
       })
       state.form.sizeList = sizeList //
     }
-
     if (!isEmpty(list)) {
       //床次总件数
       list.forEach((item: any) => {
@@ -490,41 +522,63 @@
         data.color.push(item.color)
         data.size.push(item.size)
       })
+
       data.newColor = dataRepeat(data.color)
       data.newSize = dataRepeat(data.size)
       //单层件数----------------------------
       let levelData: any = []
-       list.forEach((v:any) => {
+      list.forEach((v: any) => {
         levelData.push(v.sizeAndAmountList)
-        })
-      let level=levelData.flat(Infinity)
-     
-      state.form.sizeList.forEach((item:any) => {
-       levelClothSum+=setLevelClothSum(item.size,level)
       })
-     // ----------------------------
-      
+      let level = levelData.flat(Infinity)
+
+      state.form.sizeList.forEach((item: any) => {
+        levelClothSum += setLevelClothSum(item.size, level)
+      })
+      // ----------------------------
       //铺布层数
-      let colorData: any = []
-      data.newColor.forEach((item: any) => {
-        let arr = list.findIndex((v: any) => v.color === item)
-        colorData.push(list[arr])
+     let levelSum=0
+      list.forEach((item: any) => {
+        levelSum += item.spreadClothLevel
       })
-      colorData.forEach((item: any) => {
-        spreadClothLevel += item.spreadClothLevel
-      })
+      state.form.spreadClothLevel = levelSum
+
       //********用于回显和保存********* */
+      //添加后端唯一判断值
+      list.map((item: any, index: any) => {
+        item.rowFlag = index
+      })
+      //过滤床次总件数为空
+      let newList = list.filter((item: any) => item.bedSum > 0)
+      //过滤数据为空的数据
+      newList.map((item:any)=>{
+        item.sizeAndAmountList=item.sizeAndAmountList.filter((item:any)=>item.levelClothSum!=0)
+      })
       //数据
-      state.form.shelfList = list //排唛比例数据赋值
+      state.form.shelfList = newList //排唛比例数据赋值
       //**************************/
       state.form.bedSum = bedSum
       state.form.levelClothSum = levelClothSum
-      state.form.spreadClothLevel = spreadClothLevel
     }
   }
 
-  // 表单提交
-  const submitForm = async (formEl: any | undefined, type: any) => {
+  let timeout: any
+  const debounce = (func: any, wait: any) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func()
+    }, wait)
+  }
+
+    // 取消
+  const resetForm = () => {
+    emits.emit(EMitt.OnCloseCurrTab)//关闭当前页
+    router.push("/bedTask/bedSchedule");//跳转到列表
+
+  }
+
+
+  const setForm = async (formEl: any | undefined, type: any) => {
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       if (valid) {
@@ -582,12 +636,24 @@
               message: '保存成功',
               type: 'success'
             })
-            emits.emit(EMitt.OnCloseCurrTab)
+           resetForm()
+          //  formEl.resetFields()
+
           } else {
+             ElMessage({
+              message: res.msg,
+              type: 'warning'
+            })
           }
         })
       }
     })
+  }
+  // 表单提交
+  const submitForm = async (formEl: any | undefined, type: any) => {
+    debounce(function () {
+      setForm(formEl, type)
+    }, 500)
   }
 
   //弹窗事件
@@ -596,24 +662,20 @@
       state.dialogTableVisible = false
     }
     if (e.type === 'confirm') {
-     
       e.data.map((item: any) => {
         item.type = ''
       })
-
       setShelfList(e)
       state.dialogTableVisible = false
     }
   }
 
-  // 取消
-  const resetForm = (formEl: any) => {
-    emits.emit(EMitt.OnCloseCurrTab)
-  }
+
 </script>
 <style lang="less" scoped>
   .rightFormRef {
     display: block;
+
     /deep/ .el-input {
       width: 22vw;
     }
@@ -624,9 +686,13 @@
       text-align: left !important; //输入框左对齐
     }
   }
+
   .top {
     width: 100%;
     height: 200px;
     display: flex;
+  }
+  .bedSchedule-content{
+    transform: translateX(-10px);         
   }
 </style>

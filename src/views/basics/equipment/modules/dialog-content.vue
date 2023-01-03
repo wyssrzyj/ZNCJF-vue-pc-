@@ -1,7 +1,7 @@
  <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-23 08:49:58
+ * @LastEditTime: 2023-01-03 19:44:44
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,12 +9,12 @@
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <!-- left1 -->
-      <el-col :span="8">
+      <el-col :span="8" class="equipment-left">
         <el-form-item label="设备图片" class="layclothImg" prop="img">
           <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
-
-        <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam">
+        
+        <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam"  v-if="state.form.type!=='2'" >
           <el-icon class="equipment-proportionsLeft" :size="20" @click="shippingMarks"><Edit /></el-icon>
           <br />
 
@@ -55,7 +55,7 @@
                 <div v-if="item.type === 'type'">
                   <el-form-item label="设备类型" prop="type" class="buttonContainer">
                     <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
-                      <el-option v-for="item in state.equipmentType" :key="item.id" :label="item.name" :value="item.id" />
+                      <el-option v-for="v in state.equipmentType" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
                   </el-form-item>
                 </div>
@@ -123,32 +123,6 @@
 
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
-
-  // const value = ref('')
-
-  // const options = [
-  //   {
-  //     value: 'Option1',
-  //     label: 'Option1'
-  //   },
-  //   {
-  //     value: 'Option2',
-  //     label: 'Option2'
-  //   },
-  //   {
-  //     value: 'Option3',
-  //     label: 'Option3'
-  //   },
-  //   {
-  //     value: 'Option4',
-  //     label: 'Option4'
-  //   },
-  //   {
-  //     value: 'Option5',
-  //     label: 'Option5'
-  //   }
-  // ]
-
   const props = defineProps<{
     dialogType: boolean
     close: any
@@ -393,5 +367,8 @@
   }
   .relationOperaterList {
     transform: translateX(13px);
+  }
+  .equipment-left{
+    width: 150px;
   }
 </style>

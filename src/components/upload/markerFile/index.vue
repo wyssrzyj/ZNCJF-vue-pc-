@@ -2,19 +2,19 @@
   <!-- 自定义样式 -->
   <div>
     <!-- 上传 -->
-    <div v-if="state.img === ''" :style="state.style" class="upload-img" @click="added" >
+    <div v-if="state.img === ''" :style="state.style" class="shelfFile-img" @click="added">
       <div class="upload-title">
         <span
           ><el-icon class="plus-icon"><Plus /></el-icon
         ></span>
-        <span >上传唛架图</span>
+        <span>上传唛架图</span>
       </div>
     </div>
     <!-- 展示 -->
     <div v-if="state.img !== ''">
-      <div  class="demo-image__preview" >
+      <div class="demo-image__preview">
         <el-image :style="state.style" :src="state.img" :preview-src-list="state.srcList" :initial-index="1" fit="cover" />
-        <div v-if="!props.disabled" class="download" @click="beforeRemove" >
+        <div v-if="!props.disabled" class="download" @click="beforeRemove">
           <el-icon class="download-icon"><Delete /></el-icon>
         </div>
       </div>
@@ -35,7 +35,7 @@
       :on-progress="uploadProgress"
       :on-success="uploadSuccess"
       :before-remove="beforeRemove"
-       :on-remove="remove"
+      :on-remove="remove"
       :on-error="uploadError"
       :limit="props.upload.limit"
       :on-preview="download"
@@ -129,7 +129,7 @@
       }
     ],
     uploadFileLoading: false,
-    style: props.width ? `width:${props.width}vw; height: 115px` : `width: 200px; height: 100px`
+    style: props.width ? `width:${props.width}vw; height: 135px` : `width: 200px; height: 135px`
   })
 
   watch(
@@ -142,23 +142,26 @@
         }
         state.targetArr[state.fileType]['fileList'] = item
         //
+      } else {
+        state.img = ''
+        state.uploadFileLoading = false
+        state.targetArr[0]['fileList'] = []
+        props.gitFile({ data: [] }) //传递给父级
       }
     }
   )
 
-    //自定义删除
+  //自定义删除
   const beforeRemove = () => {
     state.img = ''
     state.uploadFileLoading = false
-    state.targetArr[0]['fileList']=[]
+    state.targetArr[0]['fileList'] = []
     props.gitFile({ data: [] }) //传递给父级
-
   }
 
-   const remove = (uploadFile: any, uploadFiles: any) => {
+  const remove = (uploadFile: any, uploadFiles: any) => {
     props.gitFile({ data: uploadFiles })
   }
-
 
   //新增
   const added = () => {
@@ -322,7 +325,6 @@
   }
   .demo-image__preview {
     position: relative;
-
     border: 1px solid #dddddd;
     border-radius: 10px;
   }
@@ -358,10 +360,11 @@
     font-size: 30px;
     color: #909399;
   }
-  .upload-img {
-    height: 115px;
+  .shelfFile-img {
     border-radius: 10px;
     background: #eee;
+
+    // background: red;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-11-23 08:52:04
+ * @LastEditTime: 2022-12-16 21:25:54
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -24,22 +24,10 @@
   }>()
 
   const state = reactive({
-    list: []
+    list: [],
   })
   const preservation = (e: any) => {
       props.operation({ type: 'confirm', data: state.list })
-
-    // let type = state.list.every((item: any) => {
-    //   return item.size !== ''&& item.color !== ''
-    // })
-
-    // if (type) {
-    // } else {
-    //   ElMessage({
-    //     message: '颜色和尺码不可为空',
-    //     type: 'warning'
-    //   })
-    // }
   }
 
   //子组件数据

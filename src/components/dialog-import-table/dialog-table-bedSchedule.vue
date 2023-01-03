@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-11-22 17:10:25
+ * @LastEditTime: 2023-01-03 19:41:17
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -76,7 +76,7 @@
 
       <!-- 其他 -->
       <template v-if="item.type == null" #default="{ row }">
-        <el-input v-model="row[item.prop]" type="text" />
+        <el-input v-model="row[item.prop]" type="text"  @blur="onChange"/>
       </template>
     </el-table-column>
 
@@ -91,7 +91,8 @@
     </el-table-column>
   </el-table>
 
-  <el-pagination
+  <!-- 暂时取消 2022-12-16 21.00 -->
+  <!-- <el-pagination
     v-model:currentPage="page"
     v-model:page-size="limit"
     class="import-table-pagination"
@@ -103,7 +104,7 @@
     :total="state.total"
     @size-change="handleSizeChange"
     @current-change="handleCurrent"
-  />
+  /> -->
 
   <!-- 图片 -->
   <el-dialog v-model="state.dialogVisible" :title="state.title" width="210px" :draggable="false">
@@ -131,7 +132,6 @@
   import { find, isEmpty, cloneDeep } from 'lodash'
   import { equipmentType, fabricType } from '@/components/conifgs'
 
-  const page = ref(1)
   const limit = ref(10)
   const table: any = ref()
 
@@ -259,22 +259,29 @@
 
 
 
-  //分页功能
+  //分页功能- 暂时取消 2022-12-16 21.00
   const setPagination = (data: any) => {
     let list = getNewArray(data, limit.value)
-    state.tableData = list[page.value - 1] //赋值展示数据  -1 数组从0开始
+    //分页功能- 暂时取消 2022-12-16 21.00
+    // state.tableData = list[page.value - 1] //赋值展示数据  -1 数组从0开始
+    // setSpanArr(state.tableData)
+
+
+    state.tableData = list.flat(Infinity) //赋值展示数据  -1 数组从0开始
     setSpanArr(state.tableData)
+
+
     // 特殊表格数据1
   }
 
   const init = () => {
     let initData = setFormat(props.form)
     state.initData = initData
-    console.log(initData);
+    console.log("传递3-1");
     props.getTableData(initData)
     state.total = initData.length //总长度
     //处理数据
-    setPagination(initData)
+    setPagination(initData) 
   }
 
   init()
@@ -286,6 +293,7 @@
       state.tableData = setFormat(item)
     }
   )
+ 
 
   const showUploadDialog = (row: any, type: any) => {
     state.title = '上传图片'
@@ -340,13 +348,19 @@
     state.tableData = rowData.filter((item: any) => item.only !== e.only)
   }
 
-  const handleSizeChange = (val: number) => {
-    limit.value = val
-    setPagination(state.initData)
-  }
-  const handleCurrent = (val: number) => {
-    page.value = val
-    setPagination(state.initData)
+  // const handleSizeChange = (val: number) => {
+  //   limit.value = val
+  //   setPagination(state.initData)
+  // }
+  // const handleCurrent = (val: number) => {
+  //   page.value = val
+  //   setPagination(state.initData)
+  // }
+
+   const onChange=()=>{
+    // 输入框数据更新传递给父级
+      props.getTableData(state.tableData)
+
   }
 
   //监听数据变化 返回给父级

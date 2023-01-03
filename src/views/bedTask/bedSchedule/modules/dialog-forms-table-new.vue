@@ -1,14 +1,24 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-11-23 08:51:52
+ * @LastEditTime: 2022-12-16 21:28:37
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newSize">新增尺码</el-button>
-  <el-table border :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }" :data="state.tableData" style="width: 100%">
-    <el-table-column label="颜色" prop="color" fixed="left" width="150" />
+  <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newColor">新增颜色</el-button>
+
+  <el-table height="350" style="width: 100%" :data="state.tableData"     :header-cell-style="{ 'text-align': 'center' }"
+    :cell-style="{ 'text-align': 'center' }">
+    <el-table-column label="颜色" prop="color" fixed="left" width="150">
+      <template #default="{ row }">
+        <el-select v-model="row.color" :disabled="disable(false)" class="m-2" placeholder="请选择颜色" size="large">
+          <el-option v-for="v in state.selectData" :key="v.value" :label="v.label" :value="v.value" />
+        </el-select>
+      </template>
+    </el-table-column>
+
     <el-table-column v-for="(item, i) in state.size" :key="i" min-width="200">
       <template #header>
         <div class="tableHeader">
@@ -48,6 +58,7 @@
     type: props.type,
     tableColumns: tableColumns,
     //-------------
+    selectData: [], //颜色
     tableData: [],
     size: [] //动态尺码
   })
@@ -172,36 +183,60 @@
     }
     return data
   }
+  //下拉颜色处理
+  const setColor = (data: any) => {
+    let sum: any = []
+    let selectData: any = []
+    data.forEach((item: any) => {
+      if (sum.indexOf(item.color) === -1) {
+        sum.push(item.color)
+      }
+    })
 
- 
+    if (!isEmpty(sum)) {
+      sum.forEach((item: any, index: any) => {
+        if (item !== '') {
+          selectData.push({
+            label: item,
+            value: item
+          })
+        }
+      })
+    }
+    return selectData
+  }
 
   const init = () => {
     // 面料颜色数据更新->使用面料颜色的最新数据
     const fabricColor = props.data.fabricColor
     let shelfIdList = props.data.shelfList //上次保存的数据||接口数据
-
     //铺布层数
     const size = props.data.sizeList
     setSize(size)
 
-    let fabricColorAll =  fabricColor.replaceAll(',','，')
-    let sizeList =  fabricColorAll.split('，')
-      
+    let fabricColorAll = fabricColor.replaceAll(',', '，')
+    let sizeList = fabricColorAll.split('，')
+    let selectData: any = [] //下拉颜色
     let newList: any = [] //最新的数据+
 
     //回显数据
     if (!isEmpty(shelfIdList)) {
       //编辑
-
       const newListClone = setData(sizeList, shelfIdList)
       newListClone.map((item: any, index: any) => {
         item.unique = `${item.name + index}`
       })
+      selectData = setColor(newListClone)
       newList = newListClone
     } else {
       //新增
       if (fabricColor) {
         sizeList.forEach((item: any, index: any) => {
+          selectData.push({
+            label: item,
+            value: item
+          })
+
           if (item !== '') {
             //假如在中间更改数据就会重置了 只能尾部添加-后期再优化9.2 15.09
             newList.push({
@@ -230,8 +265,9 @@
     let list = setTableData(newList)
     //计算床次总件数
     let bedSumData = setSpreadClothLevel(list)
-    //赋值
+    state.selectData = selectData //下拉颜色
 
+    //赋值
     state.tableData = bedSumData
     backData(bedSumData)
   }
@@ -284,6 +320,26 @@
     } else {
       state.size.push({ number: '', indexId: new Date() })
     }
+  }
+
+  //新增颜色
+  const newColor = () => {
+    let sum = {}
+    let list: any = []
+
+    state.size.forEach((item: any) => {
+      sum[item.size] = 0
+      list.push({ size: item.size, levelClothSum: 0 })
+    })
+
+    let arr = {
+      color: '',
+      spreadClothLevel: 0,
+      bedSum: 0,
+      sizeAndAmountList: list,
+      ...sum
+    }
+    state.tableData.push(arr)
   }
   //删除
   const close = (e: any) => {

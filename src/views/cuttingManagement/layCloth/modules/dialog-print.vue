@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-10-03 17:48:17
+ * @LastEditTime: 2022-12-16 16:19:24
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -45,7 +45,7 @@
   .topContainer {
     display: flex;
     width: 100%;
-    height: 80px;
+    height: 20px;
   }
   .topLeft {
     width: 15%;
@@ -53,7 +53,7 @@
   .topRight {
     font-size: 20px;
     font-weight: 20px;
-    width: 85%;
+    width: 100%;
     text-align: center;
   }
   .title {

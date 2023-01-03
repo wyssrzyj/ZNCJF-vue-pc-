@@ -13,6 +13,7 @@
     total: 0,
     type: 1,
     equipmentPlanningTaskParam: {
+      bedPlanId:props.chartDate.bedPlanId,
       deviceId:props.chartDate.deviceId,
       deviceName: '',
       time: proxy.$dayjs(new Date()).format('YYYY-MM-DD'),
@@ -36,6 +37,7 @@
   const ganttGet = () => {
   
     let arr ={
+    // bedPlanId:state.equipmentPlanningTaskParam.bedPlanId,//暂时注销2022.11.23-15.11勇哥
     time:state.equipmentPlanningTaskParam.time,
     startTime:state.equipmentPlanningTaskParam.startTime,
     endTime:state.equipmentPlanningTaskParam.endTime,

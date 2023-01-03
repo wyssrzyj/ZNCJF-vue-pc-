@@ -8,7 +8,6 @@
         <div class="parameter-top">
           <el-form-item label="前进速度">
             <Tips title="1-10段" />
-
             <el-input-number v-model="state.rightForm.forwardSpeed" :disabled="disable(false)" :min="0" :controls="false" size="large" @change="onChang" />
           </el-form-item>
           <el-form-item label="匀速松紧值">

@@ -30,9 +30,7 @@
           <el-input v-model="state.rightForm.fabricColor" disabled />
         </el-form-item>
         <el-form-item label="唛架长度 (mm)">
-          <div class="layCloth-row">
-            <el-input-number v-model="state.rightForm.shelfLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-          </div>
+          <el-input v-model="state.rightForm.shelfLength" disabled />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -40,9 +38,7 @@
           <el-input v-model="state.rightForm.shelfWidth" disabled />
         </el-form-item>
         <el-form-item label="铺布长度 (mm)">
-          <div class="layCloth-row">
-            <el-input-number v-model="state.rightForm.spreadClothLength" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-          </div>
+          <el-input v-model="state.rightForm.spreadClothLength" disabled />
         </el-form-item>
         <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
           <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" />
@@ -56,7 +52,7 @@
         <el-form-item label="铺布层数">
           <el-input v-model="state.rightForm.spreadClothLevel" disabled />
         </el-form-item>
-        <el-form-item label="损耗率%">
+        <el-form-item label="利用率%">
           <el-input v-model="state.rightForm.useRate" disabled />
         </el-form-item>
         <el-form-item label="单层件数">
@@ -208,7 +204,7 @@
   .layCloth-row {
     position: relative;
     .el-input {
-      width: 100px !important;
+      width: 50px !important;
     }
     .spreadClothLength {
       margin-left: 100px;
@@ -237,18 +233,19 @@
   .setting-img {
     position: absolute;
     right: 3vw;
-    top: -7px;
-    width: 42px;
+    top: -2px;
+    width: 35px;
     cursor: pointer;
   }
   .bedPlanNo-img {
     position: absolute;
-    right: 2vw;
+    right: 3vw;
     top: 2px;
-    width: 42px;
+    width: 25px;
     cursor: pointer;
   }
   .rightFormRef {
+    transform: translateX(-20px);    
     display: block;
     /deep/ .el-input {
       width: 300px;

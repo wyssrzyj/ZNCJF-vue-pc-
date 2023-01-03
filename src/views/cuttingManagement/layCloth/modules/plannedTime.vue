@@ -140,7 +140,7 @@
         planEndTime: null
       }
     },
-    chartDate: { api: '/jack-ics-api/device/listDeviceUseTime', type: 'time', height: '300px', deviceId: props.value.one.deviceId }
+    chartDate: { api: '/jack-ics-api/device/listDeviceUseTime', type: 'time', height: '300px', deviceId: props.value.one.deviceId, bedPlanId: props.value.one.bedPlanId }
   })
 
   const setList = () => {

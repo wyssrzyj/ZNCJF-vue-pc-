@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2022-11-17 15:23:57
+ * @LastEditTime: 2023-01-03 15:29:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -111,7 +111,7 @@
   </el-form>
 
   <div class="cropFoot">
-    <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+    <el-button @click="resetForm()"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
     <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">保存并返回</el-button>
   </div>
 
@@ -122,7 +122,7 @@
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute,useRouter } from 'vue-router'
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
@@ -138,6 +138,7 @@
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
   const route = useRoute()
+   const router = useRouter();
   const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
@@ -222,6 +223,12 @@
   //   state.form.attritionRate = state.effectiveArea / product
   // }
 
+    // 取消
+  const resetForm = () => {
+    emits.emit(EMitt.OnCloseCurrTab)
+     router.push("/cuttingManagement/crop");//跳转到列表
+  }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
@@ -273,9 +280,7 @@
               message: '保存成功',
               type: 'success'
             })
-            // formEl.resetFields()
-            // props.close()
-            emits.emit(EMitt.OnCloseCurrTab)
+            resetForm()
           } else {
             ElMessage({
               message: `${res.msg}`,
@@ -287,13 +292,7 @@
     })
   }
 
-  // 取消
-  const resetForm = (formEl: any) => {
-    // props.close()
-    // if (!formEl) return
-    // formEl.resetFields()
-    emits.emit(EMitt.OnCloseCurrTab)
-  }
+
 
   // ------------------
 

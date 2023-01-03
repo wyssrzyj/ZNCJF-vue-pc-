@@ -48,7 +48,7 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="850px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
   <!-- 表格修改 -->
@@ -87,7 +87,6 @@
       width: '800px',
       importType: false,
       list: [], //导出数据
-      // template: 'http://192.168.99.184/template/device.xlsx',
       template: '/template/设备管理模板.xlsx', //引入的是V1的
       interface: '/jack-ics-api/device/import'
     },

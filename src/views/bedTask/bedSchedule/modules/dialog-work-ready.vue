@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-11-03 15:54:19
+ * @LastEditTime: 2023-01-03 19:40:31
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -72,42 +72,54 @@
   })
 
   //  获取当前项总和
-  const currentAnd = (topData: any, data: any) => {
-    let sum = 0
-    //获取当前行的总和
-    let sizeData: any = []
-    topData.forEach((item: any) => {
-      sizeData.push(item.size)
-    })
-    sizeData.forEach((item: any) => {
-      if (data[item]) {
-        sum += Number(data[item])
-      }
-    })
-    return sum
-  }
+  // const currentAnd = (topData: any, data: any) => {
+  //   let sum = 0
+  //   //获取当前行的总和
+  //   let sizeData: any = []
+  //   topData.forEach((item: any) => {
+  //     sizeData.push(item.size)
+  //   })
+  //   sizeData.forEach((item: any) => {
+  //     if (data[item]) {
+  //       sum += Number(data[item])
+  //     }
+  //   })
+  //   return sum
+  // }
 
   //计算积
-  const addData = (size: any, topData: any, data: any) => {
-    let dataClone = cloneDeep(topData)
-    let arr = dataClone.filter((item: any) => item.size === size)
-    let sum = data.spreadClothLevel * Number(arr[0].levelClothSum)
-    return sum
-  }
+  // const addData = (size: any, topData: any, data: any) => {
+  //   let dataClone = cloneDeep(topData)
+  //   let arr = dataClone.filter((item: any) => item.size === size)
+  //   let sum = data.spreadClothLevel * Number(arr[0].levelClothSum)
+  //   return sum
+  // }
 
   //添加对应的字段并赋值
   const setSize = (v: any, item: any) => {
-    let topData = item.sizeAndAmountList //动态头
-    let data = cloneDeep(v)
-    let size = item.colorAndSizeList
-    //给每一项添加对应的字段
-    size.forEach((i: any) => {
-      if (data.color === i.color) {
-        data[i.size] = addData(i.size, topData, data)
-      }
+    let colorAndSizeList = item.colorAndSizeList
+    let e = colorAndSizeList.filter((e: any) => e.rowFlag === v.rowFlag)
+
+    let size: any = [] //给当前项添加尺码
+    e.forEach((itemData: any) => {
+      size.push(itemData.size)
+    })
+    v.sizeList = size
+
+    //转成建值对
+    let sum = {}
+    v.sizeList.forEach((itemData: any) => {
+      let levelClothSum = item.sizeAndAmountList.filter((sizeData: any) => sizeData.size === itemData)
+      sum[itemData] = levelClothSum[0].levelClothSum * v.spreadClothLevel
     })
 
-    data.sum = currentAnd(topData, data)
+    let data = { ...v, ...sum }
+    //处理当前行的件数
+    let total = 0
+    data.sizeList.forEach((and: any) => {
+      total += data[and]
+    })
+    data.sum = total
     return data
   }
 
@@ -115,6 +127,7 @@
   const setDataFormat = (item: any) => {
     let list = cloneDeep(item.colorAndLevelList)
     let arr: any = []
+
     //添加对应字段
     if (!isEmpty(item.colorAndSizeList)) {
       list.forEach((v: any) => {
@@ -127,7 +140,6 @@
   watch(
     () => props.data,
     item => {
-      // 动态头部
       let dynamic = item.sizeAndAmountList
 
       if (!isEmpty(dynamic)) {

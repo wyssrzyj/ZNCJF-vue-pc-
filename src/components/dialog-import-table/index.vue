@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-23 08:49:28
+ * @LastEditTime: 2022-12-08 11:32:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -136,8 +136,6 @@
   const getTableData = (e: any) => {
   let list =saveFormat(e)
     state.saveData = list
-   
-    
     props.getList(list)
   }
 

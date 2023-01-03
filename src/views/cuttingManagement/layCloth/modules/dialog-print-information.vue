@@ -66,15 +66,15 @@
     <div class="print-row">
       <div class="block-f">面料颜色:</div>
       <div class="block-f">缸号</div>
-      <div class="block-f">区号:</div>
-      <div class="block-f">门幅</div>
+      <div class="block-f">匹号</div>
+      <div class="block-size">尺码比例</div>
       <div class="block-f">拉布层数</div>
       <div class="block-f">拉布米长</div>
-      <div class="block-f">标签米长</div>
+      <!-- <div class="block-f">标签米长</div>
       <div class="block-f">余布米长</div>
       <div class="block-f">备次米长</div>
       <div class="block-f">接驳米长</div>
-      <div class="block-fl">短米数</div>
+      <div class="block-fl">短米数</div> -->
       <div class="rightBro"></div>
     </div>
 
@@ -82,14 +82,14 @@
       <div class="block-f">{{ item.fabricColor }}</div>
       <div class="block-f">{{ item.vatNo }}</div>
       <div class="block-f">{{ item.clothNo }}</div>
-      <div class="block-f">{{ item.shelfWidth }}</div>
+      <div class="block-size">{{ item.shelfScale }}</div>
       <div class="block-f">{{ item.spreadClothLevel }}</div>
       <div class="block-f">{{ item.spreadClothTotalLength }}</div>
-      <div class="block-f">{{ item.tagLength }}</div>
+      <!-- <div class="block-f">{{ item.tagLength }}</div>
       <div class="block-f">{{ item.remainLength }}</div>
       <div class="block-f">{{ item.reserveLength }}</div>
       <div class="block-f">{{ item.appendLength }}</div>
-      <div class="block-fl">{{ item.shortLength }}</div>
+      <div class="block-fl">{{ item.shortLength }}</div> -->
       <div class="rightBro"></div>
     </div>
 
@@ -166,8 +166,17 @@
     line-height: 50px;
     border-left: 1px solid #000;
   }
+  
   .block-f {
     width: 237px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+  .block-size{
+      width: 1050px;
     height: 50px;
     text-align: center;
     line-height: 50px;

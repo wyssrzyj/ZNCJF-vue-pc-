@@ -53,7 +53,7 @@
   import type { UploadProps } from 'element-plus'
   import { getToken } from '@/utils/cache'
   import { ElMessage } from 'element-plus'
-  import { cloneDeep, isEmpty } from 'lodash'
+  import {  isEmpty } from 'lodash'
 
   const { proxy }: any = getCurrentInstance()
 
@@ -67,7 +67,7 @@
   
   const state = reactive({
     loading: false,
-    fileList: cloneDeep(props.value),
+    fileList: props.value,
     imgAction: `${proxy.$baseService.app.api}/jack-ics-api/oss/upload`,
     initialIndex: 0
   })
@@ -86,6 +86,8 @@
     v => {
       if (!isEmpty(v)) {
         state.fileList = v
+      }else{
+        state.fileList = []
       }
     },
     { deep: true, immediate: true }

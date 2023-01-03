@@ -28,14 +28,13 @@
      <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
       <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(row,false)">编辑</el-button>
     </template> 
-
-
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
   import { reactive, ref,getCurrentInstance } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
+  import { tagType } from '@/components/conifgs'
 
   const { proxy }: any = getCurrentInstance()
 

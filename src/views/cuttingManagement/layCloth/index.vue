@@ -21,6 +21,7 @@
     <template #operationExtBtn>
       <!-- <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button> -->
       <el-button type="success" style="order: 3" @click="examine">审核</el-button>
+
       <!-- <el-button type="danger" style="order: 3" @click="mov">删除</el-button> -->
     </template>
 
@@ -35,6 +36,9 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
       <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button>
       <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
+
+      
     </template>
     <!-- 删除 -->
     <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
@@ -198,6 +202,23 @@
   //     })
   //   }
   // }
+    //撤销
+  const revoke=(row:any)=>{
+      proxy.$baseService.post('/jack-ics-api/spreadTask/cancel', { id: row.id }).then((res: any) => {
+           if(res.code===0){
+            ElMessage({
+            message: '撤销成功',
+            type: 'success'
+          })
+        }else{
+          ElMessage({
+            message: res.msg,
+            type: 'warning'
+          })
+        }
+        refreshTable()
+      })
+  }
   const confirmDelete = () => {
     proxy.$baseService.delete('/jack-ics-api/spreadTask/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
