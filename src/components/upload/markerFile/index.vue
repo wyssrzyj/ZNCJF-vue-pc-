@@ -146,7 +146,7 @@
         state.img = ''
         state.uploadFileLoading = false
         state.targetArr[0]['fileList'] = []
-        // props.gitFile({ data: [] }) //传递给父级
+        // props.gitFile({ data: [] }) //传递给父级.
       }
     }
   )
