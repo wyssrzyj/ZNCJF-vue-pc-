@@ -1,7 +1,7 @@
  <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-01-03 19:44:44
+ * @LastEditTime: 2023-01-04 13:31:12
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -29,16 +29,16 @@
           <div class="equipment-top">
             <div>
               <div v-for="(item, index) in state.middle" :key="index">
-                <div v-if="item.type === 'sn'">
-                  <el-form-item :label="`${item.name}`" prop="sn">
+                <div v-if="item.type === 'input'">
+                  <el-form-item :label="`${item.name}`" :prop=item.prop>
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
                   </el-form-item>
                 </div>
-                <div v-if="item.type === 'name'">
+                <!-- <div v-if="item.type === 'name'">
                   <el-form-item :label="`${item.name}`" prop="name">
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
                   </el-form-item>
-                </div>
+                </div> -->
                 <div v-if="item.type === 'relationDevice'">
                   <el-form-item :label="item.name" prop="relationDevice" class="buttonContainer">
                     <Tips :title="`请选择${item.name}`" />
@@ -60,9 +60,22 @@
                   </el-form-item>
                 </div>
 
-                <div v-if="item.type === 'spec'">
-                  <el-form-item :label="`${item.name}`" prop="spec">
+                <div v-if="item.type === 'input'">
+                  <el-form-item :label="`${item.name}`" :prop="item.prop">
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
+                  </el-form-item>
+                </div>
+                  <div v-if="item.type === 'inputNumber'">
+                  <el-form-item :label="`${item.name}`" :prop="item.prop">
+                      <el-input-number
+              v-model="state.form[item.model]"
+              class="equipment-number"
+              :controls="false"
+              :min="0"
+              controls-position="right"
+              :placeholder="`请输入${item.name}`"
+              type="text"
+            />
                   </el-form-item>
                 </div>
 
@@ -351,6 +364,22 @@
   }
 </script>
 <style lang="less" scoped>
+
+ /deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
+
+    .equipment{
+  display: flex;
+  flex-direction:column;
+  // height: 450px;
+  padding-bottom: 20px;
+  overflow:auto
+  // align-items: center;
+  
+
+}
+
   .equipment-proportionsLeft {
     // width: 10px;
     font-size: 15px;

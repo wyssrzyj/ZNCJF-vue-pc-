@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-04 15:15:51
+ * @LastEditTime: 2023-01-03 19:40:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,7 +12,6 @@
       <el-form ref="ruleFormRef" class="rightFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
         <!-- top -->
         <div class="top">
-          
           <el-form-item label="款图" class="layclothImg">
             <UploadModule v-model="state.form.styleImage" :img-style="{ height: 100 }" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
@@ -25,6 +24,7 @@
               <el-input v-model="state.form.styleName" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
             </el-form-item>
           </div>
+
           <el-form-item label="唛架图" prop="shelfFile">
             <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="45" />
           </el-form-item>

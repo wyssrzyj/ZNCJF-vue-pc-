@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2022-11-03 11:03:46
+ * @LastEditTime: 2023-01-04 13:14:11
  * @Description:
  * @LastEditors: lyj
  */
@@ -49,18 +49,23 @@ export const content = {
     type: '',
     remark: '',
     defaultParam: '',
+    ip: '',
+    port: '',
     relationOperaterList: ''
   },
   formMiddleData: [
-    { name: '设备编号', model: 'sn', prop: 'sn', type: 'sn', disabled: false },
-    { name: '设备名称', model: 'name', prop: 'name', type: 'name', disabled: false },
+    { name: '设备编号', model: 'sn', prop: 'sn', type: 'input', disabled: false },
+    { name: '设备名称', model: 'name', prop: 'name', type: 'input', disabled: false },
     { name: '关联设备', model: 'relationDevice', prop: null, type: 'relationDevice', disabled: false },
+    { name: '设备ip', model: 'ip', prop: 'ip', type: 'input', disabled: false },
     { name: '备注', model: 'remark', prop: null, type: 'remark', disabled: false }
   ],
   formRightData: [
-    { name: '设备型号', model: 'spec', prop: 'spec', type: 'spec', disabled: false },
+    { name: '设备型号', model: 'spec', prop: 'spec', type: 'input', disabled: false },
     { name: '设备类型', model: 'type', prop: 'type', type: 'type', disabled: false },
-    { name: '关联操作员', model: 'relationOperaterList', prop: null, type: 'relationOperaterList', disabled: false }
+    { name: '关联操作员', model: 'relationOperaterList', prop: null, type: 'relationOperaterList', disabled: false },
+    { name: '模块端口', model: 'port', prop: 'port', type: 'inputNumber', disabled: false },
+  
   ],
   dataRule: {
     sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

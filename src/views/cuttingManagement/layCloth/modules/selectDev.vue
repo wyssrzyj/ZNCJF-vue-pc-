@@ -232,14 +232,14 @@
 
   .setting-img {
     position: absolute;
-    right: 3vw;
+    left: 200px;
     top: -2px;
     width: 35px;
     cursor: pointer;
   }
   .bedPlanNo-img {
     position: absolute;
-    right: 3vw;
+    left: 200px;
     top: 2px;
     width: 25px;
     cursor: pointer;
@@ -248,7 +248,7 @@
     transform: translateX(-20px);    
     display: block;
     /deep/ .el-input {
-      width: 300px;
+      width: 250px;
     }
     /deep/ .el-input__inner {
       text-align: left !important; //输入框左对齐
