@@ -1,9 +1,9 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-04 16:48:43
+ * @LastEditTime: 2023-01-06 13:56:23
  * @Description: 
- * @LastEditors: dhy
+ * @LastEditors: lyj
 -->
 
 <template>
@@ -353,7 +353,7 @@ import emits from '@njpCommon/utils/emits'
         let sum = res.data.shelfWidth * res.data.spreadClothLength
         state.effectiveArea = (res.data.useRate / 100) * sum //有效面积x`
         //铺布长度添加10    //后续需要注销 等后端代码更新 2022-12-19 越也
-        res.data.spreadClothLength=res.data.spreadClothLength+10
+        // res.data.spreadClothLength=res.data.spreadClothLength
 
         state.form = res.data
       })
