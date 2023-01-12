@@ -1,0 +1,141 @@
+.settings{
+  display: flex;
+}
+.settings-left{
+  width: 300px;
+  height: 82vh;
+  background: #e8eaec75;
+}
+.settings-right{
+  flex: 1;
+  background:lightpink;
+
+}
+.settings-left-top{
+  padding: 10px;
+}
+.settings-type{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+.settings-type-data2{
+  width: 60px;
+  height: 25px;
+  border: 1px solid #bfbfbf;
+  text-align: center;
+  line-height: 25px;
+  cursor:pointer;
+}
+.settings-type-data1{
+  cursor:pointer;
+  width: 60px;
+  height: 25px;
+  text-align: center;
+  color: rgb(239, 243, 243);
+  background: #3e8ff7;
+  line-height: 25px;
+}
+.division{
+  width: 300px;
+  height: 2px;
+  background:#fff ;
+  margin-top: 10px;
+    transform: translateX(-10px);
+}
+.settings-list{
+  margin-top: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+.settings-list-item-true{
+  cursor:pointer;
+  width: 290px;
+  height: 40px;
+  line-height: 40px;
+  color: #3e8ff7;
+  background: #039af94f;
+}
+
+.settings-list-item{
+  cursor:pointer;
+  width: 290px;
+  height: 40px;
+  line-height: 40px;
+  color: #3e8ff7;
+}
+.settings-list-item:hover{
+  width: 290px;
+  height: 40px;
+  line-height: 40px;
+  color: #3e8ff7;
+  background: #039af94f;
+
+}
+.settings-list-title{
+  margin-left: 27px;
+}
+.settings-list-overflow{
+  display: flex;
+  flex-direction: column;
+
+  height: 62vh;
+  width: 300px;
+
+  overflow-y: auto;
+  /* 定义滚动条样式 */
+&::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+		background-color: rgba(240, 240, 240, 1);
+}
+/*定义滚动条轨道 内阴影+圆角*/
+&::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 0px rgba(240, 240, 240, .5);
+		border-radius: 10px;
+		background-color: rgba(240, 240, 240, .5);
+}
+/*定义滑块 内阴影+圆角*/
+&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: inset 0 0 0px rgba(237, 44, 37, .5);
+		background-color: rgba(237, 44, 37, .5);
+}
+}
+.settings-list-bottom{
+  height: 8vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+.settings-list-bottom-btn{
+  width: 80px;
+  height: 30px;
+  background: #3e8ff7;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 3px;
+  color: #fff;
+}
+.settings-img{
+  transition: all 0.5s;
+}
+.settings-img-bottom{
+  transform: rotateZ(180deg);
+  transition: all 0.5s;
+
+}
+// 折叠测试
+.demo-dh1{
+  background: rgb(0, 255, 85);
+  height: 80px;
+	transition: all 0.4s;
+}
+.demo-dh2{
+  height: 0px;
+  // background: pink;
+	overflow: hidden;
+	transition: all 0.4s;
+}

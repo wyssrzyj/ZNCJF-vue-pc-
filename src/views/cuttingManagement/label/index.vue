@@ -1,6 +1,9 @@
 <template>
-  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" >
+  <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
+      <el-form-item label="款号" prop="styleCode">
+        <el-input v-model="state.queryFormData.styleCode" placeholder="请输入" clearable />
+      </el-form-item>
       <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
@@ -60,7 +63,8 @@
       bedPlanNo: '',
       taskCode: '',
       deviceName: '',
-      statu: ''
+      statu: '',
+      styleCode: ''
     },
 
     dialogVisible: false,

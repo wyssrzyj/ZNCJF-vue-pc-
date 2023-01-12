@@ -17,6 +17,7 @@
   "author": "feng.m",
   "license": "ISC",
   "dependencies": {
+    "dhtmlx-gantt": "^7.1.13",
     "echarts": "^5.3.3",
     "element-plus": "^2.2.0",
     "lodash": "^4.17.21",

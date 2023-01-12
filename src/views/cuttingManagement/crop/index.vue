@@ -1,6 +1,9 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate">
     <template #queryFormItem>
+      <el-form-item label="款号" prop="styleCode">
+        <el-input v-model="state.queryFormData.styleCode" placeholder="请输入" clearable />
+      </el-form-item>
       <el-form-item label="床次" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
@@ -25,14 +28,14 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-     <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
-      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(row,false)">编辑</el-button>
-    </template> 
+      <el-button link type="primary" style="order: 3" @click="handleClick(row, true)">查看</el-button>
+      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="handleClick(row, false)">编辑</el-button>
+    </template>
   </njp-table-config>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref,getCurrentInstance } from 'vue'
+  import { reactive, ref, getCurrentInstance } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
   import { tagType } from '@/components/conifgs'
 
@@ -60,7 +63,8 @@
       bedPlanNo: '',
       taskCode: '',
       deviceName: '',
-      statu: ''
+      statu: '',
+      styleCode: ''
     },
 
     dialogVisible: false,
@@ -89,15 +93,13 @@
   // }
 
   //新增、编辑、查看
-  const handleClick = ( row: any,type: any,) => {
+  const handleClick = (row: any, type: any) => {
     state.row = row
-    toViewFun( row,type)
+    toViewFun(row, type)
   }
 
-
-
   //跳转详情
-   const toViewFun = (row:any, type:any) => {
+  const toViewFun = (row: any, type: any) => {
     proxy.$routerToView({
       path: `/cuttingManagement/crop/view-dialog-content`,
       query: {

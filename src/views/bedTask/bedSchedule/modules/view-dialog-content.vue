@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-04 15:15:51
+ * @LastEditTime: 2023-01-12 10:14:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,7 +12,6 @@
       <el-form ref="ruleFormRef" class="rightFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
         <!-- top -->
         <div class="top">
-          
           <el-form-item label="款图" class="layclothImg">
             <UploadModule v-model="state.form.styleImage" :img-style="{ height: 100 }" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
           </el-form-item>
@@ -20,7 +19,7 @@
             <el-form-item label="款式编号 " prop="styleCode">
               <el-input v-model="state.form.styleCode" :disabled="disable(false)" placeholder="请输入款式编号" type="text" />
             </el-form-item>
-            <br/>
+            <br />
             <el-form-item label="款式名称" prop="styleName" class="bedSchedule-styleName">
               <el-input v-model="state.form.styleName" :disabled="disable(false)" placeholder="请输入款式名称" type="text" />
             </el-form-item>
@@ -230,10 +229,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, getCurrentInstance ,watch} from 'vue'
+  import { reactive, ref, getCurrentInstance, watch } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
   import print from 'print-js'
-  import { useRoute ,useRouter} from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
 
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
@@ -244,15 +243,14 @@
   import PopModule from './dialog-forms.vue'
   import Work from './dialog-work.vue'
   import { EMitt } from '@njpCommon/constants/enum'
-import emits from '@njpCommon/utils/emits'
-
+  import emits from '@njpCommon/utils/emits'
 
   import './index.less'
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
   const route = useRoute()
-   const router = useRouter();
+  const router = useRouter()
 
   const state: any = reactive({
     form: formData,
@@ -325,8 +323,8 @@ import emits from '@njpCommon/utils/emits'
 
       proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: route.query.id }).then((res: any) => {
         // 图片
-        if(res.data.styleImage){
-        res.data.img = [{ url: res.data.styleImage }]
+        if (res.data.styleImage) {
+          res.data.img = [{ url: res.data.styleImage }]
         }
         //唛架图
         res.data.shelfFile = [
@@ -353,34 +351,34 @@ import emits from '@njpCommon/utils/emits'
         let sum = res.data.shelfWidth * res.data.spreadClothLength
         state.effectiveArea = (res.data.useRate / 100) * sum //有效面积x`
         //铺布长度添加10    //后续需要注销 等后端代码更新 2022-12-19 越也
-        res.data.spreadClothLength=res.data.spreadClothLength+10
+        // res.data.spreadClothLength=res.data.spreadClothLength+10 //2023-1-12  取消
+        res.data.spreadClothLength = res.data.spreadClothLength
 
         state.form = res.data
       })
-    }else{
-      if(route.query._mt==="新增床次计划"){
-        let data=formData
-      // state.form=formData
-      //置空
-      data.styleImage=[]
-      data.shelfFile=[]
-      state.form=cloneDeep(data) 
+    } else {
+      if (route.query._mt === '新增床次计划') {
+        let data = formData
+        // state.form=formData
+        //置空
+        data.styleImage = []
+        data.shelfFile = []
+        state.form = cloneDeep(data)
       }
     }
   }
-  
+
   watch(
-  () => router.currentRoute.value,
-  (newValue: any) => {
-     init()
-  },
-  { immediate: true }
-)
+    () => router.currentRoute.value,
+    (newValue: any) => {
+      init()
+    },
+    { immediate: true }
+  )
   // init()
 
-//  onMounted(() => {
-//    })
-
+  //  onMounted(() => {
+  //    })
 
   // 是否可用
   const disable = (type: any) => {
@@ -400,7 +398,8 @@ import emits from '@njpCommon/utils/emits'
         const { heigh, width, sumArea } = shelfFile
         state.form.shelfWidth = heigh //唛架门幅
         state.form.shelfLength = width //唛架长度
-        state.form.spreadClothLength = Number(width) + 40 //铺布长度
+        state.form.spreadClothLength = Number(width) //铺布长度
+        // state.form.spreadClothLength = Number(width) + 40 //铺布长度 2023-1-12 暂时关闭
         state.effectiveArea = sumArea //有效面积
 
         //利用率
@@ -537,7 +536,7 @@ import emits from '@njpCommon/utils/emits'
       })
       // ----------------------------
       //铺布层数
-     let levelSum=0
+      let levelSum = 0
       list.forEach((item: any) => {
         levelSum += item.spreadClothLevel
       })
@@ -551,8 +550,8 @@ import emits from '@njpCommon/utils/emits'
       //过滤床次总件数为空
       let newList = list.filter((item: any) => item.bedSum > 0)
       //过滤数据为空的数据
-      newList.map((item:any)=>{
-        item.sizeAndAmountList=item.sizeAndAmountList.filter((item:any)=>item.levelClothSum!=0)
+      newList.map((item: any) => {
+        item.sizeAndAmountList = item.sizeAndAmountList.filter((item: any) => item.levelClothSum != 0)
       })
       //数据
       state.form.shelfList = newList //排唛比例数据赋值
@@ -570,13 +569,11 @@ import emits from '@njpCommon/utils/emits'
     }, wait)
   }
 
-    // 取消
+  // 取消
   const resetForm = () => {
-    emits.emit(EMitt.OnCloseCurrTab)//关闭当前页
-    router.push("/bedTask/bedSchedule");//跳转到列表
-
+    emits.emit(EMitt.OnCloseCurrTab) //关闭当前页
+    router.push('/bedTask/bedSchedule') //跳转到列表
   }
-
 
   const setForm = async (formEl: any | undefined, type: any) => {
     if (!formEl) return
@@ -636,11 +633,10 @@ import emits from '@njpCommon/utils/emits'
               message: '保存成功',
               type: 'success'
             })
-           resetForm()
-          //  formEl.resetFields()
-
+            resetForm()
+            //  formEl.resetFields()
           } else {
-             ElMessage({
+            ElMessage({
               message: res.msg,
               type: 'warning'
             })
@@ -669,8 +665,6 @@ import emits from '@njpCommon/utils/emits'
       state.dialogTableVisible = false
     }
   }
-
-
 </script>
 <style lang="less" scoped>
   .rightFormRef {
@@ -692,7 +686,7 @@ import emits from '@njpCommon/utils/emits'
     height: 200px;
     display: flex;
   }
-  .bedSchedule-content{
-    transform: translateX(-10px);         
+  .bedSchedule-content {
+    transform: translateX(-10px);
   }
 </style>

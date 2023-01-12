@@ -1,12 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-03 15:29:42
+ * @LastEditTime: 2023-01-10 11:12:24
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
+  <Demo />
   <el-form ref="ruleFormRef" class="cropForm" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <el-col :span="6">
@@ -30,7 +31,7 @@
               <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
             </el-form-item>
           </div>
-          
+
           <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
               <el-date-picker
@@ -69,7 +70,7 @@
               <!-- </div> -->
             </el-form-item>
           </div>
-            <div v-if="item.type === 'time'">
+          <div v-if="item.type === 'time'">
             <el-form-item :label="`${item.name}`">
               <el-date-picker
                 v-model="state.form[item.model]"
@@ -82,7 +83,6 @@
               />
             </el-form-item>
           </div>
-
         </div>
       </el-col>
       <el-col :span="6">
@@ -98,8 +98,6 @@
               <el-input-number v-model="state.form[item.model]" class="crop-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
             </el-form-item>
           </div>
-
-        
         </div>
       </el-col>
     </el-row>
@@ -122,7 +120,7 @@
 
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
-  import { useRoute,useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
 
@@ -131,6 +129,7 @@
 
   import UploadModule from '@/components/upload/index.vue'
   import { content } from './conifgs'
+  import Demo from './demo.vue'
 
   import './index.less'
   import Crop from './dialog-form-crop.vue'
@@ -138,7 +137,7 @@
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
   const ruleFormRef = ref<any>()
   const route = useRoute()
-   const router = useRouter();
+  const router = useRouter()
   const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
@@ -223,10 +222,10 @@
   //   state.form.attritionRate = state.effectiveArea / product
   // }
 
-    // 取消
+  // 取消
   const resetForm = () => {
     emits.emit(EMitt.OnCloseCurrTab)
-     router.push("/cuttingManagement/crop");//跳转到列表
+    router.push('/cuttingManagement/crop') //跳转到列表
   }
 
   // 表单提交
@@ -292,8 +291,6 @@
     })
   }
 
-
-
   // ------------------
 
   // 取消
@@ -327,7 +324,7 @@
   }
   .crop-number {
     width: 20vw;
-     /deep/ .el-input__inner {
+    /deep/ .el-input__inner {
       text-align: left !important; //输入框左对齐
     }
   }

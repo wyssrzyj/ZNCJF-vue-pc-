@@ -2,6 +2,9 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @on-add-update-handle="handleAddOrUpdate" @selection-change="handleSelectionChange">
     <template #queryFormItem>
+      <el-form-item label="款号" prop="styleCode">
+        <el-input v-model="state.queryFormData.styleCode" placeholder="请输入" clearable />
+      </el-form-item>
       <el-form-item label="床次计划号" prop="bedPlanNo">
         <el-input v-model="state.queryFormData.bedPlanNo" placeholder="请输入" clearable />
       </el-form-item>
@@ -37,8 +40,6 @@
       <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button>
       <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
       <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
-
-      
     </template>
     <!-- 删除 -->
     <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
@@ -50,8 +51,6 @@
         </span>
       </template>
     </el-dialog>
-
-   
   </njp-table-config>
 
   <div>
@@ -93,7 +92,8 @@
       bedPlanNo: '',
       taskCode: '',
       deviceName: '',
-      statu: ''
+      statu: '',
+      styleCode: ''
     },
 
     dialogVisible: false,
@@ -106,6 +106,8 @@
   })
   const refreshTable = () => {
     styleLibListEl.value.refreshTable()
+    // styleLibListEl.value.onFormQuery()
+    styleLibListEl.value.getTableEl().clearSelection()
   }
 
   const examine = () => {
@@ -160,13 +162,13 @@
   }
 
   //新增、编辑、查看
-  const handleClick = ( row: any,type: any,) => {
+  const handleClick = (row: any, type: any) => {
     state.row = row
-    toViewFun( row,type)
+    toViewFun(row, type)
   }
 
   //跳转详情
-   const toViewFun = (row:any, type:any) => {
+  const toViewFun = (row: any, type: any) => {
     proxy.$routerToView({
       path: `/cuttingManagement/layCloth/view-dialog-content`,
       query: {
@@ -202,22 +204,22 @@
   //     })
   //   }
   // }
-    //撤销
-  const revoke=(row:any)=>{
-      proxy.$baseService.post('/jack-ics-api/spreadTask/cancel', { id: row.id }).then((res: any) => {
-           if(res.code===0){
-            ElMessage({
-            message: '撤销成功',
-            type: 'success'
-          })
-        }else{
-          ElMessage({
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-        refreshTable()
-      })
+  //撤销
+  const revoke = (row: any) => {
+    proxy.$baseService.post('/jack-ics-api/spreadTask/cancel', { id: row.id }).then((res: any) => {
+      if (res.code === 0) {
+        ElMessage({
+          message: '撤销成功',
+          type: 'success'
+        })
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'warning'
+        })
+      }
+      refreshTable()
+    })
   }
   const confirmDelete = () => {
     proxy.$baseService.delete('/jack-ics-api/spreadTask/delete', state.ids).then((res: any) => {
