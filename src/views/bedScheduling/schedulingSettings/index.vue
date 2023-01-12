@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-01-12 10:30:14
+ * @LastEditTime: 2023-01-12 10:41:54
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -33,7 +33,7 @@
                   款号2 : {{ item.name }}
                 </div>
               </div>
-              <div :class="item.type ? 'demo-dh1' : 'demo-dh2'">测试</div>
+              <div :class="item.type ? 'demo-dh1' : 'demo-dh2'">测试8848</div>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@
   import { cloneDeep } from 'lodash'
   import './index.less'
   import top from '@/components/icon/top.png'
-  import { init } from 'echarts'
+  // import { init } from 'echarts'
   // const { proxy }: any = getCurrentInstance()
 
   const state: any = reactive({
