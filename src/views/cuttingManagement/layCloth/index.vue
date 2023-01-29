@@ -38,8 +38,8 @@
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
       <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button>
-      <el-button v-if="row.statu === 4" link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
-      <el-button v-if="row.statu === 2" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
+      <el-button v-if="row.statu === 4 " link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
+      <el-button v-if="row.statu === 2 ||row.statu === 3" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
     </template>
     <!-- 删除 -->
     <el-dialog v-model="state.dialogVisible" title="提示" width="30%">

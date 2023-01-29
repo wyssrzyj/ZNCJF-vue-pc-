@@ -1,13 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-10 11:12:24
+ * @LastEditTime: 2023-01-29 11:26:18
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
-  <Demo />
   <el-form ref="ruleFormRef" class="cropForm" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-row :gutter="20" style="margin: 2px 2px 0 10px">
       <el-col :span="6">
@@ -126,10 +125,8 @@
 
   import emits from '@njpCommon/utils/emits'
   import { EMitt } from '@njpCommon/constants/enum'
-
   import UploadModule from '@/components/upload/index.vue'
   import { content } from './conifgs'
-  import Demo from './demo.vue'
 
   import './index.less'
   import Crop from './dialog-form-crop.vue'

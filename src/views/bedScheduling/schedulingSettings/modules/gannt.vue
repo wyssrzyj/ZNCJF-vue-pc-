@@ -1,13 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-01-12 10:26:41
+ * @LastEditTime: 2023-01-15 08:38:52
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="new-page">
-    <div>卢英杰测试例子~~~~~~~~</div>
     <div id="ganttDemo" ref="ruleFormRef" class="gantt-container"></div>
   </div>
 </template>
@@ -34,7 +33,7 @@
         type: true, //判断是否可以移动
         text: '裁剪车间—裁剪班组', //名称
         lyj: '8848',
-        lxr: '刘心睿',
+        lxr: '糯米',
         // duration: 6, //天数
         // progress: 1, //控制完成百分比 范围0-1
         color: 'red' //控制颜色
@@ -207,12 +206,12 @@
 
 <style scoped>
   .gantt-container {
-    height: 600px;
+    width: 68vw;
+    height: 400px;
   }
   .new-page {
     height: 100%;
     background-color: #fff;
-    padding: 20px;
     border-radius: 4px;
   }
 </style>

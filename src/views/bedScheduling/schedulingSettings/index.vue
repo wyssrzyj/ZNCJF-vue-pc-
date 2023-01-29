@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-01-12 10:41:54
+ * @LastEditTime: 2023-01-29 17:20:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -20,32 +20,67 @@
         <div class="settings-list-overflow">
           <div v-if="state.choice.type !== '未分派'">
             <div v-for="(item, index) in state.list.wholeData" :key="index" :class="item.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item, 1)">
-              <div class="settings-list-title">款号1 : {{ item.name }}</div>
+              <div class="settings-list-title">款号 : {{ item.name }}</div>
             </div>
           </div>
 
           <!-- 未分派 -->
           <div v-if="state.choice.type === '未分派'">
-            <div v-for="(item, index) in state.list.wholeData" :key="index" @click="setLeftOperation(item, 2)">
+            <div v-for="(item, index) in state.list.notData" :key="index" @click="setLeftOperation(item, 2)">
               <div :class="item.type ? 'settings-list-item-true' : 'settings-list-item'">
                 <div class="settings-list-title">
                   <span><img :src="top" alt="" :class="item.type ? 'settings-img' : 'settings-img-bottom'" /></span>
-                  款号2 : {{ item.name }}
+                  款号-未 : {{ item.name }}
                 </div>
               </div>
-              <div :class="item.type ? 'demo-dh1' : 'demo-dh2'">测试8848</div>
+              <!-- 子项 -->
+              <div :class="item.type ? 'demo-dh1' : 'demo-dh2'">
+                
+                <div v-for="v,index in item.children" :key="index" >
+                  <div class="settings-checkbox">
+                  <el-checkbox  :label="v.name" size="large" @change="(e:any)=>{setCheckbox(e,v)}" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <!-- 操作 -->
-        <div class="settings-list-bottom">
-          <div class="settings-list-bottom-btn">智能分版</div>
+        <div class="settings-list-bottom" v-show="state.choice.type==='未分派'">
+          <div class="settings-list-bottom-btn" @click="setAssignment">智能分版</div>
           <div class="settings-list-bottom-btn">保存分派</div>
         </div>
       </div>
     </div>
-    <div class="settings-right">right</div>
+    <div class="settings-right">
+
+      <div>
+        <Gannt></Gannt>
+      </div>
+       <div class="settings-right-table">
+        <!-- 全部 -->
+        <div v-if="state.choice.type==='全部'">
+        <HomeTable></HomeTable>
+        </div>
+         <!-- 未分派已分派 -->
+        <div v-if="state.choice.type!=='全部'">
+          <div class="bottomTable-schedulingSettings">
+        <leftTable></leftTable>
+        <rightTable :type="state.choice.type"></rightTable>
+          </div>
+        </div>
+    
+       
+      </div>
+    </div>
+
+
+
   </div>
+  <!-- 弹窗 -->
+  <el-dialog v-if="state.assignmentType" v-model="state.assignmentType" :draggable="false" :close-on-click-modal="false" title="智能分派" width="750px">
+      <Assignment :close="close"></Assignment>
+</el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -54,7 +89,12 @@
   import { cloneDeep } from 'lodash'
   import './index.less'
   import top from '@/components/icon/top.png'
-  // import { init } from 'echarts'
+  import Gannt from "./modules/gannt.vue"
+  import HomeTable from "./modules/table.vue"
+  import Assignment from "./modules/dialog-assignment.vue"
+  import leftTable from "./modules/leftTable.vue"
+  import rightTable from "./modules/rightTable.vue"
+
   // const { proxy }: any = getCurrentInstance()
 
   const state: any = reactive({
@@ -66,13 +106,16 @@
         { name: '未分派', type: false },
         { name: '已分派', type: false }
       ], //状态渲染根据type状态
-      type: '全部' //选中那个【此状态不负责渲染】
+      type: '全部' ,//选中那个【此状态不负责渲染】
+      notDataCheckbox:[]//未分派选中集合
     },
     list: {
       wholeData: [], //全部
       notData: [], //未分派
       alreadyData: [] //已分派
-    }
+    },
+    assignmentType:false//分派弹窗
+
   })
   // 处理左侧数据
   const setLeftData = (e: any) => {
@@ -90,10 +133,43 @@
     setLeftData(red)
   }
   init()
+
+  //未分派 数据结构处理
+  const setNotData=()=>{
+     let red = [
+        {
+          name: 'SEE3未分派',
+          id: 1,
+          children: [
+            { name: '子1', id: '1001' },
+            { name: '子21', id: '10021' },
+            { name: '子22', id: '10022' },
+            { name: '子23', id: '10023' },
+            { name: '子24', id: '10024' },
+            { name: '子25', id: '10025' },
+            { name: '子26', id: '10026' },
+            { name: '子27', id: '10027' },
+            { name: '子3', id: '1003' }
+          ]
+        },
+        { name: 'SEE33201156', id: 2 },
+        { name: 'SEE33201157', id: 3 },
+        { name: 'SEE33201157', id: 4 },
+        { name: 'SEE33201157', id: 5 },
+        { name: 'SEE33201157', id: 6 },
+        { name: 'SEE33201157', id: 7 }
+      ]
+      red.map((item: any) => {
+        item.type = false
+      })
+      state.list.notData = red
+
+  }
+
   //状态选择
   const setType = (e: any) => {
     let data = cloneDeep(state.choice.data)
-    data.map((item: any, index: any) => {
+    data.map((item: any) => {
       if (item.name === e.name) {
         item.type = true
         state.choice.type = e.name
@@ -129,28 +205,7 @@
       setLeftData(red)
     }
     if (e.name === '未分派') {
-      let red = [
-        {
-          name: 'SEE3未分派',
-          id: 1,
-          children: [
-            { name: '子1', id: '1001' },
-            { name: '子1', id: '1001' },
-            { name: '子1', id: '1001' }
-          ]
-        },
-        { name: 'SEE33201156', id: 2 },
-        { name: 'SEE33201157', id: 3 },
-        { name: 'SEE33201157', id: 4 },
-        { name: 'SEE33201157', id: 5 },
-        { name: 'SEE33201157', id: 6 },
-        { name: 'SEE33201157', id: 7 }
-      ]
-
-      red.map((item: any) => {
-        item.type = false
-      })
-      state.list.notData = e
+        setNotData()
     }
     if (e.name === '已分派') {
       let red = [
@@ -180,7 +235,7 @@
     //未分派
     if (type === 2) {
       //选中项处理
-      let data = cloneDeep(state.list.wholeData)
+      let data = cloneDeep(state.list.notData)
       data.map((item: any, index: any) => {
         if (item.id === e.id) {
           item.type = !item.type
@@ -190,10 +245,34 @@
         //   item.type = false
         // }
       })
-      state.list.wholeData = data
+      state.list.notData = data
     }
   }
+  
+  //子项选中
+  const setCheckbox=(type:any,e:any)=>{
+    if(type===true){
+      state.choice.notDataCheckbox.push(e)
+    }else{
+    let data =cloneDeep(state.choice.notDataCheckbox) 
 
+    let subscript=data.findIndex((item:any)=>item.id===e.id)
+     data.splice(subscript, 1) 
+
+    state.choice.notDataCheckbox=data
+    }
+  }
+  //分派弹窗
+  const setAssignment=()=>{
+    state.assignmentType=true
+  }
+    const close = (type: string) => {
+    if (type == 'preservation') {
+      state.assignmentType = false
+    } else {
+      state.assignmentType = false
+    }
+  }
   // const confirmDelete = () => {
   //   proxy.$baseService.delete('/jack-ics-api/fabric/delete', state.ids).then((res: any) => {
   //     if (res.code === 0) {
