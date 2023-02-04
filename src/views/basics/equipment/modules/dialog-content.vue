@@ -1,7 +1,7 @@
  <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-01-04 13:31:12
+ * @LastEditTime: 2023-02-04 13:20:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -106,7 +106,9 @@
     </el-row>
   </el-form>
 
-  
+  <div class="equipmentBottom">
+
+  </div>
   <div class="equipmentFoot">
     <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
     <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
@@ -190,6 +192,12 @@
       }
     })
   }
+// const  calculate=(targetObj)=> {
+//   let {value1, value2} =  targetObj; 
+//   return value1;
+// }
+
+
 
   const init = () => {
     if (props.row.id) {
@@ -399,5 +407,8 @@
   }
   .equipment-left{
     width: 150px;
+  }
+  .equipmentBottom{
+    height: 30px;
   }
 </style>

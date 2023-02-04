@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2022-11-08 17:11:25
+ * @LastEditTime: 2023-02-01 13:23:29
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -176,10 +176,17 @@
       if (!isEmpty(data)) {
           proxy.$baseService.post('/jack-ics-api/fabric/saveBatch', { fabricExcelDTOList: data }).then((res: any) => {
         state.export.importType = false
-        ElMessage({
-          message: '导入成功',
-          type: 'success'
-        })
+       if (res.code === 0) {
+            ElMessage({
+              message: '导入成功',
+              type: 'success'
+            })
+          } else {
+            ElMessage({
+              message: res.msg,
+              type: 'warning'
+            })
+          }
         refreshTable()
       })
 

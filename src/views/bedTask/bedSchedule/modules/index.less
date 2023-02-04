@@ -1,22 +1,27 @@
 .demo-image__error .image-slot {
   font-size: 30px;
 }
+
 .demo-image__error .image-slot .el-icon {
   font-size: 30px;
 }
+
 .demo-image__error .el-image {
   width: 100%;
   height: 200px;
 }
+
 .dialogContentForm {
   /* display: flex; */
   margin-left: -60px;
 }
+
 .dialogContentLeft {
   width: 40%;
   height: 100%;
   background: rgb(14, 171, 177);
 }
+
 .dialogContentRight {
   width: 60%;
   height: 100%;
@@ -28,6 +33,7 @@
   top: 0;
   right: -20px;
 }
+
 .dialogBottom {
   width: 100%;
   height: 30px;
@@ -36,31 +42,42 @@
 
   flex-direction: row-reverse;
 }
+
 .preservation {
   margin-left: 10px;
 }
+
 .layclothImg {
   position: relative;
   margin-bottom: 3.4vw;
 }
 
-.filledIcon{
+.filledIcon {
   cursor: pointer;
 }
-.proportionsLeft{
+
+.proportionsLeft {
   width: 4vw;
   cursor: pointer;
 
 }
-.bedScheduleLeft{
+
+.bedScheduleLeft {
   color: rgb(20, 119, 201);
   margin-left: 20px;
   margin-right: 10px;
 
+
+}
+
+.setIcon {
+  cursor: pointer;
+  margin-top: 9px;
+
 }
 
 
-.fabricLaying-titleRight{
+.fabricLaying-titleRight {
   border: 1px solid #ddd;
   border-left: 0px solid #ddd;
   width: 60px;
@@ -73,7 +90,7 @@
   background: #f5f7fa;
 }
 
-.styleBedNo{
+.styleBedNo {
   margin-top: 5px;
 
 }
@@ -90,79 +107,151 @@
   align-items: center;
 }
 
-.filledIcon{
-  cursor: pointer;
-  
-}
-.proportionsRight{
+.filledIcon {
   cursor: pointer;
 
 }
-.proportionsDelete{
+
+.proportionsRight {
+  cursor: pointer;
+
+}
+
+.proportionsDelete {
   cursor: pointer;
   margin-left: 10px;
 
 }
 
 
-.bedSchedule-left{
+.bedSchedule-left {
   width: 320px;
 }
 
-.bedSchedule-file{
-  width:82vw;
+.bedSchedule-file {
+  width: 82vw;
   height: 170px;
 }
 
-.parent{
+.parent {
   position: relative;
 
 }
-.tips{
-    position: absolute;
-    left: 75px;
-    top: -30px;
+
+.tips {
+  position: absolute;
+  left: 75px;
+  top: -30px;
 
 }
-.tip{
-    position: absolute;
-    left: 75px;
-    top: -34px;
+
+.tip {
+  position: absolute;
+  left: 75px;
+  top: -34px;
 }
 
 .buttonContainer {
   position: relative;
 }
 
-.dialogFoot{
-   position: absolute;
-      bottom: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 100%;
-      height: 52px;
-      background:#fff;
-      box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
-      z-index: 99;
+.dialogFoot {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 52px;
+  background: #fff;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.302);
+  z-index: 99;
 }
-.fabricColor{
+
+.fabricColor {
   transform: translate(6px, -17px);
 }
-.fabricColor-bedPlanNo{
+
+.fabricColor-bedPlanNo {
   transform: translate(10px, -17px);
 }
-.fabricColor-styleBedNo{
+
+.fabricColor-styleBedNo {
   transform: translate(-25px, -17px);
 }
-.shelfList{
+
+.shelfList {
   cursor: pointer;
- display: flex;
- justify-content: center;
- color: #3e8ff7;
- align-items: center;
+  display: flex;
+  justify-content: center;
+  color: #3e8ff7;
+  align-items: center;
 }
-.bedSchedule-styleName{
+
+.bedSchedule-styleName {
   margin-top: 20px;
+}
+
+.spreadClothLength {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.spreadClothLength-right {
+  position: absolute;
+  right: 1vw;
+  top: 0;
+
+}
+
+.spreadClothLength-top {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid #1e2125;
+  position: absolute;
+  right: 21px;
+  top: -10px;
+
+}
+
+.spreadClothLength-bottom {
+  z-index: 10;
+  color: #f5f7fa;
+  font-weight: 300;
+  font-size: 10px;
+  width: 170px;
+  height: 70px;
+  background: #1e2125;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  right: -17px;
+  top: 34px;
+  opacity: 1;
+   transition: all 0.4s;
+}
+.spreadClothLength-bottom-no {
+  z-index: 10;
+  color: #f5f7fa;
+  font-weight: 300;
+  font-size: 10px;
+  width: 170px;
+  height: 70px;
+  background: #1e2125;
+  padding: 5px;
+  border-radius: 3px;
+  position: absolute;
+  right: -17px;
+  top: 34px;
+  opacity: 0;
+   transition: all 0.4s;
+}
+
+.spreadClothLength-span {
+  transform: translate(62px, -31px);
 }

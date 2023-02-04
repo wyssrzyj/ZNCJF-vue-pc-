@@ -15,9 +15,9 @@
 
       <div class="top-shelfFile">
         <el-form-item label="唛架图">
-          <div class="layCloth-img">
-            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="53" />
-          </div>
+          <!-- <div class="layCloth-img"> -->
+            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="59" />
+          <!-- </div> -->
         </el-form-item>
       </div>
     </el-form>
@@ -515,7 +515,7 @@
     left: 0;
     bottom: 0;
     padding-bottom: 50px;
-    width: 96%;
+    width: 82vw;
     transform: translate(0, 220px);
   }
 

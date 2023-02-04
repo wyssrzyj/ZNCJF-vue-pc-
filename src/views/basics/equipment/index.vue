@@ -36,7 +36,7 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '编辑设备', row)">编辑</el-button>
     </template>
   </njp-table-config>
-  
+
   <!-- 删除 -->
   <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
@@ -210,13 +210,20 @@
         proxy.$baseService.post('/jack-ics-api/device/saveBatch', { deviceExcelDTOList: data }).then((res: any) => {
           refreshTable()
           state.export.importType = false
-          ElMessage({
-            message: '导入成功',
-            type: 'success'
-          })
+          if (res.code === 0) {
+            ElMessage({
+              message: '导入成功',
+              type: 'success'
+            })
+          } else {
+            ElMessage({
+              message: res.msg,
+              type: 'warning'
+            })
+          }
         })
       } else {
-         ElMessage({
+        ElMessage({
           message: '未导入模板',
           type: 'warning'
         })
@@ -285,4 +292,10 @@
   .defaultParam {
     cursor: pointer;
   }
+  /* 全局修改 */
+  /* 角度反转180° */
+  /* .el-input__suffix{ */
+    /* transform:rotate(180deg); */
+  /* } */
+
 </style>

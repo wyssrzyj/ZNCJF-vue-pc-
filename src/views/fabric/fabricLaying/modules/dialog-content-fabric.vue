@@ -198,6 +198,7 @@ vue
   }
   .mx-1 {
     margin-left: 10px;
+    margin-top: 5px;
   }
 
   .el-dialog {

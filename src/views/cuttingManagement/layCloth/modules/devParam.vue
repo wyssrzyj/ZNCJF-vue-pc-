@@ -175,7 +175,7 @@
   //处理参数文件回显
   const setAttachmentList = (arr: any) => {
     //处理格式问题
-    if (isEmpty(arr.attachmentList)) {
+    if (!isEmpty(arr.attachmentList)) {
       if (arr.paramFileName) {
         arr.attachmentList = [
           {
@@ -225,7 +225,9 @@
       let arr = props.value.two.bottom
       //异步处理 不然watch监听不到
       setTimeout(function () {
+        if(arr){
         state.bottomForm = setAttachmentList(arr)
+        }
       }, 100)
     } else {
       setData()

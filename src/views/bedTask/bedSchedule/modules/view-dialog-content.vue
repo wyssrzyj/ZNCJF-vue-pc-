@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-12 10:14:20
+ * @LastEditTime: 2023-02-04 14:37:35
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -25,7 +25,7 @@
             </el-form-item>
           </div>
           <el-form-item label="唛架图" prop="shelfFile">
-            <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="45" />
+            <UploadModule :disabled="disable(false)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="50" />
           </el-form-item>
         </div>
 
@@ -53,7 +53,7 @@
                 </div>
                 <div v-if="item.type === 'spreadClothLength'">
                   <el-form-item :label="`${item.name} (mm)`" :prop="item.prop">
-                    <div>
+                    <div class="spreadClothLength">
                       <el-input-number
                         v-model="state.form[item.model]"
                         :placeholder="`请输入${item.name}`"
@@ -64,7 +64,28 @@
                         :min="0"
                         :disabled="disable(item.disabled)"
                         @change="setUtilization"
+
                       />
+                      
+                      <div class="spreadClothLength-right">
+                        <img class="setIcon" :src="setIcon" alt="" @click="state.spreadClothLengthType=!state.spreadClothLengthType" />
+                     
+                        <div :class="state.spreadClothLengthType?'spreadClothLength-bottom':'spreadClothLength-bottom-no'" >
+                          <div class="spreadClothLength-top"></div>
+                          <span>默认铺布长度=唛架长度+  </span>
+                        <el-input-number
+                        v-model="state.dataDifference"
+                        @change="setSpreadClothLength"
+                        class="spreadClothLength-input"
+                        :controls="false"
+                        :precision="0"
+                        controls-position="right"
+                        :min="0"
+                        :disabled="disable(item.disabled)"
+                      />
+                        <div class="spreadClothLength-span">mm</div>
+                        </div>
+                      </div>
                     </div>
                   </el-form-item>
                 </div>
@@ -86,7 +107,7 @@
                     <div class="fabricColor">
                       <Tips title="模板：红，蓝  【如有多种颜色 按，分隔】" />
                     </div>
-                    <el-input v-model="state.form[item.model]" placeholder="模板：红，蓝 " :disabled="disable(item.disabled)" type="text" @click="demo" />
+                    <el-input v-model="state.form[item.model]" placeholder="模板：红，蓝 " :disabled="disable(item.disabled)" type="text"  />
                   </el-form-item>
                 </div>
                 <div v-if="item.type === 'shelfList'">
@@ -236,7 +257,7 @@
 
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
-  import RowWheat from '@/components/icon/rowWheat.png'
+
 
   import { content } from './conifgs'
   import { ElMessage } from 'element-plus'
@@ -244,6 +265,9 @@
   import Work from './dialog-work.vue'
   import { EMitt } from '@njpCommon/constants/enum'
   import emits from '@njpCommon/utils/emits'
+
+  import RowWheat from '@/components/icon/rowWheat.png'
+  import setIcon from '@/components/icon/set.jpg'
 
   import './index.less'
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
@@ -253,12 +277,15 @@
   const router = useRouter()
 
   const state: any = reactive({
+    value:1,
     form: formData,
     type: false,
     left: cloneDeep(formLeftData),
     middle: cloneDeep(formMiddleData),
     right: cloneDeep(formRightData),
     dialogTableVisible: false,
+    spreadClothLengthType:false,//铺布长度提示框
+    dataDifference:0,//铺布长度差值
     //提示信息
     prop: dataRule,
     fabricName: [],
@@ -313,7 +340,20 @@
     state.form.shelfList = [] //清除排麦比例的旧值只用联动数据
     state.form.fabricCode = arr.sn
   }
+  //获取唛架差值
+  const getSetting=()=>{
+       let api ="/jack-ics-api/setting/get"
+  proxy.$baseService.get(api).then((res: any) => {
+  if(res.code===0){
+  state.dataDifference=res.data.spreadClothLengthDiff
+
+    }
+  
+
+        })
+  }
   const init = () => {
+    getSetting()
     state.type = route.query.typeValue === 'true' ? true : false
     //面料名称
     getFabricName('')
@@ -375,10 +415,7 @@
     },
     { immediate: true }
   )
-  // init()
-
-  //  onMounted(() => {
-  //    })
+  
 
   // 是否可用
   const disable = (type: any) => {
@@ -422,7 +459,10 @@
       state.form.attachmentList = e.data
     }
   }
-
+  //铺布长度设置数据处理
+  const setSpreadClothLength=()=>{
+    state.form.spreadClothLength=state.dataDifference+state.form.shelfLength
+  }
   const setUtilization = () => {
     // (铺布长度*唛架门幅)
     let product = state.form.spreadClothLength * state.form.shelfWidth
@@ -574,7 +614,13 @@
     emits.emit(EMitt.OnCloseCurrTab) //关闭当前页
     router.push('/bedTask/bedSchedule') //跳转到列表
   }
-
+  //保存唛架差值
+  const setSetting=()=>{
+    let api ="/jack-ics-api/setting/save"
+    let data={spreadClothLengthDiff:state.dataDifference}
+proxy.$baseService.post(api, data).then((res: any) => {
+        })
+  }
   const setForm = async (formEl: any | undefined, type: any) => {
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
@@ -645,9 +691,11 @@
       }
     })
   }
+
   // 表单提交
   const submitForm = async (formEl: any | undefined, type: any) => {
     debounce(function () {
+      setSetting()
       setForm(formEl, type)
     }, 500)
   }
@@ -666,6 +714,7 @@
     }
   }
 </script>
+
 <style lang="less" scoped>
   .rightFormRef {
     display: block;
@@ -680,6 +729,17 @@
       text-align: left !important; //输入框左对齐
     }
   }
+  .spreadClothLength-input{
+    /deep/ .el-input__inner {
+      text-align: left !important; //输入框左对齐
+    }
+    /deep/ .el-input {
+      width: 50px;
+      border: 0;
+      height:20px;
+      z-index: 99;
+    }
+  }
 
   .top {
     width: 100%;
@@ -688,5 +748,8 @@
   }
   .bedSchedule-content {
     transform: translateX(-10px);
+  }
+  /deep/ .el-input-number{
+    width: 100% !important;
   }
 </style>

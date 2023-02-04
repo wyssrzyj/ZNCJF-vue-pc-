@@ -1,13 +1,13 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="设备名称" prop="spec">
+      <el-form-item label="班组名称" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
       </el-form-item>
     </template>
 
     <template #operationExtBtn>
-      <el-button type="primary" style="order: 3" @click="handleClick(false, '公式新增', {})">新增</el-button>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '班次管理新增', {})">新增</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
@@ -25,7 +25,7 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '公式修改', row)">修改</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '班次管理修改', row)">修改</el-button>
     </template>
   </njp-table-config>
   
@@ -40,7 +40,7 @@
     </template>
   </el-dialog>
 
-  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
 
@@ -61,7 +61,7 @@
     ids: [],
     dialogType: true,
     dialogTableVisible: false,
-    dialogTitle:"公式信息",
+    dialogTitle:"查看",
  
 
     //默认参数弹窗1

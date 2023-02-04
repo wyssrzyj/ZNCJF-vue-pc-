@@ -40,8 +40,9 @@
           打标任务 <span> <el-switch v-model="state.spreadTaskTimeType" :disabled="disable(false)" @change="spreadTaskType" /></span>
         </div>
       </div>
-      <div v-if="state.spreadTaskTimeType" class="pasteTaskTime">
-        <el-form-item label="贴标任务开始时间：">
+      <div class="pasteTaskTime">
+        <div v-if="state.spreadTaskTimeType" class="spreadTaskTimeType" >
+           <el-form-item label="贴标任务开始时间：">
           <el-date-picker
             v-model="state.rightForm.pasteTaskTime.planStartTime"
             :disabled="disable(false)"
@@ -65,6 +66,8 @@
             @change="setTime"
           />
         </el-form-item>
+        </div>
+       
       </div>
     </div>
     <!-- 裁剪任务 -->
@@ -309,8 +312,9 @@
     }
   }
   .pasteTaskTime {
-    display: flex;
+    height: 80px;
   }
+
   .gunter {
     width: 120px;
     cursor: pointer;
@@ -336,6 +340,10 @@
   .cropping {
     width: 50%;
     float: left;
+  }
+  .spreadTaskTimeType{
+    display: flex;
+
   }
   .flex {
     // width: ;

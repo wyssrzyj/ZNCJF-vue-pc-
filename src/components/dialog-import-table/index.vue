@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-12-08 11:32:42
+ * @LastEditTime: 2023-02-04 14:34:19
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -24,7 +24,7 @@
      </div>
     <!-- 床次【合并单元格】 表格 -->
       <div v-if="props.export.type==='bedSchedule'">
-      <TableBedSchedule v-if="state.importType" :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableData" />
+      <TableBedSchedule v-if="state.importType" :type="props.export.type" :data="props.export.data" :form="state.fileList" :get-table-data="getTableDatMerge" />
       </div>
       <template #footer>
         <el-button style="order: 3" @click="cancel()">取消</el-button>
@@ -120,6 +120,7 @@
     data.map((item: any) => {
       typeIds.push(item.bedNo)
     })
+
     let newArr = typeIds.filter(function (value: any, index: any, self: any) {
       return self.indexOf(value) === index
     })
@@ -134,10 +135,17 @@
 
   //传递给父级
   const getTableData = (e: any) => {
-  let list =saveFormat(e)
+  
+    state.saveData = e
+    props.getList(e)
+  }
+  //传递给父级-合并单元格
+  const getTableDatMerge = (e: any) => {
+   let list =saveFormat(e)
     state.saveData = list
     props.getList(list)
   }
+
 
   const cancel = () => {
     state.importType = false

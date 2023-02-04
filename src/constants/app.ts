@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2022-09-19 17:18:03
+ * @LastEditTime: 2023-02-02 16:41:42
  * @Description: 
  * @LastEditors: lyj
  */
@@ -26,7 +26,7 @@ export default {
   /**
    * 开启页面缓存
    */
-  enabledKeepAlive: false,
+  enabledKeepAlive: true,
 
   /**
    * 网络请求超时时间，单位毫秒

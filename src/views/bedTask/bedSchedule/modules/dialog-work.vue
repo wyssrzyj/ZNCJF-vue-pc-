@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-01-03 17:36:25
+ * @LastEditTime: 2023-02-04 13:14:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,6 +9,7 @@
   <div id="work">
     <div>
       <div class="topContainer">
+       测试 {{ state.data.bedPlanId }}
         <vue-qr :text="state.data.bedPlanId" margin="5" size="120" />
         <div class="topRight">
           <div class="title">裁铺任务工单</div>
@@ -33,7 +34,9 @@
   }>()
 
   const state: any = reactive({
-    data: []
+    data: {
+      bedPlanId:"",//打印二维码
+    }
   })
 
   const init = () => {
@@ -41,6 +44,7 @@
      proxy.$baseService.get('/jack-ics-api/print/getTaskInfo', { bedPlanId: props.id }).then((res: any) => {
       if (!isEmpty(res.data)) {
         state.data = res.data
+
       }
     })
   }

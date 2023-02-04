@@ -1,105 +1,114 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-01-29 11:26:18
+ * @LastEditTime: 2023-02-04 14:29:07
  * @Description: 
  * @LastEditors: lyj
 -->
 
 <template>
   <el-form ref="ruleFormRef" class="cropForm" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
-    <el-row :gutter="20" style="margin: 2px 2px 0 10px">
-      <el-col :span="6">
-        <el-form-item label="款图" class="layclothImg">
-          <UploadModule v-model="state.form.styleImage" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
-        </el-form-item>
+    <!-- top  -->
+    <div class="label-top">
+      <el-form-item label="款图" class="layclothImg">
+        <UploadModule v-model="state.form.styleImage" :disabled="disable(true)" :type="'img'" :get-data="getData" :value="state.form" />
+      </el-form-item>
+      <div class="top-input">
         <el-form-item label="款式编号">
           <el-input v-model="state.form.styleCode" :disabled="disable(true)" placeholder="请输入款式编号" type="text" />
         </el-form-item>
         <el-form-item label="款式名称" prop="styleName">
           <el-input v-model="state.form.styleName" :disabled="disable(true)" placeholder="请输入款式名称" type="text" />
         </el-form-item>
+      </div>
+      <div class="top-shelfFile">
         <el-form-item label="唛架图" prop="shelfFile">
-          <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" />
+          <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="56" />
         </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <div v-for="(item, index) in state.left" :key="index">
-          <div v-if="item.type === null">
-            <el-form-item :label="`${item.name}`">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-            </el-form-item>
-          </div>
+      </div>
+    </div>
+    <!-- 内容 -->
+    <div>
+      <el-row :gutter="20" style="margin: 2px 2px 0 10px">
+        <el-col :span="8">
+          <div v-for="(item, index) in state.left" :key="index">
+            <div v-if="item.type === null">
+              <el-form-item :label="`${item.name}`">
+                <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+              </el-form-item>
+            </div>
 
-          <div v-if="item.type === 'time'">
-            <el-form-item :label="`${item.name}`">
-              <el-date-picker
-                v-model="state.form[item.model]"
-                class="crop-number"
-                :disabled="disable(item.disabled)"
-                value-format="x"
-                type="datetime"
-                placeholder="计划开始时间"
-                format="YYYY-MM-DD HH:mm"
-              />
-            </el-form-item>
+            <div v-if="item.type === 'time'" class="label-time">
+              <el-form-item :label="`${item.name}`">
+                <el-date-picker
+                  v-model="state.form[item.model]"
+                  class="crop-number"
+                  :disabled="disable(item.disabled)"
+                  value-format="x"
+                  type="datetime"
+                  placeholder="计划开始时间"
+                  format="YYYY-MM-DD HH:mm"
+                />
+              </el-form-item>
+            </div>
           </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div v-for="(item, index) in state.middle" :key="index">
-          <div v-if="item.type === null">
-            <el-form-item :label="`${item.name}`">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-            </el-form-item>
-          </div>
+        </el-col>
+        <el-col :span="8">
+          <div v-for="(item, index) in state.middle" :key="index">
+            <div v-if="item.type === null">
+              <el-form-item :label="`${item.name}`">
+                <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+              </el-form-item>
+            </div>
 
-          <div v-if="item.type === 'number'">
-            <el-form-item :label="`${item.name} (mm)`">
-              <el-input-number v-model="state.form[item.model]" class="crop-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-            </el-form-item>
-          </div>
+            <div v-if="item.type === 'number'">
+              <el-form-item :label="`${item.name} (mm)`">
+                <el-input-number v-model="state.form[item.model]" class="crop-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+              </el-form-item>
+            </div>
 
-          <div v-if="item.type === 'deviceSn'">
-            <el-form-item :label="`${item.name}`" prop="deviceSn">
-              <!-- <div class="level"> -->
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-              <!-- <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" /> -->
-              <el-icon class="proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
-              <!-- </div> -->
-            </el-form-item>
+            <div v-if="item.type === 'deviceSn'">
+              <el-form-item :label="`${item.name}`" prop="deviceSn" class="crop-deviceSn">
+                <!-- <div class="level"> -->
+                <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+                <!-- <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" /> -->
+                <el-icon class="crop-proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
+                <!-- </div> -->
+              </el-form-item>
+            </div>
+            <div v-if="item.type === 'time'" class="label-time">
+              <el-form-item :label="`${item.name}`">
+                <el-date-picker
+                  v-model="state.form[item.model]"
+                  class="crop-number"
+                  :disabled="disable(item.disabled)"
+                  type="datetime"
+                  placeholder="计划结束时间"
+                  format="YYYY-MM-DD HH:mm"
+                  value-format="x"
+                />
+              </el-form-item>
+            </div>
           </div>
-          <div v-if="item.type === 'time'">
-            <el-form-item :label="`${item.name}`">
-              <el-date-picker
-                v-model="state.form[item.model]"
-                class="crop-number"
-                :disabled="disable(item.disabled)"
-                type="datetime"
-                placeholder="计划结束时间"
-                format="YYYY-MM-DD HH:mm"
-                value-format="x"
-              />
-            </el-form-item>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div v-for="(item, index) in state.right" :key="index">
-          <div v-if="item.type === null">
-            <el-form-item :label="`${item.name}`">
-              <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-            </el-form-item>
-          </div>
+        </el-col>
+        <el-col :span="8">
+          <div v-for="(item, index) in state.right" :key="index">
+            <div v-if="item.type === null">
+              <el-form-item :label="`${item.name}`">
+                <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
+              </el-form-item>
+            </div>
 
-          <div v-if="item.type === 'number'">
-            <el-form-item :label="`${item.name} (mm)`">
-              <el-input-number v-model="state.form[item.model]" class="crop-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
-            </el-form-item>
+            <div v-if="item.type === 'number'">
+              <el-form-item :label="`${item.name} (mm)`">
+                <el-input-number v-model="state.form[item.model]" class="crop-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
+              </el-form-item>
+            </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </div>
+
     <el-form-item label="其他附件">
       <div class="crop-file">
         <UploadModule :disabled="disable(true)" :type="'file'" :get-data="getAttachmentList" :value="state.form.attachmentList" :upload="upload.attachmentList" />
@@ -327,5 +336,25 @@
   }
   /deep/.el-input__inner {
     width: 17vw;
+  }
+  .label-top {
+    display: flex;
+  }
+  /deep/ .el-input {
+    width: 300px;
+  }
+  .top-input {
+    margin-left: 20px;
+  }
+  .top-shelfFile {
+    margin-left: 50px;
+  }
+  .crop-file {
+  width: 82vw;
+}
+  .label-time{
+    /deep/.el-input__wrapper{
+       width: 18vw !important;
+    }
   }
 </style>

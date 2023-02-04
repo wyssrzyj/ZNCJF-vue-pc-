@@ -239,7 +239,7 @@
   }
   .bedPlanNo-img {
     position: absolute;
-    left: 200px;
+    left: 210px;
     top: 2px;
     width: 25px;
     cursor: pointer;

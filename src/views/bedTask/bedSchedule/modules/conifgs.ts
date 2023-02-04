@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2023-01-03 17:09:48
+ * @LastEditTime: 2023-02-03 15:24:40
  * @Description:
  * @LastEditors: lyj
  */
@@ -79,6 +79,7 @@ export const content: any = {
     styleName: '',
     shelfFile: [],
     attachmentList: [],
+    
 
     produceOrderCode: '',
     customName: '',

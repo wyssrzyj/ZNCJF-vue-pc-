@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-17 15:17:12
+ * @LastEditTime: 2023-02-02 16:13:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,6 +40,9 @@
         <Option :init-form="state.initForm" :type="state.type" :data="state.form" :get-list="getList" />
       </el-col>
     </el-row>
+  </div>
+  <div  class="fabricLayingBottom">
+
   </div>
   <div class="fabricLayingFoot">
     <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
@@ -287,5 +290,8 @@
 <style lang="less" scoped>
 /deep/ .el-input__inner {
       text-align: left !important; //输入框左对齐
+    }
+    .fabricLayingBottom{
+      height: 55px;
     }
 </style>
