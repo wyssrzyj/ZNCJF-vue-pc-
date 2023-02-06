@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-04 14:29:07
+ * @LastEditTime: 2023-02-04 17:07:48
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -329,8 +329,8 @@
     cursor: pointer;
   }
   .crop-number {
-    width: 20vw;
     /deep/ .el-input__inner {
+      width: 320px;
       text-align: left !important; //输入框左对齐
     }
   }
@@ -350,11 +350,11 @@
     margin-left: 50px;
   }
   .crop-file {
-  width: 82vw;
-}
-  .label-time{
-    /deep/.el-input__wrapper{
-       width: 18vw !important;
+    width: 82vw;
+  }
+  .label-time {
+    /deep/.el-input__wrapper {
+      width: 18vw !important;
     }
   }
 </style>

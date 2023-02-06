@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2022-11-17 15:18:11
+ * @LastEditTime: 2023-02-04 14:53:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -41,6 +41,8 @@
       </el-col>
     </el-row>
   </div>
+
+  <div class="fabricCuttingBottom"></div>
 
   <div class="fabricCuttingFoot">
     <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
@@ -244,7 +246,11 @@
   }
 </script>
 <style lang="less" scoped>
-/deep/ .el-input__inner {
-      text-align: left !important; //输入框左对齐
-    }
+  /deep/ .el-input__inner {
+    text-align: left !important; //输入框左对齐
+  }
+  .fabricCuttingBottom {
+    width: 10px;
+    height: 50px;
+  }
 </style>
