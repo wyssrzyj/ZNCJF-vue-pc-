@@ -10,6 +10,7 @@
           <div v-for="(item, index) in baseData.craftData" :key="index" class="item" :class="{ point: currentIndex === index }" @click="selectCraft(index, item.id)">
             <el-checkbox v-model="item.type" class="checkbox" @change="checkCraft(item.id, item.type)" />
             <div class="craftName">{{ item.name }}</div>
+            <span class="choose" @click.stop="changeCraftMessage(item.id)">修改</span>
           </div>
         </div>
         <el-divider class="divider" />
@@ -130,6 +131,20 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 修改弹窗 -->
+    <el-dialog v-model="baseData.changeCraftNameDialog" :draggable="false" title="修改名称" width="30%">
+      <el-form ref="ChangeformRef" inline label-position="top" :model="baseData.changeCraftName" :rules="ChangeRules">
+        <el-form-item label="工艺名称" style="width: 50%" prop="CraftName">
+          <el-input v-model="baseData.changeCraftName.CraftName" style="width: 100%" placeholder="请输入" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="() => (baseData.changeCraftNameDialog = false)">取消</el-button>
+          <el-button type="primary" @click="changeCraftName(ChangeformRef)">确认</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 -->
@@ -145,10 +160,14 @@
   let dialogVisible = ref(false)
   const currentIndex = ref(0)
   const formRef = ref()
+  const ChangeformRef = ref()
   const rules = reactive({ craftName: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }] })
+  const ChangeRules = reactive({ CraftName: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }] })
   //模拟工艺数据
   const baseData = reactive({
     addFabricDialog: false,
+    changeCraftNameDialog: false,
+    currentChangeCraftNameId: '',
     currentId: '',
     craftData: [] as any,
     craftIdList: [] as any,
@@ -168,7 +187,10 @@
     formulaData: [] as any, //计算公式的数据
     processOne: [] as any, //工序一的计算公式数组
     processTwo: [] as any, //工序二的计算公式数组
-    processThree: [] as any //工序三的计算公式数组
+    processThree: [] as any, //工序三的计算公式数组
+    changeCraftName: {
+      CraftName: ''
+    }
   })
   onMounted(async () => {
     //挂载后获取工艺列表
@@ -361,6 +383,22 @@
     // baseData.addCraftDialog.Tags = baseData.data
     baseData.addFabricDialog = false
   }
+  //点击修改拿到当前工艺的名称数据
+  const changeCraftMessage = async (id: string) => {
+    baseData.currentChangeCraftNameId = id
+    await proxy.$baseService
+      .get('/jack-ics-api/technology/get', { id: id })
+      .then((res: any) => {
+        baseData.changeCraftName.CraftName = res.data.name
+      })
+      .catch((err: any) => {
+        ElMessage({
+          message: err.msg,
+          type: 'error'
+        })
+      })
+    baseData.changeCraftNameDialog = true
+  }
   const save = async (formRef: any) => {
     if (!formRef) return
     // console.log(baseData.dialogFormData)
@@ -391,6 +429,26 @@
         ElMessage({
           message: '工艺名称不能为空',
           type: 'error'
+        })
+      }
+    })
+  }
+  // 点击修改按钮单出框中的保存工艺名称方法
+  const changeCraftName = async (ChangeformRef: any) => {
+    if (!ChangeformRef) return
+    await ChangeformRef.validate((valid: any, fields: any) => {
+      if (valid) {
+        let data = {
+          id: baseData.currentChangeCraftNameId,
+          name: baseData.changeCraftName.CraftName
+        }
+        proxy.$baseService.post('/jack-ics-api/technology/save', data).then((res: any) => {
+          getCraft()
+          ElMessage({
+            message: '修改成功',
+            type: 'success'
+          })
+          baseData.changeCraftNameDialog = false
         })
       }
     })
