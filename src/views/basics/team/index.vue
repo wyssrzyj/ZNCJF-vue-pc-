@@ -54,7 +54,7 @@
         </el-form-item>
         <el-form-item label="班组班次" style="width: 26%" prop="teamScheduleIdList">
           <el-select v-model="baseData.dialogFormData.teamScheduleIdList" multiple placeholder="请选择班次" style="width: 100%">
-            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.label" :value="item.value" />
+            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="班组能力" style="width: 26%" prop="ability">
@@ -190,7 +190,7 @@
       if (valid) {
         let formData = baseData.dialogFormData
 
-        formData.userIdList = baseData.transferRightUser //////看看已经有员工的情况下，新添加员工之后，总的人对不对
+        formData.userIdList = baseData.transferRightUser
         proxy.$baseService
           .post('/jack-ics-api/team/save', formData)
           .then((res: any) => {
@@ -333,15 +333,17 @@
   }
   // //获取班次信息
   const getSchedule = () => {
-    proxy.$baseService.get('/jack-ics-api/teamSchedule/pageList').then((res: any) => {
-      // baseData.ScheduleOptions = res.data
-      baseData.ScheduleOptions = [
-        { label: '1624935258881875970', value: '1624935258881875970' },
-        { label: '2', value: '2' }
-      ]
-      //班次信息
-      // console.log(res.data)///
-    })
+    proxy.$baseService
+      .get('/jack-ics-api/teamSchedule/pageList')
+      .then((res: any) => {
+        baseData.ScheduleOptions = res.data.list
+      })
+      .catch((err: any) => {
+        ElMessage({
+          message: err.msg,
+          type: 'error'
+        })
+      })
   }
 </script>
 
