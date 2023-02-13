@@ -1,12 +1,12 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2022-12-16 21:25:54
+ * @LastEditTime: 2023-02-06 16:30:24
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <NewTable :type="props.type" :data="props.form" :getData="getData" />
+  <NewTable :type="props.type" :data="props.form" :get-data="getData" />
   <div class="bedTask-footer">
     <div class="footer-right">
       <el-button type="primary" @click="preservation">保存</el-button>
@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
   import { reactive } from 'vue'
-  import NewTable from "./dialog-forms-table-new.vue"
+  import NewTable from './dialog-forms-table-new.vue'
   const props = defineProps<{
     operation: any
     form: any
@@ -24,10 +24,10 @@
   }>()
 
   const state = reactive({
-    list: [],
+    list: []
   })
   const preservation = (e: any) => {
-      props.operation({ type: 'confirm', data: state.list })
+    props.operation({ type: 'confirm', data: state.list })
   }
 
   //子组件数据
