@@ -26,9 +26,9 @@
       <div v-loading="loading" class="rightContent">
         <el-table :data="baseData.tableData" style="width: 100%" border :header-cell-style="textCenter" :cell-style="textCenter">
           <el-table-column prop="order" label="序号" width="80" center />
-          <el-table-column prop="userName" label="人员名称" width="140" center />
+          <el-table-column prop="userName" label="人员名称" center />
           <el-table-column prop="departmentName" label="所属部门" center />
-          <el-table-column prop="roleName" label="人员角色" center width="180" />
+          <el-table-column prop="roleName" label="人员角色" center />
           <el-table-column label="状态" center width="150">
             <template #default="{ row }">
               <span v-if="row.status == 1">已启用</span>
