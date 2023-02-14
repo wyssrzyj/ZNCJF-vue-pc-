@@ -119,7 +119,8 @@
   })
   //dialogForm表单验证规则
   const rules = reactive({
-    name: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }]
+    name: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }],
+    code: [{ required: true, message: '请输入班组编码', trigger: 'blur' }]
   })
   onMounted(() => {
     getTeamList()
@@ -211,7 +212,7 @@
           })
       } else {
         ElMessage({
-          message: '班组名称不能为空',
+          message: '必填项不能为空',
           type: 'error'
         })
       }
