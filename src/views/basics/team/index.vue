@@ -26,9 +26,9 @@
       <div v-loading="loading" class="rightContent">
         <el-table :data="baseData.tableData" style="width: 100%" border :header-cell-style="textCenter" :cell-style="textCenter">
           <el-table-column prop="order" label="序号" width="80" center />
-          <el-table-column prop="userName" label="人员名称" width="140" center />
+          <el-table-column prop="userName" label="人员名称" center />
           <el-table-column prop="departmentName" label="所属部门" center />
-          <el-table-column prop="roleName" label="人员角色" center width="180" />
+          <el-table-column prop="roleName" label="人员角色" center />
           <el-table-column label="状态" center width="150">
             <template #default="{ row }">
               <span v-if="row.status == 1">已启用</span>
@@ -54,7 +54,7 @@
         </el-form-item>
         <el-form-item label="班组班次" style="width: 26%" prop="teamScheduleIdList">
           <el-select v-model="baseData.dialogFormData.teamScheduleIdList" multiple placeholder="请选择班次" style="width: 100%">
-            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.label" :value="item.value" />
+            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="班组能力" style="width: 26%" prop="ability">
@@ -119,7 +119,8 @@
   })
   //dialogForm表单验证规则
   const rules = reactive({
-    name: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }]
+    name: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }],
+    code: [{ required: true, message: '请输入班组编码', trigger: 'blur' }]
   })
   onMounted(() => {
     getTeamList()
@@ -190,7 +191,7 @@
       if (valid) {
         let formData = baseData.dialogFormData
 
-        formData.userIdList = baseData.transferRightUser //////看看已经有员工的情况下，新添加员工之后，总的人对不对
+        formData.userIdList = baseData.transferRightUser
         proxy.$baseService
           .post('/jack-ics-api/team/save', formData)
           .then((res: any) => {
@@ -211,7 +212,7 @@
           })
       } else {
         ElMessage({
-          message: '班组名称不能为空',
+          message: '必填项不能为空',
           type: 'error'
         })
       }
@@ -333,15 +334,17 @@
   }
   // //获取班次信息
   const getSchedule = () => {
-    proxy.$baseService.get('/jack-ics-api/teamSchedule/pageList').then((res: any) => {
-      // baseData.ScheduleOptions = res.data
-      baseData.ScheduleOptions = [
-        { label: '1624935258881875970', value: '1624935258881875970' },
-        { label: '2', value: '2' }
-      ]
-      //班次信息
-      // console.log(res.data)///
-    })
+    proxy.$baseService
+      .get('/jack-ics-api/teamSchedule/pageList')
+      .then((res: any) => {
+        baseData.ScheduleOptions = res.data.list
+      })
+      .catch((err: any) => {
+        ElMessage({
+          message: err.msg,
+          type: 'error'
+        })
+      })
   }
 </script>
 
