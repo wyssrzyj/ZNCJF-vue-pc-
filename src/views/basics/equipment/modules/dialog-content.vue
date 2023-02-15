@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-15 12:56:33
+ * @LastEditTime: 2023-02-15 13:00:46
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -143,7 +143,7 @@
     equipmentType: equipmentType,
     title: '',
     titleType: true,
-    echoDefaultParam: {}, //设备默认参数未保存暂存回显数据
+    echoDefaultParam: {}, //设备默认参数未保存暂存回显数据..
     //提示信息
     prop: dataRule,
     messageTitle: '铺布建议参数',
