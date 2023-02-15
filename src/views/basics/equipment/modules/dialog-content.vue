@@ -1,7 +1,7 @@
- <!--
+<!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-04 13:20:32
+ * @LastEditTime: 2023-02-15 12:56:33
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -13,13 +13,13 @@
         <el-form-item label="设备图片" class="layclothImg" prop="img">
           <UploadModule v-model="state.form.img" :disabled="disable(false)" :type="'img'" :get-data="getData" :value="state.form" />
         </el-form-item>
-        
-        <el-form-item label="设备默认参数" prop="defaultParam" class="log-defaultParam"  v-if="state.form.type!=='2'" >
+
+        <el-form-item v-if="state.form.type !== '2'" label="设备默认参数" prop="defaultParam" class="log-defaultParam">
           <el-icon class="equipment-proportionsLeft" :size="20" @click="shippingMarks"><Edit /></el-icon>
           <br />
 
-          <div class="defaultParam" v-if="state.titleType">
-            <span  v-for="(item, index) in state.title" :key="index" class="title">{{ item }}， <br /></span>
+          <div v-if="state.titleType" class="defaultParam">
+            <span v-for="(item, index) in state.title" :key="index" class="title">{{ item }}， <br /></span>
           </div>
         </el-form-item>
       </el-col>
@@ -30,7 +30,7 @@
             <div>
               <div v-for="(item, index) in state.middle" :key="index">
                 <div v-if="item.type === 'input'">
-                  <el-form-item :label="`${item.name}`" :prop=item.prop>
+                  <el-form-item :label="`${item.name}`" :prop="item.prop">
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
                   </el-form-item>
                 </div>
@@ -65,17 +65,9 @@
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
                   </el-form-item>
                 </div>
-                  <div v-if="item.type === 'inputNumber'">
+                <div v-if="item.type === 'inputNumber'">
                   <el-form-item :label="`${item.name}`" :prop="item.prop">
-                      <el-input-number
-              v-model="state.form[item.model]"
-              class="equipment-number"
-              :controls="false"
-              :min="0"
-              controls-position="right"
-              :placeholder="`请输入${item.name}`"
-              type="text"
-            />
+                    <el-input-number v-model="state.form[item.model]" class="equipment-number" :controls="false" :min="0" controls-position="right" :placeholder="`请输入${item.name}`" type="text" />
                   </el-form-item>
                 </div>
 
@@ -106,9 +98,7 @@
     </el-row>
   </el-form>
 
-  <div class="equipmentBottom">
-
-  </div>
+  <div class="equipmentBottom"></div>
   <div class="equipmentFoot">
     <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
     <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
@@ -152,7 +142,7 @@
     dialogTableVisible: false,
     equipmentType: equipmentType,
     title: '',
-    titleType:true,
+    titleType: true,
     echoDefaultParam: {}, //设备默认参数未保存暂存回显数据
     //提示信息
     prop: dataRule,
@@ -162,15 +152,13 @@
     operatorData: []
   })
 
-  //获取关联设备
+  //获取关联设备++
   const setRelationDevice = (id: any) => {
     state.form.associatedEquipment = '' //将选中的清空
-    if(id==="1"){
-    state.titleType = true
-
-    }else{
-    state.titleType = false
-
+    if (id === '1') {
+      state.titleType = true
+    } else {
+      state.titleType = false
     }
     const data = {
       deviceType: id
@@ -192,12 +180,10 @@
       }
     })
   }
-// const  calculate=(targetObj)=> {
-//   let {value1, value2} =  targetObj; 
-//   return value1;
-// }
-
-
+  // const  calculate=(targetObj)=> {
+  //   let {value1, value2} =  targetObj;
+  //   return value1;
+  // }
 
   const init = () => {
     if (props.row.id) {
@@ -339,9 +325,8 @@
 
   //弹窗事件
   const operation = (e: any) => {
-
     if (e.type === 'layCloth') {
-      state.form.paramId=e.data.paramId
+      state.form.paramId = e.data.paramId
 
       let arr = e.data.title.split(',')
       state.title = arr
@@ -355,14 +340,13 @@
     }
 
     if (e.type === 'crop') {
-      state.form.paramId=e.data.paramId
+      state.form.paramId = e.data.paramId
       state.dialogTableVisible = false
     }
 
-     if (e.type === 'cancel') {
+    if (e.type === 'cancel') {
       state.dialogTableVisible = false
     }
-
   }
 
   // 取消
@@ -373,42 +357,42 @@
 </script>
 <style lang="less" scoped>
 
- /deep/ .el-input__inner {
-      text-align: left !important; //输入框左对齐
+   /deep/ .el-input__inner {
+        text-align: left !important; //输入框左对齐
+      }
+
+      .equipment{
+    display: flex;
+    flex-direction:column;
+    // height: 450px;
+    padding-bottom: 20px;
+    overflow:auto
+    // align-items: center;
+
+
+  }
+
+    .equipment-proportionsLeft {
+      // width: 10px;
+      font-size: 15px;
+      position: absolute;
+      top: -29px;
+      right: 79px;
+      color: rgb(69, 167, 231);
+      cursor: pointer;
     }
-
-    .equipment{
-  display: flex;
-  flex-direction:column;
-  // height: 450px;
-  padding-bottom: 20px;
-  overflow:auto
-  // align-items: center;
-  
-
-}
-
-  .equipment-proportionsLeft {
-    // width: 10px;
-    font-size: 15px;
-    position: absolute;
-    top: -29px;
-    right: 79px;
-    color: rgb(69, 167, 231);
-    cursor: pointer;
-  }
-  .defaultParam {
-    width: 200px;
-    height: 100px;
-    overflow-y: scroll;
-  }
-  .relationOperaterList {
-    transform: translateX(13px);
-  }
-  .equipment-left{
-    width: 150px;
-  }
-  .equipmentBottom{
-    height: 30px;
-  }
+    .defaultParam {
+      width: 200px;
+      height: 100px;
+      overflow-y: scroll;
+    }
+    .relationOperaterList {
+      transform: translateX(13px);
+    }
+    .equipment-left{
+      width: 150px;
+    }
+    .equipmentBottom{
+      height: 30px;
+    }
 </style>
