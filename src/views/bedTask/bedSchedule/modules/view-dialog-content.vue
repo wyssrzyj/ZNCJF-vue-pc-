@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-06 16:30:41
+ * @LastEditTime: 2023-02-13 16:06:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -693,6 +693,31 @@
     }, 500)
   }
 
+  const formattingData = (list: any, condition: any) => {
+    //list 数据
+    //condition 判断条件
+    let map = {}
+    let data: any = []
+
+    list.forEach((item: any) => {
+      //判断对象是否有
+      //有就添加
+      // 没有就创建
+      if (map[item[condition]]) {
+        map[item[condition]].push(item)
+      } else {
+        map[item[condition]] = [item]
+      }
+    })
+    Object.keys(map).forEach(key => {
+      data.push({
+        color: key,
+        data: map[key]
+      })
+    })
+
+    return data
+  }
   //弹窗事件
   const operation = (e: any) => {
     if (e.type === 'cancel') {
@@ -704,9 +729,38 @@
       })
 
       //颜色一样的尺码数据不能一样
+      let type = false
+      let colorData = formattingData(e.data, 'color')
+      if (!isEmpty(colorData)) {
+        colorData.forEach((v: any) => {
+          if (v.data.length > 1) {
+            //判断颜色一样的值是否一样
+            if (!isEmpty(v.data)) {
+              v.data.forEach((item: any) => {
+                let a = JSON.stringify(v.data[0].sizeAndAmountList)
+                let b = JSON.stringify(item.sizeAndAmountList)
+                //尺码数据不能相同
+                if (a == b) {
+                  type = true
+                } else {
+                  type = false
+                }
+              })
+            }
+          }
+        })
+      }
 
-      setShelfList(e)
-      state.dialogTableVisible = false
+      //如果尺码一样提示
+      if (type) {   
+        ElMessage({
+          message: '颜色相同，尺码下的数量不能相同',
+          type: 'warning'
+        })
+      } else {
+        setShelfList(e)
+        state.dialogTableVisible = false
+      }
     }
   }
 </script>

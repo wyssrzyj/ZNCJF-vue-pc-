@@ -1,5 +1,5 @@
 <template>
-  <!-- 自定义样式 -->
+  <!-- 自定义样式 .-->
   <div>
     <!-- 上传 -->
     <div v-if="state.img === ''" :style="state.style" class="shelfFile-img" @click="added">

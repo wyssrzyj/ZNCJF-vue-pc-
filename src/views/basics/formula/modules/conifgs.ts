@@ -1,43 +1,11 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2023-02-01 08:45:37
+ * @LastEditTime: 2023-02-14 13:50:44
  * @Description:
  * @LastEditors: lyj
  */
-// 导出
-export const exportData = [
-  {
-    prop: 'image',
-    label: '设备图片',
-    type: 'img',
-    required: false
-  },
-  {
-    prop: 'sn',
-    label: '设备编号',
-    type: null,
-    required: true
-  },
-  {
-    prop: 'spec',
-    label: '设备型号',
-    type: null,
-    required: true
-  },
-  {
-    prop: 'name',
-    label: '设备名称',
-    type: null,
-    required: true
-  },
-  {
-    prop: 'type',
-    label: '设备类型',
-    type: 'type',
-    required: true
-  }
-]
+
 //---------------content-----------------
 export const content = {
   formData: {
@@ -51,44 +19,44 @@ export const content = {
     defaultParam: '',
     ip: '',
     port: '',
-    relationOperaterList: ''
+    relationOperaterList: '',
+    defaultFlag:false//默认公式
   },
   formMiddleData: [
-    { name: '公式名称', model: 'sn', prop: 'sn', type: 'input', disabled: false },
-    { name: '计算类型', model: 'relationDevice', prop: null, type: 'relationDevice', disabled: false },
+    { name: '公式名称', model: 'name', prop: 'name', type: 'input', disabled: false },
+    { name: '计算类型', model: 'type', prop: "type", type: 'type', disabled: false },
   ],
   formRightData: [
-    { name: '公式编码', model: 'spec', prop: 'spec', type: 'input', disabled: true },
-    { name: '适用设备', model: 'type', prop: 'type', type: 'type', disabled: false },
+    { name: '公式编码', model: 'code', prop: 'code', type: 'input', disabled: true },
+    { name: '适用资源', model: 'resourceFormulaList', prop: 'resourceFormulaList', type: 'resourceFormulaList', disabled: false },
   ],
   dataRule: {
-    sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    relationDevice: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-    type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+    type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    resourceFormulaList: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   }
 
 }
 //公式参数
 export const parameters = [
       {
-      name:'e',value:"",
+      name:'e',value:"",type:true,
     },
       {
-      name:'A',value:"",
+      name:'A',value:"",type:true,
     },
       {
-      name:'h',value:"",
+      name:'h',value:"",type:true,
     },
       {
-      name:'g',value:"",
+      name:'g',value:"",type:true,
     },
       {
-      name:'f',value:"",
+      name:'f',value:"",type:true,
     },
       {
-      name:'k',value:"",
+      name:'k',value:"",type:true,
     },
     {
-      name:'s',value:"",
+      name:'s',value:"",type:true,
     },
   ]

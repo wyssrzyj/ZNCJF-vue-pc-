@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-01-15 08:38:52
+ * @LastEditTime: 2023-02-14 17:12:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,6 +34,8 @@
         text: '裁剪车间—裁剪班组', //名称
         lyj: '8848',
         lxr: '糯米',
+        progress: 0.6,
+        open:true,//默认展开
         // duration: 6, //天数
         // progress: 1, //控制完成百分比 范围0-1
         color: 'red' //控制颜色
@@ -56,9 +58,9 @@
         text: '卢英杰的子1',
         lyj: '8848',
         lxr: '刘心睿',
-        start_date: '2020-04-7', //开始时间
-        // end_date: ' ', //结束时间
-        duration: 1,
+        start_date: '2020-04-7-9', //开始时间
+        end_date: '2020-04-7-17 ', //结束时间
+        // duration: 1,
         progress: 0.6,
         parent: 11,
         color: 'red' //控制颜色

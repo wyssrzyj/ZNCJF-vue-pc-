@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-02 09:10:40
+ * @LastEditTime: 2023-02-14 17:38:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -19,10 +19,10 @@
                   </el-form-item>
                 </div>
 
-                <div v-if="item.type === 'relationDevice'">
-                  <el-form-item :label="item.name" prop="relationDevice" class="buttonContainer">
-                    <el-select v-model="state.form.relationDevice" class="m-2" :disabled="disable(item.disabled)">
-                      <el-option v-for="(item, index) in state.relationDevice" :key="index" :label="item.label" :value="item.value" />
+                <div v-if="item.type === 'type'">
+                  <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
+                    <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
+                      <el-option v-for="v in state.equipmentType" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
                   </el-form-item>
                 </div>
@@ -31,38 +31,17 @@
             <!-- right -->
             <div>
               <div v-for="(item, index) in state.right" :key="index">
-                <div v-if="item.type === 'type'">
-                  <el-form-item :label="item.name" prop="type" class="buttonContainer">
-                    <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
-                      <el-option v-for="v in state.equipmentType" :key="v.id" :label="v.name" :value="v.id" />
-                    </el-select>
-                  </el-form-item>
-                </div>
-
                 <div v-if="item.type === 'input'">
                   <el-form-item :label="`${item.name}`" :prop="item.prop">
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
                   </el-form-item>
                 </div>
-                <div v-if="item.type === 'inputNumber'">
-                  <el-form-item :label="`${item.name}`" :prop="item.prop">
-                    <el-input-number v-model="state.form[item.model]" class="equipment-number" :controls="false" :min="0" controls-position="right" :placeholder="`请输入${item.name}`" type="text" />
-                  </el-form-item>
-                </div>
 
-                <div v-if="item.type === 'relationOperaterList'">
-                  <el-form-item :label="item.name" prop="relationOperaterList" class="buttonContainer">
-                    <div class="relationOperaterList">
-                      <Tips :title="`请选择${item.name}`" />
-                    </div>
-                    <el-select v-model="state.form.relationOperaterList" multiple :disabled="disable(item.disabled)">
-                      <el-option v-for="(item, index) in state.operatorData" :key="index" :label="item.label" :value="item.value" />
+                <div v-if="item.type === 'resourceFormulaList'">
+                  <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
+                    <el-select v-model="state.form[item.model]" multiple collapse-tags :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)">
+                      <el-option v-for="v in state.applyList" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
-                    <template #append>
-                      <el-tooltip class="box-item" effect="dark" content="铺布机关联贴标机  贴标机关联裁床 " placement="right-start">
-                        <el-icon class="filledIcon" :size="20"><QuestionFilled /></el-icon>
-                      </el-tooltip>
-                    </template>
                   </el-form-item>
                 </div>
               </div>
@@ -70,9 +49,11 @@
           </div>
           <!-- 公式选择 -->
           <el-form-item :label="`公式选择`" prop="remark" class="equipment-spec">
-            <div class="equipment-bottom-top"><span>公式</span><span class="equipment-bottom-top-right" @click="setDialogType">选择公式</span></div>
-            <div class="equipment-bottom-bottom"><span>{{ state.formulaContent.value }}</span></div>
-            <div class="equipment-bottom-checkbox"> <el-checkbox v-model="state.checkboxType" label="设为默认公式" size="large" /> </div>
+            <div class="equipment-bottom-top" @click="setDialogType"><span>公式</span><span :class="!state.type?'equipment-bottom-top-right':'equipment-bottom-top-right-no'">选择公式</span></div>
+            <div class="equipment-bottom-bottom">
+              <span>{{ state.formulaContent.value }}</span>
+            </div>
+            <div class="equipment-bottom-checkbox"><el-checkbox v-model="state.form.defaultFlag" label="设为默认公式" size="large" :disabled="disable(false)" /></div>
           </el-form-item>
         </div>
       </el-col>
@@ -82,7 +63,7 @@
           <br />
           <div v-for="(item, index) in state.parameters" :key="index" class="parameters">
             <div class="parameters-left">{{ item.name }} :</div>
-            <el-input v-model="item.value" type="text" />
+            <el-input v-model="item.value" type="text" :disabled="item.type" />
           </div>
         </div>
       </el-col>
@@ -95,8 +76,8 @@
     <el-button v-if="state.type === false" type="primary" :disabled="disable(false)" class="preservation" @click="submitForm(ruleFormRef)">确认</el-button>
   </div>
 
-   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" title="公式选择" width="800px">
-    <Dialog :operation="operation" :value="state.formulaContent"/>
+  <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" title="公式选择" width="800px">
+    <Dialog :operation="operation" :value="state.formulaContent" :form="state.form" />
   </el-dialog>
 </template>
 
@@ -105,9 +86,7 @@
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
 
-  import { QuestionFilled } from '@element-plus/icons-vue'
   import { equipmentType } from '@/components/conifgs'
-  import Tips from '@/components/tips/index.vue'
   import Dialog from './dialog-formula.vue'
   import { content, parameters } from './conifgs'
 
@@ -125,49 +104,52 @@
 
   const state: any = reactive({
     form: formData,
+
+    applyList: [], //适用资源
+    parameters: parameters, //右侧公式参数
+
     type: props.dialogType,
     middle: formMiddleData,
     right: formRightData,
     equipmentType: equipmentType,
-    parameters: parameters, //公式参数
-     prop: dataRule,
-     checkboxType:false,//默认公式
-    dialogTableVisible: false,//公式弹窗
-    formulaContent:{name:"",value:"展示所选公式内容"}
+    prop: dataRule,
 
+    dialogTableVisible: false, //公式弹窗
+    formulaContent: { name: '', value: '展示所选公式内容' }
   })
 
   const init = () => {
+    state.form.defaultFlag = false
     if (props.row.id) {
-      proxy.$baseService.get('/jack-ics-api/device/get', { id: props.row.id }).then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/formulaContainer/get', { containerId: props.row.id }).then((res: any) => {
+        // 回显
+        state.formulaContent.value = res.data.showContent
+        res.data.defaultFlag = res.data.defaultFlag ? true : false
         res.data.type = res.data.type.toString()
-
-        res.data.img = res.data.img !== '' ? [{ url: res.data.img }] : []
-
         state.form = res.data
-        if (!isEmpty(res.data.defaultParam)) {
-          let arr = res.data.defaultParam.split(',')
-          state.title = arr
+        // 公式参数
+        let paramList = state.form.formulaParamList
+        if (!isEmpty(paramList)) {
+          let data: any = []
+          paramList.forEach((item: any) => {
+            if (item.paramValue === '0') {
+              data.push({ name: item.paramName, value: item.paramValue, type: true })
+            } else {
+              //查看全部不可操作
+              if (state.type) {
+                data.push({ name: item.paramName, value: item.paramValue, type: true })
+              } else {
+                data.push({ name: item.paramName, value: item.paramValue, type: false })
+              }
+            }
+          })
+          state.parameters = data
         }
       })
     }
-    //关联操作员
-    let data = {
-      page: 1,
-      limit: 999999,
-      systemId: localStorage.getItem('v1@systemId'),
-      tenantCode: localStorage.getItem('v1@tenantCode')
-    }
-    proxy.$baseService.get('/njp-plus-admin-api/sys/user/page', data).then((res: any) => {
-      let data = res.data.list
-      if (!isEmpty(data)) {
-        data.map((item: any) => {
-          ;(item.label = item.realName), (item.value = item.id)
-        })
-        state.operatorData = data
-      } else {
-        state.operatorData = []
-      }
+    //适用设备
+    proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource').then((res: any) => {
+      state.applyList = res.data
     })
   }
   init()
@@ -182,36 +164,52 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       let formData = cloneDeep(state.form)
-
       if (valid) {
-        if (!isEmpty(formData.img)) {
-          formData.img = formData.img[0].url
-        } else {
-          formData.img = ''
-        }
+        // 显示的公式
+        formData.showContent = state.formulaContent.value
+        // 公式id
+        formData.formulaId = state.formulaContent.id
+        // 默认公式标识
+        formData.defaultFlag = Number(formData.defaultFlag)
 
-        if (!isEmpty(formData.relationOperaterList)) {
-          let data = formData.relationOperaterList
-
-          let list: any = []
-          data.forEach((item: any) => {
-            state.operatorData.forEach((v: any) => {
-              if (item === v.id) {
-                list.push({
-                  operationName: v.realName,
-                  operationId: v.id
-                })
-              }
-            })
+        // 公式参数
+        let parameters: any = []
+        if (!isEmpty(state.parameters)) {
+          state.parameters.forEach((item: any) => {
+            if (item.value !== 0) {
+              parameters.push({
+                paramName: item.name,
+                paramValue: Number(item.value)
+              })
+            }
           })
-          formData.relationOperaterList = list
+        }
+        formData.formulaParamList = parameters
+
+        // 适用资源
+        let newResourceFormulaList: any = [] //适用资源的数据
+        let formResourceFormula: any = [] //form保存使用的适用资源的数据
+
+        if (!isEmpty(state.form.resourceFormulaList)) {
+          state.form.resourceFormulaList.forEach((item: any) => {
+            let arr = state.applyList.filter((v: any) => v.id == item)
+            newResourceFormulaList = [...newResourceFormulaList, ...arr]
+          })
         }
 
-        //选择贴标清除 默认参数
-        if (formData.type !== '1') {
-          formData.defaultParam = ''
-        }
-        proxy.$baseService.post('/jack-ics-api/device/save', formData).then((res: any) => {
+        newResourceFormulaList.forEach((item: any) => {
+          formResourceFormula.push({
+            resourceId: item.id,
+            resourceType: item.type
+          })
+        })
+        formData.resourceFormulaList = formResourceFormula
+
+        // 准备处理数据
+        // formulaParamList 公式参数
+        // resourceFormulaList 多选的那个
+
+        proxy.$baseService.post('/jack-ics-api/formulaContainer/save', formData).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',
@@ -229,18 +227,51 @@
       }
     })
   }
-const setDialogType=()=>{
-    state.dialogTableVisible = true
-}
-    //弹窗事件
-  const operation = (e: any) => {
-    if(e.type){
-    state.formulaContent=e.data
-    state.dialogTableVisible = false
-    }else{
-    state.dialogTableVisible = false
+  //打开弹窗
+  const setDialogType = () => {
+    if (!state.type) {
+      if (state.form.type) {
+        state.dialogTableVisible = true
+      } else {
+        ElMessage({
+          message: '请选择计算类型',
+          type: 'warning'
+        })
+      }
     }
-
+  }
+  //处理公式参数
+  const setParameters = (e: any) => {
+    let list = e.data.formulaParam.split(',')
+    if (!isEmpty(list)) {
+      let data: any = []
+      list.map((item: any) => {
+        let value = item.split(':')
+        if (value[1] === '0') {
+          data.push({ name: value[0], value: '', type: true })
+        } else {
+          data.push({ name: value[0], value: '', type: false })
+        }
+      })
+      state.parameters = data
+    }
+  }
+  //弹窗事件
+  const operation = (e: any) => {
+    if (e.type) {
+      //当前和上一次选中的不同【做处理】
+      let current = e.data.value
+      let last = state.formulaContent.value
+      if (current !== last) {
+        state.formulaContent = e.data
+        if (!isEmpty(e.data)) {
+          setParameters(e)
+        }
+      }
+      state.dialogTableVisible = false
+    } else {
+      state.dialogTableVisible = false
+    }
   }
   // 取消
   const resetForm = (formEl: any) => {
@@ -301,6 +332,7 @@ const setDialogType=()=>{
 
 
     .equipment-bottom-top{
+    cursor: pointer;
     border: 1px solid #cecece;
     width: 445px;
     display: flex;
@@ -322,7 +354,10 @@ const setDialogType=()=>{
       color: #5faeff;
       cursor: pointer;
     }
+    .equipment-bottom-top-right-no{
+      color: #727374;
+    }
     .equipment-bottom-checkbox{
-      transform: translateX(330px); 
+      transform: translateX(330px);
     }
 </style>

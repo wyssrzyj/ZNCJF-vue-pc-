@@ -1,22 +1,27 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-02-13 08:55:03
+ * @LastEditTime: 2023-02-15 08:24:04
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="dialog-formula-container">
-    <div v-for="(item, index) in state.list" :key="index">
-      <div class="dialog-formula-top" @click="setStyle(index)"><span>公式1</span> <el-checkbox v-model="item.type" label="" size="large" @change="setStyle(index)" /></div>
-      <div :class="item.type ? 'dialog-formula-content' : 'dialog-formula-content-no'">{{ item.value }}</div>
-      <div :class="item.type ? 'dialog-formula-bottom' : 'dialog-formula-bottom-no'">
-        参数:
-        <br />
-        <div>
-          {{ item.explain }}
+    <div v-if="!isEmpty(state.list)">
+      <div v-for="(item, index) in state.list" :key="index">
+        <div class="dialog-formula-top" @click="setStyle(index)"><span>公式1</span> <el-checkbox v-model="item.type" label="" size="large" @change="setStyle(index)" /></div>
+        <div :class="item.type ? 'dialog-formula-content' : 'dialog-formula-content-no'">{{ item.showContent }}</div>
+        <div :class="item.type ? 'dialog-formula-bottom' : 'dialog-formula-bottom-no'">
+          参数:
+          <br />
+          <div>
+            {{ item.paramNote }}
+          </div>
         </div>
       </div>
+    </div>
+    <div v-if="isEmpty(state.list)">
+      <h2>暂无公式</h2>
     </div>
   </div>
   <!-- 底部 -->
@@ -29,12 +34,13 @@
 
 <script lang="ts" setup>
   import { isEmpty } from 'lodash'
-  import { reactive } from 'vue'
-  // const { proxy } = getCurrentInstance() as any
+  import { reactive, getCurrentInstance } from 'vue'
+  const { proxy } = getCurrentInstance() as any
 
   const props = defineProps<{
     operation: any
     value: any
+    form: any
   }>()
   const state: any = reactive({
     checkboxType: false,
@@ -42,27 +48,27 @@
     list: []
   })
   const init = () => {
-    let arr = [
-      { name: '公式1', value: 'a+b+c+f+b', explain: 'e:铺布长度' },
-      { name: '公式1', value: 'a+b+c+f+b', explain: 'e:铺布长度' },
-      { name: '公式1', value: 'a+b+c+f+b', explain: 'e:铺布长度' },
-      { name: '公式1', value: 'a+b+c+f+b', explain: 'e:铺布长度' },
-      { name: '公式1', value: 'a+10086', explain: 'e:铺布长度+9999' }
-    ]
-    if (!isEmpty(arr)) {
-      arr.map((item: any) => {
-        item.type = false
-      })
-      state.list = arr
-    }
+    //适用设备
+    proxy.$baseService.get('/jack-ics-api/formulaContainer/listByType', { type: props.form.type }).then((res: any) => {
+      if (!isEmpty(res.data)) {
+   
+        // 赋值添加状态
+        let arr = res.data
+        if (!isEmpty(arr)) {
+          let value = props.value.value
+          arr.map((item: any) => {
+            item.type = false
+            item.value = item.showContent
 
-    //选中回显
-    let value = props.value.value
-    state.list.map((item: any) => {
-      if (item.value === value) {
-        item.type = true
-      } else {
-        item.type = false
+            //选中回显
+            if (item.value === value) {
+              item.type = true
+            } else {
+              item.type = false
+            }
+          })
+          state.list = arr
+        }
       }
     })
   }
