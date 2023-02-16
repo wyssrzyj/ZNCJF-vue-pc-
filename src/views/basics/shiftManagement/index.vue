@@ -81,7 +81,7 @@
     }
   }
 
-  //删除
+  //删除..
   const mov = () => {
     if (!isEmpty(state.ids)) {
       state.dialogVisible = true
