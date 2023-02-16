@@ -1,8 +1,8 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="班组名称" prop="spec">
-        <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
+      <el-form-item label="班次名称" prop="spec">
+        <el-input v-model="state.queryFormData.name" placeholder="请输入" clearable />
       </el-form-item>
     </template>
 
@@ -11,24 +11,11 @@
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>
 
-    <template #img="{ row }">
-      <ImgModular :img="row.img" />
-    </template>
-
-    <template #type="{ row }">
-      <span> {{ row.type ? equipment.get(row.type.toString()) : null }}</span>
-    </template>
-
-    <template #defaultParam="{ row }">
-      <div class="defaultParam" @click="setDefaultParam(row)">{{ row.defaultParam }}</div>
-      <!-- <el-icon class="proportionsLeft" :size="30"><Edit /></el-icon> -->
-    </template>
-
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '班次管理修改', row)">修改</el-button>
     </template>
   </njp-table-config>
-  
+
   <!-- 删除 -->
   <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
@@ -43,16 +30,12 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
-
-
 </template>
 
 <script lang="ts" setup>
   import { reactive, getCurrentInstance, ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
-  import { equipment } from '@/components/conifgs'
-  import ImgModular from '@/components/imgModular/index.vue'
   import DialogContent from './modules/dialog-content.vue'
   const { proxy }: any = getCurrentInstance()
   const styleLibListEl = ref()
@@ -61,30 +44,14 @@
     ids: [],
     dialogType: true,
     dialogTableVisible: false,
-    dialogTitle:"查看",
- 
-
-    //默认参数弹窗1
-    defaultParam: {
-      defaultParamType: false,
-      row: {},
-      Title: '铺布建议参数',
-      form: { type: '1' }
-    },
-
+    dialogTitle: '查看',
     // 查询数据
     queryFormData: {
-      spec: '',
-      sn: '',
       name: ''
     },
     data: {
       row: {}
-    },
-    title: '上传',
-    fileList: [],
-    rowData: {},
-    limit: 6
+    }
   })
 
   //刷新数据
@@ -114,37 +81,6 @@
     }
   }
 
-  // 修改默认参数
-  const setDefaultParam = (row: any) => {
-    state.defaultParam.row = row
-
-    let type = row.type.toString()
-    state.defaultParam.form.type = type
-
-    if (type === '1') {
-      state.defaultParam.Title = '铺布建议参数'
-      state.defaultParam.defaultParamType = true
-    }
-    if (type === '3') {
-      state.defaultParam.Title = '裁剪建议参数'
-      state.defaultParam.defaultParamType = true
-    }
-  }
-
-  //关闭弹窗-【默认参数】
-  // const operation = (e: any) => {
-  //   if (e.type === 'layCloth') {
-  //     refreshTable()
-  //     state.defaultParam.defaultParamType = false
-  //   }
-  //   if (e.type === 'crop') {
-  //     state.defaultParam.defaultParamType = false
-  //   }
-  //   if (e.type === 'cancel') {
-  //     state.defaultParam.defaultParamType = false
-  //   }
-  // }
-
   //删除
   const mov = () => {
     if (!isEmpty(state.ids)) {
@@ -156,8 +92,9 @@
       })
     }
   }
+
   const confirmDelete = () => {
-    proxy.$baseService.delete('/jack-ics-api/device/delete', state.ids).then((res: any) => {
+    proxy.$baseService.delete('/jack-ics-api/teamSchedule/delete', state.ids).then((res: any) => {
       if (res.code === 0) {
         state.ids = [] //清空选中项
         onFormQuery()

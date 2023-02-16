@@ -1,29 +1,29 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-04 14:31:07
+ * @LastEditTime: 2023-02-15 16:17:21
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
     <el-form-item :label="`班组名称`">
-      <el-input v-model="state.form.sn" placeholder="请输入班组名称" type="text" />
+      <el-input v-model="state.form.name" placeholder="请输入班组名称" type="text" />
     </el-form-item>
     <el-form-item :label="`班次周期`">
-      <Cycle :set-data="setCycleData" />
+      <Cycle :data="state.form" :set-data="setCycleData" />
     </el-form-item>
   </el-form>
   <div>
     <div class="shiftTitle"></div>
     <span class="shiftTXT">班组时间</span>
-    <TeamTime :set-data="setTeamTime" />
+    <TeamTime :data="state.form" :set-data="setTeamTime" />
   </div>
   <div>
     <div class="shiftTitle"></div>
     <span class="shiftTXT">适用范围</span>
     <div class="shift-transfer">
-      <el-transfer v-model="state.value" class="transfer-high" :data="state.data" />
+      <el-transfer v-model="state.form.workTeamIdList" :titles="['所有资源', '已选资源']" class="transfer-high" :data="state.data" />
     </div>
   </div>
 
@@ -39,6 +39,7 @@
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
+
   import { content } from './conifgs'
   import Cycle from './cycle.vue'
   import TeamTime from './teamTime.vue'
@@ -60,50 +61,30 @@
     type: props.dialogType,
     middle: formMiddleData,
     // 穿梭
-    data: [
-      {
-        key: 1,
-        label: '数据1',
-        disabled: false
-      },
-      {
-        key: 2,
-        label: '数据2',
-        disabled: false
-      }
-    ],
-    value: []
+    data: []
   })
 
   const init = () => {
-    if (props.row.id) {
-      proxy.$baseService.get('/jack-ics-api/device/get', { id: props.row.id }).then((res: any) => {
-        res.data.type = res.data.type.toString()
-        state.form = res.data
-        if (!isEmpty(res.data.defaultParam)) {
-          let arr = res.data.defaultParam.split(',')
-          state.title = arr
-        }
-      })
-    }
-    //关联操作员
-    let data = {
-      page: 1,
-      limit: 999999,
-      systemId: localStorage.getItem('v1@systemId'),
-      tenantCode: localStorage.getItem('v1@tenantCode')
-    }
-    proxy.$baseService.get('/njp-plus-admin-api/sys/user/page', data).then((res: any) => {
-      let data = res.data.list
+    //获取适用范围
+    proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource').then((res: any) => {
+      let data = res.data
       if (!isEmpty(data)) {
         data.map((item: any) => {
-          ;(item.label = item.realName), (item.value = item.id)
+          item.key = item.id
+          ;(item.label = item.name), (item.disabled = false)
         })
-        state.operatorData = data
-      } else {
-        state.operatorData = []
+        state.data = data
       }
     })
+    //回显
+    if (props.row.id) {
+      //适用范围
+      proxy.$baseService.get('/jack-ics-api/teamSchedule/get', { id: props.row.id }).then((res: any) => {
+        let data = res.data
+        data.workDay
+        state.form = data
+      })
+    }
   }
   init()
 
@@ -117,36 +98,8 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       let formData = cloneDeep(state.form)
-
       if (valid) {
-        if (!isEmpty(formData.img)) {
-          formData.img = formData.img[0].url
-        } else {
-          formData.img = ''
-        }
-
-        if (!isEmpty(formData.relationOperaterList)) {
-          let data = formData.relationOperaterList
-
-          let list: any = []
-          data.forEach((item: any) => {
-            state.operatorData.forEach((v: any) => {
-              if (item === v.id) {
-                list.push({
-                  operationName: v.realName,
-                  operationId: v.id
-                })
-              }
-            })
-          })
-          formData.relationOperaterList = list
-        }
-
-        //选择贴标清除 默认参数
-        if (formData.type !== '1') {
-          formData.defaultParam = ''
-        }
-        proxy.$baseService.post('/jack-ics-api/device/save', formData).then((res: any) => {
+        proxy.$baseService.post('/jack-ics-api/teamSchedule/save', formData).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',
@@ -164,12 +117,21 @@
       }
     })
   }
-
+  // 班次周期
   const setCycleData = (e: any) => {
-    // console.log('班次周期~~~~~~~~', e)
+    if (!isEmpty(e)) {
+      let data = e.filter((item: any) => item.type)
+      let list: any = []
+      data.forEach((item: any) => {
+        list.push(item.value)
+      })
+      state.form.workDay = list
+    }
+    // workDay
   }
+  // 班组时间
   const setTeamTime = (e: any) => {
-    // console.log('时间数据~~~~~~~~', e)
+    state.form.workTime = e
   }
   // 取消
   const resetForm = (formEl: any) => {
@@ -216,7 +178,8 @@
        // Transfer Element
   .transfer-high{
      /deep/ .el-transfer-panel__body{
-      height: 200px;
+      // height: 180px;
+      //  overflow: auto;
     }
   }
 </style>
