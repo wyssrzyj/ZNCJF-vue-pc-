@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-13 16:06:42
+ * @LastEditTime: 2023-02-20 14:40:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -373,7 +373,6 @@
             }
           }
         ]
-
         //回显排唛比例-unique判断唯一值
         if (!isEmpty(res.data.shelfList)) {
           let shelfList = res.data.shelfList
@@ -388,7 +387,6 @@
         //铺布长度添加10    //后续需要注销 等后端代码更新 2022-12-19 越也
         // res.data.spreadClothLength=res.data.spreadClothLength+10 //2023-1-12  取消
         res.data.spreadClothLength = res.data.spreadClothLength
-
         state.form = res.data
       })
     } else {
@@ -752,7 +750,7 @@
       }
 
       //如果尺码一样提示
-      if (type) {   
+      if (type) {
         ElMessage({
           message: '颜色相同，尺码下的数量不能相同',
           type: 'warning'
