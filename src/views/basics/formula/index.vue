@@ -1,16 +1,15 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-          <el-form-item label="计算类型" prop="statu">
+      <el-form-item label="计算类型" prop="statu">
         <el-select v-model="state.queryFormData.type" clearable filterable>
           <el-option v-for="item in equipmentType" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
 
-      <el-form-item label="设备名称" prop="spec">
+      <el-form-item label="资源名称" prop="spec">
         <el-input v-model="state.queryFormData.name" placeholder="请输入" clearable />
       </el-form-item>
-
     </template>
 
     <template #operationExtBtn>
@@ -22,7 +21,7 @@
       <el-button link type="primary" style="order: 3" @click="handleClick(false, '修改公式', row)">编辑</el-button>
     </template>
   </njp-table-config>
-  
+
   <!-- 删除 -->
   <el-dialog v-model="state.dialogVisible" title="提示" width="30%">
     <span>确定要删除该数据吗？</span>
@@ -37,8 +36,6 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="800px">
     <DialogContent :row="state.data.row" :close="close" :dialog-type="state.dialogType" />
   </el-dialog>
-
-
 </template>
 
 <script lang="ts" setup>
@@ -54,8 +51,7 @@
     ids: [],
     dialogType: true,
     dialogTableVisible: false,
-    dialogTitle:"公式信息",
- 
+    dialogTitle: '公式信息',
 
     //默认参数弹窗1
     defaultParam: {
@@ -106,8 +102,7 @@
     }
   }
 
-
- const mov = () => {
+  const mov = () => {
     if (!isEmpty(state.ids)) {
       state.dialogVisible = true
     } else {
@@ -148,7 +143,6 @@
       state.ids = ids
     }
   }
-  
 </script>
 <style>
   .defaultParam {

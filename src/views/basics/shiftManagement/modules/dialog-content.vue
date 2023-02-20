@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-15 16:17:21
+ * @LastEditTime: 2023-02-20 16:58:35
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
-    <el-form-item :label="`班组名称`">
+    <el-form-item :label="`班次名称`">
       <el-input v-model="state.form.name" placeholder="请输入班组名称" type="text" />
     </el-form-item>
     <el-form-item :label="`班次周期`">
@@ -16,7 +16,7 @@
   </el-form>
   <div>
     <div class="shiftTitle"></div>
-    <span class="shiftTXT">班组时间</span>
+    <span class="shiftTXT">班次时间</span>
     <TeamTime :data="state.form" :set-data="setTeamTime" />
   </div>
   <div>
@@ -38,7 +38,7 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { isEmpty, cloneDeep } from 'lodash'
+  import { isEmpty } from 'lodash'
 
   import { content } from './conifgs'
   import Cycle from './cycle.vue'
@@ -97,7 +97,7 @@
   const submitForm = async (formEl: any | undefined) => {
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
-      let formData = cloneDeep(state.form)
+      let formData = state.form
       if (valid) {
         proxy.$baseService.post('/jack-ics-api/teamSchedule/save', formData).then((res: any) => {
           if (res.code === 0) {

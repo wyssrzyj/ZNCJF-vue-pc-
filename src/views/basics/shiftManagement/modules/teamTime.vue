@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-02-16 08:47:09
+ * @LastEditTime: 2023-02-20 15:34:02
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -64,7 +64,6 @@
 
   const newData = () => {
     state.list.push({ startTime: '', endTime: '', time: '' })
-    props.setData(state.list)
   }
   const setDelete = (e: any) => {
     state.list.splice(e, 1)
