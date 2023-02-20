@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-11-07 13:49:13
+ * @LastEditTime: 2023-02-20 13:40:18
  * @Description:
  * @LastEditors: lyj
  */
@@ -95,4 +95,40 @@ export const dataRule = {
   shrinkFlag: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   primaryFlag: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+}
+
+//排唛比例的表格
+export const formsTable = {
+  tableColumns: [
+    {
+      title: '颜色',
+      align: 'center',
+      dataIndex: 'color',
+      width: 200
+    },
+    {
+      title: '尺码',
+      align: 'center',
+      dataIndex: 'size',
+      width: 200
+    },
+    {
+      title: '单层件数',
+      align: 'center',
+      dataIndex: 'levelClothSum',
+      width: 200
+    },
+    {
+      title: '铺布层数',
+      align: 'center',
+      dataIndex: 'spreadClothLevel',
+      width: 200
+    },
+    {
+      title: '床次总件数',
+      align: 'center',
+      dataIndex: 'total',
+      width: 250
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-02-14 17:12:39
+ * @LastEditTime: 2023-02-20 10:34:42
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -35,7 +35,7 @@
         lyj: '8848',
         lxr: '糯米',
         progress: 0.6,
-        open:true,//默认展开
+        open: true, //默认展开
         // duration: 6, //天数
         // progress: 1, //控制完成百分比 范围0-1
         color: 'red' //控制颜色
@@ -153,16 +153,18 @@
         return true
       }
     })
+
     //  日期控制
     const zoomConfig = {
+      //只会使用第一个对象的数据
       levels: [
         {
           name: 'Hours', //时
           scale_height: 60,
           min_column_width: 30,
           scales: [
-            { unit: 'day', step: 1, format: '%M %d ' },
-            { unit: 'hour', step: 1, format: '%H' }
+            { unit: 'day', step: 1, format: '%M %d %l ' }, //时间的第一层
+            { unit: 'hour', step: 1, format: '%H' } //时间的第二层
           ]
         },
         {
@@ -188,14 +190,12 @@
         }
       ]
     }
-
     gantt.ext.zoom.init(zoomConfig)
   }
   //渲染
   const ganttShow = async () => {
     const chartDom = document.getElementById('ganttDemo')
     gantt.clearAll() //缓存问题 先清楚后添加
-    gantt.config.date_format = '%Y-%m-%d %H:%i'
     gantt.init(chartDom) //根据 id
     gantt.parse(state.ganttList) //渲染数据
   }
