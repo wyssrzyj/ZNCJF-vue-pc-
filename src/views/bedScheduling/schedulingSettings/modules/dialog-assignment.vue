@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-20 15:16:38
+ * @LastEditTime: 2023-02-20 15:22:01
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -191,7 +191,7 @@
   // 取消
   const resetForm = (type: any) => {
     if (type === 'preservation') {
-      // console.log("确认")
+      // console.log("确认.")
     }
     props.close(type)
   }
