@@ -212,7 +212,7 @@
   const selectCraft = async (index: any, id: string) => {
     loading.value = true
     //将请求三个不同工序下公式列表的方法放在这里，先请求到所属的公式列表
-    getFormual()
+    await getFormual()
     baseData.tableData = []
     baseData.currentId = id
     //需要请求不同工艺下的相关信息
@@ -273,13 +273,13 @@
   }
 
   //获取工艺中公式信息
-  const getFormual = async () => {
+  const getFormual = () => {
     //获取不同工序对应的计算公式
     //请求参数 铺布 type = 1 打标/唛架纸 type = 2 裁剪type = 3
     //后续工序出现变动，会有问题
     for (let index = 1; index <= 3; index++) {
       // formulaData
-      await proxy.$baseService.get('/jack-ics-api/formulaContainer/pageList', { type: index }).then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/formulaContainer/pageList', { type: index }).then((res: any) => {
         if (index === 1) {
           // assignmentFormula('铺布', res.data.list)
           baseData.processOne = res.data.list
