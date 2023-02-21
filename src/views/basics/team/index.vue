@@ -49,8 +49,8 @@
         <el-form-item label="班组名称" style="width: 26%" prop="name">
           <el-input v-model="baseData.dialogFormData.name" style="width: 100%" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="班组编码" style="width: 26%" prop="code">
-          <el-input v-model="baseData.dialogFormData.code" style="width: 100%" />
+        <el-form-item label="班组编码" style="width: 26%">
+          <el-input v-model="baseData.dialogFormData.code" disabled style="width: 100%" />
         </el-form-item>
         <el-form-item label="班组班次" style="width: 26%" prop="teamScheduleIdList">
           <el-select v-model="baseData.dialogFormData.teamScheduleIdList" multiple placeholder="请选择班次" style="width: 100%">
@@ -59,8 +59,7 @@
         </el-form-item>
         <el-form-item label="班组能力" style="width: 26%" prop="ability">
           <el-select v-model="baseData.dialogFormData.ability" placeholder="请选择任务" style="width: 100%">
-            <el-option label="铺布" value="P" />
-            <el-option label="裁剪" value="C" />
+            <el-option v-for="(item, index) in equipmentType" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <span style="width: 28%"></span>
@@ -90,6 +89,7 @@
   import { ElMessage } from 'element-plus'
   import { ref, reactive, getCurrentInstance, onMounted } from 'vue'
   import { isEmpty } from 'lodash'
+  import { equipmentType } from '@/components/conifgs'
   const { proxy }: any = getCurrentInstance()
   let currentIndex = ref(0)
   //ref引用
@@ -120,7 +120,8 @@
   //dialogForm表单验证规则
   const rules = reactive({
     name: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }],
-    code: [{ required: true, message: '请输入班组编码', trigger: 'blur' }]
+    teamScheduleIdList: [{ required: true, message: '请选择班次', trigger: 'change' }],
+    ability: [{ required: true, message: '请选择能力', trigger: 'change' }]
   })
   onMounted(() => {
     getTeamList()
@@ -171,8 +172,14 @@
   }
   //dialog 关闭时调用
   const dialogClose = () => {
-    //调用form事件清除dialog中表单内容
-    ruleForm.value.resetFields()
+    ruleForm.value.clearValidate('name', 'teamScheduleIdList', 'ability')
+    ruleForm.value.resetFields() //重置以清除非必要的表单验证
+    baseData.dialogFormData.name = ''
+    baseData.dialogFormData.ability = ''
+    baseData.dialogFormData.code = ''
+    baseData.dialogFormData.userIdList = []
+    baseData.dialogFormData.teamScheduleIdList = []
+
     //关闭之后并将穿梭框右侧内容清空
     baseData.transferLeftUser = []
     baseData.transferRightUser = []
@@ -189,20 +196,28 @@
 
     await ruleForm.validate((valid: any, fields: any) => {
       if (valid) {
-        let formData = baseData.dialogFormData
-
+        let formData: any = baseData.dialogFormData
+        formData.ability = Number(formData.ability)
         formData.userIdList = baseData.transferRightUser
         proxy.$baseService
           .post('/jack-ics-api/team/save', formData)
           .then((res: any) => {
-            ElMessage({
-              message: '保存成功',
-              type: 'success'
-            })
-            // ruleForm.resetFields() 成功后清除form表单的信息
-            dialogVisible.value = false
-            getTeamList()
-            getTeamUser(baseData.currentTeamId)
+            if (res.code === 0) {
+              ElMessage({
+                message: '保存成功',
+                type: 'success'
+              })
+              // ruleForm.resetFields() 成功后清除form表单的信息
+              dialogVisible.value = false
+              getTeamList()
+              getTeamUser(baseData.currentTeamId)
+            } else {
+              formData.ability = String(formData.ability) //函数一开始修改同一个对象中的ablity的类型，导致函数执行到这一步，界面无法正常显示能力的label
+              ElMessage({
+                message: res.msg,
+                type: 'error'
+              })
+            }
           })
           .catch((err: any) => {
             ElMessage({
