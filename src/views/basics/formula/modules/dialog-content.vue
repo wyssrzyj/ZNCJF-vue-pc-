@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-21 08:47:41
+ * @LastEditTime: 2023-02-21 14:58:53
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -21,7 +21,7 @@
 
                 <div v-if="item.type === 'type'">
                   <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
-                    <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="change">
+                    <el-select v-model="state.form[item.model]" :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)" @change="(e:any)=>{change(e,'new')}">
                       <el-option v-for="v in state.equipmentType" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
                   </el-form-item>
@@ -39,7 +39,7 @@
 
                 <div v-if="item.type === 'resourceFormulaList'">
                   <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
-                    <el-select v-model="state.form[item.model]" multiple collapse-tags :placeholder="`请选择${item.name}`" :disabled="state.form.type?false:true">
+                    <el-select v-model="state.form[item.model]" multiple collapse-tags :placeholder="`请选择${item.name}`" :disabled="state.form.type ? false : true">
                       <el-option v-for="v in state.applyList" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
                   </el-form-item>
@@ -49,7 +49,7 @@
           </div>
           <!-- 公式选择 -->
           <el-form-item :label="`公式选择`" prop="remark" class="equipment-spec">
-            <div class="equipment-bottom-top" @click="setDialogType"><span>公式</span><span :class="!state.type?'equipment-bottom-top-right':'equipment-bottom-top-right-no'">选择公式</span></div>
+            <div class="equipment-bottom-top" @click="setDialogType"><span>公式</span><span :class="!state.type ? 'equipment-bottom-top-right' : 'equipment-bottom-top-right-no'">选择公式</span></div>
             <div class="equipment-bottom-bottom">
               <span>{{ state.formulaContent.value }}</span>
             </div>
@@ -147,13 +147,22 @@
         }
       })
     }
-    //适用设备
-    proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource').then((res: any) => {
-      state.applyList = res.data
-    })
+    //获取适用设备
+    let type = state.form.type
+    if (type) {
+      change(type, 'init')
+    }
   }
   init()
-
+  //获取适用设备
+  const change = (e: any, type: any) => {
+    proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource', { type: e }).then((res: any) => {
+      state.applyList = res.data
+    })
+    if (type === 'new') {
+      state.form.resourceFormulaList = []
+    }
+  }
   // 是否可用
   const disable = (type: any) => {
     return state.type === true ? true : type

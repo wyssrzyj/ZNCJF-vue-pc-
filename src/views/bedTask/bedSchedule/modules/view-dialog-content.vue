@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-20 14:40:40
+ * @LastEditTime: 2023-02-21 14:31:33
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -161,6 +161,11 @@
                     />
                   </el-form-item>
                 </div>
+                <div v-if="item.type === 'time'">
+                  <el-form-item :label="`${item.name}`" :prop="item.prop">
+                    <el-date-picker v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="datetime" :placeholder="item.name" format="YYYY-MM-DD HH:mm" />
+                  </el-form-item>
+                </div>
 
                 <div v-if="item.type === null">
                   <el-form-item :label="`${item.name}`">
@@ -213,6 +218,19 @@
                   </el-form-item>
                 </div>
 
+                <div v-if="item.type === 'time'">
+                  <el-form-item :label="`${item.name}`" :prop="item.prop">
+                    <el-date-picker
+                      v-model="state.form[item.model]"
+                      :disabled-date="disabledDate"
+                      :disabled="disable(item.disabled)"
+                      type="datetime"
+                      :placeholder="item.name"
+                      format="YYYY-MM-DD HH:mm"
+                    />
+                  </el-form-item>
+                </div>
+
                 <div v-if="item.type === null">
                   <el-form-item :label="`${item.name}`" :prop="item.prop" class="bedPlanNo-input">
                     <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" />
@@ -253,7 +271,7 @@
   import { isEmpty, cloneDeep } from 'lodash'
   import print from 'print-js'
   import { useRoute, useRouter } from 'vue-router'
-
+  import moment from 'moment'
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
 
@@ -760,6 +778,11 @@
         state.dialogTableVisible = false
       }
     }
+  }
+
+  const disabledDate = (time: Date) => {
+    let setTime: any = moment(state.form.setTime)
+    return time.getTime() < setTime
   }
 </script>
 

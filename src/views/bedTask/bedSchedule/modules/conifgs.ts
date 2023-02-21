@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2023-02-03 15:24:40
+ * @LastEditTime: 2023-02-21 14:05:41
  * @Description:
  * @LastEditors: lyj
  */
@@ -79,7 +79,6 @@ export const content: any = {
     styleName: '',
     shelfFile: [],
     attachmentList: [],
-    
 
     produceOrderCode: '',
     customName: '',
@@ -99,14 +98,13 @@ export const content: any = {
     useRate: 0,
     remark: ''
   },
-    formLeftData: [
+  formLeftData: [
     { name: '客户名称', model: 'customName', prop: null, type: null, disabled: false },
     { name: '面料名称', model: 'fabricName', prop: 'fabricName', type: 'fabricName', disabled: false },
     { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: false },
     { name: '面料颜色', model: 'fabricColor', prop: 'fabricColor', type: 'fabricColor', disabled: false },
     { name: '铺布长度', model: 'spreadClothLength', prop: 'spreadClothLength', type: 'spreadClothLength', disabled: false },
-    { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false },
-
+    { name: '排唛比例', model: 'shelfList', prop: 'shelfList', type: 'shelfList', disabled: false }
   ],
 
   formMiddleData: [
@@ -115,15 +113,15 @@ export const content: any = {
     { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
     { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: null, disabled: true },
     { name: '利用率', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
-
+    { name: '最早开始时间', model: 'setTime', prop: 'setTime', type: 'time', disabled: false }
   ],
   formRightData: [
     { name: '床次计划号', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
     { name: '床次', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: false },
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true },
     { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
-    { name: '备注', model: 'remark', prop: null, type: null }
-  
+    { name: '备注', model: 'remark', prop: null, type: null },
+    { name: '最晚结束时间', model: 'endTime', prop: 'endTime', type: 'time', disabled: false }
   ],
   dataRule: {
     produceOrderCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

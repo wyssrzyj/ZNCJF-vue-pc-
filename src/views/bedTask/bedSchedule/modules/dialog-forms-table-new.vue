@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2022-12-16 21:28:37
+ * @LastEditTime: 2023-02-21 15:00:29
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,8 +9,7 @@
   <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newSize">新增尺码</el-button>
   <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newColor">新增颜色</el-button>
 
-  <el-table height="350" style="width: 100%" :data="state.tableData"     :header-cell-style="{ 'text-align': 'center' }"
-    :cell-style="{ 'text-align': 'center' }">
+  <el-table height="350" style="width: 100%" :data="state.tableData" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
     <el-table-column label="颜色" prop="color" fixed="left" width="150">
       <template #default="{ row }">
         <el-select v-model="row.color" :disabled="disable(false)" class="m-2" placeholder="请选择颜色" size="large">
@@ -266,7 +265,6 @@
     //计算床次总件数
     let bedSumData = setSpreadClothLevel(list)
     state.selectData = selectData //下拉颜色
-
     //赋值
     state.tableData = bedSumData
     backData(bedSumData)
