@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-14 17:38:39
+ * @LastEditTime: 2023-02-21 08:47:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -39,7 +39,7 @@
 
                 <div v-if="item.type === 'resourceFormulaList'">
                   <el-form-item :label="item.name" :prop="item.prop" class="buttonContainer">
-                    <el-select v-model="state.form[item.model]" multiple collapse-tags :placeholder="`请选择${item.name}`" :disabled="disable(item.disabled)">
+                    <el-select v-model="state.form[item.model]" multiple collapse-tags :placeholder="`请选择${item.name}`" :disabled="state.form.type?false:true">
                       <el-option v-for="v in state.applyList" :key="v.id" :label="v.name" :value="v.id" />
                     </el-select>
                   </el-form-item>

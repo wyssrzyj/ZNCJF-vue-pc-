@@ -277,7 +277,6 @@
   const init = () => {
     let initData = setFormat(props.form)
     state.initData = initData
-    console.log("传递3-1");
     props.getTableData(initData)
     state.total = initData.length //总长度
     //处理数据

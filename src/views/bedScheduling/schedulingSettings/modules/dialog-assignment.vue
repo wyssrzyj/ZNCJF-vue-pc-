@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-20 15:22:01
+ * @LastEditTime: 2023-02-21 09:15:47
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column property="styleBedNo" label="缝制上线日期" />
       <el-table-column property="styleBedNo" label="分派状态" />
-      <el-table-column property="styleBedNo" label="操作">
+      <el-table-column property="styleBedNo" label="操作" width="180">
         <template #default>
           <div class="operation">
             <div><img src="@/components/icon/top1.png" alt="" /></div>
@@ -57,13 +57,15 @@
       </el-table-column>
     </el-table>
   </div>
+    <div class="schedulingSettings-bottom">
+
+    </div>
 </template>
 
 <script lang="ts" setup>
   import { reactive } from 'vue'
   import './index.less'
   const props = defineProps<{
-    dialogType: boolean
     close: any
     row: any
   }>()
@@ -233,10 +235,13 @@
     transform: translate(25px, 0px);
   }
   .operation {
-    width: 100px;
-
+    cursor: pointer;
+    width: 150px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+  }
+  .schedulingSettings-bottom{
+    height: 40px;
   }
 </style>

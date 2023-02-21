@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-02-20 15:34:02
+ * @LastEditTime: 2023-02-21 08:41:33
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -10,15 +10,7 @@
     <div class="teamTime">
       <div v-for="(item, index) in state.list" :key="index" class="teamTime-container">
         <div class="teamTime-time">
-          <el-date-picker
-            v-model="item.time"
-            type="datetimerange"
-            range-separator="-"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            format="YYYY-MM-DD HH:mm"
-            @change="(e: any)=>{setBlur(e,index)}"
-          />
+          <el-time-picker v-model="item.time" is-range range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" format=" HH:mm" @change="(e: any)=>{setBlur(e,index)}" />
         </div>
         <div>
           <el-button v-if="index !== 0" type="danger" @click="setDelete(index)">删除</el-button>

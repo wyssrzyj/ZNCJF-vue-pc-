@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-02-20 10:34:42
+ * @LastEditTime: 2023-02-21 11:12:02
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,10 +12,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onMounted } from 'vue'
+  import { reactive, onMounted ,watch} from 'vue'
 
-  import gantt from 'dhtmlx-gantt' // 引入模块
+  import {gantt} from 'dhtmlx-gantt' // 引入模块
   import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
+
+    const props = defineProps<{
+    data:any
+  }>()
 
   const state: any = reactive({
     name: 'DhtmlxGantt-Demo1',
@@ -24,9 +28,9 @@
       links: []
     }
   })
-
+  
   const init = () => {
-    const data = [
+    const data = [                          
       {
         //父亲
         id: 1,
@@ -82,7 +86,124 @@
         progress: 0.6,
         parent: 11,
         color: '#039af9' //控制颜色
-      }
+      },
+        {
+        //父亲
+        id: 1971,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米1',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+        {
+        //父亲
+        id: 1972,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+        {
+        //父亲
+        id: 1973,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+        {
+        //父亲
+        id: 1974,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+        {
+        //父亲
+        id: 1975,
+        type: true, //判断是否可以移动
+        text: '测试选中—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+        {
+        //父亲
+        id: 1976,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+       {
+        //父亲
+        id: 1977,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+       {
+        //父亲
+        id: 1978,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
+       {
+        //父亲
+        id: 1979,
+        type: true, //判断是否可以移动
+        text: '裁剪车间—裁剪班组', //名称
+        lyj: '8848',
+        lxr: '糯米2',
+        progress: 0.6,
+        open: true, //默认展开
+        // duration: 6, //天数
+        // progress: 1, //控制完成百分比 范围0-1
+        color: 'red' //控制颜色
+      },
     ]
 
     state.ganttList.data = data
@@ -100,12 +221,12 @@
   //配置数据
   const initZoom = () => {
     gantt.i18n.setLocale('cn') //设置中文
-    // gantt.config.readonly = true//只读
+    gantt.config.readonly = true//只读
     gantt.config.autoscroll = true //如果线超出屏幕可以x滚动
     gantt.config.order_branch = false // 左侧可以拖动
     // gantt.config.sort = true //左侧点击表头排序
-    gantt.config.drag_move = true //是否可以移动
-    gantt.config.drag_progress = true //拖放进度
+    gantt.config.drag_move = false //是否可以移动
+    gantt.config.drag_progress = false //拖放进度
     gantt.config.drag_resize = false //控制大小
     // gantt.config.show_links = false //控制两端的线是否可以拖动
     gantt.config.details_on_dblclick = false //双击出弹窗
@@ -119,12 +240,10 @@
     })
     //表头
     gantt.config.columns = [
-      { name: 'text', label: '名称', tree: true, width: '250' },
+      { name: 'text', label: '款号', tree: true, width: '250' },
+      { name: 'lyj', label: '床次', align: 'center' },
       { name: 'start_date', label: '时间', align: 'center' },
       { name: 'lxr', label: '状态', align: 'center' },
-      { name: 'lyj', label: '时间Demo', align: 'center' }
-      // { name: 'duration', label: 'Duration', align: 'center' }
-      // { name: 'add', label: '' },
     ]
     //单击事件
     gantt.attachEvent('onTaskSelected', function (id: any) {
@@ -204,6 +323,16 @@
     initZoom()
     ganttShow()
   })
+     watch(
+    () => props.data,
+    item => {
+     
+      gantt.scrollTo(35, 35)//位移
+       gantt.selectTask(1975)//选中
+      //  console.log("监听数据变化-触发位移", item);
+    }
+  )
+
 </script>
 
 <style scoped>

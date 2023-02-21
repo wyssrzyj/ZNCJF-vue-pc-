@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-01-29 17:20:25
+ * @LastEditTime: 2023-02-21 10:06:03
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -11,13 +11,17 @@
       <div class="settings-left-top">
         <el-input v-model="state.name" :placeholder="`请输入款号`" type="text" />
         <div class="settings-type">
-          <div v-for="item in state.choice.data" :key="item.name" :class="item.type ? 'settings-type-data1' : 'settings-type-data2'" @click="setType(item)">{{ item.name }}</div>
+          <div v-for="item in state.choice.data"
+           :key="item.name"
+            :class="item.type ? 'settings-type-data1' : 'settings-type-data2'"
+             @click="setType(item)">{{ item.name }}</div>
         </div>
         <div class="division"></div>
       </div>
-      <!-- 全部数据 -->
+    
       <div class="settings-list">
         <div class="settings-list-overflow">
+          <!-- 全部、已分派 -->
           <div v-if="state.choice.type !== '未分派'">
             <div v-for="(item, index) in state.list.wholeData" :key="index" :class="item.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item, 1)">
               <div class="settings-list-title">款号 : {{ item.name }}</div>
@@ -55,8 +59,9 @@
     <div class="settings-right">
 
       <div>
-        <Gannt></Gannt>
+        <Gannt :data="state.dhtml"></Gannt>
       </div>
+      
        <div class="settings-right-table">
         <!-- 全部 -->
         <div v-if="state.choice.type==='全部'">
@@ -78,7 +83,7 @@
 
   </div>
   <!-- 弹窗 -->
-  <el-dialog v-if="state.assignmentType" v-model="state.assignmentType" :draggable="false" :close-on-click-modal="false" title="智能分派" width="750px">
+  <el-dialog v-if="state.assignmentType" v-model="state.assignmentType" :draggable="false" :close-on-click-modal="false" title="智能分派" width="850px">
       <Assignment :close="close"></Assignment>
 </el-dialog>
 </template>
@@ -114,8 +119,8 @@
       notData: [], //未分派
       alreadyData: [] //已分派
     },
-    assignmentType:false//分派弹窗
-
+    assignmentType:false,//分派弹窗
+    dhtml:{}
   })
   // 处理左侧数据
   const setLeftData = (e: any) => {
@@ -219,11 +224,11 @@
   }
   //左侧数据点击事件
   const setLeftOperation = (e: any, type: any) => {
-    // console.log('当前选中的值', e)
+
     if (type === 1) {
       //选中项处理
       let data = cloneDeep(state.list.wholeData)
-      data.map((item: any, index: any) => {
+      data.map((item: any) => {
         if (item.id === e.id) {
           item.type = true
         } else {
@@ -231,12 +236,15 @@
         }
       })
       state.list.wholeData = data
+
+      //甘特图
+       state.dhtml={name:123} 
     }
     //未分派
     if (type === 2) {
       //选中项处理
       let data = cloneDeep(state.list.notData)
-      data.map((item: any, index: any) => {
+      data.map((item: any) => {
         if (item.id === e.id) {
           item.type = !item.type
         }
@@ -246,6 +254,8 @@
         // }
       })
       state.list.notData = data
+
+      state.dhtml={name:456} 
     }
   }
   

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2023-02-14 13:50:44
+ * @LastEditTime: 2023-02-21 08:58:52
  * @Description:
  * @LastEditors: lyj
  */
@@ -31,6 +31,7 @@ export const content = {
     { name: '适用资源', model: 'resourceFormulaList', prop: 'resourceFormulaList', type: 'resourceFormulaList', disabled: false },
   ],
   dataRule: {
+    name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
     resourceFormulaList: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   }
