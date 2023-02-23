@@ -104,6 +104,7 @@
     dialogTitle: '',
     tableData: [] as any,
     dialogFormData: {
+      id: '',
       name: '',
       code: '',
       ability: '',
@@ -177,6 +178,7 @@
     baseData.dialogFormData.name = ''
     baseData.dialogFormData.ability = ''
     baseData.dialogFormData.code = ''
+    baseData.dialogFormData.id = ''
     baseData.dialogFormData.userIdList = []
     baseData.dialogFormData.teamScheduleIdList = []
 
