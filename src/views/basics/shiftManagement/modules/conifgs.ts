@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2023-02-15 14:47:49
+ * @LastEditTime: 2023-02-22 17:31:30
  * @Description:
  * @LastEditors: lyj
  */
@@ -17,6 +17,8 @@ export const content = {
   formMiddleData: [{ name: '班组名称', model: 'name', prop: 'name', type: 'input', disabled: false }],
   formRightData: [{ name: '班次周期', model: 'type', prop: 'type', type: 'type', disabled: false }],
   dataRule: {
-    name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+    name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    workDay: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    workTime: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }

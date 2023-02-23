@@ -1,24 +1,27 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-20 16:58:35
+ * @LastEditTime: 2023-02-23 10:53:26
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <el-form ref="ruleFormRef" label-position="top" :rules="state.prop" :inline="true" :model="state.form">
-    <el-form-item :label="`班次名称`">
+    <el-form-item :label="`班次名称`" prop="name">
       <el-input v-model="state.form.name" placeholder="请输入班组名称" type="text" />
     </el-form-item>
-    <el-form-item :label="`班次周期`">
+    <el-form-item :label="`班次周期`" prop="workDay">
       <Cycle :data="state.form" :set-data="setCycleData" />
     </el-form-item>
+      <el-form-item :label="`班次时间`" prop="workTime">
+        <TeamTime :data="state.form" :set-data="setTeamTime" />
+    </el-form-item>
   </el-form>
-  <div>
+  <!-- <div>
     <div class="shiftTitle"></div>
     <span class="shiftTXT">班次时间</span>
     <TeamTime :data="state.form" :set-data="setTeamTime" />
-  </div>
+  </div> -->
   <div>
     <div class="shiftTitle"></div>
     <span class="shiftTXT">适用范围</span>
@@ -46,7 +49,7 @@
 
   import './index.less'
 
-  const { formData, formMiddleData } = content
+  const { formData, formMiddleData,dataRule } = content
 
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
@@ -60,6 +63,7 @@
     form: formData,
     type: props.dialogType,
     middle: formMiddleData,
+    prop: dataRule,
     // 穿梭
     data: []
   })
@@ -98,6 +102,10 @@
     if (!formEl) return
     await formEl.validate((valid: any, fields: any) => {
       let formData = state.form
+      //班次时间不能为空
+     let  time = formData.workTime.filter((item:any)=>item.startTime!=="")
+      formData.workTime=time
+      
       if (valid) {
         proxy.$baseService.post('/jack-ics-api/teamSchedule/save', formData).then((res: any) => {
           if (res.code === 0) {

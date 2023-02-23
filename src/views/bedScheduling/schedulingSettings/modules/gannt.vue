@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-02-21 11:12:02
+ * @LastEditTime: 2023-02-23 10:11:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,7 +40,6 @@
         lxr: '糯米',
         progress: 0.6,
         open: true, //默认展开
-        // duration: 6, //天数
         // progress: 1, //控制完成百分比 范围0-1
         color: 'red' //控制颜色
       },
@@ -48,9 +47,8 @@
         //儿子
         id: 11,
         text: '订单1',
-        start_date: '2020-04-07',
         lyj: '8848',
-        lxr: '刘心睿',
+       
         progress: 0.6,
         parent: 1,
         color: '', //控制颜色
@@ -61,10 +59,8 @@
         id: 111,
         text: '卢英杰的子1',
         lyj: '8848',
-        lxr: '刘心睿',
-        start_date: '2020-04-7-9', //开始时间
-        end_date: '2020-04-7-17 ', //结束时间
-        // duration: 1,
+        start_date: '2023-04-7-9', //开始时间
+        end_date: '2023-04-7-17 ', //结束时间
         progress: 0.6,
         parent: 11,
         color: 'red' //控制颜色
@@ -72,8 +68,8 @@
       {
         id: 112,
         text: '卢英杰的子2',
-        start_date: '2020-04-9',
-        duration: 1,
+        start_date: '2023-04-9-9', //开始时间
+        end_date: '2023-04-9-17 ', //结束时间
         progress: 0.6,
         parent: 11,
         color: 'pink' //控制颜色
@@ -81,128 +77,11 @@
       {
         id: 113,
         text: '卢英杰号的子3',
-        start_date: '2020-04-10',
-        duration: 1,
+        start_date: '2023-04-11-9', //开始时间
+        end_date: '2023-04-11-17 ', //结束时间
         progress: 0.6,
         parent: 11,
         color: '#039af9' //控制颜色
-      },
-        {
-        //父亲
-        id: 1971,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米1',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-        {
-        //父亲
-        id: 1972,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-        {
-        //父亲
-        id: 1973,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-        {
-        //父亲
-        id: 1974,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-        {
-        //父亲
-        id: 1975,
-        type: true, //判断是否可以移动
-        text: '测试选中—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-        {
-        //父亲
-        id: 1976,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-       {
-        //父亲
-        id: 1977,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-       {
-        //父亲
-        id: 1978,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-       {
-        //父亲
-        id: 1979,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米2',
-        progress: 0.6,
-        open: true, //默认展开
-        // duration: 6, //天数
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
       },
     ]
 
@@ -313,8 +192,9 @@
   }
   //渲染
   const ganttShow = async () => {
-    const chartDom = document.getElementById('ganttDemo')
+    const chartDom:any = document.getElementById('ganttDemo')
     gantt.clearAll() //缓存问题 先清楚后添加
+    gantt.config.date_format = '%Y-%m-%d %H:%i' //处理时间格【勿动】2023-2-23
     gantt.init(chartDom) //根据 id
     gantt.parse(state.ganttList) //渲染数据
   }
