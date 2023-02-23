@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-23 11:02:32
+ * @LastEditTime: 2023-02-23 11:14:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -13,8 +13,8 @@
     <el-form-item :label="`班次周期`" prop="workDay">
       <Cycle :data="state.form" :set-data="setCycleData" />
     </el-form-item>
-      <el-form-item :label="`班次时间`" prop="workTime">
-        <TeamTime :data="state.form" :set-data="setTeamTime" />
+    <el-form-item :label="`班次时间`" prop="workTime">
+      <TeamTime :data="state.form" :set-data="setTeamTime" />
     </el-form-item>
   </el-form>
   <!-- <div>
@@ -49,7 +49,7 @@
 
   import './index.less'
 
-  const { formData, formMiddleData,dataRule } = content
+  const { formData, formMiddleData, dataRule } = content
 
   const ruleFormRef = ref<any>()
   const { proxy } = getCurrentInstance() as any
@@ -69,7 +69,7 @@
   })
 
   const init = () => {
-    //获取适用范围..
+    //获取适用范围...
     proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource').then((res: any) => {
       let data = res.data
       if (!isEmpty(data)) {
@@ -103,9 +103,9 @@
     await formEl.validate((valid: any, fields: any) => {
       let formData = state.form
       //班次时间不能为空
-     let  time = formData.workTime.filter((item:any)=>item.startTime!=="")
-      formData.workTime=time
-      
+      let time = formData.workTime.filter((item: any) => item.startTime !== '')
+      formData.workTime = time
+
       if (valid) {
         proxy.$baseService.post('/jack-ics-api/teamSchedule/save', formData).then((res: any) => {
           if (res.code === 0) {
