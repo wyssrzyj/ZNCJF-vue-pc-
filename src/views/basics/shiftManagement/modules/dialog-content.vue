@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-23 10:53:26
+ * @LastEditTime: 2023-02-23 11:02:32
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -69,7 +69,7 @@
   })
 
   const init = () => {
-    //获取适用范围
+    //获取适用范围..
     proxy.$baseService.get('/jack-ics-api/formulaContainer/getResource').then((res: any) => {
       let data = res.data
       if (!isEmpty(data)) {
