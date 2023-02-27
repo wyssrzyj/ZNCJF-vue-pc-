@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-04 16:20:33
- * @LastEditTime: 2022-11-11 13:18:55
+ * @LastEditTime: 2023-02-24 10:04:13
  * @Description:
  * @LastEditors: lyj
  */
@@ -21,7 +21,9 @@ export const selectDevice: any = {
     deviceName: '',
     useRate: '',
     levelClothSum: '',
-    bedSum: ''
+    bedSum: '',
+    planStartTime: '',
+    planEndTime: ''
   },
   dataRule: {
     deviceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

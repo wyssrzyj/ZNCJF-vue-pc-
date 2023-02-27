@@ -11,7 +11,7 @@
       <el-form-item label="铺布任务号" prop="taskCode">
         <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="设备名称" prop="deviceName">
+      <el-form-item label="资源名称" prop="deviceName">
         <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="statu">
@@ -23,7 +23,7 @@
 
     <template #operationExtBtn>
       <!-- <el-button type="primary" style="order: 3" @click="handleClick(false, '新增铺布')">新增</el-button> -->
-      <el-button type="success" style="order: 3" @click="examine">审核</el-button>
+      <!-- <el-button type="success" style="order: 3" @click="examine">审核</el-button> -->
 
       <!-- <el-button type="danger" style="order: 3" @click="mov">删除</el-button> -->
     </template>
@@ -82,7 +82,7 @@
     dialogTableVisible: false,
     dialogTitle: '查看铺布',
     statu: [
-      { name: '未审核', value: 1 },
+      // { name: '未审核', value: 1 },
       { name: '已审核', value: 2 },
       { name: '进行中', value: 3 },
       { name: '已完成', value: 4 }
@@ -110,30 +110,30 @@
     styleLibListEl.value.getTableEl().clearSelection()
   }
 
-  const examine = () => {
-    if (!isEmpty(state.ids)) {
-      proxy.$baseService.post('/jack-ics-api/spreadTask/audit', { idList: Object.values(state.ids) }).then((res: any) => {
-        if (res.code === 0) {
-          state.ids = []
-          ElMessage({
-            message: '审核成功',
-            type: 'success'
-          })
-          refreshTable()
-        } else {
-          ElMessage({
-            message: res.msg,
-            type: 'warning'
-          })
-        }
-      })
-    } else {
-      ElMessage({
-        message: '至少选择一个',
-        type: 'warning'
-      })
-    }
-  }
+  // const examine = () => {
+  //   if (!isEmpty(state.ids)) {
+  //     proxy.$baseService.post('/jack-ics-api/spreadTask/audit', { idList: Object.values(state.ids) }).then((res: any) => {
+  //       if (res.code === 0) {
+  //         state.ids = []
+  //         ElMessage({
+  //           message: '审核成功',
+  //           type: 'success'
+  //         })
+  //         refreshTable()
+  //       } else {
+  //         ElMessage({
+  //           message: res.msg,
+  //           type: 'warning'
+  //         })
+  //       }
+  //     })
+  //   } else {
+  //     ElMessage({
+  //       message: '至少选择一个',
+  //       type: 'warning'
+  //     })
+  //   }
+  // }
   const setPrint = (row: any) => {
     try {
       // if (row.statu === 4) {

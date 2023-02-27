@@ -16,24 +16,27 @@
       <div class="top-shelfFile">
         <el-form-item label="唛架图">
           <!-- <div class="layCloth-img"> -->
-            <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="59" />
+          <UploadModule :disabled="disable(true)" :type="'shelfFile'" :get-data="getData" :value="state.form.shelfFile" :upload="upload.shelfFile" :width="59" />
           <!-- </div> -->
         </el-form-item>
       </div>
     </el-form>
+    <!-- 暂时关闭  2-24 2.1版本 -->
     <!-- 选项 -->
-    <div class="option">
+    <!-- <div class="option">
       <div v-for="(item, i) in state.topList" :key="i" :class="item.type ? 'option-item-check' : 'option-item'" @click="option(item, i)">{{ item.name }}</div>
-    </div>
+    </div> -->
     <!-- 内容  -->
     <div class="middle-container">
       <div class="middle">
         <!--选择设备-->
         <SelectDev v-if="state.topCurrent === 0" :type="state.type" :value="state.list.one" :set-data="setData" />
+        <!-- 暂时关闭  2-24 2.1版本 -->
         <!--设备参数-->
-        <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" />
+        <!-- <DevParam v-if="state.topCurrent === 1" ref="devParam" :type="state.type" :value="state.list" :row="state.list.one" :set-data="setData" /> -->
         <!--计划时间-->
-        <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" />
+        <!-- <PlannedTime v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData" /> -->
+
         <!-- 时间更新  新功能 -->
         <!-- <plannedTimeDemo v-if="state.topCurrent === 2" ref="plannedTime" :type="state.type" :ids="state.ids" :value="state.list" :set-data="setData"  /> -->
       </div>
@@ -55,7 +58,7 @@
 <script lang="ts" setup>
   import { ElMessage } from 'element-plus'
   import { isEmpty, cloneDeep } from 'lodash'
-  import { useRoute,useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { reactive, ref, getCurrentInstance } from 'vue'
   import type { FormRules } from 'element-plus'
   import { FormInstance } from 'element-plus'
@@ -65,15 +68,15 @@
   import UploadModule from '@/components/upload/index.vue'
 
   import SelectDev from './selectDev.vue'
-  import DevParam from './devParam.vue'
-  import PlannedTime from './plannedTime.vue'
+  // import DevParam from './devParam.vue'
+  // import PlannedTime from './plannedTime.vue'
   // import plannedTimeDemo from './plannedTimeDemo.vue'
   import { content } from './conifgs'
 
   const leftForm = ref<FormInstance>()
   const { proxy } = getCurrentInstance() as any
   const route = useRoute()
-   const router = useRouter();
+  const router = useRouter()
   const { formData } = content
 
   // const props = defineProps<{
@@ -139,8 +142,8 @@
   })
 
   // const selectDevice = ref<any>(null)
-  const devParam = ref<any>(null)
-  const plannedTime = ref<any>(null)
+  // const devParam = ref<any>(null)
+  // const plannedTime = ref<any>(null)
 
   //设置设备参数
   let setGetParam = (data: any) => {
@@ -169,7 +172,7 @@
             }
           }
         ]
-       res.data.img = [{ url: res.data.styleImage }]
+        res.data.img = [{ url: res.data.styleImage }]
         state.form = cloneDeep(res.data) //显示左侧款图
         state.list.one = res.data //初始显示数据
       })
@@ -210,27 +213,27 @@
   init()
 
   //切换菜单
-  const option = (v: any, i: any) => {
-    let bedPlanNo = state.list.one.bedPlanNo
-    let deviceSn = state.list.one.deviceSn
-    if (bedPlanNo && deviceSn) {
-      let arr = cloneDeep(state.topList)
-      arr.map((item: any) => {
-        if (item.name === v.name) {
-          item.type = true
-        } else {
-          item.type = false
-        }
-      })
-      state.topCurrent = i
-      state.topList = arr
-    } else {
-      ElMessage({
-        message: '必填项不能为空',
-        type: 'warning'
-      })
-    }
-  }
+  // const option = (v: any, i: any) => {
+  //   let bedPlanNo = state.list.one.bedPlanNo
+  //   let deviceSn = state.list.one.deviceSn
+  //   if (bedPlanNo && deviceSn) {
+  //     let arr = cloneDeep(state.topList)
+  //     arr.map((item: any) => {
+  //       if (item.name === v.name) {
+  //         item.type = true
+  //       } else {
+  //         item.type = false
+  //       }
+  //     })
+  //     state.topCurrent = i
+  //     state.topList = arr
+  //   } else {
+  //     ElMessage({
+  //       message: '必填项不能为空',
+  //       type: 'warning'
+  //     })
+  //   }
+  // }
 
   // 总数据
   const setData = (type: any, e: any) => {
@@ -340,7 +343,6 @@
     return data
   }
 
-
   let timeout: any
   const debounce = (func: any, wait: any) => {
     clearTimeout(timeout)
@@ -354,10 +356,10 @@
     }, 300)
   }
 
-    // 取消
+  // 取消
   const close = () => {
     emits.emit(EMitt.OnCloseCurrTab)
-     router.push("/cuttingManagement/layCloth");//跳转到列表
+    router.push('/cuttingManagement/layCloth') //跳转到列表
   }
 
   // 保存
@@ -426,7 +428,7 @@
         } else {
           ElMessage({
             message: res.msg,
-            
+
             type: 'warning'
           })
         }
@@ -438,8 +440,6 @@
       })
     }
   }
-
-
 </script>
 
 <style lang="less" scoped>

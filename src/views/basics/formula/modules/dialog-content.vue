@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-21 14:58:53
+ * @LastEditTime: 2023-02-24 10:57:57
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -144,14 +144,15 @@
             }
           })
           state.parameters = data
+          //获取适用资源
+          let type = state.form.type
+          if (type) {
+            change(type, 'init')
+          }
         }
       })
     }
     //获取适用设备
-    let type = state.form.type
-    if (type) {
-      change(type, 'init')
-    }
   }
   init()
   //获取适用设备

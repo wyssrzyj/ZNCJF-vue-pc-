@@ -13,6 +13,7 @@
     </template>
 
     <template #operationExtBtn>
+      <el-button type="primary" style="order: 3" @click="handleClick(false, '公式新增', {})">基台测试13-21</el-button>
       <el-button type="primary" style="order: 3" @click="handleClick(false, '公式新增', {})">新增</el-button>
       <el-button type="danger" style="order: 3" @click="mov">删除</el-button>
     </template>

@@ -18,6 +18,9 @@
         <el-form-item label="铺布任务号">
           <el-input v-model="state.rightForm.taskCode" disabled />
         </el-form-item>
+        <el-form-item label="计划开始时间：">
+          <el-date-picker v-model="state.rightForm.planStartTime" :clearable="false" value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
+        </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="面料编号">
@@ -32,6 +35,9 @@
         <el-form-item label="唛架长度 (mm)">
           <el-input v-model="state.rightForm.shelfLength" disabled />
         </el-form-item>
+        <el-form-item label="计划结束时间：">
+          <el-date-picker v-model="state.rightForm.planEndTime" :clearable="false" value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
+        </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="唛架门幅 (mm)">
@@ -41,8 +47,8 @@
           <el-input v-model="state.rightForm.spreadClothLength" disabled />
         </el-form-item>
         <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
-          <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" />
-          <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" />
+          <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" disabled />
+          <!-- <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" /> -->
         </el-form-item>
         <el-form-item label="设备名称">
           <el-input v-model="state.rightForm.deviceName" disabled />
@@ -70,7 +76,7 @@
   </el-dialog>
   <!-- 设备编号 -->
   <el-dialog v-if="state.deviceSnType" v-model="state.deviceSnType" :draggable="false" :close-on-click-modal="false" title="设备编号" width="1100px">
-    <DeviceSnType :type="props.type" :operation="setDeviceSnType" :value=" props.value" />
+    <DeviceSnType :type="props.type" :operation="setDeviceSnType" :value="props.value" />
   </el-dialog>
 </template>
 
@@ -80,7 +86,7 @@
   import DeviceSn from './dialog-content-deviceSn.vue'
   import DeviceSnType from './dialog-content-deviceSnType.vue'
 
-  import equipmentIcon from '@/components/icon/equipment-icon.png'
+  // import equipmentIcon from '@/components/icon/equipment-icon.png'
 
   import { selectDevice } from './conifgs'
   const { formData, dataRule } = selectDevice
@@ -116,42 +122,21 @@
   watch(
     () => props.value,
     (item: any) => {
-     try {
-      state.device.deviceId = item.deviceId
-      state.device.deviceSn = item.deviceSn
-      state.rightForm = item
-      props.setData('1', state.rightForm)
-      
-     } catch (error) {
-      
-     }
-
+      try {
+        state.device.deviceId = item.deviceId
+        state.device.deviceSn = item.deviceSn
+        state.rightForm = item
+        props.setData('1', state.rightForm)
+      } catch (error) {}
     }
   )
 
-  // const validateFrom = () => {
-  //   submitForm(rightFormRef)
+  // 暂时关闭 2-24
+  // const setDeviceSn = () => {
+  //   if (!props.type) {
+  //     state.deviceSnType = true
+  //   }
   // }
-  // // 校验表单
-  // const submitForm = async (formEl: any | undefined | any) => {
-  //   if (!formEl) return
-  //   await formEl.value.validate((valid: any) => {
-  //     if (valid) {
-  //       // emit('changeFrom', state.rightForm)
-  //     }
-  //   })
-  // }
-
-  // defineExpose({ validateFrom })
-
-  // const setBedPlanNo = () => {
-  //   state.bedPlanNoType = true
-  // }
-  const setDeviceSn = () => {
-    if (!props.type) {
-      state.deviceSnType = true
-    }
-  }
   //设置床次数据
   const operation = (e: any) => {
     if (e.type === 'cancel') {
@@ -245,7 +230,7 @@
     cursor: pointer;
   }
   .rightFormRef {
-    transform: translateX(-20px);    
+    transform: translateX(-20px);
     display: block;
     /deep/ .el-input {
       width: 250px;

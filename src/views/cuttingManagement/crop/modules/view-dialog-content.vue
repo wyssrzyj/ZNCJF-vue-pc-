@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-04 17:07:48
+ * @LastEditTime: 2023-02-24 10:13:02
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -40,15 +40,7 @@
 
             <div v-if="item.type === 'time'" class="label-time">
               <el-form-item :label="`${item.name}`">
-                <el-date-picker
-                  v-model="state.form[item.model]"
-                  class="crop-number"
-                  :disabled="disable(item.disabled)"
-                  value-format="x"
-                  type="datetime"
-                  placeholder="计划开始时间"
-                  format="YYYY-MM-DD HH:mm"
-                />
+                <el-date-picker v-model="state.form[item.model]" class="crop-number" disabled value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm" />
               </el-form-item>
             </div>
           </div>
@@ -78,15 +70,7 @@
             </div>
             <div v-if="item.type === 'time'" class="label-time">
               <el-form-item :label="`${item.name}`">
-                <el-date-picker
-                  v-model="state.form[item.model]"
-                  class="crop-number"
-                  :disabled="disable(item.disabled)"
-                  type="datetime"
-                  placeholder="计划结束时间"
-                  format="YYYY-MM-DD HH:mm"
-                  value-format="x"
-                />
+                <el-date-picker v-model="state.form[item.model]" class="crop-number" disabled type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" />
               </el-form-item>
             </div>
           </div>
