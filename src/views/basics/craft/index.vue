@@ -54,14 +54,14 @@
             <el-table-column prop="use" label="启用" center width="100">
               <template #default="{ row }">
                 <div>
-                  <el-switch v-model="row.enableFlag" :active-value="1" :inactive-value="0" />
+                  <el-switch v-model="row.enableFlag" :active-value="1" :inactive-value="0" :disabled="row.name !== '打标/唛架纸' ? true : false" />
                 </div>
               </template>
             </el-table-column>
             <el-table-column prop="formula" label="计算公式" center>
               <template #default="{ row }">
                 <div>
-                  <el-select v-model="row.formulaId">
+                  <el-select v-model="row.formulaId" :clearable="row.name === '打标/唛架纸' ? true : false" :disabled="row.enableFlag === 0 ? true : false">
                     <el-option v-for="(item, index) in row.formula" :key="index" :label="item.name" :value="item.id" />
                   </el-select>
                 </div>
@@ -491,6 +491,11 @@
       technologyId: baseData.currentId,
       processList: temp
     }
+    // processData.processList.forEach((item: any) => {
+    //   if (item.name === '打标/唛架纸') {
+    //     if (item.formulaId === '') item.formulaId = null
+    //   }
+    // })
     await proxy.$baseService.post('/jack-ics-api/technology/save', data)
     await proxy.$baseService
       .post('/jack-ics-api/technology/updateProcess', processData)
@@ -565,6 +570,24 @@
         // baseData.tempArr = arr
       }
     )
+  //当这个工序关闭时，清空计算公式
+  watch(
+    () => {
+      return baseData.tableData
+    },
+    NewValue => {
+      NewValue.forEach((item: any) => {
+        if (item.name === '打标/唛架纸') {
+          if (item.enableFlag === 0) {
+            item.formulaId = ''
+          }
+        }
+      })
+    },
+    {
+      deep: true
+    }
+  )
 </script>
 
 <style scoped lang="less">
