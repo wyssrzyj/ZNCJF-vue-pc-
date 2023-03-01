@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-24 10:13:02
+ * @LastEditTime: 2023-02-27 16:14:53
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -46,7 +46,7 @@
           </div>
         </el-col>
         <el-col :span="8">
-          <div v-for="(item, index) in state.middle" :key="index">
+          <div v-for="(item, index) in  state.middle" :key="index">
             <div v-if="item.type === null">
               <el-form-item :label="`${item.name}`">
                 <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
@@ -59,12 +59,11 @@
               </el-form-item>
             </div>
 
-            <div v-if="item.type === 'deviceSn'">
-              <el-form-item :label="`${item.name}`" prop="deviceSn" class="crop-deviceSn">
+            <div v-if="item.type === 'resourceSn'">
+              <el-form-item :label="`${item.name}`" prop="resourceSn" class="crop-resourceSn">
                 <!-- <div class="level"> -->
                 <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
-                <!-- <el-input v-model="state.form[item.model]" class="cropInput" :disabled="disable(item.disabled)" type="text" /> -->
-                <el-icon class="crop-proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon>
+                <!-- <el-icon class="crop-proportionsLeft" :size="30" @click="state.dialogTableVisible = true"><Edit /></el-icon> -->
                 <!-- </div> -->
               </el-form-item>
             </div>
@@ -175,7 +174,7 @@
             }
           }
         ]
-        // (res.data.deviceSn = 1), //设备编号测试~
+        // (res.data.resourceSn = 1), //设备编号测试~
         state.form = res.data
       })
     }

@@ -29,14 +29,14 @@
     </template>
 
     <template #shelfLength="{ row }">
-      <span>{{ row.shelfLength.toFixed(0) }} </span>
+      <!-- <span>{{ row.shelfLength.toFixed(0) }} </span> -->
     </template>
     <template #spreadClothLength="{ row }">
-      <span>{{ row.spreadClothLength.toFixed(0) }} </span>
+      <!-- <span>{{ row.spreadClothLength.toFixed(0) }} </span> -->
     </template>
 
     <template #statu="{ row }">
-      <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)"> {{ mapType.get(row.statu) }}</el-tag>
+      <el-tag v-if="row.statu" class="ml-2" :type="tagType.get(row.statu)"> {{ bedScheduleType.get(row.statu) }}</el-tag>
     </template>
 
     <template #actionExtBtn="{ row }">
@@ -72,7 +72,7 @@
   import { ElMessage } from 'element-plus'
   import { isEmpty } from 'lodash'
 
-  import { mapType, tagType } from '@/components/conifgs'
+  import { bedScheduleType, tagType } from '@/components/conifgs'
   import ImgModular from '@/components/imgModular/index.vue'
   import ImportDialog from '@/components/dialog-import-table/index.vue'
   import { exportData } from './modules/conifgs'

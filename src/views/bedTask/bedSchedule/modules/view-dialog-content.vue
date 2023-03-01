@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-23 10:27:22
+ * @LastEditTime: 2023-03-01 16:48:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -163,7 +163,7 @@
                 </div>
                 <div v-if="item.type === 'time'">
                   <el-form-item :label="`${item.name}`" :prop="item.prop">
-                    <el-date-picker v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="datetime" :placeholder="item.name" format="YYYY-MM-DD HH:mm" />
+                    <el-date-picker v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="datetime" :placeholder="item.name" format="MM-DD HH:mm" />
                   </el-form-item>
                 </div>
 
@@ -226,7 +226,7 @@
                       :disabled="disable(item.disabled)"
                       type="datetime"
                       :placeholder="item.name"
-                      format="YYYY-MM-DD HH:mm"
+                      format="MM-DD HH:mm"
                     />
                   </el-form-item>
                 </div>
@@ -261,6 +261,10 @@
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" title="排唛比例" width="1200px">
     <PopModule :type="state.type" :operation="operation" :form="state.form" />
   </el-dialog>
+  <!-- 审核 -->
+    <el-dialog v-if="state.dialogContentType" v-model="state.dialogContentType" :draggable="false" :close-on-click-modal="false" :title="state.dialogTitle" width="700px">
+    <DialogExamine  :close="close" :dialog-type="state.dialogContentType" :row="state.form" />
+  </el-dialog>
   <div style="height: 0; overflow: hidden">
     <Work :id="state.printId" />
   </div>
@@ -272,18 +276,22 @@
   import print from 'print-js'
   import { useRoute, useRouter } from 'vue-router'
   import moment from 'moment'
+
   import UploadModule from '@/components/upload/index.vue'
   import Tips from '@/components/tips/index.vue'
+    import { EMitt } from '@njpCommon/constants/enum'
+  import emits from '@njpCommon/utils/emits'
+  import RowWheat from '@/components/icon/rowWheat.png'
+  import setIcon from '@/components/icon/set.jpg'
+
 
   import { content } from './conifgs'
   import { ElMessage } from 'element-plus'
   import PopModule from './dialog-forms.vue'
   import Work from './dialog-work.vue'
-  import { EMitt } from '@njpCommon/constants/enum'
-  import emits from '@njpCommon/utils/emits'
+  import DialogExamine from './dialog-examine.vue'
 
-  import RowWheat from '@/components/icon/rowWheat.png'
-  import setIcon from '@/components/icon/set.jpg'
+
 
   import './index.less'
   const { formData, formMiddleData, formLeftData, formRightData, dataRule } = content
@@ -300,6 +308,7 @@
     middle: cloneDeep(formMiddleData),
     right: cloneDeep(formRightData),
     dialogTableVisible: false,
+    dialogContentType:false,//审核弹窗
     spreadClothLengthType: false, //铺布长度提示框
     dataDifference: 0, //铺布长度差值
     //提示信息
@@ -405,6 +414,10 @@
         //铺布长度添加10    //后续需要注销 等后端代码更新 2022-12-19 越也
         // res.data.spreadClothLength=res.data.spreadClothLength+10 //2023-1-12  取消
         res.data.spreadClothLength = res.data.spreadClothLength
+       //时间
+        // res.data.startDate= moment(res.data.startDate)
+        // res.data.endDate= moment(res.data.endDate)
+        
         state.form = res.data
       })
     } else {
@@ -679,17 +692,28 @@
           data.attachmentList = arr
         }
 
-        // 排唛比例
+        // 时间
+        if(data.startDate){
+          data.startDate=moment(data.startDate).valueOf()
+        }
+         if(data.endDate){
+           data.endDate=moment(data.endDate).valueOf()
+        }
+        
+       
+
         //面料名称
         let api = type === '1' ? '/jack-ics-api/bedPlan/saveAndAudit' : '/jack-ics-api/bedPlan/save'
-        proxy.$baseService.post(api, data).then((res: any) => {
+
+        if(type=== '2'){
+         //保存
+            proxy.$baseService.post(api, data).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',
               type: 'success'
             })
             resetForm()
-            //  formEl.resetFields()
           } else {
             ElMessage({
               message: res.msg,
@@ -697,6 +721,12 @@
             })
           }
         })
+        }else{
+        // 审核 后期删除【测试使用 】
+          state.dialogContentType = true
+      
+        }
+      
       }
     })
   }
@@ -781,8 +811,17 @@
   }
 
   const disabledDate = (time: Date) => {
-    let setTime: any = moment(state.form.setTime)
-    return time.getTime() < setTime
+    let startDate: any = moment(state.form.startDate)
+    return time.getTime() < startDate
+  }
+
+    //关闭 弹窗
+  const close = (type: string) => {
+    if (type == 'preservation') {
+      state.dialogContentType = false
+    } else {
+      state.dialogContentType = false
+    }
   }
 </script>
 

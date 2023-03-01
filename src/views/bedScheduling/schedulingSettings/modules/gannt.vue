@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-02-23 10:11:39
+ * @LastEditTime: 2023-03-01 17:00:25
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onMounted ,watch} from 'vue'
-
+  import { reactive ,watch} from 'vue'
+  import { cloneDeep, isEmpty } from 'lodash'
   import {gantt} from 'dhtmlx-gantt' // 引入模块
   import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 
@@ -29,73 +29,12 @@
     }
   })
   
-  const init = () => {
-    const data = [                          
-      {
-        //父亲
-        id: 1,
-        type: true, //判断是否可以移动
-        text: '裁剪车间—裁剪班组', //名称
-        lyj: '8848',
-        lxr: '糯米',
-        progress: 0.6,
-        open: true, //默认展开
-        // progress: 1, //控制完成百分比 范围0-1
-        color: 'red' //控制颜色
-      },
-      {
-        //儿子
-        id: 11,
-        text: '订单1',
-        lyj: '8848',
-       
-        progress: 0.6,
-        parent: 1,
-        color: '', //控制颜色
-        render: 'split' //添加同一行
-      },
-      {
-        //孙子
-        id: 111,
-        text: '卢英杰的子1',
-        lyj: '8848',
-        start_date: '2023-04-7-9', //开始时间
-        end_date: '2023-04-7-17 ', //结束时间
-        progress: 0.6,
-        parent: 11,
-        color: 'red' //控制颜色
-      },
-      {
-        id: 112,
-        text: '卢英杰的子2',
-        start_date: '2023-04-9-9', //开始时间
-        end_date: '2023-04-9-17 ', //结束时间
-        progress: 0.6,
-        parent: 11,
-        color: 'pink' //控制颜色
-      },
-      {
-        id: 113,
-        text: '卢英杰号的子3',
-        start_date: '2023-04-11-9', //开始时间
-        end_date: '2023-04-11-17 ', //结束时间
-        progress: 0.6,
-        parent: 11,
-        color: '#039af9' //控制颜色
-      },
-    ]
 
-    state.ganttList.data = data
-    // state.ganttList.links=links
-    // // //本地化
-    // gantt.i18n.setLocale("cn");
-    // // 新增列
-    // // 初始化
-    // gantt.init(chartDom);
-    // // 数据解析
-    // gantt.parse(state.tasks);
-  }
-  init()
+
+  
+
+
+
 
   //配置数据
   const initZoom = () => {
@@ -121,7 +60,7 @@
     gantt.config.columns = [
       { name: 'text', label: '款号', tree: true, width: '250' },
       { name: 'lyj', label: '床次', align: 'center' },
-      { name: 'start_date', label: '时间', align: 'center' },
+      { name: 'start_date', label: '时间', align: 'center', width: '350'  },
       { name: 'lxr', label: '状态', align: 'center' },
     ]
     //单击事件
@@ -199,19 +138,30 @@
     gantt.parse(state.ganttList) //渲染数据
   }
 
-  onMounted(() => {
-    initZoom()
-    ganttShow()
-  })
-     watch(
+  // 赋值数据
+  const init = (e:any) => {
+      if(!isEmpty(e.data)){
+         state.ganttList.data = e.data
+          initZoom()
+          ganttShow()
+      }
+  }
+  
+  watch(
     () => props.data,
     item => {
-     
-      gantt.scrollTo(35, 35)//位移
-       gantt.selectTask(1975)//选中
+    let list =cloneDeep(item)
+     init(list)
+      // gantt.scrollTo(35, 35)//位移
+      //  gantt.selectTask(1975)//选中
       //  console.log("监听数据变化-触发位移", item);
-    }
+    },
+    {deep:true}
+
   )
+
+  
+    
 
 </script>
 

@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-28 08:42:24
+ * @LastEditTime: 2023-03-01 16:59:58
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <div class="rightTable">
-    <el-table :data="state.tableData" border style="width: 100%" height="245">
+  <div>
+    <el-table :data="state.tableData" border style="width: 100%">
       <el-table-column prop="color" label="工序" align="center">
         <template #default="{ row }">
           <div :class="row.style"></div>
@@ -27,22 +27,31 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button v-if="props.type === '已分派'" class="schedulingSettings-btn" type="primary" @click="btn">确定修改</el-button>
-    <el-button v-if="props.type === '已分派'" class="schedulingSettings-btn" type="primary" @click="btn">取消分派</el-button>
+  </div>
+
+  <div class="equipmentBottom"></div>
+  <div class="equipmentFoot">
+    <el-button @click="resetForm(ruleFormRef)"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
+    <el-button type="primary" class="preservation" @click="btn">确认</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onMounted,getCurrentInstance } from 'vue'
+  import { reactive, ref, onMounted, getCurrentInstance } from 'vue'
   import moment from 'moment'
+
+  import './index.less'
   import { isEmpty } from 'lodash'
 
-   const { proxy } = getCurrentInstance() as any
+  const ruleFormRef = ref<any>()
+  const { proxy } = getCurrentInstance() as any
   const props = defineProps<{
-    type: any
+    dialogType: boolean
+    close: any
+    row: any
   }>()
 
- const state: any = reactive({
+  const state: any = reactive({
     tableData: [
       {
         title: '铺布',
@@ -80,6 +89,7 @@
     })
   }
   init()
+
   // 生产任务订单查询
   const getPageList = () => {}
   onMounted(() => {
@@ -121,20 +131,61 @@
           resourceId: cutTaskId
         }
       },
-      bedPlanId: "123465"//测试id
+      bedPlanId: props.row.id
     }
     proxy.$baseService.post('/jack-ics-api/spreadTask/save', { ...arr }).then((res: any) => {
       if(res.data===0){
-      //  props.close('cancel')
+       props.close('cancel')
       }
     })
   }
+  // 取消
+  const resetForm = (formEl: any) => {
+    props.close('cancel')
+  }
 </script>
 <style lang="less" scoped>
-  .rightTable {
-    width: 33vw;
-    float: right;
+
+   /deep/ .el-input__inner {
+        text-align: left !important; //输入框左对齐
+      }
+
+      .equipment{
+    display: flex;
+    flex-direction:column;
+    // height: 450px;
+    padding-bottom: 20px;
+    overflow:auto
+    // align-items: center;
+
+
   }
+
+    .equipment-proportionsLeft {
+      // width: 10px;
+      font-size: 15px;
+      position: absolute;
+      top: -29px;
+      right: 79px;
+      color: rgb(69, 167, 231);
+      cursor: pointer;
+    }
+    .defaultParam {
+      width: 200px;
+      height: 100px;
+      overflow-y: scroll;
+    }
+    .relationOperaterList {
+      transform: translateX(13px);
+    }
+    .equipment-left{
+      width: 150px;
+    }
+    .equipmentBottom{
+      height: 50px;
+    }
+
+
   .cloth {
     width: 16px;
     height: 28px;
@@ -154,13 +205,7 @@
     background: #56d6be;
     transform: translate(25px, 10px);
   }
-
-  .table-txt {
+    .table-txt {
     transform: translate(5px, -16px);
-  }
-  .schedulingSettings-btn {
-    float: right;
-    margin-top: 20px;
-    margin-right: 10px;
   }
 </style>

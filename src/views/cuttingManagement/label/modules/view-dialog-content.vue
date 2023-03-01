@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-04 17:06:27
+ * @LastEditTime: 2023-02-27 16:09:24
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -41,7 +41,7 @@
               </div>
               <div v-if="item.type === 'time'" class="label-time">
                 <el-form-item :label="`${item.name}`">
-                  <el-date-picker v-model="state.form[item.model]" :disabled="disable(false)" value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm" @change="setTime" />
+                  <el-date-picker v-model="state.form[item.model]" disabled value-format="x" type="datetime" placeholder="计划开始时间" format="YYYY-MM-DD HH:mm" @change="setTime" />
                 </el-form-item>
               </div>
             </div>
@@ -58,14 +58,14 @@
                   <el-input-number v-model="state.form[item.model]" class="label-number" :controls="false" :precision="0" controls-position="right" :min="0" disabled />
                 </el-form-item>
               </div>
-              <div v-if="item.type === 'deviceSn'">
-                <el-form-item :label="`${item.name}`" prop="deviceSn">
+              <div v-if="item.type === 'resourceSn'">
+                <el-form-item :label="`${item.name}`" prop="resourceSn">
                   <el-input v-model="state.form[item.model]" :disabled="disable(item.disabled)" type="text" />
                 </el-form-item>
               </div>
               <div v-if="item.type === 'time'" class="label-time">
                 <el-form-item :label="`${item.name}`">
-                  <el-date-picker v-model="state.form[item.model]" :disabled="disable(false)" type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
+                  <el-date-picker v-model="state.form[item.model]" disabled type="datetime" placeholder="计划结束时间" format="YYYY-MM-DD HH:mm" value-format="x" @change="setTime" />
                 </el-form-item>
               </div>
             </div>

@@ -10,7 +10,7 @@
       <el-form-item label="贴标任务号" prop="taskCode">
         <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
       </el-form-item>
-      <el-form-item label="设备名称" prop="deviceName">
+      <el-form-item label="资源名称" prop="deviceName">
         <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="statu">
@@ -37,14 +37,10 @@
 <script lang="ts" setup>
   import { reactive, ref, getCurrentInstance } from 'vue'
   import ImgModular from '@/components/imgModular/index.vue'
-  import { tagType } from '@/components/conifgs'
-
+  import { tagType ,mapType} from '@/components/conifgs'
   const { proxy }: any = getCurrentInstance()
 
-  let mapType = new Map()
-  mapType.set(2, '待执行')
-  mapType.set(3, '进行中')
-  mapType.set(4, '已完成')
+
 
   const styleLibListEl = ref()
 

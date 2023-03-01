@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-20 15:13:01
+ * @LastEditTime: 2023-03-01 16:38:58
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -16,19 +16,24 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column property="produceOrderCode" label="床次" />
-      <el-table-column property="bedPlanNo" label="面料" />
-      <el-table-column property="styleName" label="主料/辅料" />
-      <el-table-column property="styleCode" label="计划层数" />
-      <el-table-column property="styleBedNo" label="计划件数" />
+      <el-table-column property="styleBedNo" label="床次" />
+      <el-table-column property="fabricName" label="面料" />
+      <el-table-column property="primaryFlag" label="主料/辅料">
+        <template #default="{ row }">
+          <span>{{ row.primaryFlag === 1 ? '主料' : '辅料' }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column property="spreadClothLevel" label="计划层数" />
+      <el-table-column property="bedSum" label="计划件数" />
 
       <el-table-column property="customName" label="排唛比例">
         <template #default="{ row }">
           <img :src="edit" alt="" class="schedulingSettings-edit" @click="shippingMarks(row)" />
         </template>
       </el-table-column>
-      <el-table-column property="customName" label="计划开始时间" />
-      <el-table-column property="customName" label="计划结束时间" />
+      <el-table-column property="startDate" label="计划开始时间" />
+      <el-table-column property="endDate" label="计划结束时间" />
       <el-table-column property="customName" label="铺布任务">
         <template #default="scope">
           <div class="tableContainer">
@@ -69,14 +74,20 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance, onMounted } from 'vue'
+  import { reactive, getCurrentInstance, watch } from 'vue'
   import { isEmpty } from 'lodash'
   import { ElMessage } from 'element-plus'
+  import moment from 'moment'
 
   import edit from '@/components/icon/edit.png'
   import PopModule from './dialog-forms.vue'
 
   import './table.less'
+
+  const props = defineProps<{
+    row: any
+  }>()
+
   const { proxy } = getCurrentInstance() as any
 
   const state: any = reactive({
@@ -85,184 +96,18 @@
     form: {} //排麦比例需要的数据
   })
 
-  const init = () => {
-    let a = [
-      {
-        color: 'B00标准白',
-        sizeAndAmountList: [
-          {
-            size: 'L',
-            levelClothSum: 3
-          },
-          {
-            size: 'XL',
-            levelClothSum: 2
-          },
-          {
-            size: 'XXL',
-            levelClothSum: 2
-          }
-        ],
-        spreadClothLevel: 20,
-        rowFlag: 1,
-        unique: 'B00标准白0'
-      },
-      {
-        color: 'B01米白',
-        sizeAndAmountList: [
-          {
-            size: 'L',
-            levelClothSum: 3
-          },
-          {
-            size: 'XL',
-            levelClothSum: 2
-          },
-          {
-            size: 'XXL',
-            levelClothSum: 2
-          }
-        ],
-        spreadClothLevel: 20,
-        rowFlag: 2,
-        unique: 'B01米白1'
-      },
-      {
-        color: 'B02浅黄',
-        sizeAndAmountList: [
-          {
-            size: 'L',
-            levelClothSum: 3
-          },
-          {
-            size: 'XL',
-            levelClothSum: 2
-          },
-          {
-            size: 'XXL',
-            levelClothSum: 2
-          }
-        ],
-        spreadClothLevel: 20,
-        rowFlag: 3,
-        unique: 'B02浅黄2'
-      },
-      {
-        color: 'B03橘黄',
-        sizeAndAmountList: [
-          {
-            size: 'L',
-            levelClothSum: 3
-          },
-          {
-            size: 'XL',
-            levelClothSum: 2
-          },
-          {
-            size: 'XXL',
-            levelClothSum: 2
-          }
-        ],
-        spreadClothLevel: 20,
-        rowFlag: 4,
-        unique: 'B03橘黄3'
-      }
-    ]
-    proxy.$baseService.get('/jack-ics-api/index/bedTask').then((res: any) => {
-      let demoList = [
-        {
-          fabricColor: 'B01米白,B02浅黄,B00标准白,B03橘黄',
-          shelfList: a,
-          sizeList: [
-            {
-              size: 'L'
-            },
-            {
-              size: 'XL'
-            },
-            {
-              size: 'XXL'
-            }
-          ],
-          id: '1623853129071763457',
-          styleImage: '',
-          styleCode: '1125',
-          styleName: '25号梭织',
-          produceOrderCode: '68553',
-          customName: '',
-          bedPlanNo: 'BP-202211250899',
-          styleBedNo: '1',
-          fabricCode: 'S002',
-          fabricName: '梭织面料',
-          overViewList: '1,2,3',
-          finishList: null,
-          nextTaskType: null
-        },
-        {
-          id: '1623853129071763457',
-          shelfList: a,
-          sizeList: [
-            {
-              size: 'L'
-            },
-            {
-              size: 'XL'
-            },
-            {
-              size: 'XXL'
-            }
-          ],
-          styleImage: '',
-          styleCode: '1125',
-          styleName: '25号梭织',
-          produceOrderCode: '68553',
-          customName: '',
-          bedPlanNo: 'BP-202211250899',
-          styleBedNo: '1',
-          fabricCode: 'S002',
-          fabricName: '梭织面料',
-          fabricColor: '黑，绿',
-          overViewList: '1,2,3',
-          finishList: '1',
-          nextTaskType: 1
-        },
-        {
-          shelfList: a,
-          sizeList: [
-            {
-              size: 'L'
-            },
-            {
-              size: 'XL'
-            },
-            {
-              size: 'XXL'
-            }
-          ],
-          id: '1623853129071763457',
-          styleImage: '',
-          styleCode: '1125',
-          styleName: '25号梭织',
-          produceOrderCode: '68553',
-          customName: '',
-          bedPlanNo: 'BP-202211250899',
-          styleBedNo: '1',
-          fabricCode: 'S002',
-          fabricName: '梭织面料',
-          fabricColor: '黑，绿',
-          overViewList: '1,2,3',
-          finishList: '1,2',
-          nextTaskType: 1
-        }
-      ]
+  const init = (e: any) => {
+    let data = { styleCode: e.style.styleCode }
+
+    proxy.$baseService.get('/jack-ics-api/productionScheduling/listBedProgress', { ...data }).then((res: any) => {
       if (!isEmpty(res.data)) {
-        // state.total = res.data.total
-        state.total = demoList
+        state.total = res.data
         //添加任务状态
-        // let list = res.data.list
-        let list = demoList
+        let list = res.data
+
         if (!isEmpty(list)) {
           list.map((item: any) => {
+            // 尾部样式处理
             if (item.finishList) {
               item.finishList = item.finishList.split(',')
 
@@ -272,17 +117,27 @@
               if (item.finishList.includes('2')) {
                 item.labeling = true
               }
-              //
-              // if (item.finishList.includes('3')) {
-              //   item.cropping = true
-              // }
+            }
+            //时间处理
+            if (item.startDate) {
+              item.startDate = moment(item.startDate).format('HH:mm:ss')
+              item.endDate = moment(item.endDate).format('HH:mm:ss')
             }
           })
         }
+
         state.tableData = list
       }
     })
   }
+
+  watch(
+    () => props.row,
+    item => {
+      init(item)
+    }
+  )
+
   //弹窗展示
   const shippingMarks = (e: any) => {
     proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: e.id }).then((res: any) => {
@@ -470,10 +325,7 @@
       setForm()
     }
   }
-
-  onMounted(() => {
-    init()
-  })
+  
 </script>
 <style lang="less" scoped>
   /deep/ .el-input__inner {

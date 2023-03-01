@@ -19,7 +19,7 @@
           <el-input v-model="state.rightForm.taskCode" disabled />
         </el-form-item>
         <el-form-item label="计划开始时间：">
-          <el-date-picker v-model="state.rightForm.planStartTime" :clearable="false" value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
+          <el-date-picker v-model="state.rightForm.planStartTime" disabled :clearable="false" value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -36,7 +36,7 @@
           <el-input v-model="state.rightForm.shelfLength" disabled />
         </el-form-item>
         <el-form-item label="计划结束时间：">
-          <el-date-picker v-model="state.rightForm.planEndTime" :clearable="false" value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
+          <el-date-picker v-model="state.rightForm.planEndTime" :clearable="false" disabled value-format="x" format="YYYY-MM-DD HH:mm" type="datetime" />
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -46,12 +46,12 @@
         <el-form-item label="铺布长度 (mm)">
           <el-input v-model="state.rightForm.spreadClothLength" disabled />
         </el-form-item>
-        <el-form-item label="设备编号" required prop="deviceSn" class="deviceSn">
-          <el-input :value="state.rightForm.deviceSn" :placeholder="`请选择设备编号`" disabled />
+        <el-form-item label="资源编号"  class="deviceSn">
+          <el-input :value="state.rightForm.resourceSn" :placeholder="`请选择设备编号`" disabled />
           <!-- <img :src="equipmentIcon" alt="" class="setting-img" @click="setDeviceSn" /> -->
         </el-form-item>
-        <el-form-item label="设备名称">
-          <el-input v-model="state.rightForm.deviceName" disabled />
+        <el-form-item label="资源名称">
+          <el-input v-model="state.rightForm.resourceName" disabled />
         </el-form-item>
       </el-col>
       <el-col :span="6">

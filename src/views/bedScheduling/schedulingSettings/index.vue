@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-02-21 10:06:03
+ * @LastEditTime: 2023-03-01 16:07:46
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,40 +9,36 @@
   <div class="settings">
     <div class="settings-left">
       <div class="settings-left-top">
-        <el-input v-model="state.name" :placeholder="`请输入款号`" type="text" />
+        <el-input v-model="state.name" :placeholder="`请输入款号`" type="text" clearable @blur="setBlur" />
         <div class="settings-type">
-          <div v-for="item in state.choice.data"
-           :key="item.name"
-            :class="item.type ? 'settings-type-data1' : 'settings-type-data2'"
-             @click="setType(item)">{{ item.name }}</div>
+          <div v-for="item in state.choice.data" :key="item.name" :class="item.type ? 'settings-type-data1' : 'settings-type-data2'" @click="setType(item)">{{ item.name }}</div>
         </div>
         <div class="division"></div>
       </div>
-    
+
       <div class="settings-list">
         <div class="settings-list-overflow">
           <!-- 全部、已分派 -->
           <div v-if="state.choice.type !== '未分派'">
-            <div v-for="(item, index) in state.list.wholeData" :key="index" :class="item.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item, 1)">
-              <div class="settings-list-title">款号 : {{ item.name }}</div>
+            <div v-for="(item, index) in state.typeList.wholeData" :key="index" :class="item.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item, 1)">
+              <div class="settings-list-title">款号 : {{ item.style.name }}</div>
             </div>
           </div>
 
           <!-- 未分派 -->
           <div v-if="state.choice.type === '未分派'">
-            <div v-for="(item, index) in state.list.notData" :key="index" @click="setLeftOperation(item, 2)">
-              <div :class="item.type ? 'settings-list-item-true' : 'settings-list-item'">
+            <div v-for="(item, index) in state.typeList.notData" :key="index">
+              <div :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item, 2)">
                 <div class="settings-list-title">
-                  <span><img :src="top" alt="" :class="item.type ? 'settings-img' : 'settings-img-bottom'" /></span>
-                  款号-未 : {{ item.name }}
+                  <span><img :src="top" alt="" :class="item.style.type ? 'settings-img' : 'settings-img-bottom'" /></span>
+                  款号-未 : {{ item.style.name }}
                 </div>
               </div>
               <!-- 子项 -->
-              <div :class="item.type ? 'demo-dh1' : 'demo-dh2'">
-                
-                <div v-for="v,index in item.children" :key="index" >
+              <div :class="item.style.type ? 'demo-dh1' : 'demo-dh2'">
+                <div v-for="(v, index) in item.style.children" :key="index">
                   <div class="settings-checkbox">
-                  <el-checkbox  :label="v.name" size="large" @change="(e:any)=>{setCheckbox(e,v)}" />
+                    <el-checkbox :label="v.name" size="large" @change="(e:any)=>{setCheckbox(e,v)}" />
                   </div>
                 </div>
               </div>
@@ -50,126 +46,155 @@
           </div>
         </div>
         <!-- 操作 -->
-        <div class="settings-list-bottom" v-show="state.choice.type==='未分派'">
+        <div v-show="state.choice.type === '未分派'" class="settings-list-bottom">
           <div class="settings-list-bottom-btn" @click="setAssignment">智能分版</div>
           <div class="settings-list-bottom-btn">保存分派</div>
         </div>
       </div>
     </div>
     <div class="settings-right">
-
       <div>
-        <Gannt :data="state.dhtml"></Gannt>
+        <Gannt :data="state.dhtml" />
       </div>
-      
-       <div class="settings-right-table">
+
+      <div class="settings-right-table">
         <!-- 全部 -->
-        <div v-if="state.choice.type==='全部'">
-        <HomeTable></HomeTable>
+        <div v-if="state.choice.type === '全部'">
+          <HomeTable :row="state.selectData" />
         </div>
-         <!-- 未分派已分派 -->
-        <div v-if="state.choice.type!=='全部'">
+        <!-- 未分派已分派 -->
+        <div v-if="state.choice.type !== '全部'">
           <div class="bottomTable-schedulingSettings">
-        <leftTable></leftTable>
-        <rightTable :type="state.choice.type"></rightTable>
+            <leftTable />
+            <rightTable :type="state.choice.type" />
           </div>
         </div>
-    
-       
       </div>
     </div>
-
-
-
   </div>
   <!-- 弹窗 -->
   <el-dialog v-if="state.assignmentType" v-model="state.assignmentType" :draggable="false" :close-on-click-modal="false" title="智能分派" width="850px">
-      <Assignment :close="close"></Assignment>
-</el-dialog>
+    <Assignment :close="close" />
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { reactive } from 'vue'
+  import { reactive, getCurrentInstance } from 'vue'
   // import { ElMessage } from 'element-plus'
-  import { cloneDeep } from 'lodash'
-  import './index.less'
-  import top from '@/components/icon/top.png'
-  import Gannt from "./modules/gannt.vue"
-  import HomeTable from "./modules/table.vue"
-  import Assignment from "./modules/dialog-assignment.vue"
-  import leftTable from "./modules/leftTable.vue"
-  import rightTable from "./modules/rightTable.vue"
+  import { cloneDeep, isEmpty } from 'lodash'
+import moment from 'moment' 
 
-  // const { proxy }: any = getCurrentInstance()
+  import top from '@/components/icon/top.png'
+
+
+  import Gannt from './modules/gannt.vue'
+  import HomeTable from './modules/table.vue'
+  import Assignment from './modules/dialog-assignment.vue'
+  import leftTable from './modules/leftTable.vue'
+  import rightTable from './modules/rightTable.vue'
+  import './index.less'
+
+  import { content } from './modules/conifgs'
+
+const {choice,typeList}=content
+  const { proxy }: any = getCurrentInstance()
 
   const state: any = reactive({
-    name: '',
-
-    choice: {
-      data: [
-        { name: '全部', type: true },
-        { name: '未分派', type: false },
-        { name: '已分派', type: false }
-      ], //状态渲染根据type状态
-      type: '全部' ,//选中那个【此状态不负责渲染】
-      notDataCheckbox:[]//未分派选中集合
+    name: '', //款号查询条件
+    choice: choice,
+    typeList: typeList,//状态数据
+    assignmentType: false, //分派弹窗
+    selectData:{},//选中项【左侧、甘特图】
+    dhtml: {
+      list:[],
+      x:35,
+      y:35,
+      id:""
     },
-    list: {
-      wholeData: [], //全部
-      notData: [], //未分派
-      alreadyData: [] //已分派
-    },
-    assignmentType:false,//分派弹窗
-    dhtml:{}
   })
-  // 处理左侧数据
-  const setLeftData = (e: any) => {
-    e.map((item: any) => {
-      item.type = false
-    })
-    state.list.wholeData = e
-  }
-  const init = () => {
-    let red = [
-      { name: 'SEE3全部', id: 1 },
-      { name: 'SEE33201156', id: 2 },
-      { name: 'SEE33201157', id: 3 }
-    ]
-    setLeftData(red)
-  }
-  init()
 
   //未分派 数据结构处理
-  const setNotData=()=>{
-     let red = [
-        {
-          name: 'SEE3未分派',
-          id: 1,
-          children: [
-            { name: '子1', id: '1001' },
-            { name: '子21', id: '10021' },
-            { name: '子22', id: '10022' },
-            { name: '子23', id: '10023' },
-            { name: '子24', id: '10024' },
-            { name: '子25', id: '10025' },
-            { name: '子26', id: '10026' },
-            { name: '子27', id: '10027' },
-            { name: '子3', id: '1003' }
-          ]
-        },
-        { name: 'SEE33201156', id: 2 },
-        { name: 'SEE33201157', id: 3 },
-        { name: 'SEE33201157', id: 4 },
-        { name: 'SEE33201157', id: 5 },
-        { name: 'SEE33201157', id: 6 },
-        { name: 'SEE33201157', id: 7 }
-      ]
-      red.map((item: any) => {
-        item.type = false
-      })
-      state.list.notData = red
-
+  const setNotData = (data: any) => {
+    //添加子项
+    data.map((item: any) => {
+      if (!isEmpty(item.styleBedList)) {
+        item.styleBedList.map((v: any) => {
+          v.name = v.styleCode
+        })
+        item.style.children = item.styleBedList
+      }
+    })
+ 
+    state.typeList.notData = data
   }
+
+  // 处理左侧数据
+  const setLeftData = (e: any, type: any) => {
+    e.map((item: any) => {
+      item.style.name = item.style.styleCode //款号
+      item.style.type = false
+    })
+    if (type === '') {
+      state.typeList.wholeData = e
+
+      //子项处理暂时测试
+      setNotData(e)
+    }
+    if (type === 1) {
+      setNotData(e)
+    }
+    if (type === 2) {
+      state.typeList.alreadyData = e
+    }
+  }
+  //获取左侧列表数据
+  const setList = (type: any) => {
+    let data = { distributeStatu: type, styleCode: state.name }
+    // 空是全部
+    // 1 未分派
+    // 2 已分派
+    proxy.$baseService.get('/jack-ics-api/productionScheduling/listStyleAndBed', { ...data }).then((res: any) => {
+      if (res.code === 0) {
+        setLeftData(res.data, type)
+      }
+    })
+  }
+  //款号查询
+  const setBlur = () => {
+    if (state.choice.type === '全部') {
+      setList('')
+    }
+    if (state.choice.type === '未分派') {
+      setList(1)
+    }
+    if (state.choice.type === '已分派') {
+      setList(2)
+    }
+  }
+
+  //获取甘特图数据
+  const setGanntData = (type: any, api: any) => {
+    proxy.$baseService.get(api).then((res: any) => {
+      if(res.code===0){
+        res.data.map((item:any)=>{
+          if(item.startDate){
+          item.start_date=moment(item.startDate).format('YYYY-MM-DD-HH')
+          }
+          if(item.endDate){
+          item.end_date=moment(item.endDate).format('YYYY-MM-DD-HH')
+          }
+        })
+        
+      state.dhtml.data=res.data
+      }
+    })
+  }
+
+  const init = () => {
+    setList('')
+    setGanntData('', '/jack-ics-api/productionScheduling/styleGantt')
+  }
+    init()
 
   //状态选择
   const setType = (e: any) => {
@@ -184,122 +209,82 @@
     })
     state.choice.data = data
     if (e.name === '全部') {
-      let red = [
-        { name: 'SEE3全部', id: 1 },
-        { name: 'SEE33201156', id: 21 },
-        { name: 'SEE33201156', id: 22 },
-        { name: 'SEE33201156', id: 23 },
-        { name: 'SEE33201156', id: 24 },
-        { name: 'SEE33201156', id: 25 },
-        { name: 'SEE33201156', id: 26 },
-        { name: 'SEE33201156', id: 27 },
-        { name: 'SEE33201156', id: 28 },
-        { name: 'SEE33201156', id: 29 },
-        { name: 'SEE33201156', id: 210 },
-        { name: 'SEE33201156', id: 211 },
-        { name: 'SEE33201156', id: 212 },
-        { name: 'SEE33201156', id: 213 },
-        { name: 'SEE33201156', id: 214 },
-        { name: 'SEE33201156', id: 215 },
-        { name: 'SEE33201156', id: 216 },
-        { name: 'SEE33201156', id: 217 },
-        { name: 'SEE33201156', id: 218 },
-        { name: 'SEE33201156', id: 219 },
-        { name: 'SEE33201157', id: 320 }
-      ]
-      setLeftData(red)
+      setList('')
+
+      setGanntData('', '/jack-ics-api/productionScheduling/styleGantt')
     }
     if (e.name === '未分派') {
-        setNotData()
+      // setList(1)
+
+      setList('')
+      setGanntData(1, '')
     }
     if (e.name === '已分派') {
-      let red = [
-        { name: 'SEE3已分派', id: 1 },
-        { name: 'SEE33201156', id: 2 },
-        { name: 'SEE33201157', id: 3 }
-      ]
-      setLeftData(red)
+      setList(2)
+      setGanntData(2, '')
     }
-    // console.log('选中那个', state.choice.type)
   }
   //左侧数据点击事件
   const setLeftOperation = (e: any, type: any) => {
-
     if (type === 1) {
       //选中项处理
-      let data = cloneDeep(state.list.wholeData)
+      let data = cloneDeep(state.typeList.wholeData)
       data.map((item: any) => {
-        if (item.id === e.id) {
-          item.type = true
-        } else {
-          item.type = false
+        if (item.style.id === e.style.id) {
+          item.style.type = true
+        } else {   
+          item.style.type = false
         }
       })
-      state.list.wholeData = data
+      state.selectData = e
+      state.typeList.wholeData = data
 
+      
       //甘特图
-       state.dhtml={name:123} 
+      state.dhtml = { name: 123 }
     }
     //未分派
     if (type === 2) {
       //选中项处理
-      let data = cloneDeep(state.list.notData)
+      let data = cloneDeep(state.typeList.notData)
       data.map((item: any) => {
-        if (item.id === e.id) {
-          item.type = !item.type
+        if (item.style.id === e.id) {
+          item.style.type = !item.style.type
         }
         //是否收齐其他
-        //  else {
-        //   item.type = false
-        // }
+        else {
+          // item.style.type = false
+        }
       })
-      state.list.notData = data
 
-      state.dhtml={name:456} 
+      state.typeList.notData = data
+      state.dhtml = { name: 456 }
     }
   }
-  
+
   //子项选中
-  const setCheckbox=(type:any,e:any)=>{
-    if(type===true){
+  const setCheckbox = (type: any, e: any) => {
+    if (type === true) {
       state.choice.notDataCheckbox.push(e)
-    }else{
-    let data =cloneDeep(state.choice.notDataCheckbox) 
+    } else {
+      let data = cloneDeep(state.choice.notDataCheckbox)
 
-    let subscript=data.findIndex((item:any)=>item.id===e.id)
-     data.splice(subscript, 1) 
+      let subscript = data.findIndex((item: any) => item.id === e.id)
+      data.splice(subscript, 1)
 
-    state.choice.notDataCheckbox=data
+      state.choice.notDataCheckbox = data
     }
   }
   //分派弹窗
-  const setAssignment=()=>{
-    state.assignmentType=true
+  const setAssignment = () => {
+    state.assignmentType = true
   }
-    const close = (type: string) => {
+  const close = (type: string) => {
     if (type == 'preservation') {
       state.assignmentType = false
     } else {
       state.assignmentType = false
     }
   }
-  // const confirmDelete = () => {
-  //   proxy.$baseService.delete('/jack-ics-api/fabric/delete', state.ids).then((res: any) => {
-  //     if (res.code === 0) {
-  //       state.ids = [] //清空选中项
-  //       onFormQuery()
-  //       ElMessage({
-  //         message: '删除成功',
-  //         type: 'success'
-  //       })
-  //       state.dialogVisible = false
-  //       refreshTable()
-  //     } else {
-  //       ElMessage({
-  //         message: res.msg,
-  //         type: 'warning'
-  //       })
-  //     }
-  //   })
-  // }
+
 </script>

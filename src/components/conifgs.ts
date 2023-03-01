@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-09-27 11:24:55
+ * @LastEditTime: 2023-02-28 08:36:22
  * @Description:
  * @LastEditors: lyj
  */
@@ -27,16 +27,21 @@ export const fabric = new Map()
 fabric.set("1", '针织')
 fabric.set("2", '梭织')
 
-
-// 状态
+//床次任务状态
+export  const bedScheduleType = new Map()
+  bedScheduleType.set(1, '未审核')
+  bedScheduleType.set(2, '已审核')
+  bedScheduleType.set(3, '进行中')
+  bedScheduleType.set(4, '已完成')
+  
+// 裁铺任务状态
 export  const mapType = new Map()
-  mapType.set(1, '未审核')
-  mapType.set(2, '已审核')
+  mapType.set(2, '待执行')
   mapType.set(3, '进行中')
   mapType.set(4, '已完成')
 // 状态样式
 export  const tagType = new Map()
-  tagType.set(1, 'danger')
+  // tagType.set(1, 'danger')
   tagType.set(2, 'success')
   tagType.set(4, '')
   tagType.set(3, 'warning')

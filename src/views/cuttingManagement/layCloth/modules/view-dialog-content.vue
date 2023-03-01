@@ -48,7 +48,7 @@
 
     <div class="foot">
       <el-button @click="close"> {{ state.type === false ? '取消' : '关闭' }}</el-button>
-      <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="submitForm('1')">审核</el-button>
+      <!-- <el-button v-if="state.type === false" type="success" :disabled="disable(false)" class="preservation" @click="submitForm('1')">审核</el-button> -->
       <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="submitForm('2')">保存</el-button>
       <!-- <el-button v-if="state.type === false" :disabled="disable(false)" type="primary" @click="submitForm()">DEMO</el-button> -->
     </div>

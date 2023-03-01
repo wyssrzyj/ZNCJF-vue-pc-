@@ -12,7 +12,7 @@
         <el-input v-model="state.queryFormData.taskCode" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="资源名称" prop="deviceName">
-        <el-input v-model="state.queryFormData.deviceName" placeholder="请输入" clearable />
+        <el-input v-model="state.queryFormData.resourceName" placeholder="请输入" clearable />
       </el-form-item>
       <el-form-item label="状态" prop="statu">
         <el-select v-model="state.queryFormData.statu" clearable filterable>
@@ -37,7 +37,7 @@
 
     <template #actionExtBtn="{ row }">
       <el-button link type="primary" style="order: 3" @click="handleClick(row ,true)">查看</el-button>
-      <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button>
+      <!-- <el-button v-if="row.statu === 1" link type="primary" style="order: 3" @click="handleClick(row ,false)">编辑 </el-button> -->
       <el-button v-if="row.statu === 4 " link type="primary" style="order: 3" @click="setPrint(row)">打印</el-button>
       <el-button v-if="row.statu === 2 ||row.statu === 3" link type="primary" style="order: 3" @click="revoke(row)">撤销</el-button>
     </template>
@@ -83,7 +83,7 @@
     dialogTitle: '查看铺布',
     statu: [
       // { name: '未审核', value: 1 },
-      { name: '已审核', value: 2 },
+      { name: '待执行', value: 2 },
       { name: '进行中', value: 3 },
       { name: '已完成', value: 4 }
     ],
@@ -91,7 +91,7 @@
     queryFormData: {
       bedPlanNo: '',
       taskCode: '',
-      deviceName: '',
+      resourceName: '',
       statu: '',
       styleCode: ''
     },
@@ -240,3 +240,4 @@
     })
   }
 </script>
+  

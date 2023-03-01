@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-11-14 17:23:32
+ * @LastEditTime: 2023-02-27 16:13:04
  * @Description:
  * @LastEditors: lyj
  */
@@ -49,7 +49,7 @@ export const content: any = {
     { name: '面料编号', model: 'fabricCode', prop: null, type: null, disabled: true },
     { name: '面料颜色', model: 'fabricColor', prop: null, type: null, disabled: true },
     { name: '唛架门幅', model: 'shelfWidth', prop: null, type: 'number', disabled: true },
-    { name: '设备编号', model: 'deviceSn', prop: 'deviceSn', type: 'deviceSn', disabled: true, append: '设置' },
+    { name: '资源编号', model: 'resourceSn', prop: 'resourceSn', type: 'resourceSn', disabled: true, append: '设置' },
     { name: '计划结束', model: 'planEndTime', prop: null, type: 'time', disabled: false }
 
   ],
@@ -57,10 +57,10 @@ export const content: any = {
     { name: '面料名称', model: 'fabricName', prop: null, type: null, disabled: true },
     { name: '唛架长度', model: 'shelfLength', prop: null, type: 'number', disabled: true },
     { name: '铺布长度', model: 'spreadClothLength', prop: null, type: 'number', disabled: true },
-    { name: '设备名称', model: 'deviceName', prop: null, type: null, disabled: true },
+    { name: '资源名称', model: 'resourceName', prop: null, type: null, disabled: true },
   ],
   dataRule: {
-    deviceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+    resourceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }
 

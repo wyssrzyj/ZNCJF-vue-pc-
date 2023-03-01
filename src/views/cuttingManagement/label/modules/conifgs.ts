@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2022-11-15 08:54:53
+ * @LastEditTime: 2023-02-27 15:38:02
  * @Description:
  * @LastEditors: lyj
  */
@@ -19,7 +19,7 @@ export const content: any = {
     fabricCode: '',
     fabricColor: '',
     shelfWidth: 0,
-    deviceSn: '',
+    resourceSn: '',
     planStartTime: '',
     bedSum: 0,
 
@@ -28,7 +28,7 @@ export const content: any = {
     fabricName: '',
     shelfLength: 0,
     spreadClothLength: 0,
-    deviceName: '',
+    resourceName: '',
     planEndTime: 0,
     remark: ''
   },
@@ -45,7 +45,7 @@ export const content: any = {
       { name: '床次', model: 'styleBedNo', prop: null, type: null, disabled: true },
     { name: '贴标任务号', model: 'taskCode', prop: null, type: null, disabled: true },
     { name: '唛架门幅', model: 'shelfWidth', prop: null, type: 'shelfWidth', disabled: true },
-    { name: '设备编号', model: 'deviceSn', prop: 'deviceSn', type: 'deviceSn', disabled: true },
+    { name: '资源编号', model: 'resourceSn', prop: 'resourceSn', type: 'resourceSn', disabled: true },
     { name: '计划结束', model: 'planEndTime', prop: null, type: 'time', disabled: true }
 
   ],
@@ -53,9 +53,9 @@ export const content: any = {
   { name: '面料名称', model: 'fabricName', prop: null, type: null, disabled: true },
     { name: '唛架长度', model: 'shelfLength', prop: null, type: 'number', disabled: true },
     { name: '铺布长度', model: 'spreadClothLength', prop: null, type: 'number', disabled: true },
-    { name: '设备名称', model: 'deviceName', prop: null, type: null, disabled: true },
+    { name: '资源名称', model: 'resourceName', prop: null, type: null, disabled: true },
   ],
   dataRule: {
-    deviceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+    resourceSn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
   }
 }

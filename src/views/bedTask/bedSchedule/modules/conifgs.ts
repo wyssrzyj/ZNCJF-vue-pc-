@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2023-02-21 14:05:41
+ * @LastEditTime: 2023-02-27 16:39:29
  * @Description:
  * @LastEditors: lyj
  */
@@ -113,7 +113,7 @@ export const content: any = {
     { name: '唛架门幅', model: 'shelfWidth', prop: 'shelfWidth', type: 'shelfWidth', disabled: true },
     { name: '铺布层数', model: 'spreadClothLevel', prop: 'spreadClothLevel', type: null, disabled: true },
     { name: '利用率', model: 'useRate', prop: 'useRate', type: 'useRate', disabled: true },
-    { name: '最早开始时间', model: 'setTime', prop: 'setTime', type: 'time', disabled: false }
+    { name: '最早开始时间', model: 'startDate', prop: 'startDate', type: 'time', disabled: false }
   ],
   formRightData: [
     { name: '床次计划号', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
@@ -121,7 +121,7 @@ export const content: any = {
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true },
     { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
     { name: '备注', model: 'remark', prop: null, type: null },
-    { name: '最晚结束时间', model: 'endTime', prop: 'endTime', type: 'time', disabled: false }
+    { name: '最晚结束时间', model: 'endDate', prop: 'endDate', type: 'time', disabled: false }
   ],
   dataRule: {
     produceOrderCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
