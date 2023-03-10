@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-03-01 16:48:10
+ * @LastEditTime: 2023-03-07 10:45:09
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -705,7 +705,7 @@
         //面料名称
         let api = type === '1' ? '/jack-ics-api/bedPlan/saveAndAudit' : '/jack-ics-api/bedPlan/save'
 
-        if(type=== '2'){
+        // if(type=== '2'){
          //保存
             proxy.$baseService.post(api, data).then((res: any) => {
           if (res.code === 0) {
@@ -721,11 +721,11 @@
             })
           }
         })
-        }else{
+        // }else{
         // 审核 后期删除【测试使用 】
-          state.dialogContentType = true
+          // state.dialogContentType = true
       
-        }
+        // }
       
       }
     })

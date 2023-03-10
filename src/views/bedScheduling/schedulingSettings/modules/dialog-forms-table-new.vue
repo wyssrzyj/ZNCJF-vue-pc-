@@ -1,14 +1,11 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2023-02-20 15:16:48
+ * @LastEditTime: 2023-03-10 14:36:22
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
-  <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newSize">新增尺码</el-button>
-  <el-button class="setSize" type="primary" :disabled="disable(false)" @click="newColor">新增颜色</el-button>
-
   <el-table height="350" style="width: 100%" :data="state.tableData" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
     <el-table-column label="颜色" prop="color" fixed="left" width="150">
       <template #default="{ row }">
@@ -313,41 +310,6 @@
     }
   }
 
-  //新增尺码
-  const newSize = () => {
-    if (!isEmpty(state.size)) {
-      if (state.size[state.size.length - 1].number) {
-        state.size.push({ number: '', indexId: new Date() })
-      } else {
-        ElMessage({
-          message: '请输入尺码',
-          type: 'warning'
-        })
-      }
-    } else {
-      state.size.push({ number: '', indexId: new Date() })
-    }
-  }
-
-  //新增颜色
-  const newColor = () => {
-    let sum = {}
-    let list: any = []
-
-    state.size.forEach((item: any) => {
-      sum[item.size] = 0
-      list.push({ size: item.size, levelClothSum: 0 })
-    })
-
-    let arr = {
-      color: '',
-      spreadClothLevel: 0,
-      bedSum: 0,
-      sizeAndAmountList: list,
-      ...sum
-    }
-    state.tableData.push(arr)
-  }
   //删除
   const close = (e: any) => {
     if (!state.type) {

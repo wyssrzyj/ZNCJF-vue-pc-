@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-03-01 17:00:25
+ * @LastEditTime: 2023-03-09 17:38:40
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,13 +12,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive ,watch} from 'vue'
+  import { reactive, watch } from 'vue'
   import { cloneDeep, isEmpty } from 'lodash'
-  import {gantt} from 'dhtmlx-gantt' // 引入模块
+  import { gantt } from 'dhtmlx-gantt' // 引入模块
   import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 
-    const props = defineProps<{
-    data:any
+  const props = defineProps<{
+    data: any
+    onChang: any
   }>()
 
   const state: any = reactive({
@@ -28,18 +29,10 @@
       links: []
     }
   })
-  
-
-
-  
-
-
-
-
-  //配置数据
+  //配置数据【】
   const initZoom = () => {
     gantt.i18n.setLocale('cn') //设置中文
-    gantt.config.readonly = true//只读
+    gantt.config.readonly = true //只读
     gantt.config.autoscroll = true //如果线超出屏幕可以x滚动
     gantt.config.order_branch = false // 左侧可以拖动
     // gantt.config.sort = true //左侧点击表头排序
@@ -56,16 +49,10 @@
       //多选
       multiselect: true
     })
-    //表头
-    gantt.config.columns = [
-      { name: 'text', label: '款号', tree: true, width: '250' },
-      { name: 'lyj', label: '床次', align: 'center' },
-      { name: 'start_date', label: '时间', align: 'center', width: '350'  },
-      { name: 'lxr', label: '状态', align: 'center' },
-    ]
+
     //单击事件
     gantt.attachEvent('onTaskSelected', function (id: any) {
-      // leftData && leftData(id)
+      props.onChang(id, state.ganttList)
     })
     //单击右键
     gantt.attachEvent('onContextMenu', function (id: any) {
@@ -129,40 +116,49 @@
     }
     gantt.ext.zoom.init(zoomConfig)
   }
+  initZoom()
+
   //渲染
   const ganttShow = async () => {
-    const chartDom:any = document.getElementById('ganttDemo')
+    const chartDom: any = document.getElementById('ganttDemo')
     gantt.clearAll() //缓存问题 先清楚后添加
+
     gantt.config.date_format = '%Y-%m-%d %H:%i' //处理时间格【勿动】2023-2-23
     gantt.init(chartDom) //根据 id
     gantt.parse(state.ganttList) //渲染数据
   }
 
   // 赋值数据
-  const init = (e:any) => {
-      if(!isEmpty(e.data)){
-         state.ganttList.data = e.data
-          initZoom()
-          ganttShow()
-      }
+  const init = (e: any) => {
+    if (!isEmpty(e.data)) {
+      state.ganttList.data = e.data
+      //渲染
+    } else {
+      state.ganttList.data = []
+    }
+    ganttShow()
   }
-  
+
   watch(
     () => props.data,
     item => {
-    let list =cloneDeep(item)
-     init(list)
+      let list = cloneDeep(item)
+      // console.log("5---监听树变化",item);
+      
+      //动态设置表头表头
+      gantt.config.columns = [
+        { name: 'text', label: item.title, tree: true, width: '150' },
+        { name: 'start_date', label: '时间', align: 'center', width: '150' },
+        { name: 'type', label: '状态', align: 'center' }
+      ]
+
+      init(list)
+
+      gantt.selectTask(list.id) //选中
       // gantt.scrollTo(35, 35)//位移
-      //  gantt.selectTask(1975)//选中
-      //  console.log("监听数据变化-触发位移", item);
     },
-    {deep:true}
-
+    { deep: true, immediate: true }
   )
-
-  
-    
-
 </script>
 
 <style scoped>

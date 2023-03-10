@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-02-06 16:30:24
+ * @LastEditTime: 2023-03-02 09:17:23
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
   <NewTable :type="props.type" :data="props.form" :get-data="getData" />
   <div class="bedTask-footer">
     <div class="footer-right">
-      <el-button type="primary" @click="preservation">保存</el-button>
+      <el-button type="primary" @click="preservation">确定</el-button>
     </div>
   </div>
 </template>

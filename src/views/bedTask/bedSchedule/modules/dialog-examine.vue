@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-01 16:59:58
+ * @LastEditTime: 2023-03-01 17:07:51
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column prop="setTime" label="计划开始时间" align="center" width="400px">
         <template #default="{ row }">
-          <el-date-picker v-model="row.time" :change="setTime" format="YYYY-MM-DD HH:mm" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" />
+          <el-date-picker v-model="row.time" :change="setTime" format="MM-DD HH:mm" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" />
         </template>
       </el-table-column>
     </el-table>

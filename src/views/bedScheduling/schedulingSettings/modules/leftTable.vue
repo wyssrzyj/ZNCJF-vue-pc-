@@ -1,15 +1,22 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-21 13:44:18
+ * @LastEditTime: 2023-03-09 13:06:12
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="leftTable">
-    <el-table :data="state.tableData" border show-summary style="width: 100%" height="340" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
+    <div v-if="props.title !== '已分派'"  class="leftTable-top">
+       <div v-if="!state.type" class="leftTable-top-title">请选择床次</div>
+    <div v-if="state.type" class="leftTable-top-title">当前使用床次：【{{ props.data.styleCode }}】</div>
+      <div class="cutApart"></div>
+    </div>
+    
+   
+    <el-table :data="state.tableData" border show-summary style="width: 100%" height="250" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
       <el-table-column prop="color" label="颜色" align="center" />
-      <el-table-column prop="layers" label="层数" align="center" />
+      <el-table-column prop="spreadClothLevel" label="层数" align="center" />
 
       <!-- 动态尺码  -->
       <el-table-column v-for="(item, i) in state.size" :key="i" min-width="50" :prop="item.number" align="center">
@@ -23,24 +30,26 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="number" label="件数" align="center" />
+      <el-table-column prop="rowFlag" label="件数" align="center" />
     </el-table>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, onMounted } from 'vue'
+  import { reactive, onMounted, getCurrentInstance, watch } from 'vue'
   import { isEmpty } from 'lodash'
 
-  // import type { TableColumnCtx } from 'element-plus'
-  // const { proxy } = getCurrentInstance() as any
-  // const props = defineProps<{
-  // }>()
+  const { proxy } = getCurrentInstance() as any
+  const props = defineProps<{
+    data: any
+    title:any
+  }>()
   const state: any = reactive({
     tableData: [],
     //测试
     size: [], //动态尺码
-    shelfList: [] //尺码数据
+    shelfList: [], //尺码数据
+    type: false
   })
 
   //处理尺码格式问题
@@ -82,49 +91,60 @@
     return list
   }
 
-  const init = () => {
-    //动态尺码
-    let sizeList: any = [{ size: 's' }]
-    setSize(sizeList)
-    // 格式处理
-    let shelfIdList = [
-      {
-        color: '红色',
-        layers: '1',
-        sizeAndAmountList: [
-          {
-            size: 's',
-            levelClothSum: 10
-          }
-        ],
-        number: 100
-      },
-      {
-        color: '绿色',
-        layers: '2',
-        sizeAndAmountList: [
-          {
-            size: 's',
-            levelClothSum: 20
-          }
-        ],
-        number: 200
+  const init = (e: any) => {
+    proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: e }).then((res: any) => {
+      if (res.code === 0) {
+        //动态尺码
+        let sizeList: any = res.data.sizeList
+        setSize(sizeList)
+        // 格式处理
+        let list = setTableData(res.data.shelfList)
+        state.tableData = list
       }
-    ]
-    let list = setTableData(shelfIdList)
-
-    state.tableData = list
+    })
   }
-  init()
   // 生产任务订单查询
   const getPageList = () => {}
   onMounted(() => {
     getPageList()
   })
+
+  watch(
+    () => props.data,
+    item => {
+      if(item.init==="init"){
+        state.tableData=[]
+        state.size=[]
+        state.type = false
+      }else{
+      state.type = true
+      let id = item.id
+      init(id)
+      }
+      
+   
+    }
+    // ,{deep:true}
+    ,{deep:true,immediate: true}
+  )
 </script>
 <style lang="less" scoped>
   .leftTable {
     width: 34vw;
     float: left;
+  }
+  .leftTable-top{
+    line-height: 20px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  .cutApart{
+    width: 100%;
+    height: 2px;
+    background: #eee;
+    margin-top: 10px;
+}
+  .leftTable-top-title{
+    transform: translate(0, -8px);
   }
 </style>

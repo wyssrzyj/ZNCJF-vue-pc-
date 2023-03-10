@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-01 16:38:58
+ * @LastEditTime: 2023-03-10 15:41:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -69,14 +69,13 @@
   </div>
   <!-- 排唛比例 -->
   <el-dialog v-if="state.dialogTableVisible" v-model="state.dialogTableVisible" :close-on-click-modal="false" :draggable="false" title="排唛比例" width="1200px">
-    <PopModule :type="false" :operation="operation" :form="state.form" />
+    <PopModule :type="true" :operation="operation" :form="state.form" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
   import { reactive, getCurrentInstance, watch } from 'vue'
   import { isEmpty } from 'lodash'
-  import { ElMessage } from 'element-plus'
   import moment from 'moment'
 
   import edit from '@/components/icon/edit.png'
@@ -145,187 +144,20 @@
       state.dialogTableVisible = true
     })
   }
-
-  const formattingData = (list: any, condition: any) => {
-    //list 数据
-    //condition 判断条件
-    let map = {}
-    let data: any = []
-
-    list.forEach((item: any) => {
-      //判断对象是否有
-      //有就添加
-      // 没有就创建
-      if (map[item[condition]]) {
-        map[item[condition]].push(item)
-      } else {
-        map[item[condition]] = [item]
-      }
-    })
-    Object.keys(map).forEach(key => {
-      data.push({
-        color: key,
-        data: map[key]
-      })
-    })
-
-    return data
-  }
-
   //弹窗事件
   const operation = (e: any) => {
     if (e.type === 'cancel') {
       state.dialogTableVisible = false
     }
     if (e.type === 'confirm') {
-      e.data.map((item: any) => {
-        item.type = ''
-      })
-
-      //颜色一样的尺码数据不能一样
-      let type = false
-      let colorData = formattingData(e.data, 'color')
-      if (!isEmpty(colorData)) {
-        colorData.forEach((v: any) => {
-          if (v.data.length > 1) {
-            //判断颜色一样的值是否一样
-            if (!isEmpty(v.data)) {
-              v.data.forEach((item: any) => {
-                let a = JSON.stringify(v.data[0].sizeAndAmountList)
-                let b = JSON.stringify(item.sizeAndAmountList)
-                //尺码数据不能相同
-                if (a == b) {
-                  type = true
-                } else {
-                  type = false
-                }
-              })
-            }
-          }
-        })
-      }
-
-      //如果尺码一样提示
-      if (type) {
-        ElMessage({
-          message: '颜色相同，尺码下的数量不能相同',
-          type: 'warning'
-        })
-      } else {
-        setShelfList(e)
-      }
-    }
-  }
-
-  //去重
-  let dataRepeat = (arr: any) => {
-    let newArr = arr.filter(function (value: any, index: any, self: any) {
-      return self.indexOf(value) === index
-    })
-    return newArr
-  }
-  //单层间数的计算
-  const setLevelClothSum = (size: any, data: any) => {
-    let arr = data.filter((item: any) => item.size === size)
-    arr.map((item: any) => {
-      item.levelClothSum = item.levelClothSum === undefined ? 0 : item.levelClothSum
-    })
-    let max = Math.max.apply(
-      Math,
-      arr.map((item: any) => {
-        return item.levelClothSum
-      })
-    )
-    //获取当前尺码的最大值
-
-    return max
-  }
-  // 排唛比例保存
-  const setForm = async () => {
-    let api = '/jack-ics-api/bedPlan/save'
-    proxy.$baseService.post(api, state.form).then((res: any) => {
-      if (res.code === 0) {
-        ElMessage({
-          message: '保存成功',
-          type: 'success'
-        })
-        //关闭
         state.dialogTableVisible = false
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'warning'
-        })
-      }
-    })
-  }
-  //排唛比例- 保存- 数据处理
-  const setShelfList = (e: any) => {
-    let list = e.data
-
-    let bedSum = 0 //床次总件数
-    let levelClothSum = 0 //单层件数
-    let data: any = { color: [], size: [], newColor: [], newSize: [] }
-
-    //尺码
-    let size = list[0].sizeAndAmountList
-    if (!isEmpty(size)) {
-      let sizeList: any = []
-      size.map((item: any) => {
-        sizeList.push({ size: item.size })
-      })
-      state.form.sizeList = sizeList //
-    }
-    if (!isEmpty(list)) {
-      //床次总件数
-      list.forEach((item: any) => {
-        bedSum += item.bedSum
-        data.color.push(item.color)
-        data.size.push(item.size)
-      })
-
-      data.newColor = dataRepeat(data.color)
-      data.newSize = dataRepeat(data.size)
-      //单层件数----------------------------
-      let levelData: any = []
-      list.forEach((v: any) => {
-        levelData.push(v.sizeAndAmountList)
-      })
-      let level = levelData.flat(Infinity)
-
-      state.form.sizeList.forEach((item: any) => {
-        levelClothSum += setLevelClothSum(item.size, level)
-      })
-      // ----------------------------
-      //铺布层数
-      let levelSum = 0
-      list.forEach((item: any) => {
-        levelSum += item.spreadClothLevel
-      })
-      state.form.spreadClothLevel = levelSum
-
-      //********用于回显和保存********* */
-      //添加后端唯一判断值
-      list.map((item: any, index: any) => {
-        item.rowFlag = index
-      })
-      //过滤床次总件数为空
-      let newList = list.filter((item: any) => item.bedSum > 0)
-      //过滤数据为空的数据
-      newList.map((item: any) => {
-        item.sizeAndAmountList = item.sizeAndAmountList.filter((item: any) => item.levelClothSum != 0)
-      })
-      //数据
-      state.form.shelfList = newList //排唛比例数据赋值
-      //**************************/
-      state.form.bedSum = bedSum
-      state.form.levelClothSum = levelClothSum
-
-      //保存到后端
-      setForm()
+   
     }
   }
-  
+
+
+
+ 
 </script>
 <style lang="less" scoped>
   /deep/ .el-input__inner {
