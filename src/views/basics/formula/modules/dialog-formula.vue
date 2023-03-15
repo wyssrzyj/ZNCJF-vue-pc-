@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-18 14:56:09
- * @LastEditTime: 2023-02-15 08:24:04
+ * @LastEditTime: 2023-03-15 08:46:20
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -56,10 +56,10 @@
         let arr = res.data
         if (!isEmpty(arr)) {
           let value = props.value.value
-          arr.map((item: any) => {
+          arr.map((item: any,index:any) => {
             item.type = false
             item.value = item.showContent
-
+            
             //选中回显
             if (item.value === value) {
               item.type = true
@@ -67,6 +67,11 @@
               item.type = false
             }
           })
+          //默认选中第一个
+          if(value==="init"){
+            arr[0].type=true
+          }
+
           state.list = arr
         }
       }
@@ -86,15 +91,15 @@
   const preservation = () => {
     let arr = state.list.filter((item: any) => item.type)
     if (!isEmpty(arr)) {
-      props.operation({ type: 'true', data: arr[0] })
+      props.operation({ type: true, data: arr[0] })
     } else {
-      props.operation({ type: 'false', data: {} })
+      props.operation({ type: false, data: {} })
     }
   }
 
   // 取消
   const cancel = () => {
-    props.operation({ type: 'false', data: {} })
+    props.operation({ type: false, data: {} })
   }
 </script>
 

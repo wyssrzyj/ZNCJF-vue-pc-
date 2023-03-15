@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-05 10:01:25
- * @LastEditTime: 2023-02-21 08:58:52
+ * @LastEditTime: 2023-03-13 15:22:26
  * @Description:
  * @LastEditors: lyj
  */
@@ -39,25 +39,6 @@ export const content = {
 }
 //公式参数
 export const parameters = [
-      {
-      name:'e',value:"",type:true,
-    },
-      {
-      name:'A',value:"",type:true,
-    },
-      {
-      name:'h',value:"",type:true,
-    },
-      {
-      name:'g',value:"",type:true,
-    },
-      {
-      name:'f',value:"",type:true,
-    },
-      {
-      name:'k',value:"",type:true,
-    },
-    {
-      name:'s',value:"",type:true,
-    },
+  //  {name:'e',value:"",type:true,}
+      
   ]

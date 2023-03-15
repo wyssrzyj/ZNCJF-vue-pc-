@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-03-07 10:45:09
+ * @LastEditTime: 2023-03-15 08:47:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -307,6 +307,7 @@
     left: cloneDeep(formLeftData),
     middle: cloneDeep(formMiddleData),
     right: cloneDeep(formRightData),
+    
     dialogTableVisible: false,
     dialogContentType:false,//审核弹窗
     spreadClothLengthType: false, //铺布长度提示框
@@ -315,7 +316,8 @@
     prop: dataRule,
     fabricName: [],
     effectiveArea: 0, //有效面积
-    printId: ''
+    printId: '',
+    shelfFile:{}//唛架图基本信息
     // printType: false
   })
 
@@ -400,6 +402,14 @@
             }
           }
         ]
+        //唛架图基本信息
+        state.shelfFile.heigh=res.data.heigh
+        state.shelfFile.markLength=res.data.markLength
+        state.shelfFile.partSize=res.data.partSize
+        state.shelfFile.pointSize=res.data.pointSize
+        state.shelfFile.width=res.data.width
+
+
         //回显排唛比例-unique判断唯一值
         if (!isEmpty(res.data.shelfList)) {
           let shelfList = res.data.shelfList
@@ -453,6 +463,8 @@
     //唛架图
     if (e.type === 'shelfFile') {
       if (!isEmpty(e.data)) {
+        state.shelfFile=e.data[0].response.data//唛架图基本信息
+
         let shelfFile = e.data[0].response.data
 
         const { heigh, width, sumArea } = shelfFile
@@ -468,7 +480,10 @@
         e.data[0].response.data.src = e.data[0].response.data.shelfFileUrl
 
         state.form.effectiveArea = sumArea //有效面积
+
         state.form.shelfFile = e.data //赋值
+
+        
       } else {
         state.form.shelfFile = []
       }
@@ -700,14 +715,12 @@
            data.endDate=moment(data.endDate).valueOf()
         }
         
-       
+        //唛架基本数据
+        let form={...data,...state.shelfFile}
 
-        //面料名称
         let api = type === '1' ? '/jack-ics-api/bedPlan/saveAndAudit' : '/jack-ics-api/bedPlan/save'
-
-        // if(type=== '2'){
          //保存
-            proxy.$baseService.post(api, data).then((res: any) => {
+            proxy.$baseService.post(api, form).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
               message: '保存成功',
@@ -721,12 +734,6 @@
             })
           }
         })
-        // }else{
-        // 审核 后期删除【测试使用 】
-          // state.dialogContentType = true
-      
-        // }
-      
       }
     })
   }

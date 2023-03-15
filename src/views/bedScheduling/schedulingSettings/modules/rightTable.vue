@@ -1,13 +1,13 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-10 14:26:37
+ * @LastEditTime: 2023-03-15 08:39:51
  * @Description: 
  * @LastEditors: lyj
 -->
 <template>
   <div class="rightTable">
-    <div v-if="props.title !== '已分派'" class="rightTable-top">
+    <div v-if="props.title !== '全部'" class="rightTable-top">
       请选择工艺：
       <el-select v-model="state.technology.value" placeholder="请选择" filterable :disabled="state.technology.type" @change="setTechnologyValue">
         <el-option v-for="item in state.technology.data" :key="item.value" :label="item.label" :value="item.value" />
@@ -56,7 +56,7 @@
     <div v-if="props.title === '已分派'">
       <el-popconfirm width="220" confirm-button-text="确定" cancel-button-text="取消" title="是否取消分派?" @confirm="cancel">
         <template #reference>
-          <el-button :disabled="state.buttonType" class="schedulingSettings-btn" type="primary">取消分派</el-button>
+          <el-button :disabled="state.buttonType" class="schedulingSettings-btn" type="warning">取消分派</el-button>
         </template>
       </el-popconfirm>
     </div>
@@ -87,7 +87,8 @@
       data: []
     },
     cropping: [],
-    buttonType: true
+    buttonType: true,
+    demoType: false
   })
 
   //获取设备下拉数据
@@ -96,12 +97,13 @@
 
     if (type === 1) {
       data.type = 1
+      data.technologyId = state.technology.value
     } else {
       data.type = type
       data.spreadDeviceId = id
+      data.technologyId = state.technology.value
     }
-
-    proxy.$baseService.get('jack-ics-api/formulaContainer/getResource', { ...data }).then((res: any) => {
+    proxy.$baseService.get('/jack-ics-api/formulaContainer/getSchedulingResource', { ...data }).then((res: any) => {
       if (!isEmpty(res.data)) {
         let list: any = []
         res.data.forEach((item: any) => {
@@ -122,7 +124,6 @@
       }
     })
   }
-  getResource(1)
 
   //获取公艺
   const getTechnology = (id: any) => {
@@ -136,29 +137,67 @@
       }
     })
   }
+  //数据清空
+  const emptyData = () => {
+    state.technology.value = ''
+    let data = cloneDeep(state.tableData)
+    data.map((item: any) => {
+      item.cropping = ''
+      item.time = ''
+      item.initType = true
+      item.type = true
+    })
+    state.tableData = data
+
+    state.technology.type = true
+  }
 
   // 【切换数据重置】
   watch(
     () => props.title,
     item => {
       if (item === '已分派') {
-        state.technology.value = ''
-        state.tableData.map((item: any) => {
-          item.cropping = ''
-          item.time = ''
-          item.initType = true
-          item.type = true
-        })
+        emptyData()
       }
     },
     { deep: true }
   )
-  //表格回显
+
+
+  //按钮、工艺是否可用
+  const setButtonType = (item: any) => {
+    //只有已审核可用
+    if (item.gannt) {
+      let type = item.gannt.statu
+      const  data  =cloneDeep(state.tableData) 
+      if (type === 2) {
+        state.buttonType = false
+        state.technology.type=false
+        //设备 时间状态 是否可用
+        data.map((v: any) => {
+          if (v.initType !== true) {
+            v.type = false
+          }
+        })
+      } else {
+        state.buttonType = true
+        state.technology.type=true
+        data.map((v: any) => {
+          v.type = true
+        })
+
+      }
+      state.tableData=data
+    }
+  }
+    //表格回显
   const init = (e: any) => {
     let id = e.bedPlanId
     proxy.$baseService.get('/jack-ics-api/spreadTask/getTime', { bedPlanId: id }).then((res: any) => {
       if (res.code === 0) {
+     
         let data = res.data
+        state.technology.value = data.technologyId //工艺回显
 
         // spreadTaskTime 铺布，pasteTaskTime 贴标，cutTaskTime 裁剪
         let arr = [{ name: 'spreadTaskTime' }, { name: 'pasteTaskTime' }, { name: 'cutTaskTime' }]
@@ -166,27 +205,27 @@
           if (!isEmpty(data[item.name])) {
             //下拉回显
             if (item.name === 'spreadTaskTime') {
-              let id = data.spreadTaskTime.resourceId
+              let id = data.spreadTaskTime.resourceId //设备id
+              getResource(1)
               getResource(2, id)
               getResource(3, id)
             }
             //回显
             let time = [moment(data[item.name].planStartTime), moment(data[item.name].planEndTime)]
             let resourceId = data[item.name].resourceId
-
             state.tableData[index].time = time
             state.tableData[index].cropping = resourceId
-
             state.tableData[index].initType = false //接口是否允许使用
           }
         })
+        
+        //是否可用
+        setButtonType(e)
 
-        //已审核 可用
         if (e.type === false) {
           state.tableData.map((item: any) => {
             if (!item.initType) {
               item.clothType = false
-              item.type = false
             }
           })
         }
@@ -197,11 +236,7 @@
   watch(
     () => props.data,
     item => {
-      //回显数据
-      if (item.bedPlanId) {
-        init(item)
-      }
-      //获取公式
+      //获取公艺
       if (item.id) {
         getTechnology(item.id)
       }
@@ -219,20 +254,16 @@
 
       //工艺状态【床次多选后右表格不可操作】
       state.technology.type = item.type
-      //设备时间状态 是否可用
+
+
+      //设备 时间状态 是否可用
       state.tableData.map((v: any) => {
         v.type = item.type
       })
 
-      //按钮是否可用
-      if (item.gannt) {
-        if (item.gannt.statu === 2) {
-          state.buttonType = false
-        } else {
-          state.buttonType = true
-        }
-      } else {
-        state.buttonType = true
+      //回显数据
+      if (item.bedPlanId) {
+        init(item)
       }
     },
     { deep: true, immediate: true }
@@ -253,15 +284,21 @@
     // type=2 贴标是动态的
     let data = state.technology.data.filter((item: any) => item.id === e)
     //根据接口判断设置不可用
-    if (data[0].enableFlag === 1) {
+    if (data[0].enableFlag === 0) {
       state.tableData[1].initType = true
     }
+    getResource(1)
+    //保存工艺id
+    state.tableData[0].technologyId=e
+    //传递
+     props.operation('assignment', state.tableData)
   }
+
   //选择设备【2】
   const setSelect = (row: any) => {
     if (row.title === '铺布') {
-      getResource(2, row.id)
-      getResource(3, row.id)
+      getResource(2, row.cropping)
+      getResource(3, row.cropping)
       // 铺布操作后都可用
       state.tableData.map((item: any) => {
         item.clothType = false
@@ -399,12 +436,12 @@
   }
   .schedulingSettings-btn {
     float: right;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-right: 10px;
   }
   .rightTable-top {
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   .cutApart {
     width: 100%;

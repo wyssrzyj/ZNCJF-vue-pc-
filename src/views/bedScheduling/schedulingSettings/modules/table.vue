@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-10 15:41:39
+ * @LastEditTime: 2023-03-14 09:30:49
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -34,31 +34,32 @@
       </el-table-column>
       <el-table-column property="startDate" label="计划开始时间" />
       <el-table-column property="endDate" label="计划结束时间" />
+
       <el-table-column property="customName" label="铺布任务">
         <template #default="scope">
           <div class="tableContainer">
-            <div class="check-customName">
-              <div class="innerCircle"></div>
+            <div :class="scope.row.customName === true ? 'check-customName' : 'check-customName-no'" >
+              <div v-if="scope.row.customName === true" class="innerCircle"></div>
             </div>
-            <div :class="scope.row.cloth === true ? 'progress-customName' : 'progress-customName-no'"></div>
+            <div :class="scope.row.customName === true||scope.row.cloth === true ? 'progress-customName' : 'progress-customName-no'"></div>
           </div>
         </template>
       </el-table-column>
       <el-table-column property="cloth" label="贴标任务">
         <template #default="scope">
           <div class="tableContainer">
-            <div :class="scope.row.cloth === true ? 'progress' : 'progress-no'"></div>
+            <div :class="scope.row.customName === true||scope.row.cloth === true ? 'progress' : 'progress-no'"></div>
             <div :class="scope.row.cloth === true ? 'check' : 'unchecked'">
               <div v-if="scope.row.cloth === true" class="innerCircle"></div>
             </div>
-            <div :class="scope.row.labeling === true || scope.row.cropping === true ? 'progress' : 'progress-no'"></div>
+            <div :class="scope.row.cloth === true || scope.row.labeling === true ? 'progress' : 'progress-no'"></div>
           </div>
         </template>
       </el-table-column>
       <el-table-column property="labeling" label="裁剪任务">
         <template #default="scope">
           <div class="tableContainer">
-            <div :class="scope.row.labeling === true ? 'progress-cropping' : 'progress-cropping-no'"></div>
+            <div :class="scope.row.cloth === true || scope.row.labeling === true ? 'progress-cropping' : 'progress-cropping-no'"></div>
             <div :class="scope.row.labeling === true ? 'check-cropping' : 'check-cropping-no'">
               <div v-if="scope.row.labeling === true" class="innerCircle"></div>
             </div>
@@ -109,11 +110,13 @@
             // 尾部样式处理
             if (item.finishList) {
               item.finishList = item.finishList.split(',')
-
-              if (item.finishList.includes('1')) {
-                item.cloth = true
+               if (item.finishList.includes('1')) {
+                item.customName = true
               }
               if (item.finishList.includes('2')) {
+                item.cloth = true
+              }
+              if (item.finishList.includes('3')) {
                 item.labeling = true
               }
             }

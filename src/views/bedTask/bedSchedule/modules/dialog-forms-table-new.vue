@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 10:02:06
- * @LastEditTime: 2023-02-21 15:00:29
+ * @LastEditTime: 2023-03-15 08:46:02
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -259,13 +259,15 @@
         item.total = item.levelClothSum * item.spreadClothLevel
       })
     }
-
+    
     // 处理数据格式
     let list = setTableData(newList)
+
     //计算床次总件数
     let bedSumData = setSpreadClothLevel(list)
     state.selectData = selectData //下拉颜色
     //赋值
+    
     state.tableData = bedSumData
     backData(bedSumData)
   }
@@ -274,6 +276,7 @@
 
   //输入框处理
   const handleChange = (e: any) => {
+    
     state.tableData = setSpreadClothLevel(state.tableData)
     backData(state.tableData)
   }

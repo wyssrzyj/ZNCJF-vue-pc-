@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-02-24 10:57:57
+ * @LastEditTime: 2023-03-15 08:46:12
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -115,7 +115,7 @@
     prop: dataRule,
 
     dialogTableVisible: false, //公式弹窗
-    formulaContent: { name: '', value: '展示所选公式内容' }
+    formulaContent: { name: '', value: 'init' }
   })
 
   const init = () => {
@@ -181,12 +181,12 @@
         formData.formulaId = state.formulaContent.id
         // 默认公式标识
         formData.defaultFlag = Number(formData.defaultFlag)
-
+        
         // 公式参数
         let parameters: any = []
         if (!isEmpty(state.parameters)) {
           state.parameters.forEach((item: any) => {
-            if (item.value !== 0) {
+            if (item.value>0) {
               parameters.push({
                 paramName: item.name,
                 paramValue: Number(item.value)
@@ -195,7 +195,6 @@
           })
         }
         formData.formulaParamList = parameters
-
         // 适用资源
         let newResourceFormulaList: any = [] //适用资源的数据
         let formResourceFormula: any = [] //form保存使用的适用资源的数据
@@ -214,11 +213,9 @@
           })
         })
         formData.resourceFormulaList = formResourceFormula
-
         // 准备处理数据
         // formulaParamList 公式参数
         // resourceFormulaList 多选的那个
-
         proxy.$baseService.post('/jack-ics-api/formulaContainer/save', formData).then((res: any) => {
           if (res.code === 0) {
             ElMessage({
@@ -268,7 +265,7 @@
   }
   //弹窗事件
   const operation = (e: any) => {
-    if (e.type) {
+    if (e.type===true) {
       //当前和上一次选中的不同【做处理】
       let current = e.data.value
       let last = state.formulaContent.value

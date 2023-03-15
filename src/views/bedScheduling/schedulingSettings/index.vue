@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-03-10 16:37:31
+ * @LastEditTime: 2023-03-15 08:47:16
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -21,53 +21,49 @@
           <!-- 全部 -->
           <div v-if="state.choice.type === '全部'">
             <div>
-               <div v-for="(item, index) in state.typeList.wholeData" :key="index" :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
-              <div class="settings-list-title">款号 : {{ item.style.name }}</div>
-            </div>
-            </div>
-            <div v-if="state.typeList.wholeData.length===0">
-                <img class="schedulingSettings-zw" :src="jackZw" alt="">
+              <div v-for="(item, index) in state.typeList.wholeData" :key="index" :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
+                <div class="settings-list-title">款号 : {{ item.style.name }}</div>
               </div>
-           
+            </div>
+            <div v-if="state.typeList.wholeData.length === 0">
+              <img class="schedulingSettings-zw" :src="jackZw" alt="" />
+            </div>
           </div>
 
           <!-- 未分派 -->
           <div v-if="state.choice.type === '未分派'">
-              <div v-if="state.typeList.notData.length>0">
-                   <div v-for="(item, index) in state.typeList.notData" :key="index">
-              <div :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
-                <div class="settings-list-title">
-                  <span><img :src="top" alt="" :class="item.style.type ? 'settings-img' : 'settings-img-bottom'" /></span>
-                  款号: {{ item.style.name }}
+            <div v-if="state.typeList.notData.length > 0">
+              <div v-for="(item, index) in state.typeList.notData" :key="index">
+                <div :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
+                  <div class="settings-list-title">
+                    <span><img :src="top" alt="" :class="item.style.type ? 'settings-img' : 'settings-img-bottom'" /></span>
+                    款号: {{ item.style.name }}
+                  </div>
                 </div>
-              </div>
-              <!-- 子项 -->
-              <div :class="item.style.type ? 'demo-dh1' : 'demo-dh2'">
-                <div v-for="(v, index) in item.style.children" :key="index">
-                  <div class="settings-checkbox">
-                    <el-checkbox :label="v.name" size="large" @change="(e:any)=>{setCheckbox(e,v)}" />
+                <!-- 子项 -->
+                <div :class="item.style.type ? 'demo-dh1' : 'demo-dh2'">
+                  <div v-for="(v, index) in item.style.children" :key="index">
+                    <div class="settings-checkbox">
+                      <el-checkbox :label="v.name" size="large" @change="(e:any)=>{setCheckbox(e,v)}" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-              </div>
-              <div v-if="state.typeList.notData.length===0">
-                <img class="schedulingSettings-zw" :src="jackZw" alt="">
-
-              </div>
+            <div v-if="state.typeList.notData.length === 0">
+              <img class="schedulingSettings-zw" :src="jackZw" alt="" />
+            </div>
           </div>
           <!-- 已分派 -->
           <div v-if="state.choice.type === '已分派'">
-            <div v-if="state.typeList.alreadyData.length>0">
-               <div v-for="(item, index) in state.typeList.alreadyData" :key="index" :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
-              <div class="settings-list-title">款号 : {{ item.style.name }}</div>
+            <div v-if="state.typeList.alreadyData.length > 0">
+              <div v-for="(item, index) in state.typeList.alreadyData" :key="index" :class="item.style.type ? 'settings-list-item-true' : 'settings-list-item'" @click="setLeftOperation(item)">
+                <div class="settings-list-title">款号 : {{ item.style.name }}</div>
+              </div>
             </div>
+            <div v-if="state.typeList.alreadyData.length === 0">
+              <img class="schedulingSettings-zw" :src="jackZw" alt="" />
             </div>
-            <div v-if="state.typeList.alreadyData.length===0">
-               <img class="schedulingSettings-zw" :src="jackZw" alt="">
-            </div>
-           
           </div>
         </div>
 
@@ -103,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance } from 'vue'
+  import { reactive, getCurrentInstance, watch } from 'vue'
   // import { ElMessage } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import { cloneDeep, isEmpty } from 'lodash'
@@ -126,7 +122,7 @@
   const { proxy }: any = getCurrentInstance()
 
   const state: any = reactive({
-    name: '', //款号查询条件
+    name: null, //款号查询条件
     choice: choice,
     typeList: typeList, //状态数据
     assignmentType: false, //分派弹窗
@@ -136,7 +132,8 @@
       x: 35,
       y: 35,
       id: '',
-      title: '设备' //表头名字
+      bedPlanId: '', //回显使用id
+      title: '款号' //表头名字
     },
 
     leftTable: {},
@@ -160,6 +157,8 @@
       type: true,
       id: ''
     }
+    //清空选中项
+    state.choice.notDataCheckbox = []
   }
 
   //未分派 数据结构处理
@@ -168,7 +167,7 @@
     data.map((item: any) => {
       if (!isEmpty(item.styleBedList)) {
         item.styleBedList.map((v: any) => {
-          v.name = v.styleCode
+          v.name = `床次${v.styleBedNo}`
         })
         item.style.children = item.styleBedList
       }
@@ -183,6 +182,9 @@
       item.type = bedScheduleType.get(item.statu)
       if (item.startDate) {
         item.start_date = moment(item.startDate).format('YYYY-MM-DD-HH')
+        item.start_time = moment(item.startDate).format('YYYY-MM-DD-HH')
+      } else {
+        item.start_time = ''
       }
       if (item.endDate) {
         item.end_date = moment(item.endDate).format('YYYY-MM-DD-HH')
@@ -194,19 +196,21 @@
   //获取甘特图数据
   const setGanntData = (type: any, value?: any) => {
     if (type === '') {
-      proxy.$baseService.get('/jack-ics-api/productionScheduling/styleGantt').then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/productionScheduling/styleGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
           getGanntTime(res.data)
         }
       })
     }
+
     if (type === 1) {
-      proxy.$baseService.get('/jack-ics-api/productionScheduling/deviceGantt').then((res: any) => {
+      proxy.$baseService.get('/jack-ics-api/productionScheduling/deviceGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
           getGanntTime(res.data)
         }
       })
     }
+
     if (type === 2) {
       proxy.$baseService.get('/jack-ics-api/productionScheduling/bedGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
@@ -248,7 +252,7 @@
       state.typeList.wholeData = []
       state.typeList.notData = []
       state.typeList.alreadyData = []
-      
+
       //甘特图
       state.dhtml.data = []
       emptyBottomTable()
@@ -270,9 +274,13 @@
   const setBlur = () => {
     if (state.choice.type === '全部') {
       setList('')
+      let data = { styleCode: state.name }
+      setGanntData('', data)
     }
     if (state.choice.type === '未分派') {
       setList(1)
+      let data = { styleCode: state.name }
+      setGanntData(1, data)
     }
     if (state.choice.type === '已分派') {
       setList(2)
@@ -288,7 +296,8 @@
   //未分派数据刷新
   let setAlreadyData = () => {
     setList(1)
-    setGanntData(1)
+    let data = { styleCode: state.name }
+    setGanntData(1, data)
   }
 
   //状态选择
@@ -310,7 +319,7 @@
     if (e.name === '全部') {
       setList('')
       setGanntData('')
-      state.dhtml.title = '设备'
+      state.dhtml.title = '款号'
     }
     if (e.name === '未分派') {
       setAlreadyData()
@@ -324,31 +333,30 @@
   }
 
   //当前甘特图选中
-  const getGanntSelect = (e: any) => {
-    //当前
-    let styleCode = e.style.styleCode
-    let data = state.dhtml.data.filter((item: any) => {
-      return item.styleCode === styleCode
-    })
-    if (!isEmpty(data)) {
-      let getId = data.filter((item: any) => item.isHead === 1)
-      //选中id
-      state.dhtml.id = getId[0].id
-      //展开当前
-      let list = cloneDeep(state.dhtml.data)
-      list.map((item: any) => {
-        if (item.id === state.dhtml.id) {
-          item.open = true
-        }
-      })
-      state.dhtml.data = list
-    }
-  }
+  // const getGanntSelect = (e: any) => {
+  //   //当前
+  //   let styleCode = e.style.styleCode
+  //   let data = state.dhtml.data.filter((item: any) => {
+  //     return item.styleCode === styleCode
+  //   })
+  //   if (!isEmpty(data)) {
+  //     let getId = data.filter((item: any) => item.isHead === 1)
+  //     //选中id
+  //     state.dhtml.id = getId[0].id
+  //     //展开当前
+  //     let list = cloneDeep(state.dhtml.data)
+  //     list.map((item: any) => {
+  //       if (item.id === state.dhtml.id) {
+  //         item.open = true
+  //       }
+  //     })
+  //     state.dhtml.data = list
+  //   }
+  // }
 
   //左侧数据点击事件
   const setLeftOperation = (e: any) => {
     let type = state.choice.type
-    state.selectData = e //选中项
     if (type === '全部') {
       //选中项处理
       let data = cloneDeep(state.typeList.wholeData)
@@ -361,8 +369,12 @@
       })
       state.typeList.wholeData = data //数据处理
 
+      //传递给甘特图选中
       //甘特图
-      getGanntSelect(e)
+      // getGanntSelect(e)
+      //**甘特图点击执行后会执行 ganntClick 方法**
+      //底部表格
+      state.selectData = e //选中项
     }
     //未分派
     if (type === '未分派') {
@@ -378,9 +390,8 @@
         }
       })
 
-      state.choice.notDataCheckbox=[]
+      state.choice.notDataCheckbox = []
       state.typeList.notData = data
-      getGanntSelect(e)
     }
     // 已分派
     if (type === '已分派') {
@@ -441,7 +452,6 @@
     } else {
       arr.type = true
     }
-
     state.rightTableData = arr
 
     //保存分派按钮状态
@@ -499,7 +509,6 @@
         arr.forEach((item: any) => {
           //只处理当前操作的** 2023-3-10
           if (item.title === item.clickType) {
-
             let ganntList = cloneDeep(state.dhtml.data)
             if (!isEmpty(ganntList)) {
               //删除【同设备 时间不同去重】
@@ -535,17 +544,15 @@
   const rightOperation = (type: any, e: any) => {
     // 数据赋值
     if (type === 'assignment') {
-      if(state.choice.type==="未分派"){
-      setGannData(e)
-      state.choice.assignList = e
+      if (state.choice.type === '未分派') {
+        setGannData(e)
+        state.choice.assignList = e
       }
     }
     // 取消
     if (type === 'cancel') {
       //数据刷新
       setList(2)
-      // 树 图 ok
-      // emptyBottomTable()
     }
     //修改
     if (type === 'revise') {
@@ -585,6 +592,8 @@
         let cutTaskId = data[2].cropping
 
         let bedPlanId = state.leftTable.id //选中的id
+        let technologyId = data[0].technologyId //工艺
+        
 
         let form: any = {
           bedPalnTaskTimeDTO: {
@@ -607,7 +616,8 @@
               resourceId: cutTaskId
             }
           },
-          bedPlanId: bedPlanId
+          bedPlanId: bedPlanId,
+          technologyId:technologyId
         }
 
         proxy.$baseService.post('/jack-ics-api/spreadTask/save', { ...form }).then((res: any) => {
@@ -645,25 +655,38 @@
   }
 
   //甘特图点击
-  const ganntClick = (id: any, data: any) => {
-    if (!isEmpty(data)) {
-      let arr = data.data.filter((item: any) => item.id === id)
 
-      //处理右边
-      if (state.choice.type === '已分派') {
+  const ganntClick = (id: any, data: any) => {
+    let list = data.data
+    if (!isEmpty(data)) {
+      let arr = list.filter((item: any) => item.id === id)
+      if (state.choice.type === '全部') {
         if (!isEmpty(arr)) {
-          // 待审核可以操作表格
-          let type = arr[0].statu === 2 ? false : true
-          let data = {
-            gannt: arr[0],
-            init: '',
-            bedPlanId: arr[0].id,
-            type: type,
-            id: ''
-          }
-          state.rightTableData = cloneDeep(data) //右表格
+          let e = { style: { styleCode: arr[0].styleCode } }
+          // 底部表格选中
+          state.selectData = e
+        }
+      }
+
+      if (state.choice.type === '已分派') {
+        let arr = list.filter((item: any) => item.id === id)
+        state.rightTableData = {
+          gannt: arr[0],
+          //右表格
+          init: '',
+          bedPlanId: id,//回显表格
+          type: false,
+          id: id//获取工艺
         }
       }
     }
   }
+
+  watch(
+    () => window.location.href,
+    item => {
+      emptyBottomTable()
+    },
+    { deep: true, immediate: true }
+  )
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-03-09 17:38:40
+ * @LastEditTime: 2023-03-14 14:04:58
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -143,14 +143,19 @@
     () => props.data,
     item => {
       let list = cloneDeep(item)
-      // console.log("5---监听树变化",item);
-      
       //动态设置表头表头
-      gantt.config.columns = [
-        { name: 'text', label: item.title, tree: true, width: '150' },
-        { name: 'start_date', label: '时间', align: 'center', width: '150' },
-        { name: 'type', label: '状态', align: 'center' }
-      ]
+      if (item.title === '床次') {
+        gantt.config.columns = [
+          { name: 'text', label: item.title, tree: true, align: 'center', width: '150' },
+          { name: 'start_time', label: '时间', align: 'center', width: '150' },
+          { name: 'type', label: '状态', align: 'center' }
+        ]
+      } else {
+        gantt.config.columns = [
+          { name: 'text', label: item.title, tree: true, align: 'center', width: '150' },
+          { name: 'start_time', label: '时间', align: 'center', width: '150' }
+        ]
+      }
 
       init(list)
 

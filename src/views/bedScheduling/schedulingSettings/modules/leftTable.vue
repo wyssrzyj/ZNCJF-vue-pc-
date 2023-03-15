@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-09 13:06:12
+ * @LastEditTime: 2023-03-15 08:29:08
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,11 +12,13 @@
     <div v-if="state.type" class="leftTable-top-title">当前使用床次：【{{ props.data.styleCode }}】</div>
       <div class="cutApart"></div>
     </div>
+    <div v-if="props.title === '已分派'"  class="leftTable-top">
+    </div>
     
    
     <el-table :data="state.tableData" border show-summary style="width: 100%" height="250" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
       <el-table-column prop="color" label="颜色" align="center" />
-      <el-table-column prop="spreadClothLevel" label="层数" align="center" />
+    
 
       <!-- 动态尺码  -->
       <el-table-column v-for="(item, i) in state.size" :key="i" min-width="50" :prop="item.number" align="center">
@@ -29,8 +31,8 @@
           <span>{{ row[item.number] }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column prop="rowFlag" label="件数" align="center" />
+      <el-table-column prop="spreadClothLevel" label="层数" align="center" />
+      <el-table-column prop="bedSum" label="件数" align="center" />
     </el-table>
   </div>
 </template>
@@ -90,6 +92,26 @@
 
     return list
   }
+  const totalBedTimes = (v: any) => {
+    let sum = 0
+    if (!isEmpty(state.size)) {
+      state.size.forEach((item: any) => {
+        if (v[item.number] > 0) {
+          sum += v[item.number]
+        }
+      })
+    }
+    return sum
+  }
+
+   const setSpreadClothLevel = (data: any) => {
+    if (!isEmpty(data)) {
+      data.map((v: any) => {
+        v.bedSum = v.spreadClothLevel * totalBedTimes(v)
+      })
+    }
+    return data
+  }
 
   const init = (e: any) => {
     proxy.$baseService.get('/jack-ics-api/bedPlan/get', { id: e }).then((res: any) => {
@@ -99,7 +121,8 @@
         setSize(sizeList)
         // 格式处理
         let list = setTableData(res.data.shelfList)
-        state.tableData = list
+            let bedSumData = setSpreadClothLevel(list)
+        state.tableData = bedSumData
       }
     })
   }
@@ -135,8 +158,8 @@
   }
   .leftTable-top{
     line-height: 20px;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin-top: 23px;
+    margin-bottom: 10px;
   }
   .cutApart{
     width: 100%;
