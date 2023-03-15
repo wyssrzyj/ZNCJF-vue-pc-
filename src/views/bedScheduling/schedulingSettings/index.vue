@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-03-15 08:47:16
+ * @LastEditTime: 2023-03-15 11:07:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -102,7 +102,7 @@
   import { reactive, getCurrentInstance, watch } from 'vue'
   // import { ElMessage } from 'element-plus'
   import { ElMessage } from 'element-plus'
-  import { cloneDeep, isEmpty } from 'lodash'
+  import { cloneDeep, isEmpty  } from 'lodash'
   import moment from 'moment'
 
   import top from '@/components/icon/top.png'
@@ -159,6 +159,8 @@
     }
     //清空选中项
     state.choice.notDataCheckbox = []
+    //不可用
+    state.choice.assignmentType=true
   }
 
   //未分派 数据结构处理
@@ -353,6 +355,7 @@
   //     state.dhtml.data = list
   //   }
   // }
+
 
   //左侧数据点击事件
   const setLeftOperation = (e: any) => {
@@ -689,4 +692,6 @@
     },
     { deep: true, immediate: true }
   )
+
+
 </script>

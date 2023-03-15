@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-15 08:29:08
+ * @LastEditTime: 2023-03-15 09:01:10
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -12,7 +12,7 @@
     <div v-if="state.type" class="leftTable-top-title">当前使用床次：【{{ props.data.styleCode }}】</div>
       <div class="cutApart"></div>
     </div>
-    <div v-if="props.title === '已分派'"  class="leftTable-top">
+    <div v-if="props.title === '已分派'"  class="leftTable-top-no">
     </div>
     
    
@@ -160,6 +160,9 @@
     line-height: 20px;
     margin-top: 23px;
     margin-bottom: 10px;
+  }
+   .leftTable-top-no{
+    height: 65px;
   }
   .cutApart{
     width: 100%;
