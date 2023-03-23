@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-15 09:01:10
+ * @LastEditTime: 2023-03-23 10:05:11
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -9,7 +9,7 @@
   <div class="leftTable">
     <div v-if="props.title !== '已分派'"  class="leftTable-top">
        <div v-if="!state.type" class="leftTable-top-title">请选择床次</div>
-    <div v-if="state.type" class="leftTable-top-title">当前使用床次：【{{ props.data.styleCode }}】</div>
+    <div v-if="state.type" class="leftTable-top-title">当前使用床次：{{ props.data.styleCode }}【{{props.data.name}}】</div>
       <div class="cutApart"></div>
     </div>
     <div v-if="props.title === '已分派'"  class="leftTable-top-no">
@@ -136,6 +136,7 @@
     () => props.data,
     item => {
       if(item.init==="init"){
+        
         state.tableData=[]
         state.size=[]
         state.type = false

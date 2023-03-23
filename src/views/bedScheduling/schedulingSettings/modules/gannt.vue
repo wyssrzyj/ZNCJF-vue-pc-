@@ -146,13 +146,13 @@
       //动态设置表头表头
       if (item.title === '床次') {
         gantt.config.columns = [
-          { name: 'text', label: item.title, tree: true, align: 'center', width: '150' },
+          { name: 'text', label: item.title, tree: true,  width: '150' },
           { name: 'start_time', label: '时间', align: 'center', width: '150' },
           { name: 'type', label: '状态', align: 'center' }
         ]
       } else {
         gantt.config.columns = [
-          { name: 'text', label: item.title, tree: true, align: 'center', width: '150' },
+          { name: 'text', label: item.title, tree: true,  width: '150' },
           { name: 'start_time', label: '时间', align: 'center', width: '150' }
         ]
       }

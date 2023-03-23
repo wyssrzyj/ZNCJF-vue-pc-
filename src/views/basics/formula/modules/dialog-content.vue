@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-15 08:46:12
+ * @LastEditTime: 2023-03-16 13:27:09
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -115,7 +115,7 @@
     prop: dataRule,
 
     dialogTableVisible: false, //公式弹窗
-    formulaContent: { name: '', value: 'init' }
+    formulaContent: { name: '', value: '请选择公式~' }
   })
 
   const init = () => {

@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-09-03 14:07:30
- * @LastEditTime: 2023-02-27 16:39:29
+ * @LastEditTime: 2023-03-17 17:02:15
  * @Description:
  * @LastEditors: lyj
  */
@@ -117,7 +117,7 @@ export const content: any = {
   ],
   formRightData: [
     { name: '床次计划号', model: 'bedPlanNo', prop: null, type: 'bedPlanNo', disabled: true },
-    { name: '床次', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: false },
+    { name: '床次', model: 'styleBedNo', prop: 'styleBedNo', type: 'styleBedNo', disabled: true },
     { name: '床次总件数', model: 'bedSum', prop: null, type: null, disabled: true },
     { name: '唛架长度', model: 'shelfLength', prop: 'shelfLength', type: 'shelfLength', disabled: true },
     { name: '备注', model: 'remark', prop: null, type: null },

@@ -1,9 +1,6 @@
 <template>
   <njp-table-config ref="styleLibListEl" :query-form-data="state.queryFormData" @selection-change="handleSelectionChange">
     <template #queryFormItem>
-      <el-form-item label="测试缓存问题" prop="spec">
-        <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
-      </el-form-item>
       <el-form-item label="设备型号" prop="spec">
         <el-input v-model="state.queryFormData.spec" placeholder="请输入" clearable />
       </el-form-item>

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-01-04 13:19:36
+ * @LastEditTime: 2023-03-17 17:31:39
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -93,6 +93,7 @@
               controls-position="right"
               :placeholder="`请输入${item.name}`"
               type="text"
+              @change="onchange"
             />
                 <!-- <el-input v-model="state.form[item.model]" :placeholder="`请输入${item.name}`" :disabled="disable(item.disabled)" type="text" @change="onchange" /> -->
               </el-form-item>

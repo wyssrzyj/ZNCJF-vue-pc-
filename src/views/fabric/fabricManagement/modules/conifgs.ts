@@ -1,7 +1,7 @@
 /*
  * @Author: lyj
  * @Date: 2022-08-12 13:12:08
- * @LastEditTime: 2022-11-07 13:49:13
+ * @LastEditTime: 2023-03-17 17:30:06
  * @Description:
  * @LastEditors: lyj
  */
@@ -89,6 +89,7 @@ export const formRightData = [
 ]
 export const dataRule = {
   sn: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  weight: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   alignLineFlag: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   looseClothFlag: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
