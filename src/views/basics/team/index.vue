@@ -9,7 +9,10 @@
         <div class="team">
           <div v-for="(item, index) in baseData.teamData" :key="index" class="item" :class="{ point: currentIndex === index }" @click="selectTeam(index, item.id)">
             <el-checkbox v-model="item.type" class="checkbox" @change="checkTeam(item.id, item.type)" />
-            <div class="teamName">{{ item.name }}</div>
+            <el-tooltip effect="dark" :content="item.name" placement="top">
+              <div class="teamName">{{ item.name }}</div>
+            </el-tooltip>
+
             <span class="choose" @click.stop="changeTeamMessage(index, item.id)">修改</span>
           </div>
         </div>
@@ -52,14 +55,15 @@
         <el-form-item label="班组编码" style="width: 26%">
           <el-input v-model="baseData.dialogFormData.code" disabled style="width: 100%" />
         </el-form-item>
-        <el-form-item label="班组班次" style="width: 26%" prop="teamScheduleIdList">
-          <el-select v-model="baseData.dialogFormData.teamScheduleIdList" multiple placeholder="请选择班次" style="width: 100%">
-            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
+
         <el-form-item label="班组能力" style="width: 26%" prop="ability">
           <el-select v-model="baseData.dialogFormData.ability" placeholder="请选择任务" style="width: 100%">
             <el-option v-for="(item, index) in equipmentType" :key="index" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班组班次" style="width: 26%" prop="teamScheduleIdList">
+          <el-select v-model="baseData.dialogFormData.teamScheduleIdList" collapse-tags multiple placeholder="请选择班次" style="width: 100%">
+            <el-option v-for="(item, index) in baseData.ScheduleOptions" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <span style="width: 28%"></span>
@@ -382,5 +386,11 @@
   }
   .point {
     background-color: rgb(244, 247, 255);
+  }
+  .teamName {
+    width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 </style>

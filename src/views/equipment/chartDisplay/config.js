@@ -171,29 +171,22 @@ export const echartsOpt = {
     dataZoom: [
       {
         type: 'slider',
-
-
         zoomLoxk: true,
         backgroundColor: 'rgba(245, 246, 248, 1)', // 组件的背景颜色。
         fillerColor: 'rgba(186, 209, 255, 1)', // 选中范围的填充颜色。
         borderColor: 'rgba(245, 246, 248, 0)', // 边框颜色
         showDetail: false, //是否显示detail，即拖拽时候显示详细数值信息
 
-        // startValue: 0, // 数据窗口范围的起始数值
-        // endValue: 4, // 数据窗口范围的结束数值（一页显示多少条数据）
+         // 可选，dataZoom 组件的 index，多个 dataZoom 组件时有用，默认为 0
+    // 开始位置的百分比，0 - 100
+    start: 100,
+    // 结束位置的百分比，0 - 100
+    end: 90,
+    // 开始位置的数值
+    startValue: 0,
+    // 结束位置的数值
+    endValue: 0,
 
-        // start: 70, //数据窗口范围的起始百分比,表示30%
-        // // end: 0,//数据窗口范围的结束百分比,表示70%
-        // startValue: 0,//数据窗口范围的起始数值
-        // endValue: 10,//数据窗口范围的结束数值。 
-
-        start: 100,                                //数据窗口范围的起始百分比,表示30%
-        // end: 0,                                  //数据窗口范围的结束百分比,表示70%
-        startValue:0,                           //数据窗口范围的起始数值
-        endValue:17,                            //数据窗口范围的结束数值。
-
-
-        // yAxisIndex: [0, 1], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
         yAxisIndex: [0], //控制哪个轴，如果是 number 表示控制一个轴，如果是 Array 表示控制多个轴。此处控制第二根轴
         width: 1, //滚动条高度
         height: '80%', //滚动条显示位置

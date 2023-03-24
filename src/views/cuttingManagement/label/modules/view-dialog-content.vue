@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-02-27 16:09:24
+ * @LastEditTime: 2023-03-23 16:47:57
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -298,7 +298,7 @@
   .label-number {
     // width: 19vw;
     /deep/ .el-input__inner {
-      width: 320px;
+      width: 16.5vw;
       text-align: left !important; //输入框左对齐
     }
   }

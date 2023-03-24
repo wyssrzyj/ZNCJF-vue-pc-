@@ -9,7 +9,9 @@
         <div class="craft">
           <div v-for="(item, index) in baseData.craftData" :key="index" class="item" :class="{ point: currentIndex === index }" @click="selectCraft(index, item.id)">
             <el-checkbox v-model="item.type" class="checkbox" @change="checkCraft(item.id, item.type)" />
-            <div class="craftName">{{ item.name }}</div>
+          <el-tooltip effect="dark" :content="item.name" placement="top">
+              <div class="teamName">{{ item.name }}</div>
+            </el-tooltip>
             <span class="choose" @click.stop="changeCraftMessage(item.id)">修改</span>
           </div>
         </div>
@@ -609,5 +611,11 @@
   .dialogText {
     position: relative;
     top: -5px;
+  }
+    .teamName {
+    width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 </style>

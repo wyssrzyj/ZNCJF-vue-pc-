@@ -48,7 +48,7 @@
         let colorsIndex = 0
         let echartsServerData: any = []
         let colors = ['#CCEED0', '#C6E8EF', '#B9D7FF', '#ABC8E6', '#EDE0F7']
-        let device = res.data.map((item: any) => item.deviceName)
+        let device = res.data.map((item: any) => item.resourceName)
         let title: any = [] //左侧标题
         // let data: any = [] //右侧数据
 
@@ -57,9 +57,10 @@
         })
         if (!isEmpty(res.data)) {
           res.data.map((item: any, i: any) => {
+            // console.log(i);   
             colorsIndex === 5 ? (colorsIndex = 0) : colorsIndex++
-
-            if (!isEmpty(item.taskList)) {
+              if(i<5){
+                 if (!isEmpty(item.taskList)) {
               return item.taskList.forEach((itemClid: any, k: any) => {
                 echartsServerData.push({
                   itemStyle: { normal: { color: colors[colorsIndex] } }, //条形颜色
@@ -70,8 +71,14 @@
                   styleCode: itemClid.styleCode,
                   styleName: itemClid.styleName
                 })
+                
+                 
+                 
               })
             }
+
+              }
+           
           })
         }
         //数据顺序反转
@@ -80,13 +87,10 @@
           item.value[0] = lengths - item.value[0]
         })
 
-        // let myChart = echarts.init(document.querySelector('#chart') as HTMLElement)
-        // let myChart = echarts.init(document.getElementById(eChart.value))
+      
         echartsOpt.gantt.xAxis.min = state.equipmentPlanningTaskParam.startTime
         echartsOpt.gantt.xAxis.max = state.equipmentPlanningTaskParam.endTime
         echartsOpt.gantt.yAxis.data = title
-        // console.log("已处理",data);
-        echartsOpt.gantt.series[0].data = echartsServerData
 
         myChart.setOption(echartsOpt.gantt)
         window.onresize = () => {
@@ -187,7 +191,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div :id="eChart" class="home-eChart" style="width: 100%; height: 90%"></div>
+        <div :id="eChart" class="home-eChart" style="width: 90%; height: 90%"></div>
       </div>
       <div v-show="state.type === 2" class="chartBottom">
         <div class="chartLeft">

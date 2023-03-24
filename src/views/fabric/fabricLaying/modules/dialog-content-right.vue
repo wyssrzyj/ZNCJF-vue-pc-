@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-25 10:25:16
- * @LastEditTime: 2022-10-19 11:36:45
+ * @LastEditTime: 2023-03-23 13:09:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -230,6 +230,7 @@
           state.list = cloneDeep(arr)
           state.current = arr[0]
           state.tabPosition = arr[0].title
+          props.getList(state.list)
         } else {
           ElMessage({
             message: '至少保留一项',

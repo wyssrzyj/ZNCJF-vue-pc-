@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-23 10:05:11
+ * @LastEditTime: 2023-03-23 11:21:28
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -16,7 +16,13 @@
     </div>
     
    
-    <el-table :data="state.tableData" border show-summary style="width: 100%" height="250" :header-cell-style="{ 'text-align': 'center' }" :cell-style="{ 'text-align': 'center' }">
+    <el-table class="schedulingSettingsTable"
+     :data="state.tableData"
+      show-summary
+       style="width: 100%" 
+       height="250"
+        :header-cell-style="{ 'text-align': 'center' }"
+         :cell-style="{ 'text-align': 'center' }">
       <el-table-column prop="color" label="颜色" align="center" />
     
 
@@ -172,6 +178,12 @@
     margin-top: 10px;
 }
   .leftTable-top-title{
-    transform: translate(0, -8px);
+    transform: translate(0, -8px) ;
   }
+  .schedulingSettingsTable{
+   /deep/ .el-table__footer-wrapper tbody td.el-table__cell{
+        background-color: #fff !important ;
+  }
+  }
+  
 </style>
