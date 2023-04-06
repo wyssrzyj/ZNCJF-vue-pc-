@@ -13,13 +13,13 @@
               <div class="teamName">{{ item.name }}</div>
             </el-tooltip>
 
-            <span class="choose" @click.stop="changeTeamMessage(index, item.id)">修改</span>
+            <span class="choose" @click.stop="changeTeamMessage(index, item.id)">编辑</span>
           </div>
         </div>
         <el-divider class="divider" />
         <div class="operation">
           <div style="display: flex; flex-direction: row-reverse">
-            <el-button type="danger" @click="delTeam">删除</el-button>
+            <el-button type="danger" @click="mov">删除</el-button>
             <el-button type="primary" @click="addTeam">新增</el-button>
           </div>
         </div>
@@ -85,6 +85,17 @@
     </el-dialog>
     <!-- <dialog-addTeam ref="dialogRef" /> -->
   </div>
+
+   <!-- 删除 -->
+  <el-dialog v-model="baseData.dialogVisible" title="提示" width="30%">
+    <span>确定要删除该数据吗？</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="baseData.dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="delTeam">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -105,6 +116,7 @@
   //dialog 显示控制
   let dialogVisible = ref(false)
   const baseData = reactive({
+    dialogVisible: false,
     dialogTitle: '',
     tableData: [] as any,
     dialogFormData: {
@@ -239,14 +251,20 @@
       }
     })
   }
-  //team删除方法
-  const delTeam = () => {
-    if (baseData.idList.length == 0) {
-      return ElMessage({
+  
+    const mov = () => {
+    if (!isEmpty(baseData.idList)) {
+      baseData.dialogVisible = true
+    } else {
+      ElMessage({
         message: '请选择需要删除的班组',
         type: 'error'
       })
     }
+  }
+
+  //team删除方法
+  const delTeam = () => {
     proxy.$baseService
       .delete('/jack-ics-api/team/delete', baseData.idList)
       .then((res: any) => {
@@ -254,6 +272,7 @@
           message: '删除成功',
           type: 'success'
         })
+        baseData.dialogVisible = false
         //删除成功后更新teamlist
         getTeamList()
       })
@@ -264,6 +283,7 @@
         })
       })
   }
+
   // //获取穿梭框右侧所有的人员信息
   const getUser = () => {
     return new Promise((resolve, reject) => {

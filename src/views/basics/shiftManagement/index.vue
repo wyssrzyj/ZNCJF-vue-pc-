@@ -12,7 +12,7 @@
     </template>
 
     <template #actionExtBtn="{ row }">
-      <el-button link type="primary" style="order: 3" @click="handleClick(false, '班次管理修改', row)">修改</el-button>
+      <el-button link type="primary" style="order: 3" @click="handleClick(false, '班次管理修改', row)">编辑</el-button>
     </template>
   </njp-table-config>
 

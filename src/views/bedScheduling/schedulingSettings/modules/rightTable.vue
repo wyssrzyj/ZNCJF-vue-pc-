@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-10 14:58:02
- * @LastEditTime: 2023-03-15 08:39:51
+ * @LastEditTime: 2023-03-29 16:58:05
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -238,6 +238,7 @@
     item => {
       //获取公艺
       if (item.id) {
+        
         getTechnology(item.id)
       }
       //清空数据

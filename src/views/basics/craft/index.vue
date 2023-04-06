@@ -18,7 +18,7 @@
         <el-divider class="divider" />
         <div class="operation">
           <div style="display: flex; flex-direction: row-reverse">
-            <el-button type="danger" @click="delCraft">删除</el-button>
+            <el-button type="danger" @click="mov">删除</el-button>
             <el-button type="primary" @click="addCraft">新增</el-button>
           </div>
         </div>
@@ -148,12 +148,22 @@
       </template>
     </el-dialog>
   </div>
+     <!-- 删除 -->
+  <el-dialog v-model="baseData.dialogVisible" title="提示" width="30%">
+    <span>确定要删除该数据吗？</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="baseData.dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="delCraft">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
--->
 
 <script setup lang="ts">
   import './modules/index.less'
   import { ElMessage } from 'element-plus'
+  import { isEmpty } from 'lodash'
   import { ref, reactive, getCurrentInstance, onMounted, watch } from 'vue'
   const loading = ref(false)
   const { proxy }: any = getCurrentInstance()
@@ -167,6 +177,7 @@
   const ChangeRules = reactive({ CraftName: [{ required: true, message: '请输入班组姓名', trigger: 'blur' }] })
   //模拟工艺数据
   const baseData = reactive({
+    dialogVisible:false,
     addFabricDialog: false,
     changeCraftNameDialog: false,
     currentChangeCraftNameId: '',
@@ -337,6 +348,16 @@
           type: 'error'
         })
       })
+  }
+  const mov = () => {
+    if (!isEmpty(baseData.craftIdList)) {
+      baseData.dialogVisible = true
+    } else {
+      ElMessage({
+        message: '请选择需要删除的班组',
+        type: 'error'
+      })
+    }
   }
   //dialog关闭事件
   const dialogClose = () => {

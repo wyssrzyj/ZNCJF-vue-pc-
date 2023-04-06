@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-03-15 08:47:10
+ * @LastEditTime: 2023-03-27 16:46:15
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -311,7 +311,9 @@
     dialogTableVisible: false,
     dialogContentType:false,//审核弹窗
     spreadClothLengthType: false, //铺布长度提示框
+
     dataDifference: 0, //铺布长度差值
+    dataDifferenceId:"",//铺布长度差值id
     //提示信息
     prop: dataRule,
     fabricName: [],
@@ -373,6 +375,7 @@
     proxy.$baseService.get(api).then((res: any) => {
       if (res.code === 0) {
         state.dataDifference = res.data.spreadClothLengthDiff
+        state.dataDifferenceId = res.data.id
       }
     })
   }
@@ -655,7 +658,7 @@
   //保存唛架差值
   const setSetting = () => {
     let api = '/jack-ics-api/setting/save'
-    let data = { spreadClothLengthDiff: state.dataDifference }
+    let data = {id:state.dataDifferenceId, spreadClothLengthDiff: state.dataDifference }
     proxy.$baseService.post(api, data).then((res: any) => {})
   }
   const setForm = async (formEl: any | undefined, type: any) => {

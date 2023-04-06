@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2023-01-09 15:17:25
- * @LastEditTime: 2023-03-14 14:04:58
+ * @LastEditTime: 2023-03-29 17:08:41
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -132,8 +132,7 @@
   const init = (e: any) => {
     if (!isEmpty(e.data)) {
       state.ganttList.data = e.data
-      //渲染
-    } else {
+} else {
       state.ganttList.data = []
     }
     ganttShow()
@@ -156,9 +155,8 @@
           { name: 'start_time', label: '时间', align: 'center', width: '150' }
         ]
       }
-
+      
       init(list)
-
       gantt.selectTask(list.id) //选中
       // gantt.scrollTo(35, 35)//位移
     },

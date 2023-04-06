@@ -13,7 +13,7 @@
 
   const state: any = reactive({
     total: 0,
-    type: 1,
+    type: 2,
     equipmentPlanningTaskParam: {
       time: proxy.$dayjs(new Date()).format('YYYY-MM-DD'),
       deviceName: '',
@@ -171,28 +171,7 @@
 
 <template>
   <div class="home">
-    <div class="homeBtn">
-      <el-button :type="state.type === 1 ? 'primary' : null" @click="setType(1)">任务进度</el-button>
-      <el-button class="tasks" :type="state.type === 2 ? 'primary' : null" @click="setType(2)">床次进度</el-button>
-    </div>
     <div class="homeContainer">
-      <div v-show="state.type === 1" class="homeTops">
-        <div class="title">
-          <div class="txt">设备计划任务</div>
-        </div>
-
-        <div class="form">
-          <el-form ref="rightFormRef" :model="state.equipmentPlanningTaskParam" :inline="true" label-width="auto">
-            <el-form-item label="时间范围:" prop="sn">
-              <el-date-picker v-model="state.equipmentPlanningTaskParam.time" :clearable="false" value-format="YYYY-MM-DD" type="date" @change="handleTime" />
-            </el-form-item>
-            <el-form-item label="设备名称:" prop="name">
-              <el-input v-model="state.equipmentPlanningTaskParam.deviceName" placeholder="请输入" clearable @change="ganttGet" />
-            </el-form-item>
-          </el-form>
-        </div>
-        <div :id="eChart" class="home-eChart" style="width: 90%; height: 90%"></div>
-      </div>
       <div v-show="state.type === 2" class="chartBottom">
         <div class="chartLeft">
           <div class="title">

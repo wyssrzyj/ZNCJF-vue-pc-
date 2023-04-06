@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-31 13:11:11
- * @LastEditTime: 2023-03-20 11:25:42
+ * @LastEditTime: 2023-03-29 17:05:08
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -117,6 +117,7 @@
   import './index.less'
 
   import { content } from './modules/conifgs'
+import { AnyTypeAnnotation } from '@babel/types'
 
   const { choice, typeList } = content
   const { proxy }: any = getCurrentInstance()
@@ -179,7 +180,7 @@
   }
 
   //甘特图时间处理【传递给子级】
-  const getGanntTime = (data: any) => {
+  const getGanntTime = (data: any,type:any) => {
     data.map((item: any) => {
       item.type = bedScheduleType.get(item.statu)
       if (item.startDate) {
@@ -192,6 +193,15 @@
         item.end_date = moment(item.endDate).format('YYYY-MM-DD-HH')
       }
     })
+      if (type === '') {
+        state.dhtml.title = '款号'
+      }
+       if (type === 1) {
+       state.dhtml.title = '设备'
+      }
+       if (type === 2) {
+        state.dhtml.title = '床次'
+      }
     state.dhtml.data = data
   }
 
@@ -200,7 +210,7 @@
     if (type === '') {
       proxy.$baseService.get('/jack-ics-api/productionScheduling/styleGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
-          getGanntTime(res.data)
+          getGanntTime(res.data,type)
         }
       })
     }
@@ -208,7 +218,7 @@
     if (type === 1) {
       proxy.$baseService.get('/jack-ics-api/productionScheduling/deviceGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
-          getGanntTime(res.data)
+          getGanntTime(res.data,type)
         }
       })
     }
@@ -216,7 +226,7 @@
     if (type === 2) {
       proxy.$baseService.get('/jack-ics-api/productionScheduling/bedGantt', { ...value }).then((res: any) => {
         if (res.code === 0) {
-          getGanntTime(res.data)
+          getGanntTime(res.data,type)
           //右侧表格需要的id【3】
           let one = res.data[0] //甘特图第一条数据
           // 默认显示第一项数据
@@ -321,16 +331,13 @@
     if (e.name === '全部') {
       setList('')
       setGanntData('')
-      state.dhtml.title = '款号'
     }
     if (e.name === '未分派') {
       setAlreadyData()
       emptyBottomTable()
-      state.dhtml.title = '设备'
     }
     if (e.name === '已分派') {
       setList(2)
-      state.dhtml.title = '床次'
     }
   }
 
