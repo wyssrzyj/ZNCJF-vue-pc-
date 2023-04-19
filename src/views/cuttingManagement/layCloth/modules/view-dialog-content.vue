@@ -140,11 +140,6 @@
       }
     ]
   })
-
-  // const selectDevice = ref<any>(null)
-  // const devParam = ref<any>(null)
-  // const plannedTime = ref<any>(null)
-
   //设置设备参数
   let setGetParam = (data: any) => {
     proxy.$baseService.get('/jack-ics-api/spreadTask/getParam', data).then((res: any) => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: lyj
  * @Date: 2022-08-17 09:49:26
- * @LastEditTime: 2023-03-27 16:46:15
+ * @LastEditTime: 2023-04-19 10:55:06
  * @Description: 
  * @LastEditors: lyj
 -->
@@ -271,7 +271,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, getCurrentInstance, watch } from 'vue'
+  import { reactive, ref, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
   import print from 'print-js'
   import { useRoute, useRouter } from 'vue-router'
@@ -444,14 +444,15 @@
       }
     }
   }
+    init()
 
-  watch(
-    () => router.currentRoute.value,
-    (newValue: any) => {
-      init()
-    },
-    { immediate: true }
-  )
+  // watch(
+  //   () => router.currentRoute.value,
+  //   (newValue: any) => {
+  //     init()
+  //   },
+  //   { immediate: true }
+  // )
 
   // 是否可用
   const disable = (type: any) => {

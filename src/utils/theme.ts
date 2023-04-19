@@ -1,10 +1,10 @@
 import { CacheTheme } from '@/constants/cacheKey'
 import { themeSetting } from '@/constants/config'
 import { EMitt, EThemeSetting } from '@/constants/enum'
-import { IFunction, IObject } from '@/types/interface'
+import {  IObject } from '@/types/interface'
 import { getCache, setCache } from '@/utils/cache'
 import emits from '@/utils/emits'
-import { chalkCss } from '@/assets/chalk/index.css.js'
+// import { chalkCss } from '@/assets/chalk/index.css'
 
 /**
  * 取主题设置缓存
@@ -119,13 +119,13 @@ export const getThemeCluster = (theme: string): string[] => {
  * @param callback
  * @param variable
  */
-export const getCSSString = (callback: IFunction, variable?: string): void => {
-  if (variable) {
-    // eslint-disable-next-line prettier/prettier
-    (window as any)[variable] = chalkCss
-  }
-  callback(chalkCss)
-}
+// export const getCSSString = (callback: IFunction, variable?: string): void => {
+//   if (variable) {
+//     // eslint-disable-next-line prettier/prettier
+//     (window as any)[variable] = chalkCss
+//   }
+//   callback(chalkCss)
+// }
 
 export const updateStyle = (style: string, oldCluster: string[], newCluster: string[]): string => {
   let newStyle = style
@@ -162,7 +162,7 @@ export const updateTheme = (val: string): void => {
   }
   const chalkHandler = getHandler('__chalk', 'chalk-style')
   if (!(window as any)['__chalk']) {
-    getCSSString(chalkHandler, '__chalk')
+    // getCSSString(chalkHandler, '__chalk')
   } else {
     chalkHandler()
   }

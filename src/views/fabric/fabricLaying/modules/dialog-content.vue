@@ -279,7 +279,6 @@
   }
 
   const getList = (e: any) => {
-    console.log(e);
     state.form.levelParamVOList = e
   }
   // 取消

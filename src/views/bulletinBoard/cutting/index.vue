@@ -1,0 +1,217 @@
+<template>
+  <div>
+    <!-- 头部 -->
+    <div class="top">
+      <img :src="logo" alt="" class="top-log" />
+      <div class="top-txt">裁铺管理系统看板</div>
+      <img :src="top" alt="" class="top-title" />
+      <img :src="qh" alt="" class="top-right-log" />
+      <div class="top-right-time">{{ state.time }}</div>
+
+    </div>
+    <!-- 内容 -->
+    <div class="mainBody">
+      <!-- 左侧 -->
+      <div class="mainBody-left">
+        <div class="left-top-content">
+          <div class="left-top">
+            <div class="left-top-title"></div>
+            <div>今日床次</div>
+          </div>
+          <div>
+            <yyds/>
+          </div>
+        </div>
+        <div class="left-bottom-content">
+          <div class="left-top">
+            <div class="left-top-title"></div>
+            <div>今日达成率</div>
+          </div>
+          <div>线性表格</div>
+        </div>
+      </div>
+      <!-- 右侧 -->
+      <div class="mainBody-right">
+        <div class="right-top">
+          <div class="left-top-title"></div>
+          <div class="right-top-content">
+             <div class="right-top-txt" v-for="item,index in state.rightList " :key="item.only">
+              <div :class="item.type?'segmentation-y':'segmentation'"
+               >{{ item.name }}</div>
+              <div v-if="index!==state.rightList.length-1">//</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+  import { reactive  } from 'vue'
+import moment from 'moment' 
+  import logo from './modules/img/logo.png'
+  import qh from './modules/img/qh.png'
+  import top from './modules/img/top.png'
+  import yyds from "./modules/yyds.vue"
+  // import TopTable from "./modules/topTable.vue"
+  // const { proxy }: any = getCurrentInstance()
+  const state:any = reactive({
+    rightList: [
+      {
+        name: '1号铺布线',
+        only: '1',
+        type: true
+      },
+      {
+        name: '2号铺布线',
+        only: '2',
+        type: false
+      },
+      {
+        name: '3号铺布线',
+        only: '3',
+        type: false
+      },
+      {
+        name: '4号铺布线',
+        only: '4',
+        type: false
+      }
+    ],
+    time:moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+  })
+  //时间
+  const setTime=()=>{
+      setInterval(()=>{
+        state.time=moment(Date.now()).format('YYYY年MM月DD日 HH:mm:ss')
+      },1000)
+  }
+  setTime()
+
+</script>
+<style lang="less" scoped>
+  .content {
+    background: #010640;
+  }
+  .top {
+    width: 96vw;
+    background: #010640;
+    position: relative;
+    display: flex;
+    color: #94d2ff;
+    font-size: 38px;
+    font-weight: bold;
+    height: 10vh;
+  }
+  .top-log {
+    position: absolute;
+    left: calc(1vw - 10px);
+    top: 2vh;
+  }
+   .top-right-log{
+    position: absolute;
+    right: calc(2vw - 10px);
+    top: 2vh;
+  }
+    .top-right-time{
+      width: 300px;
+      line-height: 25px;
+      font-size: 20px;
+      color: #409eff;
+    position: absolute;
+    right: 13vw;
+    top: 1vh;
+  }
+  .top-txt {
+    position: absolute;
+    left: 40vw;
+    top: 2vh;
+  }
+  .top-title {
+    width: 96vw;
+    height: 10vh;
+  }
+  .mainBody {
+    padding-top: 20px;
+    width: 96vw;
+    height: 85vh;
+    background: #010640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mainBody-left {
+    width: 50vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .mainBody-right {
+    flex: 1;
+    height: 100%;
+    background: #010640;
+  }
+  .left-top {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    line-height: 42px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #94d2ff;
+  }
+  .right-top {
+    margin-left: 11vw;
+    display: flex;
+    height: 50px;
+    line-height: 42px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4d748c;
+  }
+  .right-top-content{
+    transform: translate(0, -7px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .right-top-txt {
+    cursor: pointer;
+    width: 120px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+ 
+  .segmentation {
+    color: #4d748c;
+    margin-right: 10px;
+  }
+   .segmentation-y {
+    color: #95bff4;
+    margin-right: 10px;
+  }
+  .left-top-title {
+    width: 7px;
+    height: 37px;
+    margin-right: 10px;
+    margin-left: 10px;
+    background: #94d2ff;
+    border-radius: 5px;
+  }
+  .left-top-content {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+  }
+  .left-bottom-content {
+    height: 25vh;
+    width: 100%;
+    padding: 10px;
+  }
+ 
+</style>

@@ -207,20 +207,16 @@
   })
   //是否关闭贴标时间
   const spreadTaskType = (e: any) => {
-    console.log(e)
     state.spreadTaskTimeType = e
     //
   }
 
   const setTime = (type: any) => {
-    console.log(type)
     // 铺布- 1.5
     // 打标-25分钟
     // 裁剪-35分钟
     if (type === 1) {
       // spreadTaskTime
-      console.log(state.rightForm)
-      console.log(state.rightForm.spreadTaskTime.planStartTime)
     }
     props.setData('3', state.rightForm)
   }
