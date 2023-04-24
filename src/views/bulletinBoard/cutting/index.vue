@@ -1,60 +1,62 @@
 <template>
   <div>
-    <!-- 头部 -->
-    <div class="top">
-      <img :src="logo" alt="" class="top-log" />
-      <div class="top-txt">裁铺管理系统看板</div>
-      <img :src="top" alt="" class="top-title" />
-      <img :src="qh" alt="" class="top-right-log" />
-      <div class="top-right-time">{{ state.time }}</div>
-    </div>
-    <!-- 内容 -->
-    <div class="mainBody">
-      <!-- 左侧 -->
-      <div class="mainBody-left">
-        <div class="left-top-content">
-          <div class="left-top">
-            <div class="left-top-title"></div>
-            <div>今日床次</div>
-          </div>
-          <div>
-            <topTable />
-          </div>
-        </div>
-        <div class="left-bottom-content">
-          <div class="left-top">
-            <div class="left-top-title"></div>
-            <div>今日达成率</div>
-          </div>
-          <broken />
-        </div>
+    <div>
+      <!-- 头部 -->
+      <div class="top">
+        <img :src="logo" alt="" class="top-log" />
+        <div class="top-txt">裁铺管理系统看板</div>
+        <img :src="top" alt="" class="top-title" />
+        <img :src="qh" alt="" class="top-right-log" />
+        <div class="top-right-time">{{ state.time }}</div>
       </div>
-      <!-- 右侧 -->
-      <div class="mainBody-right">
-        <div class="right-top">
-          <div class="left-top-title"></div>
-          <div class="right-top-content">
-            <div v-for="(item, index) in state.rightList" :key="item.only" class="right-top-txt">
-              <div :class="item.type ? 'segmentation-y' : 'segmentation'">
-                {{ item.name }}
-              </div>
-              <div v-if="index !== state.rightList.length - 1">//</div>
+      <!-- 内容 -->
+      <div class="mainBody">
+        <!-- 左侧 -->
+        <div class="mainBody-left">
+          <div class="left-top-content">
+            <div class="left-top">
+              <div class="left-top-title"></div>
+              <div>今日床次</div>
+            </div>
+            <div>
+              <topTable />
             </div>
           </div>
+          <div class="left-bottom-content">
+            <div class="left-top">
+              <div class="left-top-title"></div>
+              <div>今日达成率</div>
+            </div>
+            <broken />
+          </div>
         </div>
-        <div class="right-container">
-          <div>
-            <div class="right-title">1号铺布机</div>
-            <histogram :data="state.histogram.data1" />
+        <!-- 右侧 -->
+        <div class="mainBody-right">
+          <div class="right-top">
+            <div class="left-top-title"></div>
+            <div class="right-top-content">
+              <div v-for="(item, index) in state.rightList" :key="item.only" class="right-top-txt">
+                <div :class="item.type ? 'segmentation-y' : 'segmentation'">
+                  {{ item.name }}
+                </div>
+                <div v-if="index !== state.rightList.length - 1">//</div>
+              </div>
+            </div>
           </div>
+          <div class="right-container">
+            <div>
+              <div class="right-title">1号铺布机</div>
+              <histogram :data="state.histogram.data1" />
+            </div>
 
-          <div>
-            <div class="right-title">2号铺布机</div>
-            <histogram :data="state.histogram.data2" />
-          </div>
-          <div>
-            <div class="right-title">3号铺布机</div>
-            <histogram :data="state.histogram.data3" />
+            <div>
+              <div class="right-title">2号铺布机</div>
+              <histogram :data="state.histogram.data2" />
+            </div>
+            <div>
+              <div class="right-title">3号铺布机</div>
+              <histogram :data="state.histogram.data3" />
+            </div>
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@
   "author": "feng.m",
   "license": "ISC",
   "dependencies": {
+    "@dataview/datav-vue3": "^0.0.0-test.1672506674342",
     "dhtmlx-gantt": "^7.1.13",
     "echarts": "^5.3.3",
     "element-plus": "^2.2.0",
