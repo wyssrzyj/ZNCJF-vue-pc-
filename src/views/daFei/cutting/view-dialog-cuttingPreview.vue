@@ -137,7 +137,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance,  } from 'vue'
+  import { reactive, getCurrentInstance } from 'vue'
   import { isEmpty, cloneDeep } from 'lodash'
   import { ElMessage } from 'element-plus'
   import { useRoute } from 'vue-router'

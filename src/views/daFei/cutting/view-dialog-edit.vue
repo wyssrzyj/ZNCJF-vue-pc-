@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, getCurrentInstance,  } from 'vue'
+  import { reactive, getCurrentInstance } from 'vue'
   import jackZw from '@/components/img/zw.jpg'
   import { isEmpty } from 'lodash'
 
@@ -214,8 +214,8 @@
         data.push({
           bedPlanId: route.query.id,
           packageNo: item.zh,
-          size:item.size,
-          color:item.color,
+          size: item.size,
+          color: item.color,
           num: item.sum,
           serialNumber: `${item.lsSet}-${item.lsEnd}`
         })
@@ -233,6 +233,7 @@
               path: `/daFei/cutting/view-dialog-cuttingPreview`,
               query: {
                 _mt: '裁剪打印',
+                type: 'init',
                 id: route.query.id
               }
             })
@@ -246,7 +247,6 @@
       })
     }
   }
-  
 </script>
 <style lang="less" scoped>
   .content {

@@ -48,12 +48,11 @@
       <el-table-column :label="$t('handle')" width="99" fixed="right" align="center">
         <template #default="scope">
           <div class="button_group">
-            <el-button type="primary" @click="editTicket(scope.row)">编辑</el-button>
+            <!-- <el-button type="primary" @click="editTicket(scope.row)">编辑</el-button> -->
             <el-button type="primary" @click="printSingle(scope.row)"> 打印 </el-button>
-
-            <el-button type="danger" @click="deleteTicket(scope.row.id)">
+            <!-- <el-button type="danger" @click="deleteTicket(scope.row.id)">
               {{ $t('delete') }}
-            </el-button>
+            </el-button> -->
           </div>
         </template>
       </el-table-column>
@@ -254,25 +253,25 @@
       }
     })
   }
-  const deleteTicket = (val: any) => {
-    proxy
-      .$confirm('确认删除这个工票吗？')
-      .then(() => {
-        let arr: any = []
-        arr.push(val)
-        baseService.delete('/fei/ticket', arr).then(res => {
-          if (res.code !== 0) {
-            return proxy.$message.error(res.msg)
-          }
-          proxy.$message.success('删除成功！')
+  // const deleteTicket = (val: any) => {
+  //   proxy
+  //     .$confirm('确认删除这个工票吗？')
+  //     .then(() => {
+  //       let arr: any = []
+  //       arr.push(val)
+  //       baseService.delete('/fei/ticket', arr).then(res => {
+  //         if (res.code !== 0) {
+  //           return proxy.$message.error(res.msg)
+  //         }
+  //         proxy.$message.success('删除成功！')
 
-          getDataList()
-        })
-      })
-      .catch(() => {
-        proxy.$message('操作取消！')
-      })
-  }
+  //         getDataList()
+  //       })
+  //     })
+  //     .catch(() => {
+  //       proxy.$message('操作取消！')
+  //     })
+  // }
 
   // 全选
   const selectAll = () => {
@@ -286,21 +285,21 @@
       })
     }
   }
-  const editTicket = (row: any) => {
-    state.productionNo = row.billNo
-    state.styleName = row.styleName
-    state.styleNo = row.styleNo
-    state.ticketNo = row.ticketNo
-    state.color = row.color
-    state.size = row.size
-    state.pacNo = row.packageNo
-    state.ticketNum = row.num
-    state.ticketId = row.id
-    state.styleId = row.styleId
-    state.editCutId = row.cutId
-    state.productionId = row.productionId
-    state.ticketVisible = true
-  }
+  // const editTicket = (row: any) => {
+  //   state.productionNo = row.billNo
+  //   state.styleName = row.styleName
+  //   state.styleNo = row.styleNo
+  //   state.ticketNo = row.ticketNo
+  //   state.color = row.color
+  //   state.size = row.size
+  //   state.pacNo = row.packageNo
+  //   state.ticketNum = row.num
+  //   state.ticketId = row.id
+  //   state.styleId = row.styleId
+  //   state.editCutId = row.cutId
+  //   state.productionId = row.productionId
+  //   state.ticketVisible = true
+  // }
   const closeTicket = () => {
     state.ticketVisible = false
   }
@@ -319,8 +318,6 @@
     //   getDataList()
     // })
   }
-
-
 </script>
 
 <style lang="less" scoped>
